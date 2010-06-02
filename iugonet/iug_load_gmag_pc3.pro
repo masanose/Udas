@@ -42,7 +42,7 @@
 
 
 ;############################################################
-;  Procedure:  FILE_DAILYNAMES
+;  Procedure:  FILE_MONTHLYNAMES_ONW
 ;  Author: Davin Larson, revised by M. Kagitani on Apr. 2010
 
 function file_monthlynames_onw,dir,prefix,suffix,trange=trange, $
