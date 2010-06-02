@@ -291,10 +291,10 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[3] = ptr_new(ptrarr(1))
   paramArray[4] = ptr_new(ptrarr(1))
     
-  (*paramArray[0])[0] = ptr_new(['dst','ae','al','ao','au','ax'])
+  (*paramArray[0])[0] = ptr_new(['dst','ae','al','ao','au','ax','onw_pc3'])
   (*paramArray[0])[1] = ptr_new(['anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
-                                 'hob','ilr','lkw','mcq','mgd','mlb','mnd','mut','onw', $
-                                 'prp','ptk','roc','sma','tir','twv','wad','yap'])
+                                 'hob','ilr','kuj','lkw','mcq','mgd','mlb','mnd','mut', $
+                                 'onw','prp','ptk','roc','sma','tir','twv','wad','yap'])
   (*paramArray[1])[0] = ptr_new(['azim_no','pwr','pwr_err','spec_width','spec_width_err',$
                                  'vlos','vlos_err','echo_flag','quality','quality_flag','position_tbl'])
   (*paramArray[2])[0] = ptr_new(['zonal_wind_ear','meridional_wind_ear','vertical_wind_ear'])

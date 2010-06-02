@@ -44,10 +44,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
       endif else if (parameters eq 'ae') or (parameters eq 'al') or (parameters eq 'ao') or (parameters eq 'au')  or (parameters eq 'ax') then begin
         par_names='kyoto_'+parameters
         kyoto_load_ae, trange=timeRange, datatype=parameters
+      endif else if parameters eq 'onw_pc3' then begin
+        par_names=parameters
+        iug_load_gmag_pc3, trange=timeRange, site='onw'
       endif
     endif else if datatype eq 'magdas' then begin
       par_names='serc_magdas_' + parameters + '_mag'
-      serc_load_gmag_sample, trange = timeRange, site = parameters
+      iug_load_gmag_serc, trange = timeRange, site = parameters
     endif
 
   endif else if instrument eq 'superdarn' then begin
@@ -58,7 +61,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         iug_load_ear_trop, datatype =datatype, parameters = parameters, trange = timeRange
   endif else if instrument eq 'MF_radar' then begin
         par_names=parameters
-        iug_load_MF, datatype =datatype, parameters=parameters, trange = timeRange
+        iug_load_mf, datatype =datatype, parameters=parameters, trange = timeRange
   endif else if instrument eq 'meteor_radar' then begin
         par_names=parameters
         iug_load_meteor, datatype =datatype, parameters=parameters, trange = timeRange
