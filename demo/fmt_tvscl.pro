@@ -11,6 +11,7 @@
 
 pro fmt_tvscl,time,imgtime
 
+;Create a window for plotting
 window,6,xs=1392*0.3,ys=1040*0.3*2
 loadct,0
 
