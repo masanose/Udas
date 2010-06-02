@@ -235,6 +235,8 @@ if datatype eq 'trop_wind' then begin
   if parameters eq 'zonal_wind_ear' then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
      store_data,'zonal_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+    ; add options
+    options, 'zonal_wind_ear', 'spec', 1
   endif
   ;Store data of meridional wind:
   ;==============================
