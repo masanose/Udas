@@ -221,7 +221,7 @@ endfor
 
 ;Replace data array:
 ;===================
-number = n_elements(ear_time)
+number = n_elements(mu_time)
 
 for i=0,number-2 do begin
   mu_time[i] = mu_time[i+1]

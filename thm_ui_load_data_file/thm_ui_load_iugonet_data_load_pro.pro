@@ -65,6 +65,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif else if instrument eq 'meteor_radar' then begin
         par_names=parameters
         iug_load_meteor, datatype =datatype, parameters=parameters, trange = timeRange
+  endif else if instrument eq 'MU' then begin
+        par_names=parameters
+        iug_load_mu_trop, datatype =datatype, parameters=parameters, trange = timeRange
   endif
   
   ;===========================================================
