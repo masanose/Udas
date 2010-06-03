@@ -251,7 +251,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   instrumentLabel = widget_label(instrumentBase,value='Instrument Type: ')
 
-  instrumentArray = ['gmag','superdarn','EAR','MF_radar','meteor_radar']
+  instrumentArray = ['gmag','superdarn','EAR','MF_radar','meteor_radar','MU']
   
   instrumentCombo = widget_combobox(instrumentBase,$
                                        value=instrumentArray,$
@@ -261,13 +261,14 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;================================
   ;=========== Data Type ==========
   ;================================
-  typeArray = ptrarr(5)
+  typeArray = ptrarr(6)
   
   typeArray[0] = ptr_new(['index','magdas'])
   typeArray[1] = ptr_new(['hok'])
   typeArray[2] = ptr_new(['trop_wind','trop_pwr','trop_spec_width'])
   typeArray[3] = ptr_new(['pameungpeuk'])
   typeArray[4] = ptr_new(['kototabang'])
+  typeArray[5] = ptr_new(['trop_wind','trop_pwr','trop_spec_width'])
                                      
   dataBase = widget_base(selectionBase,/row)
   typeBase = widget_base(dataBase,/col)
@@ -284,12 +285,13 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;================================
   ;========== Parameters ==========
   ;================================
-  paramArray = ptrarr(5)
+  paramArray = ptrarr(6)
   paramArray[0] = ptr_new(ptrarr(2))
   paramArray[1] = ptr_new(ptrarr(1))
   paramArray[2] = ptr_new(ptrarr(3))
   paramArray[3] = ptr_new(ptrarr(1))
   paramArray[4] = ptr_new(ptrarr(1))
+  paramArray[5] = ptr_new(ptrarr(3))
     
   (*paramArray[0])[0] = ptr_new(['dst','ae','al','ao','au','ax','onw_pc3'])
   (*paramArray[0])[1] = ptr_new(['anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
@@ -306,6 +308,9 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                  'zon_wind_kt108','mer_wind_kt76','mer_wind_kt80','mer_wind_kt84',$
                                  'mer_wind_kt88','mer_wind_kt92','mer_wind_kt96','mer_wind_kt100',$
                                  'mer_wind_kt104','mer_wind_kt108'])
+  (*paramArray[5])[0] = ptr_new(['zonal_wind_mu','meridional_wind_mu','vertical_wind_mu'])
+  (*paramArray[5])[1] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
+  (*paramArray[5])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])
                                                                            
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Parameter(s):')
