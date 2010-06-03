@@ -39,10 +39,11 @@
 ; $LastChangedRevision: $
 ; $URL: $
 ;-
+
+
 ;############################################################
-;  Procedure:  FILE_MONTHLYNAMES_ONW
+;  Procedure:  FILE_DAILYNAMES
 ;  Author: Davin Larson, revised by M. Kagitani on Apr. 2010
-;  GIT TEST
 
 function file_monthlynames_onw,dir,prefix,suffix,trange=trange, $
     hour_res=hour_res,  $
@@ -169,7 +170,7 @@ for i=0, nsites-1 do begin
   source = file_retrieve(/struct)
   source.verbose = verbose
   source.local_data_dir = root_data_dir() + 'geom_indices/pc3/'
-  source.remote_data_dir = 'http://pparc.gp.tohoku.ac.jp/whi/data/'
+  source.remote_data_dir = 'http://magdas.serc.kyushu-u.ac.jp/whi/data/'
 
   ; download data
   local_files = file_retrieve(relpathnames, _extra=source)

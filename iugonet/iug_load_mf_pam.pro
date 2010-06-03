@@ -242,6 +242,9 @@ if  parameters eq 'meridional_wind_pam' then begin
     store_data,'meridional_wind_pam',data={x:ear_time, y:mer_wind, v:height},dlimit=dlimit
 endif
 
+; add options
+options, parameters, 'spec', 1
+
 print,'**********************************************************************************
 print,'Data loading is successful!!'
 print,'**********************************************************************************
