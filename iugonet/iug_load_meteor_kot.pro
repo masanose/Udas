@@ -180,84 +180,84 @@ n=0
          if (n mod 2 eq 0) then time1(0)= time
          if (n mod 2 eq 1) then time1(1)= time        
          if (72 eq alt) then begin
-            zon_wind_data(*,0)= data(0)
-            mer_wind_data(*,0)= data(1)  
+            zon_wind_data(0,0)= data(0)
+            mer_wind_data(0,0)= data(1)  
          endif
          if (74 eq alt) then begin
-            zon_wind_data(*,1)= data(0)
-            mer_wind_data(*,1)= data(1)
+            zon_wind_data(0,1)= data(0)
+            mer_wind_data(0,1)= data(1)
          endif 
          if (76 eq alt) then begin
-            zon_wind_data(*,2)= data(0)
-            mer_wind_data(*,2)= data(1)  
+            zon_wind_data(0,2)= data(0)
+            mer_wind_data(0,2)= data(1)  
          endif
          if (78 eq alt) then begin
-            zon_wind_data(*,3)= data(0)
-            mer_wind_data(*,3)= data(1)
+            zon_wind_data(0,3)= data(0)
+            mer_wind_data(0,3)= data(1)
          endif 
          if (80 eq alt) then begin
-            zon_wind_data(*,4)= data(0)
-            mer_wind_data(*,4)= data(1)  
+            zon_wind_data(0,4)= data(0)
+            mer_wind_data(0,4)= data(1)  
          endif
          if (82 eq alt) then begin
-            zon_wind_data(*,5)= data(0)
-            mer_wind_data(*,5)= data(1)
+            zon_wind_data(0,5)= data(0)
+            mer_wind_data(0,5)= data(1)
          endif 
          if (84 eq alt) then begin
-            zon_wind_data(*,6)= data(0)
-            mer_wind_data(*,6)= data(1)  
+            zon_wind_data(0,6)= data(0)
+            mer_wind_data(0,6)= data(1)  
          endif
          if (86 eq alt) then begin
-            zon_wind_data(*,7)= data(0)
-            mer_wind_data(*,7)= data(1)
+            zon_wind_data(0,7)= data(0)
+            mer_wind_data(0,7)= data(1)
          endif 
          if (88 eq alt) then begin
-            zon_wind_data(*,8)= data(0)
-            mer_wind_data(*,8)= data(1)  
+            zon_wind_data(0,8)= data(0)
+            mer_wind_data(0,8)= data(1)  
          endif
          if (90 eq alt) then begin
-            zon_wind_data(*,9)= data(0)
-            mer_wind_data(*,9)= data(1)
+            zon_wind_data(0,9)= data(0)
+            mer_wind_data(0,9)= data(1)
          endif
          if (92 eq alt) then begin
-            zon_wind_data(*,10)= data(0)
-            mer_wind_data(*,10)= data(1)  
+            zon_wind_data(0,10)= data(0)
+            mer_wind_data(0,10)= data(1)  
          endif
          if (94 eq alt) then begin
-            zon_wind_data(*,11)= data(0)
-            mer_wind_data(*,11)= data(1)
+            zon_wind_data(0,11)= data(0)
+            mer_wind_data(0,11)= data(1)
          endif 
          if (96 eq alt) then begin
-            zon_wind_data(*,12)= data(0)
-            mer_wind_data(*,12)= data(1)  
+            zon_wind_data(0,12)= data(0)
+            mer_wind_data(0,12)= data(1)  
          endif
          if (98 eq alt) then begin
-            zon_wind_data(*,13)= data(0)
-            mer_wind_data(*,13)= data(1)
+            zon_wind_data(0,13)= data(0)
+            mer_wind_data(0,13)= data(1)
          endif 
          if (100 eq alt) then begin
-            zon_wind_data(*,14)= data(0)
-            mer_wind_data(*,14)= data(1)
+            zon_wind_data(0,14)= data(0)
+            mer_wind_data(0,14)= data(1)
          endif 
          if (102 eq alt) then begin
-            zon_wind_data(*,15)= data(0)
-            mer_wind_data(*,15)= data(1)  
+            zon_wind_data(0,15)= data(0)
+            mer_wind_data(0,15)= data(1)  
          endif
          if (104 eq alt) then begin
-            zon_wind_data(*,16)= data(0)
-            mer_wind_data(*,16)= data(1)
+            zon_wind_data(0,16)= data(0)
+            mer_wind_data(0,16)= data(1)
          endif  
          if (106 eq alt) then begin
-            zon_wind_data(*,17)= data(0)
-            mer_wind_data(*,17)= data(1)
+            zon_wind_data(0,17)= data(0)
+            mer_wind_data(0,17)= data(1)
          endif 
          if (108 eq alt) then begin
-            zon_wind_data(*,18)= data(0)
-            mer_wind_data(*,18)= data(1)  
+            zon_wind_data(0,18)= data(0)
+            mer_wind_data(0,18)= data(1)  
          endif
          if (110 eq alt) then begin
-            zon_wind_data(*,19)= data(0)
-            mer_wind_data(*,19)= data(1)
+            zon_wind_data(0,19)= data(0)
+            mer_wind_data(0,19)= data(1)
          endif
          n=n+1
          data(0)=0
@@ -283,8 +283,7 @@ for i=0,number-2 do begin
   kt_time[i] = kt_time[i+1]
   zon_wind[i,*] = zon_wind[i+1,*]
   mer_wind[i,*] = mer_wind[i+1,*]
-  ver_wind[i,*] = ver_wind[i+1,*]
-  for l=0,35 do begin
+  for l=0,19 do begin
     a=zon_wind[i,l]
     wbad = where(a eq 0,nbad)
     if nbad gt 0 then begin
