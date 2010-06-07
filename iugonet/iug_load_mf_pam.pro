@@ -1,14 +1,14 @@
 ;+
 ;
 ;Name:
-;iug_load_MF_pam
+;iug_load_mf_pam
 ;
 ;Purpose:
 ;  Queries the Kyoto_RISH renkei2 servers for pameungpeuk data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_MF_pam [ ,DATATYPE = string ]
+; iug_load_mf_pam [ ,DATATYPE = string ]
 ;                 [ ,PARAMETERS = string]
 ;                 [ ,TRANGE = [min,max] ]
 ;                 [ ,FILENAMES = string scalar or array ]
@@ -33,7 +33,7 @@
 ;
 ;Modifications:
 ;  A. Shinbori, 13/05/2010.
-;  
+;  A. Shinbori, 06/06/2010.
 ;
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -42,7 +42,7 @@
 ; $URL $
 ;-
 
-pro iug_load_MF_pam, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
+pro iug_load_mf_pam, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -113,12 +113,14 @@ endif else file_names=fns
 ;Read the files:
 ;===============
 
-altitude = fltarr(24)
-height = fltarr(24)
-zon_wind_data = fltarr(1,24)
-mer_wind_data = fltarr(1,24)
-zon_wind = fltarr(1,24)
-mer_wind = fltarr(1,24)
+altitude = fltarr(36)
+height = fltarr(36)
+zon_wind_data = fltarr(1,36)
+mer_wind_data = fltarr(1,36)
+ver_wind_data = fltarr(1,36)
+zon_wind = fltarr(1,36)
+mer_wind = fltarr(1,36)
+ver_wind = fltarr(1,36)
 time = dblarr(1)
 ear_time = dblarr(1)
 
@@ -167,6 +169,7 @@ ear_time = dblarr(1)
     ;================
       epoch_time_stamp = assoc(lun, lonarr(1), offset+16)
       millisecond_time_stamp = assoc(lun, lonarr(1), offset+20)
+      print, epoch_time_stamp[0], millisecond_time_stamp[0]
     ;
     ; From UNIX time to real time:
     ;============================= 
@@ -199,6 +202,11 @@ ear_time = dblarr(1)
           wbad = where(b eq -9999,nbad)
           if nbad gt 0 then b[wbad] = !values.f_nan
           mer_wind_data[m,n] = b
+          record_header_bytes14 = assoc(lun, fltarr(1), offset+16)
+          c= record_header_bytes14[0];vertical_wind
+          wbad = where(c eq -9999,nbad)
+          if nbad gt 0 then c[wbad] = !values.f_nan
+          ver_wind_data[m,n] = c
           offset += 144
           n=n+1
        endfor
@@ -212,6 +220,7 @@ ear_time = dblarr(1)
         ;=============================
          append_array, zon_wind, zon_wind_data
          append_array, mer_wind, mer_wind_data
+         append_array, ver_wind, ver_wind_data
  endfor
     free_lun,lun
 endfor
@@ -224,7 +233,29 @@ for i=0,number-2 do begin
   ear_time[i] = ear_time[i+1]
   zon_wind[i,*] = zon_wind[i+1,*]
   mer_wind[i,*] = mer_wind[i+1,*]
+  ver_wind[i,*] = ver_wind[i+1,*]
+  for l=0,35 do begin
+    a=zon_wind[i,l]
+    wbad = where(a eq 0,nbad)
+    if nbad gt 0 then begin
+      a[wbad] = !values.f_nan
+      zon_wind[i,l]=a
+    endif
+    b=mer_wind[i,l]
+    wbad = where(b eq 0,nbad)
+    if nbad gt 0 then begin
+      b[wbad] = !values.f_nan
+      mer_wind[i,l]=b
+    endif
+    c=ver_wind[i,l]
+    wbad = where(c eq 0,nbad)
+    if nbad gt 0 then begin
+      c[wbad] = !values.f_nan
+      ver_wind[i,l]=c
+    endif
+  endfor
 endfor
+
 
 ;******************************
 ;Store data in TPLOT variables:
@@ -240,6 +271,10 @@ endif
 if  parameters eq 'meridional_wind_pam' then begin
     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
     store_data,'meridional_wind_pam',data={x:ear_time, y:mer_wind, v:height},dlimit=dlimit
+endif
+if  parameters eq 'vertical_wind_pam' then begin
+    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+    store_data,'vertical_wind_pam',data={x:ear_time, y:ver_wind, v:height},dlimit=dlimit
 endif
 
 ; add options
