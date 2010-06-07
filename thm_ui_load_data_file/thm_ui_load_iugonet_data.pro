@@ -303,11 +303,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[2])[1] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
   (*paramArray[2])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])
   (*paramArray[3])[0] = ptr_new(['zonal_wind_pam','meridional_wind_pam'])                              
-  (*paramArray[4])[0] = ptr_new(['zon_wind_kt76','zon_wind_kt80','zon_wind_kt84','zon_wind_kt88',$
-                                 'zon_wind_kt92','zon_wind_kt96','zon_wind_kt100','zon_wind_kt104',$
-                                 'zon_wind_kt108','mer_wind_kt76','mer_wind_kt80','mer_wind_kt84',$
-                                 'mer_wind_kt88','mer_wind_kt92','mer_wind_kt96','mer_wind_kt100',$
-                                 'mer_wind_kt104','mer_wind_kt108'])
+  (*paramArray[4])[0] = ptr_new(['zonal_wind_ktb','meridional_wind_ktb'])
   (*paramArray[5])[0] = ptr_new(['zonal_wind_mu','meridional_wind_mu','vertical_wind_mu'])
   (*paramArray[5])[1] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
   (*paramArray[5])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])

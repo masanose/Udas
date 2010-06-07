@@ -30,9 +30,9 @@
 ;
 ;Code:
 ;  A. Shinbori, 13/05/2010.
-;
-;Modifications:
 ;  
+;Modifications:
+;  A. Shinbori, 06/06/2010.
 ;  
 ;
 ;Acknowledgment:
@@ -58,7 +58,7 @@ if ~keyword_set(datatype) then datatype='kototabang'
 ;********************************
 ;Load 'parameters' data by default:
 ;********************************
-if ~keyword_set(parameters) then parameters='zon_wind_kt76'
+if ~keyword_set(parameters) then parameters='zon_wind'
 
 ;*******************
 ;Validate datatypes:
@@ -122,35 +122,21 @@ endif else file_names=fns
 ;Read the files:
 ;===============
 s=''
-time76=0
-time80=0
-time84=0
-time88=0
-time92=0
-time96=0
-time100=0
-time104=0
-time108=0
-wind_u76=0
-wind_u80=0
-wind_u84=0
-wind_u88=0
-wind_u92=0
-wind_u96=0
-wind_u100=0
-wind_u104=0
-wind_u108=0
-wind_v76=0
-wind_v80=0
-wind_v84=0
-wind_v88=0
-wind_v92=0
-wind_v96=0
-wind_v100=0
-wind_v104=0
-wind_v108=0
+height = fltarr(20)
+zon_wind_data = fltarr(1,20)
+mer_wind_data = fltarr(1,20)
+zon_wind = fltarr(1,20)
+mer_wind = fltarr(1,20)
+time = dblarr(1)
+time1 = dblarr(2)
+kt_time = dblarr(1)
 data=fltarr(7)
-
+n=0
+ 
+ for i=0,19 do begin
+   height[i]=72+2*i   
+ endfor
+ 
 ;Loop on files (zonal component): 
 ;================================
  for j=0,n_elements(local_paths)-1 do begin
@@ -187,224 +173,150 @@ data=fltarr(7)
          data = float(strsplit(data1, ' ', /extract))
          ;
          ;Append data of time and U, V components at determined altitude:
-         ;===============================================================   
+         ;=============================================================== 
+         ;====convert time from LT to UT   
+         time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+         if (n mod 2 eq 0) then time1(0)= time
+         if (n mod 2 eq 1) then time1(1)= time        
+         if (72 eq alt) then begin
+            zon_wind_data(*,0)= data(0)
+            mer_wind_data(*,0)= data(1)  
+         endif
+         if (74 eq alt) then begin
+            zon_wind_data(*,1)= data(0)
+            mer_wind_data(*,1)= data(1)
+         endif 
          if (76 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time76, time
-            append_array, wind_u76, data(0)
-            append_array, wind_v76, data(1)
+            zon_wind_data(*,2)= data(0)
+            mer_wind_data(*,2)= data(1)  
          endif
+         if (78 eq alt) then begin
+            zon_wind_data(*,3)= data(0)
+            mer_wind_data(*,3)= data(1)
+         endif 
          if (80 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time80, time
-            append_array, wind_u80, data(0)
-            append_array, wind_v80, data(1)
+            zon_wind_data(*,4)= data(0)
+            mer_wind_data(*,4)= data(1)  
          endif
+         if (82 eq alt) then begin
+            zon_wind_data(*,5)= data(0)
+            mer_wind_data(*,5)= data(1)
+         endif 
          if (84 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time84, time
-            append_array, wind_u84, data(0)
-            append_array, wind_v84, data(1)
+            zon_wind_data(*,6)= data(0)
+            mer_wind_data(*,6)= data(1)  
          endif
+         if (86 eq alt) then begin
+            zon_wind_data(*,7)= data(0)
+            mer_wind_data(*,7)= data(1)
+         endif 
          if (88 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time88, time
-            append_array, wind_u88, data(0)
-            append_array, wind_v88, data(1)
-         endif   
+            zon_wind_data(*,8)= data(0)
+            mer_wind_data(*,8)= data(1)  
+         endif
+         if (90 eq alt) then begin
+            zon_wind_data(*,9)= data(0)
+            mer_wind_data(*,9)= data(1)
+         endif
          if (92 eq alt) then begin
-           ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time92, time
-            append_array, wind_u92, data(0)
-            append_array, wind_v92, data(1)
+            zon_wind_data(*,10)= data(0)
+            mer_wind_data(*,10)= data(1)  
          endif
+         if (94 eq alt) then begin
+            zon_wind_data(*,11)= data(0)
+            mer_wind_data(*,11)= data(1)
+         endif 
          if (96 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time96, time
-            append_array, wind_u96, data(0)
-            append_array, wind_v96, data(1)
+            zon_wind_data(*,12)= data(0)
+            mer_wind_data(*,12)= data(1)  
          endif
+         if (98 eq alt) then begin
+            zon_wind_data(*,13)= data(0)
+            mer_wind_data(*,13)= data(1)
+         endif 
          if (100 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time100, time
-            append_array, wind_u100, data(0)
-            append_array, wind_v100, data(1)
+            zon_wind_data(*,14)= data(0)
+            mer_wind_data(*,14)= data(1)
+         endif 
+         if (102 eq alt) then begin
+            zon_wind_data(*,15)= data(0)
+            mer_wind_data(*,15)= data(1)  
          endif
          if (104 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time104, time
-            append_array, wind_u104, data(0)
-            append_array, wind_v104, data(1)
-         endif
+            zon_wind_data(*,16)= data(0)
+            mer_wind_data(*,16)= data(1)
+         endif  
+         if (106 eq alt) then begin
+            zon_wind_data(*,17)= data(0)
+            mer_wind_data(*,17)= data(1)
+         endif 
          if (108 eq alt) then begin
-            ;====convert time from LT to UT         
-            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
-            append_array, time108, time
-            append_array, wind_u108, data(0)
-            append_array, wind_v108, data(1)
-         endif         
+            zon_wind_data(*,18)= data(0)
+            mer_wind_data(*,18)= data(1)  
+         endif
+         if (110 eq alt) then begin
+            zon_wind_data(*,19)= data(0)
+            mer_wind_data(*,19)= data(1)
+         endif
+         n=n+1
+         data(0)=0
+         data(1)=0
+         if n ge 1 then begin
+         if (time1(1)-time1(0) ne 0) then begin          
+            append_array, kt_time, time
+            append_array, zon_wind, zon_wind_data
+            append_array, mer_wind, mer_wind_data
+         endif
+         endif        
          continue
       endif
     endwhile 
     free_lun,lun
 endfor
 
+;Replace data array:
+;===================
+number = n_elements(kt_time)
+
+for i=0,number-2 do begin
+  kt_time[i] = kt_time[i+1]
+  zon_wind[i,*] = zon_wind[i+1,*]
+  mer_wind[i,*] = mer_wind[i+1,*]
+  ver_wind[i,*] = ver_wind[i+1,*]
+  for l=0,35 do begin
+    a=zon_wind[i,l]
+    wbad = where(a eq 0,nbad)
+    if nbad gt 0 then begin
+      a[wbad] = !values.f_nan
+      zon_wind[i,l]=a
+    endif
+    b=mer_wind[i,l]
+    wbad = where(b eq 0,nbad)
+    if nbad gt 0 then begin
+      b[wbad] = !values.f_nan
+      mer_wind[i,l]=b
+    endif
+  endfor
+endfor
 ;******************************
 ;Store data in TPLOT variables:
 ;******************************
 acknowledgstring = ''
-print, time76
-;Store data of zonal and merdional component at 76 km:
-;=====================================================
-if keyword_set(wind_u76) then begin
-  wbad = where(wind_u76 eq 9999,nbad)
-  if nbad gt 0 then wind_u76[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt76',data={x:time76, y:wind_u76},dlimit=dlimit 
+
+;Store data of zonal and meridional component:
+;=============================================
+if  parameters eq 'zonal_wind_ktb' then begin
+    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+    store_data,'zonal_wind_ktb',data={x:kt_time, y:zon_wind, v:height},dlimit=dlimit
 endif
-if keyword_set(wind_v76) then begin
-  wbad = where(wind_v76 eq 9999,nbad)
-  if nbad gt 0 then wind_v76[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt76',data={x:time76, y:wind_v76},dlimit=dlimit
+if  parameters eq 'meridional_wind_ktb' then begin
+    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+    store_data,'meridional_wind_ktb',data={x:kt_time, y:mer_wind, v:height},dlimit=dlimit
 endif
 
-;Store data of zonal and merdional component at 80 km:
-;=====================================================
-if keyword_set(wind_u80) then begin
-  wbad = where(wind_u80 eq 9999,nbad)
-  if nbad gt 0 then wind_u80[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt80',data={x:time80, y:wind_u80},dlimit=dlimit
-endif
-if keyword_set(wind_v80) then begin
-  wbad = where(wind_v80 eq 9999,nbad)
-  if nbad gt 0 then wind_v80[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt80',data={x:time80, y:wind_v80},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 84 km:
-;=====================================================
-if keyword_set(wind_u84) then begin
-  wbad = where(wind_u84 eq 9999,nbad)
-  if nbad gt 0 then wind_u84[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt84',data={x:time84, y:wind_u84},dlimit=dlimit
-endif
-if keyword_set(wind_v84) then begin
-  wbad = where(wind_v84 eq 9999,nbad)
-  if nbad gt 0 then wind_v84[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt84',data={x:time84, y:wind_v84},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 88 km:
-;=====================================================
-if keyword_set(wind_u88) then begin
-  wbad = where(wind_u88 eq 9999,nbad)
-  if nbad gt 0 then wind_u88[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt88',data={x:time88, y:wind_u88},dlimit=dlimit 
-endif
-if keyword_set(wind_v88) then begin
-  wbad = where(wind_v88 eq 9999,nbad)
-  if nbad gt 0 then wind_v88[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt88',data={x:time88, y:wind_v88},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 92 km:
-;=====================================================
-if keyword_set(wind_u92) then begin
-  wbad = where(wind_u92 eq 9999,nbad)
-  if nbad gt 0 then wind_u92[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt92',data={x:time92, y:wind_u92},dlimit=dlimit 
-endif
-if keyword_set(wind_v92) then begin
-  wbad = where(wind_v92 eq 9999,nbad)
-  if nbad gt 0 then wind_v92[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt92',data={x:time92, y:wind_v92},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 96 km:
-;=====================================================
-if keyword_set(wind_u96) then begin
-  wbad = where(wind_u96 eq 9999,nbad)
-  if nbad gt 0 then wind_u96[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt96',data={x:time96, y:wind_u96},dlimit=dlimit
-endif
-if keyword_set(wind_v96) then begin
-  wbad = where(wind_v96 eq 9999,nbad)
-  if nbad gt 0 then wind_v96[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt96',data={x:time96, y:wind_v96},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 100 km:
-;=====================================================
-if keyword_set(wind_u100) then begin
-  wbad = where(wind_u100 eq 9999,nbad)
-  if nbad gt 0 then wind_u100[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt100',data={x:time100, y:wind_u100},dlimit=dlimit
-endif
-if keyword_set(wind_v100) then begin
-  wbad = where(wind_v100 eq 9999,nbad)
-  if nbad gt 0 then wind_v100[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt100',data={x:time100, y:wind_v100},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 104 km:
-;=====================================================
-if keyword_set(wind_u104) then begin
-  wbad = where(wind_u104 eq 9999,nbad)
-  if nbad gt 0 then wind_u104[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt104',data={x:time104, y:wind_u104},dlimit=dlimit
-endif
-if keyword_set(wind_v104) then begin
-  wbad = where(wind_v104 eq 9999,nbad)
-  if nbad gt 0 then wind_v104[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt104',data={x:time104, y:wind_v104},dlimit=dlimit
-endif
-
-;Store data of zonal and merdional component at 108 km:
-;=====================================================
-if keyword_set(wind_u108) then begin
-  wbad = where(wind_u108 eq 9999,nbad)
-  if nbad gt 0 then wind_u108[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'zon_wind_kt108',data={x:time108, y:wind_u108},dlimit=dlimit
-endif
-if keyword_set(wind_v108) then begin
-  wbad = where(wind_v108 eq 9999,nbad)
-  if nbad gt 0 then wind_v108[wbad] = !values.f_nan
-  dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-  store_data,'mer_wind_kt108',data={x:time108, y:wind_v108},dlimit=dlimit
-endif
+; add options
+options, parameters, 'spec', 1
 
 print,'**********************************************************************************
 print, 'Data loading is successful!!'
