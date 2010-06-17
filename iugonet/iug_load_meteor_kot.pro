@@ -259,7 +259,6 @@ n=0
             zon_wind_data(0,19)= data(0)
             mer_wind_data(0,19)= data(1)
          endif
-         n=n+1
          data(0)=0
          data(1)=0
          if n ge 1 then begin
@@ -267,8 +266,13 @@ n=0
             append_array, kt_time, time
             append_array, zon_wind, zon_wind_data
             append_array, mer_wind, mer_wind_data
+            for i=0, 19 do begin
+             zon_wind_data(0,i)=0
+             mer_wind_data(0,i)=0
+            endfor
          endif
-         endif        
+         endif
+         n=n+1        
          continue
       endif
     endwhile 

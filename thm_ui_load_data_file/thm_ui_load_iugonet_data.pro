@@ -267,7 +267,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[1] = ptr_new(['hok'])
   typeArray[2] = ptr_new(['trop_wind','trop_pwr','trop_spec_width'])
   typeArray[3] = ptr_new(['pameungpeuk'])
-  typeArray[4] = ptr_new(['kototabang'])
+  typeArray[4] = ptr_new(['kototabang','serpong'])
   typeArray[5] = ptr_new(['trop_wind','trop_pwr','trop_spec_width'])
                                      
   dataBase = widget_base(selectionBase,/row)
@@ -290,7 +290,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[1] = ptr_new(ptrarr(1))
   paramArray[2] = ptr_new(ptrarr(3))
   paramArray[3] = ptr_new(ptrarr(1))
-  paramArray[4] = ptr_new(ptrarr(1))
+  paramArray[4] = ptr_new(ptrarr(2))
   paramArray[5] = ptr_new(ptrarr(3))
     
   (*paramArray[0])[0] = ptr_new(['dst','ae','al','ao','au','ax','onw_pc3'])
@@ -304,6 +304,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[2])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])
   (*paramArray[3])[0] = ptr_new(['zonal_wind_pam','meridional_wind_pam'])                              
   (*paramArray[4])[0] = ptr_new(['zonal_wind_ktb','meridional_wind_ktb'])
+  (*paramArray[4])[1] = ptr_new(['zonal_wind_ser','meridional_wind_ser'])
   (*paramArray[5])[0] = ptr_new(['zonal_wind_mu','meridional_wind_mu','vertical_wind_mu'])
   (*paramArray[5])[1] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
   (*paramArray[5])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])
