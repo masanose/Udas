@@ -33,7 +33,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 06/06/2010.
-;  A. Shinbori, 21/06/2010.
+;  
 ;
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -187,121 +187,121 @@ n=0
             zon_wind_data(0,0)= data(0)
             mer_wind_data(0,0)= data(1)
             zon_thermal_data(0,0)= data(2)
-            mer_thermal_data(0,0)= data(3)   
+            mer_thermal_data(0,0)= data(3)  
          endif
          if (74 eq alt) then begin
             zon_wind_data(0,1)= data(0)
             mer_wind_data(0,1)= data(1)
             zon_thermal_data(0,1)= data(2)
-            mer_thermal_data(0,1)= data(3) 
+            mer_thermal_data(0,1)= data(3)            
          endif 
          if (76 eq alt) then begin
             zon_wind_data(0,2)= data(0)
             mer_wind_data(0,2)= data(1)
             zon_thermal_data(0,2)= data(2)
-            mer_thermal_data(0,2)= data(3)               
+            mer_thermal_data(0,2)= data(3)  
          endif
          if (78 eq alt) then begin
             zon_wind_data(0,3)= data(0)
             mer_wind_data(0,3)= data(1)
             zon_thermal_data(0,3)= data(2)
-            mer_thermal_data(0,3)= data(3)             
+            mer_thermal_data(0,3)= data(3)
          endif 
          if (80 eq alt) then begin
             zon_wind_data(0,4)= data(0)
-            mer_wind_data(0,4)= data(1)
+            mer_wind_data(0,4)= data(1) 
             zon_thermal_data(0,4)= data(2)
-            mer_thermal_data(0,4)= data(3)               
+            mer_thermal_data(0,4)= data(3)  
          endif
          if (82 eq alt) then begin
             zon_wind_data(0,5)= data(0)
             mer_wind_data(0,5)= data(1)
             zon_thermal_data(0,5)= data(2)
-            mer_thermal_data(0,5)= data(3) 
+            mer_thermal_data(0,5)= data(3)
          endif 
          if (84 eq alt) then begin
             zon_wind_data(0,6)= data(0)
             mer_wind_data(0,6)= data(1)
             zon_thermal_data(0,6)= data(2)
-            mer_thermal_data(0,6)= data(3)   
+            mer_thermal_data(0,6)= data(3)  
          endif
          if (86 eq alt) then begin
             zon_wind_data(0,7)= data(0)
             mer_wind_data(0,7)= data(1)
             zon_thermal_data(0,7)= data(2)
-            mer_thermal_data(0,7)= data(3) 
+            mer_thermal_data(0,7)= data(3)
          endif 
          if (88 eq alt) then begin
             zon_wind_data(0,8)= data(0)
             mer_wind_data(0,8)= data(1)
             zon_thermal_data(0,8)= data(2)
-            mer_thermal_data(0,8)= data(3)   
+            mer_thermal_data(0,8)= data(3)  
          endif
          if (90 eq alt) then begin
             zon_wind_data(0,9)= data(0)
             mer_wind_data(0,9)= data(1)
             zon_thermal_data(0,9)= data(2)
-            mer_thermal_data(0,9)= data(3) 
+            mer_thermal_data(0,9)= data(3)
          endif
          if (92 eq alt) then begin
             zon_wind_data(0,10)= data(0)
             mer_wind_data(0,10)= data(1)
             zon_thermal_data(0,10)= data(2)
-            mer_thermal_data(0,10)= data(3)   
+            mer_thermal_data(0,10)= data(3)  
          endif
          if (94 eq alt) then begin
             zon_wind_data(0,11)= data(0)
             mer_wind_data(0,11)= data(1)
             zon_thermal_data(0,11)= data(2)
-            mer_thermal_data(0,11)= data(3) 
+            mer_thermal_data(0,11)= data(3)
          endif 
          if (96 eq alt) then begin
             zon_wind_data(0,12)= data(0)
             mer_wind_data(0,12)= data(1)
             zon_thermal_data(0,12)= data(2)
-            mer_thermal_data(0,12)= data(3)   
+            mer_thermal_data(0,12)= data(3)  
          endif
          if (98 eq alt) then begin
             zon_wind_data(0,13)= data(0)
             mer_wind_data(0,13)= data(1)
             zon_thermal_data(0,13)= data(2)
-            mer_thermal_data(0,13)= data(3) 
+            mer_thermal_data(0,13)= data(3)
          endif 
          if (100 eq alt) then begin
             zon_wind_data(0,14)= data(0)
             mer_wind_data(0,14)= data(1)
             zon_thermal_data(0,14)= data(2)
-            mer_thermal_data(0,14)= data(3) 
+            mer_thermal_data(0,14)= data(3)
          endif 
          if (102 eq alt) then begin
             zon_wind_data(0,15)= data(0)
             mer_wind_data(0,15)= data(1)
             zon_thermal_data(0,15)= data(2)
-            mer_thermal_data(0,15)= data(3)   
+            mer_thermal_data(0,15)= data(3)  
          endif
          if (104 eq alt) then begin
             zon_wind_data(0,16)= data(0)
             mer_wind_data(0,16)= data(1)
             zon_thermal_data(0,16)= data(2)
-            mer_thermal_data(0,16)= data(3) 
+            mer_thermal_data(0,16)= data(3)
          endif  
          if (106 eq alt) then begin
             zon_wind_data(0,17)= data(0)
             mer_wind_data(0,17)= data(1)
             zon_thermal_data(0,17)= data(2)
-            mer_thermal_data(0,17)= data(3) 
+            mer_thermal_data(0,17)= data(3)
          endif 
          if (108 eq alt) then begin
             zon_wind_data(0,18)= data(0)
             mer_wind_data(0,18)= data(1)
             zon_thermal_data(0,18)= data(2)
-            mer_thermal_data(0,18)= data(3)   
+            mer_thermal_data(0,18)= data(3)  
          endif
          if (110 eq alt) then begin
             zon_wind_data(0,19)= data(0)
             mer_wind_data(0,19)= data(1)
             zon_thermal_data(0,19)= data(2)
-            mer_thermal_data(0,19)= data(3) 
+            mer_thermal_data(0,19)= data(3)
          endif
          data(0)=0
          data(1)=0
@@ -309,7 +309,7 @@ n=0
          data(3)=0
          if n ge 1 then begin
          if (time1(1)-time1(0) ne 0) then begin          
-            append_array, se_time, time
+            append_array, kt_time, time
             append_array, zon_wind, zon_wind_data
             append_array, mer_wind, mer_wind_data
             append_array, zon_thermal, zon_thermal_data
@@ -331,14 +331,12 @@ endfor
 
 ;Replace data array:
 ;===================
-number = n_elements(se_time)
+number = n_elements(kt_time)
 
 for i=0,number-2 do begin
-  se_time[i] = se_time[i+1]
+  kt_time[i] = kt_time[i+1]
   zon_wind[i,*] = zon_wind[i+1,*]
   mer_wind[i,*] = mer_wind[i+1,*]
-  zon_thermal[i,*] = zon_thermal[i+1,*]
-  mer_thermal[i,*] = mer_thermal[i+1,*]  
   for l=0,19 do begin
     a=zon_wind[i,l]
     wbad = where(a eq 0,nbad)
@@ -352,7 +350,7 @@ for i=0,number-2 do begin
       b[wbad] = !values.f_nan
       mer_wind[i,l]=b
     endif
-     c=zon_thermal[i,l]
+    c=zon_thermal[i,l]
     wbad = where(c eq 0,nbad)
     if nbad gt 0 then begin
       c[wbad] = !values.f_nan
