@@ -252,7 +252,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   instrumentLabel = widget_label(instrumentBase,value='Instrument Type: ')
 
-  instrumentArray = ['gmag','superdarn','EAR','MF_radar','meteor_radar','MU']
+  instrumentArray = ['gmag','superdarn','EAR','MF_radar','meteor_radar','MU','BLR']
   
   instrumentCombo = widget_combobox(instrumentBase,$
                                        value=instrumentArray,$
@@ -262,14 +262,19 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;================================
   ;=========== Data Type ==========
   ;================================
-  typeArray = ptrarr(6)
+  typeArray = ptrarr(7)
   
   typeArray[0] = ptr_new(['index','magdas'])
   typeArray[1] = ptr_new(['hok'])
-  typeArray[2] = ptr_new(['trop_wind','trop_pwr','trop_spec_width','iono_wind','iono_pwr','iono_spec_width','iono_noise_lev'])
+  typeArray[2] = ptr_new(['trop_wind','trop_pwr','trop_spec_width',$
+                          'iono_er_dpl','iono_er_pwr','iono_er_spec_width','iono_er_noise_lev',$
+                          'iono_efr_dpl','iono_efr_pwr','iono_efr_spec_width','iono_efr_noise_lev',$ 
+                          'iono_fr_dpl','iono_fr_pwr','iono_fr_spec_width','iono_fr_noise_lev'])
   typeArray[3] = ptr_new(['pameungpeuk','pontianak'])
   typeArray[4] = ptr_new(['kototabang','serpong'])
   typeArray[5] = ptr_new(['trop_wind','trop_pwr','trop_spec_width','meso_wind','meso_pwr','meso_spec_width'])
+  typeArray[6] = ptr_new(['blr_wind_kot','blr_pwr_kot','blr_spec_width_kot','blr_wind_sgk','blr_pwr_sgk','blr_spec_width_sgk',$
+                          'blr_wind_ser','blr_pwr_ser','blr_spec_width_ser'])
                                      
   dataBase = widget_base(selectionBase,/row)
   typeBase = widget_base(dataBase,/col)
@@ -286,14 +291,15 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;================================
   ;========== Parameters ==========
   ;================================
-  paramArray = ptrarr(6)
+  paramArray = ptrarr(7)
   paramArray[0] = ptr_new(ptrarr(2))
   paramArray[1] = ptr_new(ptrarr(1))
-  paramArray[2] = ptr_new(ptrarr(7))
+  paramArray[2] = ptr_new(ptrarr(15))
   paramArray[3] = ptr_new(ptrarr(2))
   paramArray[4] = ptr_new(ptrarr(2))
   paramArray[5] = ptr_new(ptrarr(6))
-    
+  paramArray[6] = ptr_new(ptrarr(9))
+   
   (*paramArray[0])[0] = ptr_new(['dst','ae','al','ao','au','ax','onw_pc3'])
   (*paramArray[0])[1] = ptr_new(['anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
                                  'hob','ilr','kuj','lkw','mcq','mgd','mlb','mnd','mut', $
@@ -303,10 +309,18 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[2])[0] = ptr_new(['zonal_wind_ear','meridional_wind_ear','vertical_wind_ear'])
   (*paramArray[2])[1] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
   (*paramArray[2])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])
-  (*paramArray[2])[3] = ptr_new(['dvr_beam1','dvr_beam2','dvr_beam3'])
-  (*paramArray[2])[4] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3'])
-  (*paramArray[2])[5] = ptr_new(['sw_beam1','sw_beam2','sw_beam3'])
-  (*paramArray[2])[6] = ptr_new(['nl_beam1','nl_beam2','nl_beam3'])
+  (*paramArray[2])[3] = ptr_new(['er_dpl_beam1','er_dpl_beam2','er_dpl_beam3','er_dpl_beam4','er_dpl_beam5'])
+  (*paramArray[2])[4] = ptr_new(['er_pwr_beam1','er_pwr_beam2','er_pwr_beam3','er_pwr_beam4','er_pwr_beam5'])
+  (*paramArray[2])[5] = ptr_new(['er_sw_beam1','er_sw_beam2','er_sw_beam3','er_sw_beam4','er_sw_beam5'])
+  (*paramArray[2])[6] = ptr_new(['er_pn_beam1','er_pn_beam2','er_pn_beam3','er_pn_beam4','er_pn_beam5'])
+  (*paramArray[2])[7] = ptr_new(['efr_dpl_beam1','efr_dpl_beam2','efr_dpl_beam3','efr_dpl_beam4','efr_dpl_beam5'])
+  (*paramArray[2])[8] = ptr_new(['efr_pwr_beam1','efr_pwr_beam2','efr_pwr_beam3','efr_pwr_beam4','efr_pwr_beam5'])
+  (*paramArray[2])[9] = ptr_new(['efr_sw_beam1','efr_sw_beam2','efr_sw_beam3','efr_sw_beam4','efr_sw_beam5'])
+  (*paramArray[2])[10] = ptr_new(['efr_pn_beam1','efr_pn_beam2','efr_pn_beam3','efr_pn_beam4','efr_pn_beam5'])
+  (*paramArray[2])[11] = ptr_new(['fr_dpl_beam1','fr_dpl_beam2','fr_dpl_beam3','fr_dpl_beam4','fr_dpl_beam5'])
+  (*paramArray[2])[12] = ptr_new(['fr_pwr_beam1','fr_pwr_beam2','fr_pwr_beam3','fr_pwr_beam4','fr_pwr_beam5'])
+  (*paramArray[2])[13] = ptr_new(['fr_sw_beam1','fr_sw_beam2','fr_sw_beam3','fr_sw_beam4','fr_sw_beam5'])
+  (*paramArray[2])[14] = ptr_new(['fr_pn_beam1','fr_pn_beam2','fr_pn_beam3','fr_pn_beam4','fr_pn_beam5'])
   (*paramArray[3])[0] = ptr_new(['zonal_wind_pam','meridional_wind_pam','vertical_wind_pam'])  
   (*paramArray[3])[1] = ptr_new(['zonal_wind_pon','meridional_wind_pon','vertical_wind_pon'])                            
   (*paramArray[4])[0] = ptr_new(['zonal_wind_ktb','meridional_wind_ktb','zonal_thermal_speed_ktb','meridional_thermal_speed_ktb'])
@@ -317,6 +331,15 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[5])[3] = ptr_new(['zonal_wind_mu','meridional_wind_mu','vertical_wind_mu'])
   (*paramArray[5])[4] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
   (*paramArray[5])[5] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])
+  (*paramArray[6])[0] = ptr_new(['kot_zonal_wind','kot_meridional_wind','kot_vertical_wind'])
+  (*paramArray[6])[1] = ptr_new(['kot_pwr_beam1','kot_pwr_beam2','kot_pwr_beam3','kot_pwr_beam4','kot_pwr_beam5'])
+  (*paramArray[6])[2] = ptr_new(['kot_sw_beam1','kot_sw_beam2','kot_sw_beam3','kot_sw_beam4','kot_sw_beam5'])
+  (*paramArray[6])[3] = ptr_new(['sgk_zonal_wind','sgk_meridional_wind','sgk_vertical_wind'])
+  (*paramArray[6])[4] = ptr_new(['sgk_pwr_beam1','sgk_pwr_beam2','sgk_pwr_beam3','sgk_pwr_beam4','sgk_pwr_beam5'])
+  (*paramArray[6])[5] = ptr_new(['sgk_sw_beam1','sgk_sw_beam2','sgk_sw_beam3','sgk_sw_beam4','sgk_sw_beam5']) 
+  (*paramArray[6])[6] = ptr_new(['ser_zonal_wind','ser_meridional_wind','ser_vertical_wind'])
+  (*paramArray[6])[7] = ptr_new(['ser_pwr_beam1','ser_pwr_beam2','ser_pwr_beam3','ser_pwr_beam4','ser_pwr_beam5'])
+  (*paramArray[6])[8] = ptr_new(['ser_sw_beam1','ser_sw_beam2','ser_sw_beam3','ser_sw_beam4','ser_sw_beam5']) 
                                                                            
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Parameter(s):')

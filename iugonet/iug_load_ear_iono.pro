@@ -70,12 +70,14 @@ endif else begin
 endelse
 
 ;Data component
-if datatype eq 'dvr_beam1' then begin
-   vdcname = strmid(parameters, 0,1)
+if datatype eq 'iono_wind' then begin
+   vdcname = strmid(parameters, 0,9)
    
-   if vdcname eq 'z' then vdcnames = 'u'
-   if vdcname eq 'm' then vdcnames = 'v'
-   if vdcname eq 'v' then vdcnames = 'w'
+   if vdcname eq 'dvr_beam1' then vdcnames = '1'
+   if vdcname eq 'dvr_beam2' then vdcnames = '2'
+   if vdcname eq 'dvr_beam3' then vdcnames = '3'
+   if vdcname eq 'dvr_beam4' then vdcnames = '4'
+   if vdcname eq 'dvr_beam5' then vdcnames = '5'
 endif else if datatype eq 'iono_pwr' then begin
    vdcname = strmid(parameters, 0,9)
 
@@ -92,8 +94,15 @@ endif else if datatype eq 'iono_spec_width' then begin
    if vdcname eq 'sw_beam3' then vdcnames = '3'
    if vdcname eq 'sw_beam4' then vdcnames = '4'
    if vdcname eq 'sw_beam5' then vdcnames = '5'
-endif
+endif else if datatype eq 'iono_pn' then begin
+   vdcname = strmid(parameters, 0,8)
 
+   if vdcname eq 'pn_beam1' then vdcnames = '1'
+   if vdcname eq 'pn_beam2' then vdcnames = '2'
+   if vdcname eq 'pn_beam3' then vdcnames = '3'
+   if vdcname eq 'pn_beam4' then vdcnames = '4'
+   if vdcname eq 'pn_beam5' then vdcnames = '5'
+endif
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire EAR data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
@@ -117,23 +126,27 @@ if ~size(fns,/type) then begin
     if datatype eq 'iono_wind' then begin
       file_names = file_dailynames( $
         file_format='YYYY/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.faieb3p4b.dpl.csv'
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.faieb4p4a.dpl'+vdcnames+'.csv'
     endif else if datatype eq 'iono_pwr' then begin
       file_names = file_dailynames( $
         file_format='YYYY/YYYYMMDD/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.pwr'+vdcnames+'.csv'    
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.faieb4p4a.pwr'+vdcnames+'.csv'    
     endif else if datatype eq 'iono_spec_width' then begin
       file_names = file_dailynames( $
         file_format='YYYY/YYYYMMDD/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.wdt'+vdcnames+'.csv'
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.faieb4p4a.wdt'+vdcnames+'.csv'
+    endif else if datatype eq 'iono_pn' then begin
+      file_names = file_dailynames( $
+        file_format='YYYY/YYYYMMDD/'+$
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.faieb4p4a.pn'+vdcnames+'.csv'
     endif
     ;
     ;Define FILE_RETRIEVE structure:
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir = root_data_dir() + 'iugonet/rish/ear/ionosphere_wind/'
-    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/~mu/tmp-nhashi/data/csv/'
+    source.local_data_dir = root_data_dir() + 'iugonet/rish/ear/ionosphere/'
+    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/csv/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -142,16 +155,17 @@ if ~size(fns,/type) then begin
       [local_paths_all, local_paths] : local_paths
   if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
 endif else file_names=fns
-stop
+
 ;Read the files:
 ;===============
 s=''
 u=''
-altitude = fltarr(120)
-height = fltarr(121)
-data = strarr(121)
-data2 = fltarr(1,120)
-ear_data = fltarr(1,120)
+range = fltarr(203)
+altitude = fltarr(203)
+height = fltarr(203)
+data = strarr(204)
+data2 = fltarr(1,203)
+ear_data = fltarr(1,203)
 time = dblarr(1)
 ear_time = dblarr(1)
 
@@ -166,11 +180,13 @@ ear_time = dblarr(1)
     endelse
     openr,lun,file,/get_lun    
     ;
-    ;Read information of altitude:
-    ;=============================
+    ;Read information of range and altitude:
+    ;=======================================
+    readf, lun, s
+    range = float(strsplit(s,',',/extract))
     readf, lun, s
     height = float(strsplit(s,',',/extract))
-    
+    print, range, height
     for j=0,119 do begin
      altitude[j] = height[j+1]
     endfor
@@ -193,10 +209,12 @@ ear_time = dblarr(1)
          month = strmid(u,5,2)
          day = strmid(u,8,2)
          hour = strmid(u,11,2)
-         minute = strmid(u,14,2)  
+         minute = strmid(u,14,2)
+  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   
          ;
          for j=0,119 do begin
           a = float(data[j+1])
@@ -229,28 +247,40 @@ for i=0,number-2 do begin
 endfor
 
 
-if datatype eq 'trop_wind' then begin 
-  ;Store data of zonal wind:
+if datatype eq 'iono_wind' then begin 
+  ;Store data of dvr_beam1:
   ;============================
-  if parameters eq 'zonal_wind_ear' then begin
+  if parameters eq 'dvr_beam1' then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'zonal_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+     store_data,'dvr_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
     ; add options
-    options, 'zonal_wind_ear', 'spec', 1
+    options, 'dvr_beam1', 'spec', 1
   endif
-  ;Store data of meridional wind:
+  ;Store data of dvr_beam2:
   ;==============================
-  if parameters eq 'meridional_wind_ear' then begin
+  if parameters eq 'dvr_beam2' then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'meridional_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+     store_data,'dvr_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
   endif
-  ;Store data of vertical wind:
+  ;Store data of dvr_beam3:
   ;============================
-  if parameters eq 'vertical_wind_ear' then begin
+  if parameters eq 'dvr_beam3' then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'vertical_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+     store_data,'dvr_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
   endif
-endif else if datatype eq 'trop_pwr' then begin
+    ;Store data of dvr_beam4:
+  ;==============================
+  if parameters eq 'dvr_beam4' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'dvr_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
+  ;Store data of dvr_beam5:
+  ;============================
+  if parameters eq 'dvr_beam5' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'dvr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
+endif else if datatype eq 'iono_pwr' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
   if parameters eq 'pwr_beam1' then begin
@@ -281,7 +311,7 @@ endif else if datatype eq 'trop_pwr' then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
      store_data,'pwr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
   endif
-endif else if datatype eq 'trop_spec_width' then begin
+endif else if datatype eq 'iono_spec_width' then begin
     ;Store data of beam1 spectral width:
     ;===================================
   if parameters eq 'sw_beam1' then begin
@@ -312,10 +342,39 @@ endif else if datatype eq 'trop_spec_width' then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
      store_data,'sw_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
   endif
+endif else if datatype eq 'iono_pn' then begin
+    ;Store data of beam1 noise level:
+    ;===================================
+  if parameters eq 'pn_beam1' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'pn_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
+    ;Store data of beam2 noise level:
+    ;===================================
+  if parameters eq 'pn_beam2' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'pn_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
+    ;Store data of beam3 noise level:
+    ;===================================
+  if parameters eq 'pn_beam3' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'pn_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
+    ;Store data of beam4 noise level:
+    ;===================================
+  if parameters eq 'pn_beam4' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'pn_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
+    ;Store data of beam5 noise level:
+    ;===================================
+  if parameters eq 'pn_beam5' then begin
+     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+     store_data,'pn_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+  endif
 endif
 
-
-    
 print,'**********************************************************************************
 print,'Data loading is successful!!'
 print,'**********************************************************************************

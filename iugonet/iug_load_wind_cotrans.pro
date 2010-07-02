@@ -54,7 +54,7 @@ pro iug_load_wind_cotrans
   cotrans,'wi_h0_mfi_B3GSM','wi_h0_mfi_B3SM',/GSM2SM
   
 ; Plot the wi_h0_mfi_B3GSE and wi_h0_mfi_B3GSM data  
-  tlimit,'2006-10-2/12:00','2006-10-2/12:30' 
+  tlimit,'2006-10-2/12:00:00','2006-10-2/12:30:00' 
   tplot, ['wi_h0_mfi_B3GSE','wi_h0_mfi_B3GEO','wi_h0_mfi_B3GEI','wi_h0_mfi_B3SM']
   ;erase
   ;wdelete, 1
