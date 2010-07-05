@@ -158,7 +158,7 @@ for i=0, nsites-1 do begin
     append_array, databuf, rdata
     append_array, timebuf, basetime + dindgen(1440)*60d
   endfor
-
+  
   ;=======================================
   ;=== Loop on creating tplot variable ===
   ;=======================================
@@ -200,12 +200,12 @@ endfor
 print,' 
 print,'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 print,' Multicore CPU on AA
-print,'  Pentium4 HT:  (LEƒÖEßEƒÖE`)
-print,'  Core2Duo:     ( ^ƒÖ^ )( ^ƒÖ^ )
-print,'  Core2Quad:    ( ^ƒÖ^ )( ^ƒÖ^ )l( ^ƒÖ^ )( ^ƒÖ^ )
+print,'  Pentium4 HT:  (ï¿½Lï¿½Eï¿½ÖEï¿½ßEï¿½ÖE`)
+print,'  Core2Duo:     ( ^ï¿½ï¿½^ )( ^ï¿½ï¿½^ )
+print,'  Core2Quad:    ( ^ï¿½ï¿½^ )( ^ï¿½ï¿½^ )ï¿½l( ^ï¿½ï¿½^ )( ^ï¿½ï¿½^ )
 print,'  Core i7:
-print,'          ¼“ñi OƒÖOßOƒÖOj½¼“ñi OƒÖOßOƒÖOj½
-print,'          ¼“ñi OƒÖOßOƒÖOj½¼“ñi OƒÖOßOƒÖOj½
+print,'          ï¿½ï¿½ï¿½ï¿½i ï¿½Oï¿½ÖOï¿½ßOï¿½ÖOï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½i ï¿½Oï¿½ÖOï¿½ßOï¿½ÖOï¿½jï¿½ï¿½
+print,'          ï¿½ï¿½ï¿½ï¿½i ï¿½Oï¿½ÖOï¿½ßOï¿½ÖOï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½i ï¿½Oï¿½ÖOï¿½ßOï¿½ÖOï¿½jï¿½ï¿½
 print,'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 print,' 
 

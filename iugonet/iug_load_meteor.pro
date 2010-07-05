@@ -79,7 +79,7 @@ endelse
    if datatype eq 'kototabang' then begin 
       iug_load_meteor_kot, datatype=datatype,parameters=parameters,trange=trange
    endif else if datatype eq 'serpong' then begin
-      iug_load_meteor_ser, datatype=datatype,parameters=parameters,trange=trange
+      iug_load_meteor_srp, datatype=datatype,parameters=parameters,trange=trange
    endif
    
 end

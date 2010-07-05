@@ -76,7 +76,7 @@ endelse
   ;===============================
      
   ;load of MF radar data 
-   iug_load_MF_pam, datatype=datatype,parameters=parameters,trange=trange
+   iug_load_mf_pam, datatype=datatype,parameters=parameters,trange=trange
    
 end
 

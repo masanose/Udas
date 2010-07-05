@@ -33,7 +33,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 06/06/2010.
-;  
+;  A. Shinbori, 04/07/2010.
 ;
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -108,7 +108,7 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir =  root_data_dir() + 'iugonet/rish/kototabang/h2km_t60min00/'
+    source.local_data_dir =  root_data_dir() + 'iugonet/rish/mw/kototabang/h2km_t60min00/'
     ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -125,17 +125,17 @@ s=''
 height = fltarr(20)
 zon_wind_data = fltarr(1,20)
 mer_wind_data = fltarr(1,20)
-zon_wind = fltarr(1,20)
-mer_wind = fltarr(1,20)
 zon_thermal_data = fltarr(1,20)
 mer_thermal_data = fltarr(1,20)
-zon_thermal = fltarr(1,20)
-mer_thermal = fltarr(1,20)
 time = dblarr(1)
 time1 = dblarr(2)
-kt_time = dblarr(1)
 data=fltarr(7)
 n=0
+kt_time=0
+zon_wind=0
+mer_wind=0
+zon_thermal=0
+mer_thermal=0
  
  for i=0,19 do begin
    height[i]=72+2*i   
@@ -145,9 +145,9 @@ n=0
 ;================================
  for j=0,n_elements(local_paths)-1 do begin
     file= local_paths[j]
-    if file_test(/regular,file) then  dprint,'Loading kototabang file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading Kototabang file: ',file $
     else begin
-         dprint,'kototabang file ',file,' not found. Skipping'
+         dprint,'Kototabang file ',file,' not found. Skipping'
          continue
     endelse
     openr,lun,file,/get_lun    
@@ -175,6 +175,13 @@ n=0
          ;=======================================================
          data1 = strmid(s,12,55)
          data = float(strsplit(data1, ' ', /extract))
+         
+         for j=0,6 do begin
+           a = float(data[j])
+           wbad = where(a eq 999,nbad)
+           if nbad gt 0 then a[wbad] = !values.f_nan
+           data[j]=a
+         endfor
          ;
          ;Append data of time and U, V components at determined altitude:
          ;=============================================================== 
@@ -315,85 +322,61 @@ n=0
             append_array, zon_thermal, zon_thermal_data
             append_array, mer_thermal, mer_thermal_data
             for i=0, 19 do begin
-             zon_wind_data(0,i)=0
-             mer_wind_data(0,i)=0
-             zon_thermal_data(0,i)=0
-             mer_thermal_data(0,i)=0
+             zon_wind_data(0,i)=!values.f_nan
+             mer_wind_data(0,i)=!values.f_nan
+             zon_thermal_data(0,i)=!values.f_nan
+             mer_thermal_data(0,i)=!values.f_nan
             endfor
          endif
          endif
          n=n+1        
-         continue
       endif
     endwhile 
     free_lun,lun
 endfor
 
-;Replace data array:
-;===================
-number = n_elements(kt_time)
-
-for i=0,number-2 do begin
-  kt_time[i] = kt_time[i+1]
-  zon_wind[i,*] = zon_wind[i+1,*]
-  mer_wind[i,*] = mer_wind[i+1,*]
-  for l=0,19 do begin
-    a=zon_wind[i,l]
-    wbad = where(a eq 0,nbad)
-    if nbad gt 0 then begin
-      a[wbad] = !values.f_nan
-      zon_wind[i,l]=a
-    endif
-    b=mer_wind[i,l]
-    wbad = where(b eq 0,nbad)
-    if nbad gt 0 then begin
-      b[wbad] = !values.f_nan
-      mer_wind[i,l]=b
-    endif
-    c=zon_thermal[i,l]
-    wbad = where(c eq 0,nbad)
-    if nbad gt 0 then begin
-      c[wbad] = !values.f_nan
-      zon_thermal[i,l]=c
-    endif
-    d=mer_thermal[i,l]
-    wbad = where(d eq 0,nbad)
-    if nbad gt 0 then begin
-      d[wbad] = !values.f_nan
-      mer_thermal[i,l]=d
-    endif
-  endfor
-endfor
 ;******************************
 ;Store data in TPLOT variables:
 ;******************************
 acknowledgstring = ''
+if file_test(/regular,file) then begin
+   dprint,'Loading Kototabang file: ',file 
 
 ;Store data of zonal and meridional component:
 ;=============================================
-if  parameters eq 'zonal_wind_ktb' then begin
-    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-    store_data,'zonal_wind_ktb',data={x:kt_time, y:zon_wind, v:height},dlimit=dlimit
-endif
-if  parameters eq 'meridional_wind_ktb' then begin
-    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-    store_data,'meridional_wind_ktb',data={x:kt_time, y:mer_wind, v:height},dlimit=dlimit
-endif
+   if  parameters eq 'zonal_wind_ktb' then begin
+       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+       store_data,'zonal_wind_ktb',data={x:kt_time, y:zon_wind, v:height},dlimit=dlimit
+   endif
+   if  parameters eq 'meridional_wind_ktb' then begin
+       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+       store_data,'meridional_wind_ktb',data={x:kt_time, y:mer_wind, v:height},dlimit=dlimit
+   endif
 
 ;Store data of zonal and meridional thermal speed component:
 ;===========================================================
-if  parameters eq 'zonal_thermal_speed_ktb' then begin
-    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-    store_data,'zonal_thermal_speed_ktb',data={x:kt_time, y:zon_thermal, v:height},dlimit=dlimit
-endif
-if  parameters eq 'meridional_thermal_speed_ktb' then begin
-    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-    store_data,'meridional_thermal_speed_ktb',data={x:kt_time, y:mer_thermal, v:height},dlimit=dlimit
-endif
+   if  parameters eq 'zonal_thermal_speed_ktb' then begin
+       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+       store_data,'zonal_thermal_speed_ktb',data={x:kt_time, y:zon_thermal, v:height},dlimit=dlimit
+   endif
+   if  parameters eq 'meridional_thermal_speed_ktb' then begin
+       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+       store_data,'meridional_thermal_speed_ktb',data={x:kt_time, y:mer_thermal, v:height},dlimit=dlimit
+   endif
 
 ; add options
-options, parameters, 'spec', 1
+   options, parameters, 'spec', 1
+endif else begin
+ dprint,'Kototabang file ',file,' not found. Skipping'
+endelse
 
+;Clear time and data buffer:
+kt_time=0
+zon_wind=0
+mer_wind=0
+zon_thermal=0
+mer_thermal=0
+            
 print,'**********************************************************************************
 print, 'Data loading is successful!!'
 print,'**********************************************************************************

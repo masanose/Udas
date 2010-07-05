@@ -151,9 +151,8 @@ altitude = fltarr(120)
 height = fltarr(121)
 data = strarr(121)
 data2 = fltarr(1,120)
-mu_data = fltarr(1,120)
 time = dblarr(1)
-mu_time = dblarr(1)
+
 
 ;Loop on files (zonal component): 
 ;================================
@@ -213,108 +212,112 @@ mu_time = dblarr(1)
            ;=============================
             append_array, mu_data, data2
     
-         continue
       endif
     endwhile 
     free_lun,lun  
 endfor
 
-;Replace data array:
-;===================
-number = n_elements(mu_time)
+;******************************
+;Store data in TPLOT variables:
+;******************************
+acknowledgstring = ''
 
-for i=0,number-2 do begin
-  mu_time[i] = mu_time[i+1]
-  mu_data[i,*] = mu_data[i+1,*]
-endfor
-
-
-if datatype eq 'trop_wind' then begin 
+if file_test(/regular,file) then begin
+   dprint,'Loading MU file: ',file
+   
+   if datatype eq 'trop_wind' then begin 
   ;Store data of zonal wind:
   ;============================
-  if parameters eq 'zonal_wind_mu' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'zonal_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-    ; add options
-    options, 'zonal_wind_mu', 'spec', 1
-  endif
+      if parameters eq 'zonal_wind_mu' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'zonal_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
   ;Store data of meridional wind:
   ;==============================
-  if parameters eq 'meridional_wind_mu' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'meridional_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'meridional_wind_mu' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'meridional_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
   ;Store data of vertical wind:
   ;============================
-  if parameters eq 'vertical_wind_mu' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'vertical_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
-endif else if datatype eq 'trop_pwr' then begin
+      if parameters eq 'vertical_wind_mu' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'vertical_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
+   endif else if datatype eq 'trop_pwr' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
-  if parameters eq 'pwr_beam1' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'pwr_beam1',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'pwr_beam1' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'pwr_beam1',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam2 echo intensity:
     ;===================================
-  if parameters eq 'pwr_beam2' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'pwr_beam2',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'pwr_beam2' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'pwr_beam2',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam3 echo intensity:
     ;===================================
-  if parameters eq 'pwr_beam3' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'pwr_beam3',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'pwr_beam3' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'pwr_beam3',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam4 echo intensity:
     ;===================================
-  if parameters eq 'beam4' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'pwr_beam4',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'beam4' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'pwr_beam4',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam5 echo intensity:
     ;===================================
-  if parameters eq 'pwr_beam5' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'pwr_beam5',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
-endif else if datatype eq 'trop_spec_width' then begin
+      if parameters eq 'pwr_beam5' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'pwr_beam5',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
+   endif else if datatype eq 'trop_spec_width' then begin
     ;Store data of beam1 spectral width:
     ;===================================
-  if parameters eq 'sw_beam1' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'sw_beam1',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'sw_beam1' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'sw_beam1',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam2 spectral width:
     ;===================================
-  if parameters eq 'sw_beam2' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'sw_beam2',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'sw_beam2' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'sw_beam2',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam3 spectral width:
     ;===================================
-  if parameters eq 'sw_beam3' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'sw_beam3',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'sw_beam3' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'sw_beam3',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam4 spectral width:
     ;===================================
-  if parameters eq 'sw_beam4' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'sw_beam4',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'sw_beam4' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'sw_beam4',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam5 spectral width:
     ;===================================
-  if parameters eq 'sw_beam5' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'sw_beam5',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-  endif
-endif
+      if parameters eq 'sw_beam5' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'sw_beam5',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+      endif
+   endif
 
+endif else begin
+ dprint,'MU file ',file,' not found. Skipping'
+endelse
 
+; add options
+options, parameters, 'spec', 1
+
+;Clear time and data buffer:
+mu_time=0
+mu_data=0
     
 print,'**********************************************************************************
 print,'Data loading is successful!!'
