@@ -16,7 +16,7 @@
 ;
 ;Keywords:
 ;  DATATYPE (I/O):
-;    Set to 'iono_er_dpl'.  If not set, 'iono_er_dpl' is
+;    Set to datatype.  If not set, 'iono_er_dpl' is
 ;      assumed.  Returns cleaned input, or shows default. 
 ;  PARAMETERS (I/O):
 ;    Set to wind parameters.  If not set, 'er_dpl_beam1' is

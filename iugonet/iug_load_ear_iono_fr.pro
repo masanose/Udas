@@ -157,24 +157,12 @@ if ~size(fns,/type) then begin
 endif else file_names=fns
 
 if datatype ne 'iono_fr_noise_lev' then begin
-;Read the files:
-;===============
-s=''
-u=''
-altitude = fltarr(256)
-data = strarr(257)
-data2 = fltarr(1,256)
-ear_data = fltarr(1,256)
-time = dblarr(1)
-ear_time = dblarr(1)
 
-;Loop on files (zonal component): 
-;================================
  for i=0,n_elements(local_paths)-1 do begin
     file= local_paths[i]
-    if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading EAR-fai file: ',file $
     else begin
-         dprint,'EAR file ',file,' not found. Skipping'
+         dprint,'EAR-fai file ',file,' not found. Skipping'
          continue
     endelse
     openr,lun,file,/get_lun    
@@ -188,9 +176,6 @@ ear_time = dblarr(1)
     height2 = float(strsplit(s,',',/extract))
     number2 = n_elements(height2)
 
-    print, number2
-    print, range, height
-    
     for j=0,number2-2 do begin
      altitude[j] = height[j+1]
     endfor
@@ -198,7 +183,6 @@ ear_time = dblarr(1)
     ;Loop on readdata:
     ;=================
     k=0
-    print,k
     while(not eof(lun)) do begin
       readf,lun,s
       ok=1
@@ -223,15 +207,9 @@ ear_time = dblarr(1)
          ;
          for j=0,number2-2 do begin
           a = float(data[j+1])
-          wbad = where(a eq -999,nbad)
+          wbad = where(a eq -999 or 0,nbad)
           if nbad gt 0 then a[wbad] = !values.f_nan
           data2[k,j]=a
-         endfor
-         for j=0,255 do begin
-          b=altitude[j]
-          wbad = where(b eq 0,nbad)
-          if nbad gt 0 then b[wbad] = !values.f_nan
-          altitude[j]=b
          endfor
            ;
            ;Append data of time:
@@ -248,128 +226,124 @@ ear_time = dblarr(1)
     free_lun,lun  
 endfor
 
-;Replace data array:
-;===================
-number = n_elements(ear_time)
-
-for i=0,number-2 do begin
-  ear_time[i] = ear_time[i+1]
-  ear_data[i,*] = ear_data[i+1,*]
-endfor
-
-print,altitude
-if datatype eq 'iono_fr_dpl' then begin 
+if file_test(/regular,file) then begin
+   dprint,'Loading EAR-fai file: ',file
+   
+   if datatype eq 'iono_fr_dpl' then begin 
   ;Store data of dvr_beam1:
   ;============================
-  if parameters eq 'fr_dpl_beam1' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_dpl_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-    ; add options
-    options, 'fr_dpl_beam1', 'spec', 1
-  endif
+      if parameters eq 'fr_dpl_beam1' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_dpl_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
   ;Store data of dvr_beam2:
   ;==============================
-  if parameters eq 'fr_dpl_beam2' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_dpl_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_dpl_beam2' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_dpl_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
   ;Store data of dvr_beam3:
   ;============================
-  if parameters eq 'fr_dpl_beam3' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_dpl_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_dpl_beam3' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_dpl_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of dvr_beam4:
   ;==============================
-  if parameters eq 'fr_dpl_beam4' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_dpl_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_dpl_beam4' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_dpl_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
   ;Store data of dvr_beam5:
   ;============================
-  if parameters eq 'fr_dpl_beam5' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_dpl_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
-endif else if datatype eq 'iono_fr_pwr' then begin
+      if parameters eq 'fr_dpl_beam5' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_dpl_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
+   endif else if datatype eq 'iono_fr_pwr' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
-  if parameters eq 'fr_pwr_beam1' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pwr_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_pwr_beam1' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_pwr_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam2 echo intensity:
     ;===================================
-  if parameters eq 'fr_pwr_beam2' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pwr_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_pwr_beam2' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_pwr_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam3 echo intensity:
     ;===================================
-  if parameters eq 'fr_pwr_beam3' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pwr_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_pwr_beam3' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_pwr_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam4 echo intensity:
     ;===================================
-  if parameters eq 'fr_beam4' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pwr_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_beam4' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_pwr_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam5 echo intensity:
     ;===================================
-  if parameters eq 'fr_pwr_beam5' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pwr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
-endif else if datatype eq 'iono_fr_spec_width' then begin
+      if parameters eq 'fr_pwr_beam5' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_pwr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
+   endif else if datatype eq 'iono_fr_spec_width' then begin
     ;Store data of beam1 spectral width:
     ;===================================
-  if parameters eq 'fr_sw_beam1' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_sw_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_sw_beam1' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_sw_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam2 spectral width:
     ;===================================
-  if parameters eq 'fr_sw_beam2' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_sw_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_sw_beam2' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_sw_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam3 spectral width:
     ;===================================
-  if parameters eq 'fr_sw_beam3' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_sw_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_sw_beam3' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_sw_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam4 spectral width:
     ;===================================
-  if parameters eq 'fr_sw_beam4' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_sw_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
+      if parameters eq 'fr_sw_beam4' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_sw_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
     ;Store data of beam5 spectral width:
     ;===================================
-  if parameters eq 'fr_sw_beam5' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_sw_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-  endif
-endif 
-endif else if datatype eq 'iono_fr_noise_lev' then begin
-s=''
-data=fltarr(2)
-time = dblarr(1)
-ear_time = dblarr(1)
-ear_data = fltarr(1)
-;Loop on files (zonal component): 
+      if parameters eq 'fr_sw_beam5' then begin
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+         store_data,'fr_sw_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+      endif
+   endif 
+
+; add options
+   options, parameters, 'spec', 1
+endif else begin
+ dprint,'EAR-fai file ',file,' not found. Skipping'
+endelse 
+endif
+ 
+if datatype eq 'iono_fr_noise_lev' then begin
+
+;Loop on files (noise level): 
 ;================================
  for i=0,n_elements(local_paths)-1 do begin
     file= local_paths[i]
-    if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading EAR-fai file: ',file $
     else begin
-         dprint,'EAR file ',file,' not found. Skipping'
+         dprint,'EAR-fai file ',file,' not found. Skipping'
          continue
     endelse
-    openr,lun,file,/get_lun    
+    openr,lun,file,/get_lun   
+
     ;
     ;Loop on readdata:
     ;=================
@@ -396,7 +370,7 @@ ear_data = fltarr(1)
                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
                    
          ;
-         data2=data(1)
+         data2=float(data(1))
            ;
            ;Append data of time:
            ;====================
@@ -412,52 +386,52 @@ ear_data = fltarr(1)
     free_lun,lun  
 endfor
 
-;Replace data array:
-;===================
-number = n_elements(ear_time)
-
-for i=0,number-2 do begin
-  ear_time[i] = ear_time[i+1]
-  ear_data[i] = ear_data[i+1]
-endfor
-
-  if datatype eq 'iono_fr_noise_lev' then begin
+if file_test(/regular,file) then begin
+   dprint,'Loading EAR-fai file: ',file
+   
+ if datatype eq 'iono_fr_noise_lev' then begin
     ;Store data of beam1 noise level:
     ;===================================
-  if parameters eq 'fr_pn_beam1' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pn_beam1',data={x:ear_time, y:ear_data},dlimit=dlimit
-  endif
+   if parameters eq 'fr_pn_beam1' then begin
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+      store_data,'fr_pn_beam1',data={x:ear_time, y:ear_data},dlimit=dlimit
+   endif
     ;Store data of beam2 noise level:
     ;===================================
-  if parameters eq 'fr_pn_beam2' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pn_beam2',data={x:ear_time, y:ear_data},dlimit=dlimit
-  endif
+   if parameters eq 'fr_pn_beam2' then begin
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+      store_data,'fr_pn_beam2',data={x:ear_time, y:ear_data},dlimit=dlimit
+   endif
     ;Store data of beam3 noise level:
     ;===================================
-  if parameters eq 'fr_pn_beam3' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pn_beam3',data={x:ear_time, y:ear_data},dlimit=dlimit
-  endif
+   if parameters eq 'fr_pn_beam3' then begin
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+      store_data,'fr_pn_beam3',data={x:ear_time, y:ear_data},dlimit=dlimit
+   endif
     ;Store data of beam4 noise level:
     ;===================================
-  if parameters eq 'fr_pn_beam4' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pn_beam4',data={x:ear_time, y:ear_data},dlimit=dlimit
-  endif
+   if parameters eq 'fr_pn_beam4' then begin
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+      store_data,'fr_pn_beam4',data={x:ear_time, y:ear_data},dlimit=dlimit
+   endif
     ;Store data of beam5 noise level:
     ;===================================
-  if parameters eq 'fr_pn_beam5' then begin
-     dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-     store_data,'fr_pn_beam5',data={x:ear_time, y:ear_data},dlimit=dlimit
+   if parameters eq 'fr_pn_beam5' then begin
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+      store_data,'fr_pn_beam5',data={x:ear_time, y:ear_data},dlimit=dlimit
+   endif
   endif
+ endif else begin
+ dprint,'EAR-fai file ',file,' not found. Skipping'
+ endelse
 endif
-endif
+
+;Clear time and data buffer:
+ear_data = 0
+ear_time = 0
 
 print,'**********************************************************************************
 print,'Data loading is successful!!'
 print,'**********************************************************************************
 
 end
-
