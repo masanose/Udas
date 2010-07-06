@@ -176,11 +176,11 @@ mer_thermal=0
          data1 = strmid(s,12,55)
          data = float(strsplit(data1, ' ', /extract))
          
-         for j=0,6 do begin
-           a = float(data[j])
+         for k=0,6 do begin
+           a = float(data[k])
            wbad = where(a eq 999,nbad)
            if nbad gt 0 then a[wbad] = !values.f_nan
-           data[j]=a
+           data[k]=a
          endfor
          ;
          ;Append data of time and U, V components at determined altitude:
@@ -329,7 +329,8 @@ mer_thermal=0
             endfor
          endif
          endif
-         n=n+1        
+         n=n+1 
+       continue       
       endif
     endwhile 
     free_lun,lun
