@@ -97,7 +97,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
         iug_load_meteor, datatype =datatype, parameters=parameters, trange = timeRange
   endif else if instrument eq 'MU' then begin
         par_names=parameters
+        vdcname = strmid(parameters, 0,4)
+        if vdcname eq 'trop' then begin 
         iug_load_mu_trop, datatype =datatype, parameters=parameters, trange = timeRange
+        endif else if datatype eq 'mw' then begin
+        iug_load_meteor_mu, datatype =datatype, parameters=parameters, trange = timeRange
+        endif
   endif else if instrument eq 'BLR' then begin
         par_names=parameters
         vdcname = strmid(parameters, 0,3)

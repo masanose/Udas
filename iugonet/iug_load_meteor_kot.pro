@@ -34,7 +34,8 @@
 ;Modifications:
 ;  A. Shinbori, 06/06/2010.
 ;  A. Shinbori, 04/07/2010.
-;
+;  A. Shinbori, 08/07/2010.
+;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -74,7 +75,7 @@ endelse
 
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire EAR data, we ask that you' $
+acknowledgstring = 'If you acquire meteor radar data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
 + 'including text such as EAR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
@@ -127,16 +128,17 @@ zon_wind_data = fltarr(1,20)
 mer_wind_data = fltarr(1,20)
 zon_thermal_data = fltarr(1,20)
 mer_thermal_data = fltarr(1,20)
+meteor_num_data = fltarr(1,20)
 time = dblarr(1)
 time1 = dblarr(2)
-data=fltarr(7)
 n=0
 kt_time=0
 zon_wind=0
 mer_wind=0
 zon_thermal=0
 mer_thermal=0
- 
+meteor_num=0
+
  for i=0,19 do begin
    height[i]=72+2*i   
  endfor
@@ -194,126 +196,147 @@ mer_thermal=0
             zon_wind_data(0,0)= data(0)
             mer_wind_data(0,0)= data(1)
             zon_thermal_data(0,0)= data(2)
-            mer_thermal_data(0,0)= data(3)  
+            mer_thermal_data(0,0)= data(3)
+            meteor_num_data(0,0)= data(4)
          endif
          if (74 eq alt) then begin
             zon_wind_data(0,1)= data(0)
             mer_wind_data(0,1)= data(1)
             zon_thermal_data(0,1)= data(2)
-            mer_thermal_data(0,1)= data(3)            
+            mer_thermal_data(0,1)= data(3)
+            meteor_num_data(0,1)= data(4)            
          endif 
          if (76 eq alt) then begin
             zon_wind_data(0,2)= data(0)
             mer_wind_data(0,2)= data(1)
             zon_thermal_data(0,2)= data(2)
-            mer_thermal_data(0,2)= data(3)  
+            mer_thermal_data(0,2)= data(3)
+            meteor_num_data(0,2)= data(4)  
          endif
          if (78 eq alt) then begin
             zon_wind_data(0,3)= data(0)
             mer_wind_data(0,3)= data(1)
             zon_thermal_data(0,3)= data(2)
             mer_thermal_data(0,3)= data(3)
+            meteor_num_data(0,3)= data(4)
          endif 
          if (80 eq alt) then begin
             zon_wind_data(0,4)= data(0)
             mer_wind_data(0,4)= data(1) 
             zon_thermal_data(0,4)= data(2)
-            mer_thermal_data(0,4)= data(3)  
+            mer_thermal_data(0,4)= data(3)
+            meteor_num_data(0,4)= data(4)  
          endif
          if (82 eq alt) then begin
             zon_wind_data(0,5)= data(0)
             mer_wind_data(0,5)= data(1)
             zon_thermal_data(0,5)= data(2)
             mer_thermal_data(0,5)= data(3)
+            meteor_num_data(0,5)= data(4)
          endif 
          if (84 eq alt) then begin
             zon_wind_data(0,6)= data(0)
             mer_wind_data(0,6)= data(1)
             zon_thermal_data(0,6)= data(2)
-            mer_thermal_data(0,6)= data(3)  
+            mer_thermal_data(0,6)= data(3)
+            meteor_num_data(0,6)= data(4)  
          endif
          if (86 eq alt) then begin
             zon_wind_data(0,7)= data(0)
             mer_wind_data(0,7)= data(1)
             zon_thermal_data(0,7)= data(2)
             mer_thermal_data(0,7)= data(3)
+            meteor_num_data(0,7)= data(4)
          endif 
          if (88 eq alt) then begin
             zon_wind_data(0,8)= data(0)
             mer_wind_data(0,8)= data(1)
             zon_thermal_data(0,8)= data(2)
-            mer_thermal_data(0,8)= data(3)  
+            mer_thermal_data(0,8)= data(3)
+            meteor_num_data(0,8)= data(4)  
          endif
          if (90 eq alt) then begin
             zon_wind_data(0,9)= data(0)
             mer_wind_data(0,9)= data(1)
             zon_thermal_data(0,9)= data(2)
             mer_thermal_data(0,9)= data(3)
+            meteor_num_data(0,9)= data(4)
          endif
          if (92 eq alt) then begin
             zon_wind_data(0,10)= data(0)
             mer_wind_data(0,10)= data(1)
             zon_thermal_data(0,10)= data(2)
-            mer_thermal_data(0,10)= data(3)  
+            mer_thermal_data(0,10)= data(3) 
+            meteor_num_data(0,10)= data(4) 
          endif
          if (94 eq alt) then begin
             zon_wind_data(0,11)= data(0)
             mer_wind_data(0,11)= data(1)
             zon_thermal_data(0,11)= data(2)
             mer_thermal_data(0,11)= data(3)
+            meteor_num_data(0,11)= data(4)
          endif 
          if (96 eq alt) then begin
             zon_wind_data(0,12)= data(0)
             mer_wind_data(0,12)= data(1)
             zon_thermal_data(0,12)= data(2)
-            mer_thermal_data(0,12)= data(3)  
+            mer_thermal_data(0,12)= data(3)
+            meteor_num_data(0,12)= data(4)  
          endif
          if (98 eq alt) then begin
             zon_wind_data(0,13)= data(0)
             mer_wind_data(0,13)= data(1)
             zon_thermal_data(0,13)= data(2)
             mer_thermal_data(0,13)= data(3)
+            meteor_num_data(0,13)= data(4)
          endif 
          if (100 eq alt) then begin
             zon_wind_data(0,14)= data(0)
             mer_wind_data(0,14)= data(1)
             zon_thermal_data(0,14)= data(2)
             mer_thermal_data(0,14)= data(3)
+            meteor_num_data(0,14)= data(4)
          endif 
          if (102 eq alt) then begin
             zon_wind_data(0,15)= data(0)
             mer_wind_data(0,15)= data(1)
             zon_thermal_data(0,15)= data(2)
-            mer_thermal_data(0,15)= data(3)  
+            mer_thermal_data(0,15)= data(3)
+            meteor_num_data(0,15)= data(4)  
          endif
          if (104 eq alt) then begin
             zon_wind_data(0,16)= data(0)
             mer_wind_data(0,16)= data(1)
             zon_thermal_data(0,16)= data(2)
             mer_thermal_data(0,16)= data(3)
+            meteor_num_data(0,16)= data(4)
          endif  
          if (106 eq alt) then begin
             zon_wind_data(0,17)= data(0)
             mer_wind_data(0,17)= data(1)
             zon_thermal_data(0,17)= data(2)
             mer_thermal_data(0,17)= data(3)
+            meteor_num_data(0,17)= data(4)
          endif 
          if (108 eq alt) then begin
             zon_wind_data(0,18)= data(0)
             mer_wind_data(0,18)= data(1)
             zon_thermal_data(0,18)= data(2)
-            mer_thermal_data(0,18)= data(3)  
+            mer_thermal_data(0,18)= data(3)
+            meteor_num_data(0,18)= data(4)  
          endif
          if (110 eq alt) then begin
             zon_wind_data(0,19)= data(0)
             mer_wind_data(0,19)= data(1)
             zon_thermal_data(0,19)= data(2)
             mer_thermal_data(0,19)= data(3)
+            meteor_num_data(0,19)= data(4)
          endif
          data(0)=0
          data(1)=0
          data(2)=0
          data(3)=0
+         data(4)=0
          if n ge 1 then begin
          if (time1(1)-time1(0) ne 0) then begin          
             append_array, kt_time, time
@@ -321,11 +344,13 @@ mer_thermal=0
             append_array, mer_wind, mer_wind_data
             append_array, zon_thermal, zon_thermal_data
             append_array, mer_thermal, mer_thermal_data
+            append_array, meteor_num, meteor_num_data
             for i=0, 19 do begin
              zon_wind_data(0,i)=!values.f_nan
              mer_wind_data(0,i)=!values.f_nan
              zon_thermal_data(0,i)=!values.f_nan
              mer_thermal_data(0,i)=!values.f_nan
+             meteor_num_data(0,i)=!values.f_nan
             endfor
          endif
          endif
@@ -364,7 +389,13 @@ if file_test(/regular,file) then begin
        dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
        store_data,'meridional_thermal_speed_ktb',data={x:kt_time, y:mer_thermal, v:height},dlimit=dlimit
    endif
-
+;Store data of meteor trace number:
+;==================================
+   if  parameters eq 'meteor_num_ktb' then begin
+       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+       store_data,'meteor_num_ktb',data={x:kt_time, y:meteor_num, v:height},dlimit=dlimit
+   endif
+   
 ; add options
    options, parameters, 'spec', 1
 endif else begin
@@ -377,7 +408,8 @@ zon_wind=0
 mer_wind=0
 zon_thermal=0
 mer_thermal=0
-            
+meteor_num=0 
+          
 print,'**********************************************************************************
 print, 'Data loading is successful!!'
 print,'**********************************************************************************
