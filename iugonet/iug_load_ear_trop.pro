@@ -152,6 +152,7 @@ data = strarr(121)
 data2 = fltarr(1,120)
 time = dblarr(1)
 
+
 ;Loop on files (zonal component): 
 ;================================
  for i=0,n_elements(local_paths)-1 do begin
@@ -221,9 +222,7 @@ endfor
 ;******************************
 acknowledgstring = ''
 
-if file_test(/regular,file) then begin
-   dprint,'Loading EAR file: ',file
-   
+if time ne 0 then begin
    if datatype eq 'trop_wind' then begin 
   ;Store data of zonal wind:
   ;============================
@@ -307,9 +306,7 @@ if file_test(/regular,file) then begin
       endif
    endif
    
-endif else begin
- dprint,'EAR file ',file,' not found. Skipping'
-endelse
+endif
 
 ; add options
 options, parameters, 'spec', 1

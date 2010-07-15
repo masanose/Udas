@@ -9,6 +9,7 @@
 ;
 ;Syntax:
 ; iug_load_ear_iono_efr [ ,DATATYPE = string ]
+;                       [ ,SITE_OR_PARAM = string ]
 ;                       [ ,PARAMETERS = string ]
 ;                       [ ,TRANGE = [min,max] ]
 ;                       [ ,FILENAMES = string scalar or array ]
@@ -16,11 +17,14 @@
 ;
 ;Keywords:
 ;  DATATYPE (I/O):
-;    Set to 'iono_efr_dpl'.  If not set, 'iono_efr_dpl' is
+;    Set to datatype.  If not set, 'iono_er_dpl' is
 ;      assumed.  Returns cleaned input, or shows default. 
-;  PARAMETERS (I/O):
-;    Set to wind parameters.  If not set, 'efr_dpl_beam1' is
+;  SITE_OR_PARAM (I/O):
+;    Set to parameters.  If not set, 'er_dpl_beam1' is
 ;      assumed.  Returns cleaned input, or shows default.       
+;  PARAMETERS (I/O):
+;    Set to file name.  If not set, 'faieb4p4' is
+;      assumed.  Returns cleaned input, or shows default.  
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
 ;  FILENAMES (In):
@@ -40,7 +44,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_iono_efr, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
+pro iug_load_ear_iono_efr, datatype=datatype, site_or_param =site_or_param, parameters=parameters, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -55,7 +59,12 @@ if ~keyword_set(datatype) then datatype='iono_efr_dpl'
 ;************************************
 ;Load wind component data by default:
 ;************************************
-if ~keyword_set(parameters) then parameters='efr_dpl_beam1'
+if ~keyword_set(site_or_param) then site_or_param='efr_dpl_beam1'
+
+;************************************
+;Selection of file name by default:
+;************************************
+if ~keyword_set(parameters) then parameters='faiefb1p16'
 
 ;*******************
 ;Validate datatypes:
@@ -71,7 +80,7 @@ endelse
 
 ;Data component
 if datatype eq 'iono_efr_dpl' then begin
-   vdcname = strmid(parameters, 0,13)
+   vdcname = strmid(site_or_param, 0,13)
    
    if vdcname eq 'efr_dpl_beam1' then vdcnames = '1'
    if vdcname eq 'efr_dpl_beam2' then vdcnames = '2'
@@ -79,7 +88,7 @@ if datatype eq 'iono_efr_dpl' then begin
    if vdcname eq 'efr_dpl_beam4' then vdcnames = '4'
    if vdcname eq 'efr_dpl_beam5' then vdcnames = '5'
 endif else if datatype eq 'iono_efr_pwr' then begin
-   vdcname = strmid(parameters, 0,13)
+   vdcname = strmid(site_or_param, 0,13)
 
    if vdcname eq 'efr_pwr_beam1' then vdcnames = '1'
    if vdcname eq 'efr_pwr_beam2' then vdcnames = '2'
@@ -87,7 +96,7 @@ endif else if datatype eq 'iono_efr_pwr' then begin
    if vdcname eq 'efr_pwr_beam4' then vdcnames = '4'
    if vdcname eq 'efr_pwr_beam5' then vdcnames = '5'
 endif else if datatype eq 'iono_efr_spec_width' then begin
-   vdcname = strmid(parameters, 0,12)
+   vdcname = strmid(site_or_param, 0,12)
 
    if vdcname eq 'efr_sw_beam1' then vdcnames = '1'
    if vdcname eq 'efr_sw_beam2' then vdcnames = '2'
@@ -95,7 +104,7 @@ endif else if datatype eq 'iono_efr_spec_width' then begin
    if vdcname eq 'efr_sw_beam4' then vdcnames = '4'
    if vdcname eq 'efr_sw_beam5' then vdcnames = '5'
 endif else if datatype eq 'iono_efr_noise_lev' then begin
-   vdcname = strmid(parameters, 0,12)
+   vdcname = strmid(site_or_param, 0,12)
 
    if vdcname eq 'efr_pn_beam1' then vdcnames = '1'
    if vdcname eq 'efr_pn_beam2' then vdcnames = '2'
@@ -126,19 +135,19 @@ if ~size(fns,/type) then begin
     if datatype eq 'iono_efr_dpl' then begin
       file_names = file_dailynames( $
         file_format='YYYY/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.faiefb1p16a.dpl'+vdcnames+'.csv'
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters+'.dpl'+vdcnames+'.csv'
     endif else if datatype eq 'iono_efr_pwr' then begin
       file_names = file_dailynames( $
         file_format='YYYY/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.faiefb1p16a.pwr'+vdcnames+'.csv'
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters+'.pwr'+vdcnames+'.csv'
     endif else if datatype eq 'iono_efr_spec_width' then begin
       file_names = file_dailynames( $
         file_format='YYYY/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.faiefb1p16a.wdt'+vdcnames+'.csv'
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters+'.wdt'+vdcnames+'.csv'
     endif else if datatype eq 'iono_efr_noise_lev' then begin
       file_names = file_dailynames( $
         file_format='YYYY/'+$
-        'YYYYMMDD',trange=trange,times=times,/unique)+'.faiefb1p16a.pn'+vdcnames+'.csv'
+        'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters+'.pn'+vdcnames+'.csv'
     endif
     ;
     ;Define FILE_RETRIEVE structure:
@@ -155,6 +164,17 @@ if ~size(fns,/type) then begin
       [local_paths_all, local_paths] : local_paths
   if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
 endif else file_names=fns
+
+;Read the files:
+;===============
+s=''
+u=''
+range = fltarr(141)
+altitude = fltarr(140)
+height = fltarr(141)
+data = strarr(141)
+data2 = fltarr(1,140)
+time = dblarr(1)
 
 if datatype ne 'iono_efr_noise_lev' then begin
 
@@ -232,100 +252,100 @@ if file_test(/regular,file) then begin
    if datatype eq 'iono_efr_dpl' then begin 
   ;Store data of dvr_beam1:
   ;============================
-      if parameters eq 'efr_dpl_beam1' then begin
+      if site_or_param eq 'efr_dpl_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_dpl_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of dvr_beam2:
   ;==============================
-      if parameters eq 'efr_dpl_beam2' then begin
+      if site_or_param eq 'efr_dpl_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_dpl_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of dvr_beam3:
   ;============================
-      if parameters eq 'efr_dpl_beam3' then begin
+      if site_or_param eq 'efr_dpl_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_dpl_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of dvr_beam4:
   ;==============================
-      if parameters eq 'efr_dpl_beam4' then begin
+      if site_or_param eq 'efr_dpl_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_dpl_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of dvr_beam5:
   ;============================
-      if parameters eq 'efr_dpl_beam5' then begin
+      if site_or_param eq 'efr_dpl_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_dpl_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
    endif else if datatype eq 'iono_efr_pwr' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
-      if parameters eq 'efr_pwr_beam1' then begin
+      if site_or_param eq 'efr_pwr_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_pwr_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 echo intensity:
     ;===================================
-      if parameters eq 'er_pwr_beam2' then begin
+      if site_or_param eq 'er_pwr_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_pwr_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 echo intensity:
     ;===================================
-      if parameters eq 'efr_pwr_beam3' then begin
+      if site_or_param eq 'efr_pwr_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_pwr_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 echo intensity:
     ;===================================
-      if parameters eq 'efr_beam4' then begin
+      if site_or_param eq 'efr_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_pwr_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 echo intensity:
     ;===================================
-      if parameters eq 'efr_pwr_beam5' then begin
+      if site_or_param eq 'efr_pwr_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_pwr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
    endif else if datatype eq 'iono_efr_spec_width' then begin
     ;Store data of beam1 spectral width:
     ;===================================
-      if parameters eq 'efr_sw_beam1' then begin
+      if site_or_param eq 'efr_sw_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_sw_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 spectral width:
     ;===================================
-      if parameters eq 'efr_sw_beam2' then begin
+      if site_or_param eq 'efr_sw_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_sw_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 spectral width:
     ;===================================
-      if parameters eq 'efr_sw_beam3' then begin
+      if site_or_param eq 'efr_sw_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_sw_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 spectral width:
     ;===================================
-      if parameters eq 'efr_sw_beam4' then begin
+      if site_or_param eq 'efr_sw_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_sw_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 spectral width:
     ;===================================
-      if parameters eq 'efr_sw_beam5' then begin
+      if site_or_param eq 'efr_sw_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'efr_sw_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
       endif
    endif 
 
 ; add options
-   options, parameters, 'spec', 1
+   options, site_or_param, 'spec', 1
 endif else begin
  dprint,'EAR-fai file ',file,' not found. Skipping'
 endelse 
@@ -392,31 +412,31 @@ if file_test(/regular,file) then begin
  if datatype eq 'iono_efr_noise_lev' then begin
     ;Store data of beam1 noise level:
     ;===================================
-   if parameters eq 'efr_pn_beam1' then begin
+   if site_or_param eq 'efr_pn_beam1' then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
       store_data,'efr_pn_beam1',data={x:ear_time, y:ear_data},dlimit=dlimit
    endif
     ;Store data of beam2 noise level:
     ;===================================
-   if parameters eq 'efr_pn_beam2' then begin
+   if site_or_param eq 'efr_pn_beam2' then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
       store_data,'efr_pn_beam2',data={x:ear_time, y:ear_data},dlimit=dlimit
    endif
     ;Store data of beam3 noise level:
     ;===================================
-   if parameters eq 'efr_pn_beam3' then begin
+   if site_or_param eq 'efr_pn_beam3' then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
       store_data,'efr_pn_beam3',data={x:ear_time, y:ear_data},dlimit=dlimit
    endif
     ;Store data of beam4 noise level:
     ;===================================
-   if parameters eq 'efr_pn_beam4' then begin
+   if site_or_param eq 'efr_pn_beam4' then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
       store_data,'efr_pn_beam4',data={x:ear_time, y:ear_data},dlimit=dlimit
    endif
     ;Store data of beam5 noise level:
     ;===================================
-   if parameters eq 'efr_pn_beam5' then begin
+   if site_or_param eq 'efr_pn_beam5' then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
       store_data,'efr_pn_beam5',data={x:ear_time, y:ear_data},dlimit=dlimit
    endif

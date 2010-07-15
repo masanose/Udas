@@ -41,7 +41,7 @@
 ; $URL $
 ;-
   
-pro iug_load_meteor, datatype = datatype, parameters = parameters, trange = trange, verbose = verbose
+pro iug_load_meteor, datatype = datatype, site_or_param = site_or_param, trange = trange, verbose = verbose
 
 ;******************
 ;keyword check:

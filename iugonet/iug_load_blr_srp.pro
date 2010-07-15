@@ -204,7 +204,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(6)+':'+string(48))
          ;
          for j=0,number2-2 do begin
           a = float(data[j+1])
@@ -229,10 +229,11 @@ endfor
 ;Store data in TPLOT variables:
 ;******************************
 
-if datatype eq 'blr_wind_sgk' then begin 
-
-   if file_test(/regular,file) then begin
+if time ne 0 then begin
       dprint,'Loading BLR-Serpong file: ',file 
+      
+      
+   if datatype eq 'blr_wind_sgk' then begin 
    
   ;Store data of zonal wind:
   ;============================
@@ -315,9 +316,7 @@ if datatype eq 'blr_wind_sgk' then begin
          store_data,'sgk_sw_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
    endif
-endif else begin
- dprint,'BLR-Serpong file ',file,' not found. Skipping'
-endelse
+endif 
 
 ; add options
 options, parameters, 'spec', 1

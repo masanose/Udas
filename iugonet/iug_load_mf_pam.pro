@@ -231,8 +231,7 @@ endfor
 ;******************************
 acknowledgstring = ''
 
-if file_test(/regular,file) then begin
-   dprint,'Loading MF-Pameungpeuk file: ',file
+if time ne 0 then begin
    
 ;Store data of zonal and meridional component:
 ;=============================================
@@ -249,9 +248,7 @@ if file_test(/regular,file) then begin
        store_data,'vertical_wind_pam',data={x:ear_time, y:ver_wind, v:height},dlimit=dlimit
    endif
 
-endif else begin
- dprint,'MU file ',file,' not found. Skipping'
-endelse
+endif 
 
 ; add options
 options, parameters, 'spec', 1

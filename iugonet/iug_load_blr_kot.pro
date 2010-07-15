@@ -229,95 +229,93 @@ endfor
 ;Store data in TPLOT variables:
 ;******************************
 
-if datatype eq 'blr_wind_sgk' then begin 
-
-   if file_test(/regular,file) then begin
-      dprint,'Loading BLR-Kototabang file: ',file 
+if time ne 0 then begin
+      
+   if datatype eq 'blr_wind_kot' then begin 
    
   ;Store data of zonal wind:
   ;============================
-      if parameters eq 'sgk_zonal_wind' then begin
+      if parameters eq 'kot_zonal_wind' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_zonal_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_zonal_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of meridional wind:
   ;==============================
-      if parameters eq 'sgk_meridional_wind' then begin
+      if parameters eq 'kot_meridional_wind' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_meridional_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_meridional_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of vertical wind:
   ;============================
-      if parameters eq 'sgk_vertical_wind' then begin
+      if parameters eq 'kot_vertical_wind' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_vertical_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_vertical_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
-   endif else if datatype eq 'blr_pwr_sgk' then begin
+   endif else if datatype eq 'blr_pwr_kot' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
-      if parameters eq 'sgk_pwr_beam1' then begin
+      if parameters eq 'kot_pwr_beam1' then begin
+      print, parameters
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_pwr_beam1',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_pwr_beam1',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 echo intensity:
     ;===================================
-      if parameters eq 'sgk_pwr_beam2' then begin
+      if parameters eq 'kot_pwr_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_pwr_beam2',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_pwr_beam2',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 echo intensity:
     ;===================================
-      if parameters eq 'sgk_pwr_beam3' then begin
+      if parameters eq 'kot_pwr_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_pwr_beam3',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_pwr_beam3',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 echo intensity:
     ;===================================
-      if parameters eq 'sgk_pwr_beam4' then begin
+      if parameters eq 'kot_pwr_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_pwr_beam4',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_pwr_beam4',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 echo intensity:
     ;===================================
-      if parameters eq 'sgk_pwr_beam5' then begin
+      if parameters eq 'kot_pwr_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_pwr_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_pwr_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
    endif else if datatype eq 'blr_spec_width_kot' then begin
     ;Store data of beam1 spectral width:
     ;===================================
-      if parameters eq 'sgk_sw_beam1' then begin
+      if parameters eq 'kot_sw_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_sw_beam1',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_sw_beam1',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 spectral width:
     ;===================================
-      if parameters eq 'sgk_sw_beam2' then begin
+      if parameters eq 'kot_sw_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_sw_beam2',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_sw_beam2',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 spectral width:
     ;===================================
-      if parameters eq 'sgk_sw_beam3' then begin
+      if parameters eq 'kot_sw_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_sw_beam3',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_sw_beam3',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 spectral width:
     ;===================================
-      if parameters eq 'sgk_sw_beam4' then begin
+      if parameters eq 'kot_sw_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_sw_beam4',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_sw_beam4',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 spectral width:
     ;===================================
-      if parameters eq 'sgk_sw_beam5' then begin
+      if parameters eq 'kot_sw_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sgk_sw_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+         store_data,'kot_sw_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
    endif
-endif else begin
- dprint,'BLR-Kototabang file ',file,' not found. Skipping'
-endelse
+endif 
 
 ; add options
 options, parameters, 'spec', 1

@@ -134,7 +134,7 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir = root_data_dir() + 'iugonet/rish/ear/blr/shigaraki/'
+    source.local_data_dir = root_data_dir() + 'iugonet/rish/blr/shigaraki/'
     source.remote_data_dir = 'ftp://ftp.rish.kyoto-u.ac.jp/pub/blr/shigaraki/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -204,7 +204,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(4)+':'+string(24))
          ;
          for j=0,number2-2 do begin
           a = float(data[j+1])
@@ -230,11 +230,10 @@ endfor
 ;Store data in TPLOT variables:
 ;******************************
 
-if datatype eq 'blr_wind_sgk' then begin 
+if time ne 0 then begin
 
-   if file_test(/regular,file) then begin
-      dprint,'Loading BLR-Shigaraki file: ',file 
-   
+   if datatype eq 'blr_wind_sgk' then begin 
+ 
   ;Store data of zonal wind:
   ;============================
       if parameters eq 'sgk_zonal_wind' then begin
@@ -316,9 +315,7 @@ if datatype eq 'blr_wind_sgk' then begin
          store_data,'sgk_sw_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
    endif
-endif else begin
- dprint,'BLR-Shigaraki file ',file,' not found. Skipping'
-endelse
+endif 
 
 ; add options
 options, parameters, 'spec', 1

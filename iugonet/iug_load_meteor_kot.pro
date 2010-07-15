@@ -123,12 +123,12 @@ endif else file_names=fns
 ;Read the files:
 ;===============
 s=''
-height = fltarr(20)
-zon_wind_data = fltarr(1,20)
-mer_wind_data = fltarr(1,20)
-zon_thermal_data = fltarr(1,20)
-mer_thermal_data = fltarr(1,20)
-meteor_num_data = fltarr(1,20)
+height = fltarr(21)
+zon_wind_data = fltarr(1,21)
+mer_wind_data = fltarr(1,21)
+zon_thermal_data = fltarr(1,21)
+mer_thermal_data = fltarr(1,21)
+meteor_num_data = fltarr(1,21)
 time = dblarr(1)
 time1 = dblarr(2)
 n=0
@@ -139,9 +139,6 @@ zon_thermal=0
 mer_thermal=0
 meteor_num=0
 
- for i=0,19 do begin
-   height[i]=72+2*i   
- endfor
  
 ;Loop on files (zonal component): 
 ;================================
@@ -192,146 +189,15 @@ meteor_num=0
                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
          if (n mod 2 eq 0) then time1(0)= time
          if (n mod 2 eq 1) then time1(1)= time        
-         if (72 eq alt) then begin
-            zon_wind_data(0,0)= data(0)
-            mer_wind_data(0,0)= data(1)
-            zon_thermal_data(0,0)= data(2)
-            mer_thermal_data(0,0)= data(3)
-            meteor_num_data(0,0)= data(4)
+       for g=0,20 do begin         
+         if (70+g*2 eq alt) then begin
+            zon_wind_data(0,g)= data(0)
+            mer_wind_data(0,g)= data(1)
+            zon_thermal_data(0,g)= data(2)
+            mer_thermal_data(0,g)= data(3)
+            meteor_num_data(0,g)= data(4)
          endif
-         if (74 eq alt) then begin
-            zon_wind_data(0,1)= data(0)
-            mer_wind_data(0,1)= data(1)
-            zon_thermal_data(0,1)= data(2)
-            mer_thermal_data(0,1)= data(3)
-            meteor_num_data(0,1)= data(4)            
-         endif 
-         if (76 eq alt) then begin
-            zon_wind_data(0,2)= data(0)
-            mer_wind_data(0,2)= data(1)
-            zon_thermal_data(0,2)= data(2)
-            mer_thermal_data(0,2)= data(3)
-            meteor_num_data(0,2)= data(4)  
-         endif
-         if (78 eq alt) then begin
-            zon_wind_data(0,3)= data(0)
-            mer_wind_data(0,3)= data(1)
-            zon_thermal_data(0,3)= data(2)
-            mer_thermal_data(0,3)= data(3)
-            meteor_num_data(0,3)= data(4)
-         endif 
-         if (80 eq alt) then begin
-            zon_wind_data(0,4)= data(0)
-            mer_wind_data(0,4)= data(1) 
-            zon_thermal_data(0,4)= data(2)
-            mer_thermal_data(0,4)= data(3)
-            meteor_num_data(0,4)= data(4)  
-         endif
-         if (82 eq alt) then begin
-            zon_wind_data(0,5)= data(0)
-            mer_wind_data(0,5)= data(1)
-            zon_thermal_data(0,5)= data(2)
-            mer_thermal_data(0,5)= data(3)
-            meteor_num_data(0,5)= data(4)
-         endif 
-         if (84 eq alt) then begin
-            zon_wind_data(0,6)= data(0)
-            mer_wind_data(0,6)= data(1)
-            zon_thermal_data(0,6)= data(2)
-            mer_thermal_data(0,6)= data(3)
-            meteor_num_data(0,6)= data(4)  
-         endif
-         if (86 eq alt) then begin
-            zon_wind_data(0,7)= data(0)
-            mer_wind_data(0,7)= data(1)
-            zon_thermal_data(0,7)= data(2)
-            mer_thermal_data(0,7)= data(3)
-            meteor_num_data(0,7)= data(4)
-         endif 
-         if (88 eq alt) then begin
-            zon_wind_data(0,8)= data(0)
-            mer_wind_data(0,8)= data(1)
-            zon_thermal_data(0,8)= data(2)
-            mer_thermal_data(0,8)= data(3)
-            meteor_num_data(0,8)= data(4)  
-         endif
-         if (90 eq alt) then begin
-            zon_wind_data(0,9)= data(0)
-            mer_wind_data(0,9)= data(1)
-            zon_thermal_data(0,9)= data(2)
-            mer_thermal_data(0,9)= data(3)
-            meteor_num_data(0,9)= data(4)
-         endif
-         if (92 eq alt) then begin
-            zon_wind_data(0,10)= data(0)
-            mer_wind_data(0,10)= data(1)
-            zon_thermal_data(0,10)= data(2)
-            mer_thermal_data(0,10)= data(3) 
-            meteor_num_data(0,10)= data(4) 
-         endif
-         if (94 eq alt) then begin
-            zon_wind_data(0,11)= data(0)
-            mer_wind_data(0,11)= data(1)
-            zon_thermal_data(0,11)= data(2)
-            mer_thermal_data(0,11)= data(3)
-            meteor_num_data(0,11)= data(4)
-         endif 
-         if (96 eq alt) then begin
-            zon_wind_data(0,12)= data(0)
-            mer_wind_data(0,12)= data(1)
-            zon_thermal_data(0,12)= data(2)
-            mer_thermal_data(0,12)= data(3)
-            meteor_num_data(0,12)= data(4)  
-         endif
-         if (98 eq alt) then begin
-            zon_wind_data(0,13)= data(0)
-            mer_wind_data(0,13)= data(1)
-            zon_thermal_data(0,13)= data(2)
-            mer_thermal_data(0,13)= data(3)
-            meteor_num_data(0,13)= data(4)
-         endif 
-         if (100 eq alt) then begin
-            zon_wind_data(0,14)= data(0)
-            mer_wind_data(0,14)= data(1)
-            zon_thermal_data(0,14)= data(2)
-            mer_thermal_data(0,14)= data(3)
-            meteor_num_data(0,14)= data(4)
-         endif 
-         if (102 eq alt) then begin
-            zon_wind_data(0,15)= data(0)
-            mer_wind_data(0,15)= data(1)
-            zon_thermal_data(0,15)= data(2)
-            mer_thermal_data(0,15)= data(3)
-            meteor_num_data(0,15)= data(4)  
-         endif
-         if (104 eq alt) then begin
-            zon_wind_data(0,16)= data(0)
-            mer_wind_data(0,16)= data(1)
-            zon_thermal_data(0,16)= data(2)
-            mer_thermal_data(0,16)= data(3)
-            meteor_num_data(0,16)= data(4)
-         endif  
-         if (106 eq alt) then begin
-            zon_wind_data(0,17)= data(0)
-            mer_wind_data(0,17)= data(1)
-            zon_thermal_data(0,17)= data(2)
-            mer_thermal_data(0,17)= data(3)
-            meteor_num_data(0,17)= data(4)
-         endif 
-         if (108 eq alt) then begin
-            zon_wind_data(0,18)= data(0)
-            mer_wind_data(0,18)= data(1)
-            zon_thermal_data(0,18)= data(2)
-            mer_thermal_data(0,18)= data(3)
-            meteor_num_data(0,18)= data(4)  
-         endif
-         if (110 eq alt) then begin
-            zon_wind_data(0,19)= data(0)
-            mer_wind_data(0,19)= data(1)
-            zon_thermal_data(0,19)= data(2)
-            mer_thermal_data(0,19)= data(3)
-            meteor_num_data(0,19)= data(4)
-         endif
+       endfor
          data(0)=0
          data(1)=0
          data(2)=0
@@ -345,7 +211,7 @@ meteor_num=0
             append_array, zon_thermal, zon_thermal_data
             append_array, mer_thermal, mer_thermal_data
             append_array, meteor_num, meteor_num_data
-            for i=0, 19 do begin
+            for i=0, 20 do begin
              zon_wind_data(0,i)=!values.f_nan
              mer_wind_data(0,i)=!values.f_nan
              zon_thermal_data(0,i)=!values.f_nan
@@ -360,13 +226,16 @@ meteor_num=0
     endwhile 
     free_lun,lun
 endfor
-
+print, zon_wind(0,11)
+for g=0,20 do begin         
+  height[g]=70+g*2 
+endfor
 ;******************************
 ;Store data in TPLOT variables:
 ;******************************
 acknowledgstring = ''
-if file_test(/regular,file) then begin
-   dprint,'Loading Kototabang file: ',file 
+
+if time ne 0 then begin
 
 ;Store data of zonal and meridional component:
 ;=============================================
@@ -398,9 +267,7 @@ if file_test(/regular,file) then begin
    
 ; add options
    options, parameters, 'spec', 1
-endif else begin
- dprint,'Kototabang file ',file,' not found. Skipping'
-endelse
+endif 
 
 ;Clear time and data buffer:
 kt_time=0

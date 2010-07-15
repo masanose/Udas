@@ -55,7 +55,7 @@ if ~keyword_set(datatype) then datatype='trop_wind'
 ;************************************
 ;Load wind component data by default:
 ;************************************
-if ~keyword_set(parameters) then parameters='zonal_wind_ear'
+if ~keyword_set(parameters) then parameters='zonal_wind_mu'
 
 ;*******************
 ;Validate datatypes:
@@ -195,7 +195,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(4)+':'+string(24))
          ;
          for j=0,119 do begin
           a = float(data[j+1])
@@ -222,12 +222,13 @@ endfor
 ;******************************
 acknowledgstring = ''
 
-if file_test(/regular,file) then begin
-   dprint,'Loading MU file: ',file
-   
-   if datatype eq 'trop_wind' then begin 
+if time ne 0 then begin
+    
+  if datatype eq 'trop_wind' then begin 
+     print, datatype,parameters
   ;Store data of zonal wind:
   ;============================
+
       if parameters eq 'zonal_wind_mu' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
          store_data,'zonal_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
@@ -308,9 +309,7 @@ if file_test(/regular,file) then begin
       endif
    endif
 
-endif else begin
- dprint,'MU file ',file,' not found. Skipping'
-endelse
+endif
 
 ; add options
 options, parameters, 'spec', 1
