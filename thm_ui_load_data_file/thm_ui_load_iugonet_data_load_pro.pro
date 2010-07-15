@@ -69,69 +69,64 @@ pro thm_ui_load_iugonet_data_load_pro,$
       par_names='serc_magdas_' + site_or_param + '_mag'
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
-
   endif else if instrument eq 'superdarn' then begin
     par_names='sd_' + datatype + '_' + parameters +'_0'
     erg_load_sdfit, trange=timeRange, sites=datetype    
   endif else if instrument eq 'EAR' then begin
-        if datatype eq 'trop_wind' then begin
-           par_names=parameters+'_'+strmid(site_or_param, 0,4)+'_ear'
-           iug_load_ear_trop, datatype =datatype, parameters = par_names, trange = timeRange
-        endif else if datatype eq 'iono_er_dpl' then begin
+     if datatype eq 'trop_std' then begin
+        if site_or_param eq 'trop_wind' then par_names=parameters+'_wind_ear'
+        if site_or_param eq 'trop_pwr' then par_names='pwr_'+parameters
+        if site_or_param eq 'trop_spec_width' then par_names='sw_'+parameters
+           iug_load_ear_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+     endif else if datatype eq 'iono_er_dpl' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_efr_dpl' then begin
+     endif else if datatype eq 'iono_efr_dpl' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_fr_dpl' then begin 
+     endif else if datatype eq 'iono_fr_dpl' then begin 
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'trop_pwr' then begin
-           par_names=parameters
-           iug_load_ear_trop, datatype =datatype, parameters = parameters, trange = timeRange
-        endif else if datatype eq 'iono_er_pwr' then begin
+     endif else if datatype eq 'iono_er_pwr' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_efr_pwr' then begin
+     endif else if datatype eq 'iono_efr_pwr' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_fr_pwr' then begin
+     endif else if datatype eq 'iono_fr_pwr' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'trop_spec_width' then begin
-           par_names=parameters
-           iug_load_ear_trop, datatype =datatype, parameters = parameters, trange = timeRange
-        endif else if datatype eq 'iono_er_spec_width' then begin
+     endif else if datatype eq 'iono_er_spec_width' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_efr_spec_width' then begin
+     endif else if datatype eq 'iono_efr_spec_width' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_fr_spec_width' then begin
+     endif else if datatype eq 'iono_fr_spec_width' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_er_noise_lev' then begin
+     endif else if datatype eq 'iono_er_noise_lev' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_efr_noise_lev' then begin
+     endif else if datatype eq 'iono_efr_noise_lev' then begin
            par_names=site_or_param
            par_names2=parameters
            iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif else if datatype eq 'iono_fr_noise_lev' then begin
+     endif else if datatype eq 'iono_fr_noise_lev' then begin
            par_names=site_or_param
            par_names2=parameters 
            iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-        endif
+     endif
   endif else if instrument eq 'MF_radar' then begin
         if site_or_param eq 'pameungpeuk' then begin
            par_names=parameters+'_wind_pam'
