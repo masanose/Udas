@@ -249,8 +249,7 @@ if datatype ne 'iono_er_noise_lev' then begin
     free_lun,lun  
 endfor
 
-if file_test(/regular,file) then begin
-   dprint,'Loading EAR-fai file: ',file
+if time ne 0 then begin
    
    if datatype eq 'iono_er_dpl' then begin 
   ;Store data of dvr_beam1:
@@ -349,9 +348,7 @@ if file_test(/regular,file) then begin
 
 ; add options
    options, site_or_param, 'spec', 1
-endif else begin
- dprint,'EAR-fai file ',file,' not found. Skipping'
-endelse 
+ endif  
 endif
  
 if datatype eq 'iono_er_noise_lev' then begin
@@ -409,8 +406,7 @@ if datatype eq 'iono_er_noise_lev' then begin
     free_lun,lun  
 endfor
 
-if file_test(/regular,file) then begin
-   dprint,'Loading EAR-fai file: ',file
+if time ne 0 then begin
    
  if datatype eq 'iono_er_noise_lev' then begin
     ;Store data of beam1 noise level:
@@ -444,9 +440,7 @@ if file_test(/regular,file) then begin
       store_data,'er_pn_beam5',data={x:ear_time, y:ear_data},dlimit=dlimit
    endif
   endif
- endif else begin
- dprint,'EAR-fai file ',file,' not found. Skipping'
- endelse
+ endif 
 endif
 
 ;Clear time and data buffer:
