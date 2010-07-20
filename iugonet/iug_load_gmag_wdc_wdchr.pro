@@ -67,16 +67,10 @@ pro iug_load_gmag_wdc_wdchr, $
   
   for i=0L, nsites-1 do begin
   
-    ; filename
-    if strlowcase(wdc_sites[i]) eq 'dst' then begin
-      dir = 'index/dst'
-    endif else begin
-      dir = strlowcase(wdc_sites[i])
-    endelse
-    pathformat= 'hour/' + dir + '/YYYY/' + strlowcase(wdc_sites[i]) + 'yyMM'
-    
-    relpathnames = file_dailynames(file_format=pathformat, $
-      trange=trange, addmaster=addmaster, /unique)
+    relpathnames = $
+       iug_load_gmag_wdc_relpath(sname=wdc_sites[i], res='hour', $
+                                 trange=trange, addmaster=addmaster, /unique)
+
     ;print,relpathnames
       
     ; define remote and local path information
@@ -101,7 +95,7 @@ pro iug_load_gmag_wdc_wdchr, $
       file = local_files[j]
       
       if file_test(/regular,file) then begin
-        dprint,'Loading data file: ', file
+        dprint,'Scanning data file: ', file
         fexist = 1
       endif else begin
         dprint,'Data file ',file,' not found. Skipping'
