@@ -42,7 +42,6 @@
 ;############################################################
 ;  Procedure:  FILE_MONTHLYNAMES_ONW
 ;  Author: Davin Larson, revised by M. Kagitani on Apr. 2010
-;  GIT TEST
 
 function file_monthlynames_onw,dir,prefix,suffix,trange=trange, $
     hour_res=hour_res,  $
