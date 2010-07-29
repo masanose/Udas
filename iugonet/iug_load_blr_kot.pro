@@ -8,7 +8,7 @@
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_ear_sgk  [ ,DATATYPE = string ]
+; iug_load_ear_kot  [ ,DATATYPE = string ]
 ;                   [ ,PARAMETERS = string ]
 ;                   [ ,TRANGE = [min,max] ]
 ;                   [ ,FILENAMES = string scalar or array ]

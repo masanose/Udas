@@ -16,10 +16,10 @@
 ;
 ;Keywords:
 ;  DATATYPE (I/O):
-;    Set to 'thermosphere_wind'.  If not set, 'thermo_wind_kototabang' is
+;    Set to 'thermosphere_wind'.  If not set, 'kototabang' is
 ;      assumed.  Returns cleaned input, or shows default.
 ;  PARAMETERS:
-;    Set to the wind data at several altitudes=''. If not set, 'zon_wind_kt76' is
+;    Set to the wind data at several altitudes=''. If not set, 'zon_wind' is
 ;      assumed.  Returns cleaned input, or shows default.      
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
@@ -77,7 +77,7 @@ endelse
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire meteor radar data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as EAR data provided by Research Institute' $
++ 'including text such as the kototabang MW data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -226,7 +226,7 @@ meteor_num=0
     endwhile 
     free_lun,lun
 endfor
-print, zon_wind(0,11)
+
 for g=0,20 do begin         
   height[g]=70+g*2 
 endfor
