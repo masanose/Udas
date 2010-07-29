@@ -14,7 +14,8 @@ pro iug_load_gmag_wdc_wdchr, $
     verbose=verbose, $
     level=level, $
     addmaster=addmaster, $
-    downloadonly=downloadonly
+    downloadonly=downloadonly, $
+    no_download=no_download
     
   if ~keyword_set(verbose) then verbose=2
   if(~keyword_set(level)) then level = 'final'
@@ -44,25 +45,6 @@ pro iug_load_gmag_wdc_wdchr, $
   ; number of valid sites
   nsites = n_elements(wdc_sites)
   
-  ; acknowlegment string (use for creating tplot vars)
-  acknowledgstring_dst = $
-    'The DST data are provided by the World Data Center for Geomagnetism, Kyoto, and'+ $
-    ' are not for redistribution (http://wdc.kugi.kyoto-u.ac.jp/). Furthermore, we thank'+ $
-    ' the geomagnetic observatories (Kakioka [JMA], Honolulu and San Juan [USGS], Hermanus'+ $
-    ' [RSA], Alibag [IIG]), NiCT, INTERMAGNET, and many others for their cooperation to'+ $
-    ' make the Dst index available.'
-  acknowledgstring = $
-    'The rules for the data use and exchange are defined'+ $
-    ' by the Guide on the World Data Center System '+ $
-    ' (ICSU Panel on World Data Centers, 1996).'+$
-    ' Note that information on the appropriate institution(s)'+$
-    ' is also supplied with the WDC data sets.'+$
-    ' If the data are used in publications and presentations,'+$
-    ' the data suppliers and the WDC for Geomagnetism, Kyoto'+$
-    ' must properly be acknowledged.'+$
-    ' Commercial use and re-distribution of WDC data are, in general, not allowed.'+$
-    ' Please ask for the information of each observatory to the WDC.'
-    
   ; bad data
   missing_value = 9999
   
@@ -81,6 +63,7 @@ pro iug_load_gmag_wdc_wdchr, $
     source.verbose = verbose
     source.local_data_dir = root_data_dir() + 'iugonet/gmag/wdc/'
     source.remote_data_dir = 'http://localhost/~daiki/test/wdc/data/'
+    if(keyword_set(no_download)) then source.no_server = 1
     
     ; download data
     local_files = file_retrieve(relpathnames, _extra=source)
@@ -200,16 +183,15 @@ pro iug_load_gmag_wdc_wdchr, $
            year = year_upper + year_lower
         endif else begin
            year = iug_load_gmag_wdc_relpath_to_year(relpathnames[j],wdc_sites[i])
-           if strmid(year,2,2) ne year_lower then begin
-              dprint, 'invalid year value?'
+           if fix(strmid(year,2,2)) ne fix(year_lower) then begin
+              dprint, 'invalid year value? (dir:'+year+', data:'+year_lower +')'
               continue
            endif
         endelse
         month = (strmid(line,5,2))
         day = (strmid(line,8,2))
         
-        basetime = $
-          time_double(year+'-'+month+'-'+day)
+        basetime = time_double(year+'-'+month+'-'+day)
           
         element = strmid(line,7,1)     ; * for index
         version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final
@@ -225,16 +207,16 @@ pro iug_load_gmag_wdc_wdchr, $
         
         basevalue_str = strmid(line,16,4)
         if strlen(strtrim(basevalue_str,2)) eq 0 then begin
-           basevalue = 0
+           basevalue = 0l
         endif else begin
-           basevalue = fix(basevalue_str) ; unit 100 nT for index
+           basevalue = long(basevalue_str) ; unit 100 nT for index
         endelse
-        variations = fix( strmid(line, indgen(24)*4 +20 ,4) )
+        variations = long( strmid(line, indgen(24)*4 +20 ,4) )
         
         if element eq 'D' or element eq 'I' then begin
-          value = float(variations) / 600. + basevalue
+          value = float(variations) / 600. + float(basevalue)
         endif else begin
-          value = float(variations) + basevalue * 100
+          value = float(variations) + float(basevalue * 100)
         endelse
         wbad = where(variations eq missing_value, nbad)
         if nbad gt 0 then value[wbad] = !values.f_nan

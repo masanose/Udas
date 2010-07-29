@@ -14,7 +14,8 @@ pro iug_load_gmag_wdc_wdcmin, $
     verbose=verbose, $
     level=level, $
     addmaster=addmaster, $
-    downloadonly=downloadonly
+    downloadonly=downloadonly, $
+    no_download=no_download
     
   if ~keyword_set(verbose) then verbose=2
   if(~keyword_set(level)) then level = 'final'
@@ -64,6 +65,7 @@ pro iug_load_gmag_wdc_wdcmin, $
     source.verbose = verbose
     source.local_data_dir = root_data_dir() + 'iugonet/gmag/wdc/'
     source.remote_data_dir = 'http://localhost/~daiki/test/wdc/data/'
+    if(keyword_set(no_download)) then source.no_server = 1
     
     ; download data
     local_files = file_retrieve(relpathnames, _extra=source)
@@ -167,10 +169,6 @@ pro iug_load_gmag_wdc_wdcmin, $
       endelse
       
       ; read data
-      ; reference for Dst index record format:
-      ; http://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html
-      ; reference for WDC hourly means record format:
-      ; http://wdc.kugi.kyoto-u.ac.jp/hyplt/format/wdchrformat.html
       openr,lun,file,/get_lun
       while(not eof(lun)) do begin
         line=''
@@ -191,8 +189,8 @@ pro iug_load_gmag_wdc_wdcmin, $
         day = (strmid(line,16,2))
         hour = (strmid(line,19,2))
         
-        if strmid(year,2,2) ne year_lower then begin
-           dprint, 'invalid year value?'
+        if fix(strmid(year,2,2)) ne fix(year_lower) then begin
+           dprint, 'invalid year value? (dir:'+year+', data:'+year_lower +')'
            continue
         endif
         basetime = time_double(year+'-'+month+'-'+day) + hour*3600d
@@ -210,16 +208,16 @@ pro iug_load_gmag_wdc_wdcmin, $
           endelse
         endfor
         
-        basevalue = 0 ;for wdc 1-min format data
-        variations = fix( strmid(line, indgen(60)*6 +34 ,6) )
+        basevalue = 0l ;for wdc 1-min format data
+        variations = long( strmid(line, indgen(60)*6 +34 ,6) )
         
         if strlowcase(wdc_sites[i]) eq 'sym' or $
            strlowcase(wdc_sites[i]) eq 'asy' then begin
            value = float(variations)
         endif else if element eq 'D' or element eq 'I' then begin
-           value = float(variations) / 600. + basevalue
+           value = float(variations) / 600. + float(basevalue)
         endif else begin
-          value = float(variations) + basevalue * 100
+          value = float(variations) + float(basevalue * 100)
         endelse
         wbad = where(variations eq missing_value, nbad)
         if nbad gt 0 then value[wbad] = !values.f_nan
