@@ -4,11 +4,11 @@
 ;+
 ;
 ;Name:
-;iug_load_gmag_wdc_wdchr
+;iug_load_gmag_wdc_wdcmin
 ;
 ;-
 
-pro iug_load_gmag_wdc_wdchr, $
+pro iug_load_gmag_wdc_wdcmin, $
     site=site, $
     trange=trange, $
     verbose=verbose, $
@@ -19,7 +19,7 @@ pro iug_load_gmag_wdc_wdchr, $
     
   if ~keyword_set(verbose) then verbose=2
   if(~keyword_set(level)) then level = 'final'
-  
+
   if ~keyword_set(datatype) then datatype='gmag'
   vns=['gmag']
   if size(datatype,/type) eq 7 then begin
@@ -33,7 +33,7 @@ pro iug_load_gmag_wdc_wdchr, $
   
   ;site = 'kak'
   ; list of sites
-  vsnames = 'kak dst'
+  vsnames = 'kak asy sym ae'
   vsnames_all = strsplit(vsnames, ' ', /extract)
   
   ; validate sites
@@ -45,18 +45,20 @@ pro iug_load_gmag_wdc_wdchr, $
   ; number of valid sites
   nsites = n_elements(wdc_sites)
   
+    
   ; bad data
-  missing_value = 9999
+  missing_value = 99999
   
   
   for i=0L, nsites-1 do begin
   
     relpathnames = $
        iug_load_gmag_wdc_relpath(sname=wdc_sites[i], $
-                                 res='hour', level=level, $
-                                 trange=trange, addmaster=addmaster, /unique)
-
+                                 trange=trange, $
+                                 res='min', level=level, $
+                                 addmaster=addmaster, /unique)
     ;print,relpathnames
+
       
     ; define remote and local path information
     source = file_retrieve(/struct)
@@ -81,7 +83,7 @@ pro iug_load_gmag_wdc_wdchr, $
       file = local_files[j]
       
       if file_test(/regular,file) then begin
-        dprint,'Scanning data file: ', file
+        dprint,'Loading data file: ', file
         fexist = 1
       endif else begin
         dprint,'Data file ',file,' not found. Skipping'
@@ -89,10 +91,12 @@ pro iug_load_gmag_wdc_wdchr, $
       endelse
       
       ; read data
-      ; reference for Dst index record format:
-      ; http://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html
-      ; reference for WDC hourly means record format:
-      ; http://wdc.kugi.kyoto-u.ac.jp/hyplt/format/wdchrformat.html
+      ; reference for WDC 1 minute record format:
+      ; http://wdc.kugi.kyoto-u.ac.jp/mdplt/format/wdcformat.html
+      ; reference for ASY/SYM index 1 minute record format:
+      ; http://wdc.kugi.kyoto-u.ac.jp/aeasy/format/asyformat.html
+      ; reference for AE index 1 minute record format:
+      ; http://wdc.kugi.kyoto-u.ac.jp/aeasy/format/aeformat.html
       openr,lun,file,/get_lun
       while(not eof(lun)) do begin
         line=''
@@ -101,18 +105,22 @@ pro iug_load_gmag_wdc_wdchr, $
         if ~ keyword_set(line) then continue
         dprint,line,dlevel=5
         
-        name = strmid(line,0,3)
-        if name ne strupcase(wdc_sites[i]) then continue
-        ;        year_lower = (strmid(line,3,2))
-        ;        year_upper= (strmid(line,14,2))
-        ;        month = (strmid(line,5,2))
-        ;        day = (strmid(line,8,2))
+        name = strmid(line,21,3)
+        if 'ae' eq strlowcase(wdc_sites[i]) then begin
+           if 'AEALAOAU' ne strmid(line,0,8) then continue
+        endif else begin
+           if name ne strupcase(wdc_sites[i]) then continue
+        endelse
+        ;        year = (strmid(relpathnames[j],strlen(dir),4))
+        ;        year_lower = (strmid(line,12,2))
+        ;        month = (strmid(line,14,2))
+        ;        day = (strmid(line,16,2))
+        ;        hour = (strmid(line,19,2))
         ;
         ;        basetime = $
-        ;          time_double(year_upper+year_lower+'-'+month+'-'+day)
+        ;          time_double(year+'-'+month+'-'+day)
         
-        element = strmid(line,7,1)     ; * for index
-        version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final
+        element = strmid(line,18,1)
         
         for x=0L,n_elements(elemlist)-1 do begin
           if elemlist[x] eq element then begin
@@ -141,20 +149,19 @@ pro iug_load_gmag_wdc_wdchr, $
     
     ; read data
     dprint, 'Data elements: ', elemlist
-    databuf = replicate(!values.f_nan,size(elemlist,/n_elements),max(elemlength)*24)
-    timebuf = replicate(!values.d_nan,size(elemlist,/n_elements),max(elemlength)*24)
+    databuf = replicate(!values.f_nan,size(elemlist,/n_elements),max(elemlength)*60)
+    timebuf = replicate(!values.d_nan,size(elemlist,/n_elements),max(elemlength)*60)
     bufcount = replicate(0L,size(elemlist,/n_elements))
     elemnum = -1
     ;printdat, databuf
     ;printdat, timebuf
     
-    
-    
+
     for j=0L,n_elements(local_files)-1 do begin
       file = local_files[j]
       
       if file_test(/regular,file) then begin
-        dprint,'Loading data file: ', file
+         ;dprint,'Scanning data file: ', file
         fexist = 1
       endif else begin
         dprint,'Data file ',file,' not found. Skipping'
@@ -162,10 +169,6 @@ pro iug_load_gmag_wdc_wdchr, $
       endelse
       
       ; read data
-      ; reference for Dst index record format:
-      ; http://wdc.kugi.kyoto-u.ac.jp/dstae/format/dstformat.html
-      ; reference for WDC hourly means record format:
-      ; http://wdc.kugi.kyoto-u.ac.jp/hyplt/format/wdchrformat.html
       openr,lun,file,/get_lun
       while(not eof(lun)) do begin
         line=''
@@ -174,28 +177,28 @@ pro iug_load_gmag_wdc_wdchr, $
         if ~ keyword_set(line) then continue
         dprint,line,dlevel=5
         
-        name = strmid(line,0,3)
-        if name ne strupcase(wdc_sites[i]) then continue
-
-        year_lower = (strmid(line,3,2))
-        if strlowcase(wdc_sites[i]) eq 'dst' then begin
-           year_upper= (strmid(line,14,2))
-           year = year_upper + year_lower
+        name = strmid(line,21,3)
+        if 'ae' eq strlowcase(wdc_sites[i]) then begin
+           if 'AEALAOAU' ne strmid(line,0,8) then continue
         endif else begin
-           year = iug_load_gmag_wdc_relpath_to_year(relpathnames[j],wdc_sites[i])
-           if fix(strmid(year,2,2)) ne fix(year_lower) then begin
-              dprint, 'invalid year value? (dir:'+year+', data:'+year_lower +')'
-              continue
-           endif
+           if name ne strupcase(wdc_sites[i]) then continue
         endelse
-        month = (strmid(line,5,2))
-        day = (strmid(line,8,2))
+        year = iug_load_gmag_wdc_relpath_to_year(relpathnames[j],wdc_sites[i])
+        year_lower = (strmid(line,12,2))
+        month = (strmid(line,14,2))
+        day = (strmid(line,16,2))
+        hour = (strmid(line,19,2))
         
-        basetime = time_double(year+'-'+month+'-'+day)
-          
-        element = strmid(line,7,1)     ; * for index
-        version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final
+        if fix(strmid(year,2,2)) ne fix(year_lower) then begin
+           dprint, 'invalid year value? (dir:'+year+', data:'+year_lower +')'
+           continue
+        endif
+        basetime = time_double(year+'-'+month+'-'+day) + hour*3600d
         
+        element = strmid(line,18,1)
+        ;version = strmid(line,13,1) ; 0:realtime, 1:prov., 2+:final
+        
+
         for x=0L,n_elements(elemlist)-1 do begin
           if elemlist[x] eq element then begin
             elemnum = x
@@ -205,16 +208,14 @@ pro iug_load_gmag_wdc_wdchr, $
           endelse
         endfor
         
-        basevalue_str = strmid(line,16,4)
-        if strlen(strtrim(basevalue_str,2)) eq 0 then begin
-           basevalue = 0l
-        endif else begin
-           basevalue = long(basevalue_str) ; unit 100 nT for index
-        endelse
-        variations = long( strmid(line, indgen(24)*4 +20 ,4) )
+        basevalue = 0l ;for wdc 1-min format data
+        variations = long( strmid(line, indgen(60)*6 +34 ,6) )
         
-        if element eq 'D' or element eq 'I' then begin
-          value = float(variations) / 600. + float(basevalue)
+        if strlowcase(wdc_sites[i]) eq 'sym' or $
+           strlowcase(wdc_sites[i]) eq 'asy' then begin
+           value = float(variations)
+        endif else if element eq 'D' or element eq 'I' then begin
+           value = float(variations) / 600. + float(basevalue)
         endif else begin
           value = float(variations) + float(basevalue * 100)
         endelse
@@ -225,7 +226,7 @@ pro iug_load_gmag_wdc_wdchr, $
           p = bufcount[elemnum]+x
           ;dprint,bufcount[elemnum], p
           databuf[elemnum,p] = value[x]
-          timebuf[elemnum,p] = basetime + x*3600d
+          timebuf[elemnum,p] = basetime + x*60d
         endfor
         bufcount[elemnum] += n_elements(value)
         
@@ -233,14 +234,14 @@ pro iug_load_gmag_wdc_wdchr, $
       free_lun,lun
     endfor
     
-    
+
     ; store data to tplot variables
     for elemnum=0,n_elements(elemlist)-1 do begin
 
        iug_load_gmag_wdc_create_tplot_vars, $
           sname = wdc_sites[i], $
           element = elemlist[elemnum], $
-          res = 'hour', level = level, $
+          res = 'min', level = level, $
           tplot_name, tplot_ytitle, tplot_ysubtitle, dlimit
 
        store_data,$
@@ -257,10 +258,9 @@ pro iug_load_gmag_wdc_wdchr, $
     print, '**************************************************'
     print, dlimit.data_att.acknowledgment
     print, '**************************************************'
-
-
+    
     databuf = 0
     timebuf = 0
-  endfor
+ endfor
   
 end
