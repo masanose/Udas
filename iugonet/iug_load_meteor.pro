@@ -32,7 +32,7 @@
 ;A. Shinbori, 13/05/2010.
 ;
 ;Modifications:
-;
+;A. Shinbori, 17/06/2010.
 ;
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -41,7 +41,7 @@
 ; $URL $
 ;-
   
-pro iug_load_meteor, datatype = datatype, parameters = parameters, trange = trange, verbose = verbose
+pro iug_load_meteor, datatype = datatype, site_or_param = site_or_param, trange = trange, verbose = verbose
 
 ;******************
 ;keyword check:
@@ -76,7 +76,11 @@ endelse
   ;===============================
      
   ;load of MF radar data 
-   iug_load_meteor_kot, datatype=datatype,parameters=parameters,trange=trange
+   if datatype eq 'kototabang' then begin 
+      iug_load_meteor_kot, datatype=datatype,parameters=parameters,trange=trange
+   endif else if datatype eq 'serpong' then begin
+      iug_load_meteor_srp, datatype=datatype,parameters=parameters,trange=trange
+   endif
    
 end
 

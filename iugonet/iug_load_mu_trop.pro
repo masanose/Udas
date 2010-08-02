@@ -1,14 +1,14 @@
 ;+
 ;
 ;Name:
-;iug_load_ear_trop
+;iug_load_mu_trop
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH servers for EAR data and loads data into
+;  Queries the Kyoto_RISH servers for MU data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_ear_trop [ ,DATATYPE = string ]
+; iug_load_mu_trop  [ ,DATATYPE = string ]
 ;                   [ ,PARAMETERS = string ]
 ;                   [ ,TRANGE = [min,max] ]
 ;                   [ ,FILENAMES = string scalar or array ]
@@ -19,7 +19,7 @@
 ;    Set to 'trop_wind'.  If not set, 'trop_wind' is
 ;      assumed.  Returns cleaned input, or shows default. 
 ;  PARAMETERS (I/O):
-;    Set to wind parameters.  If not set, 'ear_wind_zon' is
+;    Set to wind parameters.  If not set, 'mu_wind_zon' is
 ;      assumed.  Returns cleaned input, or shows default.       
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
@@ -29,7 +29,7 @@
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;Code:
-; A. Shinbori, 13/05/2010.
+; A. Shinbori, 03/06/2010.
 ;
 ;Modifications:
 ;
@@ -40,7 +40,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_trop, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
+pro iug_load_mu_trop, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -55,7 +55,7 @@ if ~keyword_set(datatype) then datatype='trop_wind'
 ;************************************
 ;Load wind component data by default:
 ;************************************
-if ~keyword_set(parameters) then parameters='zonal_wind_ear'
+if ~keyword_set(parameters) then parameters='zonal_wind_mu'
 
 ;*******************
 ;Validate datatypes:
@@ -95,9 +95,9 @@ endif else if datatype eq 'trop_spec_width' then begin
 endif
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire EAR data, we ask that you' $
+acknowledgstring = 'If you acquire MU data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as EAR data provided by Research Institute' $
++ 'including text such as MU data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -132,8 +132,8 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir = 'c:/data/RISH/EAR/troposphere_wind/'
-    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
+    source.local_data_dir = root_data_dir() + 'iugonet/rish/mu/troposphere_wind/'
+    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -148,6 +148,7 @@ endif else file_names=fns
 s=''
 u=''
 altitude = fltarr(120)
+height = fltarr(121)
 data = strarr(121)
 data2 = fltarr(1,120)
 time = dblarr(1)
@@ -157,12 +158,11 @@ time = dblarr(1)
 ;================================
  for i=0,n_elements(local_paths)-1 do begin
     file= local_paths[i]
-    if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading MU file: ',file $
     else begin
-         dprint,'EAR file ',file,' not found. Skipping'
+         dprint,'MU file ',file,' not found. Skipping'
          continue
     endelse
-
     openr,lun,file,/get_lun    
     ;
     ;Read information of altitude:
@@ -195,7 +195,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(4)+':'+string(24))
          ;
          for j=0,119 do begin
           a = float(data[j+1])
@@ -206,12 +206,12 @@ time = dblarr(1)
            ;
            ;Append data of time:
            ;====================
-            append_array, ear_time, time
+            append_array, mu_time, time
            ;
            ;Append data of wind velocity:
            ;=============================
-            append_array, ear_data, data2
-
+            append_array, mu_data, data2
+    
       endif
     endwhile 
     free_lun,lun  
@@ -223,97 +223,100 @@ endfor
 acknowledgstring = ''
 
 if time ne 0 then begin
-   if datatype eq 'trop_wind' then begin 
+    
+  if datatype eq 'trop_wind' then begin 
+     print, datatype,parameters
   ;Store data of zonal wind:
   ;============================
-      if parameters eq 'zonal_wind_ear' then begin
+
+      if parameters eq 'zonal_wind_mu' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'zonal_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'zonal_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of meridional wind:
   ;==============================
-      if parameters eq 'meridional_wind_ear' then begin
+      if parameters eq 'meridional_wind_mu' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'meridional_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'meridional_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of vertical wind:
   ;============================
-      if parameters eq 'vertical_wind_ear' then begin
+      if parameters eq 'vertical_wind_mu' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'vertical_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'vertical_wind_mu',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
    endif else if datatype eq 'trop_pwr' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
       if parameters eq 'pwr_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'pwr_beam1',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 echo intensity:
     ;===================================
       if parameters eq 'pwr_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'pwr_beam2',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 echo intensity:
     ;===================================
       if parameters eq 'pwr_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'pwr_beam3',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 echo intensity:
     ;===================================
-      if parameters eq 'pwr_beam4' then begin
+      if parameters eq 'beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'pwr_beam4',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 echo intensity:
     ;===================================
       if parameters eq 'pwr_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'pwr_beam5',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
    endif else if datatype eq 'trop_spec_width' then begin
     ;Store data of beam1 spectral width:
     ;===================================
       if parameters eq 'sw_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sw_beam1',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 spectral width:
     ;===================================
       if parameters eq 'sw_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sw_beam2',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 spectral width:
     ;===================================
       if parameters eq 'sw_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sw_beam3',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 spectral width:
     ;===================================
       if parameters eq 'sw_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sw_beam4',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 spectral width:
     ;===================================
       if parameters eq 'sw_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sw_beam5',data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
       endif
    endif
-   
+
 endif
 
 ; add options
 options, parameters, 'spec', 1
 
 ;Clear time and data buffer:
-ear_time=0
-ear_data=0
+mu_time=0
+mu_data=0
     
 print,'**********************************************************************************
 print,'Data loading is successful!!'

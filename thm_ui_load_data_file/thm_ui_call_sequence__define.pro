@@ -40,7 +40,9 @@
 ;$LastChangedRevision: 6207 $
 ;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_5_11/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
 ;
-;  IUGONETƒf[ƒ^load—p‚Éˆê•”’Ç‰ÁB by Y.Tanaka  20/04/2010
+;  IUGONETï¿½fï¿½[ï¿½^loadï¿½pï¿½Éˆê•”ï¿½Ç‰AB by Y.Tanaka  20/04/2010
+;  Modifications:
+;  A. Shinbori, 09/07/2010.
 ;--------------------------------------------------------------------------------
 
 
@@ -129,6 +131,7 @@ end
 pro thm_ui_call_sequence::addloadiugonet,$
                             instrument,$
                             datatype,$
+                            site_or_param,$
                             parameters,$
                             timeRange
                             
@@ -137,6 +140,7 @@ pro thm_ui_call_sequence::addloadiugonet,$
   in_st = {type:'loadiugonetdata', $
            instrument:instrument,$
            datatype:datatype,$
+           site_or_param:site_or_param,$
            parameters:parameters,$
            timeRange:timeRange}
           
@@ -425,6 +429,7 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
       thm_ui_load_iugonet_data_load_pro,$
                          st.instrument[0],$
                          st.datatype[0],$
+                         st.site_or_param,$ ; add to st.site_or_param by A. Shinbori.
                          st.parameters,$
                          st.timeRange,$
                          self.loadedData,$

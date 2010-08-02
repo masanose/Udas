@@ -1,14 +1,14 @@
 ;+
 ;
 ;Name:
-;iug_load_ear_trop
+;iug_load_blr_spr
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH servers for EAR data and loads data into
+;  Queries the Kyoto_RISH servers for blr data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_ear_trop [ ,DATATYPE = string ]
+; iug_load_blr_spr  [ ,DATATYPE = string ]
 ;                   [ ,PARAMETERS = string ]
 ;                   [ ,TRANGE = [min,max] ]
 ;                   [ ,FILENAMES = string scalar or array ]
@@ -16,10 +16,10 @@
 ;
 ;Keywords:
 ;  DATATYPE (I/O):
-;    Set to 'trop_wind'.  If not set, 'trop_wind' is
+;    Set to 'blr_wind_srp'.  If not set, 'blr_wind_srp' is
 ;      assumed.  Returns cleaned input, or shows default. 
 ;  PARAMETERS (I/O):
-;    Set to wind parameters.  If not set, 'ear_wind_zon' is
+;    Set to wind parameters.  If not set, 'srp_zonal_wind' is
 ;      assumed.  Returns cleaned input, or shows default.       
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
@@ -29,10 +29,12 @@
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;Code:
-; A. Shinbori, 13/05/2010.
+; A. Shinbori, 05/07/2010.
 ;
 ;Modifications:
-;
+; 
+; 
+; 
 ;Acknowledgment:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -40,7 +42,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_trop, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
+pro iug_load_blr_srp, datatype=datatype, parameters=parameters, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -48,14 +50,14 @@ pro iug_load_ear_trop, datatype=datatype, parameters=parameters, trange=trange, 
 if ~keyword_set(verbose) then verbose=2
  
 ;****************************************
-;Load 'troposphere_wind' data by default:
+;Load 'blr_wind_ear' data by default:
 ;****************************************
-if ~keyword_set(datatype) then datatype='trop_wind'
+if ~keyword_set(datatype) then datatype='blr_wind_srp'
 
 ;************************************
 ;Load wind component data by default:
 ;************************************
-if ~keyword_set(parameters) then parameters='zonal_wind_ear'
+if ~keyword_set(parameters) then parameters='srp_zonal_wind'
 
 ;*******************
 ;Validate datatypes:
@@ -70,22 +72,22 @@ endif else begin
 endelse
 
 ;Data component
-if datatype eq 'trop_wind' then begin
-   vdcname = strmid(parameters, 0,1)
+if datatype eq 'blr_wind_srp' then begin
+   vdcname = strmid(parameters, 4,1)
    
    if vdcname eq 'z' then vdcnames = 'u'
    if vdcname eq 'm' then vdcnames = 'v'
    if vdcname eq 'v' then vdcnames = 'w'
-endif else if datatype eq 'trop_pwr' then begin
-   vdcname = strmid(parameters, 0,9)
+endif else if datatype eq 'blr_pwr_srp' then begin
+   vdcname = strmid(parameters, 4,13)
 
    if vdcname eq 'pwr_beam1' then vdcnames = '1'
    if vdcname eq 'pwr_beam2' then vdcnames = '2'
    if vdcname eq 'pwr_beam3' then vdcnames = '3'
    if vdcname eq 'pwr_beam4' then vdcnames = '4'
    if vdcname eq 'pwr_beam5' then vdcnames = '5'
-endif else if datatype eq 'trop_spec_width' then begin
-   vdcname = strmid(parameters, 0,8)
+endif else if datatype eq 'blr_spec_width_srp' then begin
+   vdcname = strmid(parameters, 4,12)
 
    if vdcname eq 'sw_beam1' then vdcnames = '1'
    if vdcname eq 'sw_beam2' then vdcnames = '2'
@@ -95,7 +97,7 @@ endif else if datatype eq 'trop_spec_width' then begin
 endif
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire EAR data, we ask that you' $
+acknowledgstring = 'If you acquire BLR data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
 + 'including text such as EAR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
@@ -114,15 +116,15 @@ if ~size(fns,/type) then begin
 
     ;Get files for ith component:
     ;***************************
-    if datatype eq 'trop_wind' then begin
+    if datatype eq 'blr_wind_srp' then begin
       file_names = file_dailynames( $
         file_format='YYYYMM/YYYYMMDD/'+$
         'YYYYMMDD',trange=trange,times=times,/unique)+'.'+vdcnames+'wnd.csv'
-    endif else if datatype eq 'trop_pwr' then begin
+    endif else if datatype eq 'blr_pwr_srp' then begin
       file_names = file_dailynames( $
         file_format='YYYYMM/YYYYMMDD/'+$
         'YYYYMMDD',trange=trange,times=times,/unique)+'.pwr'+vdcnames+'.csv'    
-    endif else if datatype eq 'trop_spec_width' then begin
+    endif else if datatype eq 'blr_spec_width_srp' then begin
       file_names = file_dailynames( $
         file_format='YYYYMM/YYYYMMDD/'+$
         'YYYYMMDD',trange=trange,times=times,/unique)+'.wdt'+vdcnames+'.csv'
@@ -132,8 +134,8 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir = 'c:/data/RISH/EAR/troposphere_wind/'
-    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
+    source.local_data_dir = root_data_dir() + 'iugonet/rish/blr/serpong/'
+    source.remote_data_dir = 'ftp://ftp.rish.kyoto-u.ac.jp/pub/blr/serpong/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -147,9 +149,9 @@ endif else file_names=fns
 ;===============
 s=''
 u=''
-altitude = fltarr(120)
-data = strarr(121)
-data2 = fltarr(1,120)
+altitude = fltarr(63)
+data = strarr(64)
+data2 = fltarr(1,63)
 time = dblarr(1)
 
 
@@ -157,21 +159,28 @@ time = dblarr(1)
 ;================================
  for i=0,n_elements(local_paths)-1 do begin
     file= local_paths[i]
-    if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading BLR-Serpong file: ',file $
     else begin
-         dprint,'EAR file ',file,' not found. Skipping'
+         dprint,'BLR-Serpong file ',file,' not found. Skipping'
          continue
     endelse
-
     openr,lun,file,/get_lun    
     ;
     ;Read information of altitude:
     ;=============================
     readf, lun, s
     height = float(strsplit(s,',',/extract))
-    
-    for j=0,119 do begin
+    number2 = n_elements(height)
+    print, number2
+    for j=0,number2-2 do begin
      altitude[j] = height[j+1]
+    endfor
+    for j=0,62 do begin
+     b = float(altitude[j])
+     wbad = where(b eq 0,nbad)
+     if nbad gt 0 then b[wbad] = !values.f_nan
+     print, b
+     altitude[j]=b
     endfor
     ;
     ;Loop on readdata:
@@ -195,9 +204,9 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(6)+':'+string(48))
          ;
-         for j=0,119 do begin
+         for j=0,number2-2 do begin
           a = float(data[j+1])
           wbad = where(a eq 999,nbad)
           if nbad gt 0 then a[wbad] = !values.f_nan
@@ -206,114 +215,115 @@ time = dblarr(1)
            ;
            ;Append data of time:
            ;====================
-            append_array, ear_time, time
+            append_array, blr_time, time
            ;
            ;Append data of wind velocity:
            ;=============================
-            append_array, ear_data, data2
-
+            append_array, blr_data, data2
+    
       endif
     endwhile 
     free_lun,lun  
 endfor
-
 ;******************************
 ;Store data in TPLOT variables:
 ;******************************
-acknowledgstring = ''
 
 if time ne 0 then begin
-   if datatype eq 'trop_wind' then begin 
+      dprint,'Loading BLR-Serpong file: ',file 
+      
+      
+   if datatype eq 'blr_wind_sgk' then begin 
+   
   ;Store data of zonal wind:
   ;============================
-      if parameters eq 'zonal_wind_ear' then begin
+      if parameters eq 'sgk_zonal_wind' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'zonal_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_zonal_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of meridional wind:
   ;==============================
-      if parameters eq 'meridional_wind_ear' then begin
+      if parameters eq 'sgk_meridional_wind' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'meridional_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_meridional_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
   ;Store data of vertical wind:
   ;============================
-      if parameters eq 'vertical_wind_ear' then begin
+      if parameters eq 'sgk_vertical_wind' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'vertical_wind_ear',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_vertical_wind',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
-   endif else if datatype eq 'trop_pwr' then begin
+   endif else if datatype eq 'blr_pwr_sgk' then begin
     ;Store data of beam1 echo intensity:
     ;===================================
-      if parameters eq 'pwr_beam1' then begin
+      if parameters eq 'sgk_pwr_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_pwr_beam1',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 echo intensity:
     ;===================================
-      if parameters eq 'pwr_beam2' then begin
+      if parameters eq 'sgk_pwr_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_pwr_beam2',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 echo intensity:
     ;===================================
-      if parameters eq 'pwr_beam3' then begin
+      if parameters eq 'sgk_pwr_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_pwr_beam3',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 echo intensity:
     ;===================================
-      if parameters eq 'pwr_beam4' then begin
+      if parameters eq 'sgk_pwr_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_pwr_beam4',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 echo intensity:
     ;===================================
-      if parameters eq 'pwr_beam5' then begin
+      if parameters eq 'sgk_pwr_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'pwr_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_pwr_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
-   endif else if datatype eq 'trop_spec_width' then begin
+   endif else if datatype eq 'blr_spec_width_kot' then begin
     ;Store data of beam1 spectral width:
     ;===================================
-      if parameters eq 'sw_beam1' then begin
+      if parameters eq 'sgk_sw_beam1' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam1',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_sw_beam1',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam2 spectral width:
     ;===================================
-      if parameters eq 'sw_beam2' then begin
+      if parameters eq 'sgk_sw_beam2' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam2',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_sw_beam2',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam3 spectral width:
     ;===================================
-      if parameters eq 'sw_beam3' then begin
+      if parameters eq 'sgk_sw_beam3' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam3',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_sw_beam3',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam4 spectral width:
     ;===================================
-      if parameters eq 'sw_beam4' then begin
+      if parameters eq 'sgk_sw_beam4' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam4',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_sw_beam4',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
     ;Store data of beam5 spectral width:
     ;===================================
-      if parameters eq 'sw_beam5' then begin
+      if parameters eq 'sgk_sw_beam5' then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-         store_data,'sw_beam5',data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         store_data,'sgk_sw_beam5',data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
       endif
    endif
-   
-endif
+endif 
 
 ; add options
 options, parameters, 'spec', 1
 
 ;Clear time and data buffer:
-ear_time=0
-ear_data=0
+blr_data = 0
+blr_time = 0
     
 print,'**********************************************************************************
 print,'Data loading is successful!!'
