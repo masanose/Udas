@@ -1,6 +1,6 @@
 ;+
-;Procedure: TOHOKUU_LOAD_ONW_PC3_SAMPLE,
-;  TohokuU_load_onw_pc3_sample, site = site, datatype = datatype, $
+;Procedure: iug_load_gmag_pc3
+;  iug_load_gmag_pc3, site = site, datatype = datatype, $
 ;                         trange = trange, verbose = verbose, $
 ;                         addmaster=addmaster, downloadonly = downloadonly
 ;Purpose:
@@ -21,7 +21,7 @@
 ;                 into variables.
 ;
 ;Example:
-;  TohokuU_load_onw_pc3_sample,  trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
+;  iug_load_gmag_pc3,  trange = ['2003-08-01/00:00:00','2003-09-04/00:00:00']
 ;
 ;Code:
 ;  Shuji Abe, revised by M. Kagitani
