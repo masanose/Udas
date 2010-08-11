@@ -14,6 +14,7 @@
 ;A. Shinbori, 13/05/2010
 ;A. Shinbori, 24/06/2010
 ;A. Shinbori, 10/07/2010
+;A. Shinbori, 06/08/2010
 ;
 ;  �e�X�g�v���V�W���Bthm_ui_load_iugonet_data.pro���������B
 ;--------------------------------------------------------------------------------
@@ -461,7 +462,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[7])[1] = ptr_new(['zonal','meridional','vertical','beam1', $
                                   'beam2','beam3','beam4','beam5'])
   (*param2Array[7])[2] = ptr_new(['beam1','beam2','beam3','beam4','beam5'])
-  (*param2Array[7])[3] = ptr_new(['zonal_wind','meridional_wind','vertical_wind','zonal_thermal_speed','meridional_thermal_speed','meteor_num'])
+  (*param2Array[7])[3] = ptr_new(['zonal_wind','meridional_wind','zonal_thermal_speed','meridional_thermal_speed','meteor_num'])
   (*param2Array[8])[0] = ptr_new(['zonal_wind','meridional_wind','vertical_wind'])
   (*param2Array[8])[1] = ptr_new(['pwr_beam1','pwr_beam2','pwr_beam3','pwr_beam4','pwr_beam5'])
   (*param2Array[8])[2] = ptr_new(['sw_beam1','sw_beam2','sw_beam3','sw_beam4','sw_beam5'])

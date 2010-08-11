@@ -222,7 +222,7 @@ if datatype ne 'iono_efr_noise_lev' then begin
   
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
                    
          ;
          for j=0,number2-2 do begin

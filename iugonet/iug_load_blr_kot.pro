@@ -148,9 +148,9 @@ endif else file_names=fns
 ;===============
 s=''
 u=''
-altitude = fltarr(121)
-data = strarr(121)
-data2 = fltarr(1,120)
+altitude = fltarr(63)
+data = strarr(64)
+data2 = fltarr(1,63)
 time = dblarr(1)
 
 
@@ -175,7 +175,7 @@ time = dblarr(1)
      altitude[j] = height[j+1]
     endfor
     
-    for j=0,120 do begin
+    for j=0,62 do begin
      b = float(altitude[j])
      wbad = where(b eq 0,nbad)
      if nbad gt 0 then b[wbad] = !values.f_nan
@@ -204,7 +204,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
          ;
          for j=0,number2-2 do begin
           a = float(data[j+1])

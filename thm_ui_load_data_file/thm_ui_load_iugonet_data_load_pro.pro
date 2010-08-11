@@ -130,7 +130,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif else if instrument eq 'MF_radar' then begin
         if site_or_param eq 'pameungpeuk' then begin
            par_names=parameters+'_wind_pam'
-           iug_load_mf_pam, datatype =datatype, parameters=par_names, trange = timeRange
+           iug_load_mf_pam_nc, datatype =datatype, parameters=par_names, trange = timeRange
         endif else if site_or_param eq 'pontianak' then begin
            par_names=parameters+'_wind_pon'
            iug_load_mf_pon, datatype =datatype, parameters=par_names, trange = timeRange
@@ -138,10 +138,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif else if instrument eq 'meteor_radar' then begin
         if site_or_param eq 'kototabang' then begin
            par_names=parameters+'_ktb'
-           iug_load_meteor_kot, datatype =datatype, parameters=par_names, trange = timeRange
+           iug_load_meteor_kot_nc, datatype =datatype, parameters=par_names, trange = timeRange
         endif else if site_or_param eq 'serpong' then begin
            par_names=parameters+'_srp'
-           iug_load_meteor_srp, datatype =datatype, parameters=par_names, trange = timeRange
+           iug_load_meteor_srp_nc, datatype =datatype, parameters=par_names, trange = timeRange
         endif
   endif else if instrument eq 'MU' then begin
      if datatype eq 'trop_std' then begin

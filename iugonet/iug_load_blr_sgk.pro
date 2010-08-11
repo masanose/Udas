@@ -204,7 +204,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(4)+':'+string(24))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
          ;
          for j=0,number2-2 do begin
           a = float(data[j+1])

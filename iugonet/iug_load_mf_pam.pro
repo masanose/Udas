@@ -108,13 +108,12 @@ if ~size(fns,/type) then begin
     local_paths=file_retrieve(file_names,_extra=source)
     local_paths_all = ~(~size(local_paths_all,/type)) ? $
       [local_paths_all, local_paths] : local_paths
-  if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
+    if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
 endif else file_names=fns
 
 ;Read the files:
 ;===============
 
-altitude = fltarr(36)
 height = fltarr(36)
 zon_wind_data = fltarr(1,36)
 mer_wind_data = fltarr(1,36)
@@ -192,7 +191,7 @@ ver_wind=0
       n=0
       for l = 1L, number_of_range_gates_sampled[0] do begin
           record_header_bytes10 = assoc(lun, lonarr(1), offset+0)
-          altitude[n] =float(record_header_bytes10[0])/1000;Range [km]
+          height[n] =float(record_header_bytes10[0])/1000;Range [km]
           record_header_bytes12 = assoc(lun, fltarr(1), offset+8)
           a = record_header_bytes12[0];zonal_wind
           wbad = where(a eq -9999,nbad)
@@ -208,10 +207,15 @@ ver_wind=0
           wbad = where(c eq -9999,nbad)
           if nbad gt 0 then c[wbad] = !values.f_nan
           ver_wind_data[m,n] = c
+          d=height[n]
+          wbad = where(d eq 0,nbad)
+          if nbad gt 0 then d[wbad] = !values.f_nan
+          height[n] = d
+          
           offset += 144
           n=n+1
        endfor
-        height = altitude
+
         ;
         ;Append data of time:
         ;====================

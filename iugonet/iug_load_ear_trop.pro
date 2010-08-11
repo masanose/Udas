@@ -132,7 +132,7 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir = 'c:/data/RISH/EAR/troposphere_wind/'
+    source.local_data_dir = root_data_dir() + 'iugonet/rish/ear/troposphere/'
     source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -195,7 +195,7 @@ time = dblarr(1)
          minute = strmid(u,14,2)  
          ;====convert time from LT to UT      
          time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(6)+':'+string(41)+':'+string(12))
+                   -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
          ;
          for j=0,119 do begin
           a = float(data[j+1])
