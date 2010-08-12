@@ -4,7 +4,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
    resolution = res, $
    level = level, $
    tplot_name, $
-   tplot_ytitle, tplot_ysubtitle, $
+   tplot_ytitle, tplot_ysubtitle, tplot_ylabels, $
    tplot_dlimit
 
   ; for acknowledgment
@@ -46,6 +46,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
         tplot_ytitle = 'Dst'
      endelse
      tplot_ysubtitle = '[nT]'
+     tplot_ylabels = 'Dst'
 
   endif $
   else if strlowcase(sname) eq 'sym' or strlowcase(sname) eq 'asy' then begin
@@ -54,6 +55,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
                   strlowcase(sname+'-'+element)
      tplot_ytitle = strupcase(sname+'-'+element)
      tplot_ysubtitle = '[nT]'
+     tplot_ylabele = strupcase(sname+'-'+element)
 
   endif $
   else if strlowcase(sname) eq 'ae' then begin
@@ -71,26 +73,41 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
         tplot_ytitle = 'A' + strupcase(element)
      endelse
 
+     if res eq 'min' then begin
+        tplot_ytitle = tplot_ytitle + '!c(1-min)'
+     endif else if res eq 'hour' or res eq 'hr' then begin
+        tplot_ytitle = tplot_ytitle + '!c(hourly)'
+     endif
+
      if strupcase(element) eq 'X' then begin
         tplot_ysubtitle = '[#]'
      endif else begin
         tplot_ysubtitle = '[nT]'
      endelse
 
+     tplot_ylabels = 'A' + strupcase(element)
+
   endif $
   else begin
 
      tplot_name = 'iug_gmag_wdc_'+res+'_'+sname+'_'+element
      tplot_name = strlowcase(tplot_name)
+
      tplot_ytitle = strupcase(sname+' '+element)
 
      if strlowcase(strmid(level,0,4)) eq 'prov' then begin
         tplot_name = tplot_name + '_prov'
-        tplot_ytitle = tplot_ytitle + ' (Prov.)'
+        tplot_ytitle = tplot_ytitle + ' Prov.'
      endif else if strlowcase(strmid(level,0,2)) eq 'ql' or $
         strlowcase(level) eq 'quicklook' then begin
         tplot_name = tplot_name + '_ql'
-        tplot_ytitle = tplot_ytitle + ' (QL)'
+        tplot_ytitle = tplot_ytitle + ' QL'
+     endif
+
+     if res eq 'min' then begin
+        tplot_ytitle = tplot_ytitle + '!c(1-min)'
+     endif else if res eq 'hour' or res eq 'hr' then begin
+        tplot_ytitle = tplot_ytitle + '!c(hourly)'
      endif
 
      if strupcase(element) eq 'D' or $
@@ -99,6 +116,9 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
      endif else begin
         tplot_ysubtitle = '[nT]'
      endelse
+
+     tplot_ylabels = strupcase(element)
+
 
   endelse
 

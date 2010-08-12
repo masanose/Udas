@@ -241,7 +241,7 @@ pro iug_load_gmag_wdc_wdchr, $
           sname = wdc_sites[i], $
           element = elemlist[elemnum], $
           res = 'hour', level = level, $
-          tplot_name, tplot_ytitle, tplot_ysubtitle, dlimit
+          tplot_name, tplot_ytitle, tplot_ysubtitle, tplot_ylabels, dlimit
 
        store_data,$
           tplot_name, $
@@ -250,7 +250,7 @@ pro iug_load_gmag_wdc_wdchr, $
           dlimit=dlimit
        options,$
           tplot_name, $
-          ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle
+          ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle, ylabels = tplot_ylabels
 
    endfor
     
