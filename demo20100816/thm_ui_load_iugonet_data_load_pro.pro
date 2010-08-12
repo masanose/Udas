@@ -12,6 +12,7 @@
 ;Modifications:
 ;A. SHinbori, 12/05/2010
 ;A. SHinbori, 10/07/2010
+;Y. Tanaka, 12/08/2010  for demo 20100816.
 ;
 ;  �e�X�g�v���V�W���Bthm_ui_load_wind_data.pro���������B
 ;  �Ƃ肠�����A�������B
@@ -55,8 +56,6 @@ pro thm_ui_load_iugonet_data_load_pro,$
        if site_or_param eq 'WDC_kyoto' then begin
          if (parameters eq 'asy_d') or (parameters eq 'asy_h') or (parameters eq 'sym_d') or (parameters eq 'sym_h')  then begin
              par_names='iug_gmag_wdc_min_index_'+strmid(parameters,0,3)+'-'+strmid(parameters,4,1)
-
-             print,par_names
              iug_load_gmag_wdc_wdcmin, trange=timeRange
          endif
       endif
