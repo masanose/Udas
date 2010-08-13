@@ -75,7 +75,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       iug_load_gmag_wdc_wdcmin, trange=timeRange, site = site_or_param
     endif
     if datatype eq 'NIPR_mag' then begin
-      par_names='hdz_1sec'
+      par_names='nipr_hdz_1sec_'+site_or_param
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param
     endif
   endif else if instrument eq 'superdarn' then begin
@@ -83,10 +83,19 @@ pro thm_ui_load_iugonet_data_load_pro,$
     erg_load_sdfit, trange=timeRange, sites=site_or_param
   endif else if instrument eq 'EAR' then begin
      if datatype eq 'trop_std' then begin
-        if site_or_param eq 'trop_wind' then par_names=parameters+'_wind_ear'
-        if site_or_param eq 'trop_pwr' then par_names='pwr_'+parameters
-        if site_or_param eq 'trop_spec_width' then par_names='sw_'+parameters
-           iug_load_ear_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        if site_or_param eq 'trop_wind' then begin
+           par_names=parameters+'_wind_ear'
+           vdcname = strmid(parameters, 0,1)
+           if vdcname ne 'b' then iug_load_ear_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        endif else if site_or_param eq 'trop_pwr' then begin
+           par_names='pwr_'+parameters
+           vdcname = strmid(parameters, 0,1)
+            if vdcname eq 'b' then iug_load_ear_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        endif else if site_or_param eq 'trop_spec_width' then begin
+           par_names='sw_'+parameters
+           vdcname = strmid(parameters, 0,1)
+            if vdcname eq 'b' then iug_load_ear_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        endif
      endif else if datatype eq 'iono_er_dpl' then begin
            par_names=site_or_param
            par_names2=parameters
@@ -159,10 +168,19 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
   endif else if instrument eq 'MU' then begin
      if datatype eq 'trop_std' then begin
-        if site_or_param eq 'trop_wind' then par_names=parameters+'_wind_mu'
-        if site_or_param eq 'trop_pwr' then par_names='pwr_'+parameters
-        if site_or_param eq 'trop_spec_width' then par_names='sw_'+parameters
-           iug_load_mu_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        if site_or_param eq 'trop_wind' then begin
+           par_names=parameters+'_wind_mu'
+           vdcname = strmid(parameters, 0,1)
+           if vdcname ne 'b' then iug_load_mu_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        endif else if site_or_param eq 'trop_pwr' then begin
+           par_names='pwr_'+parameters
+           vdcname = strmid(parameters, 0,1)
+           if vdcname eq 'b' then iug_load_mu_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        endif else if site_or_param eq 'trop_spec_width' then begin
+           par_names='sw_'+parameters
+           vdcname = strmid(parameters, 0,1)
+           if vdcname eq 'b' then iug_load_mu_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
+        endif
      endif else if datatype eq 'mw_spc' then begin
            par_names=parameters+'_mw'
            iug_load_meteor_mu, datatype =datatype, parameters=par_names, trange = timeRange

@@ -14,7 +14,6 @@
 ;A. Shinbori, 13/05/2010
 ;A. Shinbori, 24/06/2010
 ;A. Shinbori, 10/07/2010
-;Y. Tanaka, 12/08/2010 for demo 20100816.
 ;
 ;  �e�X�g�v���V�W���Bthm_ui_load_iugonet_data.pro���������B
 ;--------------------------------------------------------------------------------
@@ -365,7 +364,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[1])[2] = ptr_new(['kag','kot','msr','rik'])
   (*paramArray[1])[3] = ptr_new(['kak'])
   (*paramArray[1])[4] = ptr_new(['syo'])
-  (*paramArray[2])[0] = ptr_new(['hok','syo'])
+  (*paramArray[2])[0] = ptr_new(['hok','sye','sys'])
   (*paramArray[3])[0] = ptr_new(['trop_wind','trop_pwr','trop_spec_width'])
   (*paramArray[3])[1] = ptr_new(['er_dpl_beam1','er_dpl_beam2','er_dpl_beam3','er_dpl_beam4','er_dpl_beam5'])
   (*paramArray[3])[2] = ptr_new(['er_pwr_beam1','er_pwr_beam2','er_pwr_beam3','er_pwr_beam4','er_pwr_beam5'])
