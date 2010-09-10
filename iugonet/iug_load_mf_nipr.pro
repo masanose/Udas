@@ -176,24 +176,6 @@ for i=0, nsites-1 do begin
     ; tplot variable name
     prefix = 'mf_'+ strlowcase(strmid(mf_sites[i],0,3))
 
-    ; add options
-    options, prefix+'_zonal_vel', $
-      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
-      ysubtitle = '[km]', ztitle='Zonal Wind [m/s]', $
-      title = 'MF radar'
-    options, prefix+'_merid_vel', $
-      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
-      ysubtitle = '[km]', ztitle='Meridional Wind [m/s]', $
-      title = 'MF radar'
-    options, prefix+'_zonal_std', $
-      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
-      ysubtitle = '[km]', ztitle='Std of Zonal Wind [m/s]', $
-      title = 'MF radar'
-    options, prefix+'_merid_std', $
-      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
-      ysubtitle = '[km]', ztitle='Std of Meridional Wind [m/s]', $
-      title = 'MF radar'
-
     ; default limit structure
     dlimit=create_struct('data_att',create_struct('acknowledgment', acknowledgstring, $
                                                   'PI_NAME', 'M. Tsutsumi'))
@@ -215,6 +197,28 @@ for i=0, nsites-1 do begin
     options, prefix+'_merid_vel', 'spec', 1
     options, prefix+'_zonal_std', 'spec', 1
     options, prefix+'_merid_std', 'spec', 1
+
+    ; add options
+    options, prefix+'_zonal_vel', $
+      labels = strupcase(strmid(mf_sites[i],0,3))+' MF radar', $
+      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
+      ysubtitle = '[km]', ztitle='Zonal Wind [m/s]', $
+      title = 'MF radar'
+    options, prefix+'_merid_vel', $
+      labels = strupcase(strmid(mf_sites[i],0,3))+' MF radar', $
+      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
+      ysubtitle = '[km]', ztitle='Meridional Wind [m/s]', $
+      title = 'MF radar'
+    options, prefix+'_zonal_std', $
+      labels = strupcase(strmid(mf_sites[i],0,3))+' MF radar', $
+      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
+      ysubtitle = '[km]', ztitle='Std of Zonal Wind [m/s]', $
+      title = 'MF radar'
+    options, prefix+'_merid_std', $
+      labels = strupcase(strmid(mf_sites[i],0,3))+' MF radar', $
+      ytitle = strupcase(strmid(mf_sites[i],0,3))+'!CHeight', $
+      ysubtitle = '[km]', ztitle='Std of Meridional Wind [m/s]', $
+      title = 'MF radar'
 
   endif
 
