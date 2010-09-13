@@ -32,11 +32,7 @@
 ;A. Shinbori, 13/05/2010.
 ;
 ;Modifications:
-<<<<<<< HEAD
-;
-=======
 ;A. Shinbori, 24/08/2010.
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 ;
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -45,11 +41,7 @@
 ; $URL $
 ;-
   
-<<<<<<< HEAD
-pro iug_load_ear, datatype = datatype, parameters = parameters, trange = trange, verbose = verbose
-=======
 pro iug_load_ear, trange = trange, verbose = verbose
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 
 ;******************
 ;keyword check:
@@ -57,44 +49,6 @@ pro iug_load_ear, trange = trange, verbose = verbose
 ;verbose
 if ~keyword_set(verbose) then verbose=2
  
-<<<<<<< HEAD
-;**************************
-;Load 'troposphere_wind' data by default:
-;**************************
-if ~keyword_set(datatype) then datatype='trop_wind'
-
-;**************************
-;Load 'parameters' data by default:
-;**************************
-if ~keyword_set(parameters) then parameters='zonal_wind_ear'
-
-;*****************
-;Validate datatypes:
-;*****************
-vns = datatype
-if size(datatype,/type) eq 7 then begin
-  datatype=thm_check_valid_name(datatype,vns,/ignore_case,/include_all,/no_warning)
-  if datatype[0] eq '' then return
-endif else begin
-  message,'DATATYPE must be of string type.',/info
-  return
-endelse
-                 
-  ;===============================
-  ;======Load data================
-  ;===============================
-  ;load of ear tropsphere data
-   iug_load_ear_trop,datatype=datatype,parameters=parameters,trange=trange
-   
-  ;load of ear ionosphere data
-  ; iug_load_ear_iono,datatype=datatype,parameters=parameters,trange=trange 
-   
-  ;load of meteor radar data 
-   iug_load_meteor_kot, datatype=datatype,parameters=parameters,trange=trange
-   
-  ;load of MF radar data 
-   iug_load_MF_pam, datatype=datatype,parameters=parameters,trange=trange
-=======
   ;===============================
   ;======Load data================
   ;===============================
@@ -122,7 +76,6 @@ endelse
   
   ; iug_load_ear_iono,datatype=datatype,parameters=parameters,trange=trange 
    
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
    
 end
 
