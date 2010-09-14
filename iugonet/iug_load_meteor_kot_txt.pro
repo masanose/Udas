@@ -59,11 +59,7 @@ if ~keyword_set(datatype) then datatype='kototabang'
 ;********************************
 ;Load 'parameters' data by default:
 ;********************************
-<<<<<<< HEAD
-if ~keyword_set(parameters) then parameters='zon_wind'
-=======
 if ~keyword_set(parameters) then parameters='zon_wind_ktb'
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 
 ;*******************
 ;Validate datatypes:
@@ -136,20 +132,12 @@ meteor_num_data = fltarr(1,21)
 time = dblarr(1)
 time1 = dblarr(2)
 n=0
-<<<<<<< HEAD
-kt_time=0
-=======
 kot_time=0
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 zon_wind=0
 mer_wind=0
 zon_thermal=0
 mer_thermal=0
-<<<<<<< HEAD
-meteor_num=0
-=======
 meteor_num=0 
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 
  
 ;Loop on files (zonal component): 
@@ -188,14 +176,9 @@ meteor_num=0
          data = float(strsplit(data1, ' ', /extract))
          
          for k=0,6 do begin
-<<<<<<< HEAD
-           a = float(data[k])
-           wbad = where(a eq 999,nbad)
-=======
            a = float(data[k])
            wbad = where(a gt 100 || a lt -100,nbad)
            wbad = where(a eq 999,nbad)
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
            if nbad gt 0 then a[wbad] = !values.f_nan
            data[k]=a
          endfor
@@ -223,11 +206,7 @@ meteor_num=0
          data(4)=0
          if n ge 1 then begin
          if (time1(1)-time1(0) ne 0) then begin          
-<<<<<<< HEAD
-            append_array, kt_time, time
-=======
             append_array, kot_time, time
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
             append_array, zon_wind, zon_wind_data
             append_array, mer_wind, mer_wind_data
             append_array, zon_thermal, zon_thermal_data
@@ -259,42 +238,6 @@ acknowledgstring = ''
 
 if time ne 0 then begin
 
-<<<<<<< HEAD
-;Store data of zonal and meridional component:
-;=============================================
-   if  parameters eq 'zonal_wind_ktb' then begin
-       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-       store_data,'zonal_wind_ktb',data={x:kt_time, y:zon_wind, v:height},dlimit=dlimit
-   endif
-   if  parameters eq 'meridional_wind_ktb' then begin
-       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-       store_data,'meridional_wind_ktb',data={x:kt_time, y:mer_wind, v:height},dlimit=dlimit
-   endif
-
-;Store data of zonal and meridional thermal speed component:
-;===========================================================
-   if  parameters eq 'zonal_thermal_speed_ktb' then begin
-       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-       store_data,'zonal_thermal_speed_ktb',data={x:kt_time, y:zon_thermal, v:height},dlimit=dlimit
-   endif
-   if  parameters eq 'meridional_thermal_speed_ktb' then begin
-       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-       store_data,'meridional_thermal_speed_ktb',data={x:kt_time, y:mer_thermal, v:height},dlimit=dlimit
-   endif
-;Store data of meteor trace number:
-;==================================
-   if  parameters eq 'meteor_num_ktb' then begin
-       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
-       store_data,'meteor_num_ktb',data={x:kt_time, y:meteor_num, v:height},dlimit=dlimit
-   endif
-   
-; add options
-   options, parameters, 'spec', 1
-endif 
-
-;Clear time and data buffer:
-kt_time=0
-=======
 ;Store data of kototabang wind data:
 ;===================================
   dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
@@ -323,17 +266,12 @@ endif
 
 ;Clear time and data buffer:
 kot_time=0
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 zon_wind=0
 mer_wind=0
 zon_thermal=0
 mer_thermal=0
 meteor_num=0 
-<<<<<<< HEAD
-          
-=======
   
->>>>>>> ea6ad748563fc214c86e5d52c951acf9d2b3095c
 print,'**********************************************************************************
 print, 'Data loading is successful!!'
 print,'**********************************************************************************
