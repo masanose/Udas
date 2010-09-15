@@ -1,5 +1,5 @@
 ;+
-;Procedure: IUG_LOAD_GMAG_WDC,
+;Procedure: IUG_LOAD_GMAG_WDC
 ; iug_load_gmag_wdc, site=site, $
 ;                        trange=trange, $
 ;                        resolution = resolution, $
@@ -10,7 +10,7 @@
 ;                        no_download=no_download
 ;
 ;Purpose:
-;  Loads geomag data in WDC format from WDC for Geomag Kyoto.
+;  Loading geomag data in WDC format from WDC for Geomag Kyoto.
 ;
 ;Keywords:
 ;  site  = Station ABB code or name of geomagnetic index.
@@ -40,6 +40,7 @@
 ;  Now support only for AE Dst SYM/ASY KAK data.
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
+;Last Updated:  Daiki Yoshida,  Sep 10, 2010
 ; 
 ;-
 

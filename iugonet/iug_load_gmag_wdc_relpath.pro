@@ -1,3 +1,25 @@
+;+
+;Function: IUG_LOAD_GMAG_WDC_RELPATH
+;function iug_load_gmag_wdc_relpath, sname = sname, $
+;                                    trange = trange, $
+;                                    resolution = res, $
+;                                    level = level, $
+;                                    addmaster = addmaster, $
+;                                    _extra = _extra
+;
+;Purpose:
+;  create relpath string from abb code
+;
+;Notes:
+;  This procedure is called from load procedures for WDC format data,
+;  'iug_load_gmag_wdc*' provided by WDC Kyoto.
+;
+;
+;Written by:  Daiki Yoshida,  Aug 2010
+;Updated by:  Daiki Yoshida,  Sep 14, 2010
+;
+;-
+
 function iug_load_gmag_wdc_relpath, sname = sname, $
                                     trange = trange, $
                                     resolution = res, $
