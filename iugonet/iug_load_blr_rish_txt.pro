@@ -70,6 +70,12 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
+;*****************
+;defition of unit:
+;*****************
+;--- all parameters (default)
+unit_all = strsplit('m/s dB',' ', /extract)
+
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire BLR data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
@@ -220,10 +226,14 @@ for ii=0,n_elements(site_code)-1 do begin
   ;Store data in TPLOT variables:
   ;******************************
 
-          if time ne 0 then begin    
+          if time ne 0 then begin 
+             if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then begin 
+                o=0
+             endif else if strmid(parameters[ii],0,2) eq 'pw' then o=1    
              dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
              store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
-             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight [km]',ztitle=parameters[iii]
+             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$
+                     ztitle=parameters[iii]+'!C['+unit_all[o]+']'
              options,'iug_blr_'+site_code[ii]+'_'+parameters[iii], labels='BLR'
              ; add options
              options, 'iug_blr_'+site_code[ii]+'_'+parameters[iii], 'spec', 1    
@@ -232,10 +242,12 @@ for ii=0,n_elements(site_code)-1 do begin
           ;Clear time and data buffer:
           blr_data = 0
           blr_time = 0
-
+          ; add tdegap
+         tdegap, 'iug_blr_'+site_code[ii]+'_'+parameters[iii],/overwrite
        endif
        jj=n_elements(local_paths)
    endfor
+       jj=n_elements(local_paths)
 endfor 
    
 print,'**********************************************************************************

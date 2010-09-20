@@ -12,7 +12,7 @@
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;  parameter = parameter name of EAR obervation data.  
+;  parameter = parameter name of EAR troposphere standard obervation data.  
 ;          For example, iug_load_ear_trop_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -36,7 +36,7 @@
 ;-
 
 pro iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $
-                       downloadonly=downloadonly, trange=trange, verbose=verbose
+                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -46,7 +46,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;****************************************
 ;Load 'troposphere_wind' data by default:
 ;****************************************
-if (not keyword_set(datatype)) then datatype='toroposphere'
+if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;***********
 ;parameters:
@@ -59,6 +59,12 @@ if(not keyword_set(parameter)) then parameter='all'
 parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
+
+;*****************
+;defition of unit:
+;*****************
+;--- all parameters (default)
+unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire EAR data, we ask that you' $
@@ -189,10 +195,13 @@ for ii=0,n_elements(parameters)-1 do begin
    ;******************************
       acknowledgstring = ''
 
-      if time ne 0 then begin 
+      if time ne 0 then begin
+         if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then begin 
+             o=0
+          endif else if strmid(parameters[ii],0,2) eq 'pw' then o=1  
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ear_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-         options,'iug_ear_'+parameters[ii],ytitle='EAR-Kototabang!CHeight [km]',ztitle=parameters[ii]
+         options,'iug_ear_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
          options,'iug_ear_'+parameters[ii], labels='EAR'
        ; add options
          options, 'iug_ear_'+parameters[ii], 'spec', 1
@@ -201,7 +210,8 @@ for ii=0,n_elements(parameters)-1 do begin
     ;Clear time and data buffer:
       ear_time=0
       ear_data=0
- 
+    ; add tdegap
+      tdegap, 'iug_ear_'+parameters[ii],/overwrite,/overwrite
    endif
    jj=n_elements(local_paths)
 endfor

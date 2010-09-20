@@ -12,8 +12,8 @@
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;  parameter = parameter name of EAR obervation data.  
-;          For example, iug_load_ear_trop_txt, parameter = 'uwnd'.
+;  parameter = parameter name of MU troposphere standard obervation data.  
+;          For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -60,8 +60,14 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
+;*****************
+;defition of unit:
+;*****************
+;--- all parameters (default)
+unit_all = strsplit('m/s dB',' ', /extract)
+
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire EAR data, we ask that you' $
+acknowledgstring = 'If you acquire MU data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
 + 'including text such as MU data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
@@ -189,10 +195,13 @@ for ii=0,n_elements(parameters)-1 do begin
    ;******************************
        acknowledgstring = ''
 
-       if time ne 0 then begin 
+       if time ne 0 then begin
+          if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then begin 
+             o=0
+          endif else if strmid(parameters[ii],0,2) eq 'pw' then o=1  
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-          options,'iug_mu_'+parameters[ii],ytitle='MU-Shigaraki!CHeight [km]',ztitle=parameters[ii]
+          options,'iug_mu_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
           options,'iug_mu_'+parameters[ii], labels='MU'
        endif   
 
@@ -202,6 +211,8 @@ for ii=0,n_elements(parameters)-1 do begin
        ;Clear time and data buffer:
        mu_time=0
        mu_data=0
+       ; add tdegap
+      tdegap, 'iug_mu_'+parameters[ii],/overwrite,/overwrite
    endif
   jj=n_elements(local_paths)
 endfor

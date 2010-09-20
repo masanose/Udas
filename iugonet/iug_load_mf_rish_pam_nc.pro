@@ -11,7 +11,7 @@
 ; iug_load_mf_rish_pam_bin, site=site,downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;   site  = Observatory code name.  For example, iug_load_meteor_rish_txt, site = 'pam'.
+;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_nc, site = 'pam'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -169,15 +169,15 @@ if(downloadonly eq 0) then begin
               vwind_pam[i,k]=vwind[k+36*i]
               wwind_pam[i,k]=wwind[k+36*i]
               a = uwind_pam[i,k]            
-              wbad = where(a gt 200 || a lt -200,nbad)
+              wbad = where(a gt 400 || a lt -400,nbad)
               if nbad gt 0 then a[wbad] = !values.f_nan
               uwind_pam[i,k] =a
               b = vwind_pam[i,k]            
-              wbad = where(b gt 200 || b lt -200,nbad)
+              wbad = where(b gt 400 || b lt -400,nbad)
               if nbad gt 0 then b[wbad] = !values.f_nan
               vwind_pam[i,k] =b
               c = wwind_pam[i,k]            
-              wbad = where(c gt 10 || c lt -10,nbad)
+              wbad = where(c gt 40 || c lt -40,nbad)
               wbad = where(a eq -9999,nbad)
               if nbad gt 0 then a[wbad] = !values.f_nan
               uwind_pam[i,k] =a
@@ -212,11 +212,11 @@ if(downloadonly eq 0) then begin
 ;====================================
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:ear_time, y:zon_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uwnd',ztitle='Zonal wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:ear_time, y:mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_vwnd',ztitle='Meridional wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwind!C[m/s]'
       store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:ear_time, y:ver_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_wwnd',ztitle='Vertical wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='wwnd!C[m/s]'
   
 
     ; add options
@@ -232,7 +232,11 @@ if(downloadonly eq 0) then begin
    zon_wind=0
    mer_wind=0
    ver_wind=0
-
+   ; add tdegap
+   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',/overwrite
+   
 endif
 
 end

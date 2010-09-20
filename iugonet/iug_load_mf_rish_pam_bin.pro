@@ -11,7 +11,7 @@
 ; iug_load_mf_rish_pam_bin, site=site,downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;   site  = Observatory code name.  For example, iug_load_meteor_rish_txt, site = 'pam'.
+;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_bin, site = 'pam'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -182,17 +182,17 @@ if(downloadonly eq 0) then begin
                height[n] =float(record_header_bytes10[0])/1000;Range [km]
                record_header_bytes12 = assoc(lun, fltarr(1), offset+8)
                a = record_header_bytes12[0];zonal_wind
-               wbad = where(a gt 200 || a lt -200,nbad)
+               wbad = where(a gt 400 || a lt -400,nbad)
                if nbad gt 0 then a[wbad] = !values.f_nan
                zon_wind_data[m,n]=a
                record_header_bytes13 = assoc(lun, fltarr(1), offset+12)
                b= record_header_bytes13[0];meridional_wind
-               wbad = where(a gt 200 || a lt -200,nbad)
+               wbad = where(a gt 400 || a lt -400,nbad)
                if nbad gt 0 then b[wbad] = !values.f_nan
                mer_wind_data[m,n] = b
                record_header_bytes14 = assoc(lun, fltarr(1), offset+16)
                c= record_header_bytes14[0];vertical_wind
-               wbad = where(a gt 10 || a lt -10,nbad)
+               wbad = where(a gt 40 || a lt -40,nbad)
                if nbad gt 0 then c[wbad] = !values.f_nan
                ver_wind_data[m,n] = c
                d=height[n]
@@ -229,26 +229,31 @@ if(downloadonly eq 0) then begin
 ;====================================
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:ear_time, y:zon_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uwnd',ztitle='Zonal wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:ear_time, y:mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_vwnd',ztitle='Meridional wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwind!C[m/s]'
       store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:ear_time, y:ver_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_wwnd',ztitle='Vertical wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='wwnd!C[m/s]'
   
 
-    ; add options
+   ; add options
     options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd'], 'spec', 1
   
     ; add options of setting lanels
     options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR pam'
     options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR pam'
     options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR pam'
-    endif
-    ; clear data and time buffer
-    ear_time=0
-    zon_wind=0
-    mer_wind=0
-    ver_wind=0
+   endif
+ ; clear data and time buffer
+   ear_time=0
+   zon_wind=0
+   mer_wind=0
+   ver_wind=0
+   ; add tdegap
+   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',/overwrite
+   
 endif
 
 end

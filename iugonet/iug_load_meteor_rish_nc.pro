@@ -198,19 +198,19 @@ for ii=0,n_elements(site_code)-1 do begin
                   num_data[i,k]=num[k+36*i]
             
                   a = uwind_data[i,k]            
-                  wbad = where(a gt 200 || a lt -200,nbad)
+                  wbad = where(a gt 400 || a lt -400,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
                   uwind_data[i,k] =a
                   b = vwind_data[i,k]            
-                  wbad = where(b gt 200 || b lt -200,nbad)
+                  wbad = where(b gt 400 || b lt -400,nbad)
                   if nbad gt 0 then b[wbad] = !values.f_nan
                   vwind_data[i,k] =b
                   c = sig_uwind_data[i,k]            
-                  wbad = where(c gt 200 || c lt -200,nbad)
+                  wbad = where(c gt 400 || c lt -400,nbad)
                   if nbad gt 0 then c[wbad] = !values.f_nan
                   sig_uwind_data[i,k] =c
                   d = sig_vwind_data[i,k]            
-                  wbad = where(d gt 200 || d lt -200,nbad)
+                  wbad = where(d gt 400 || d lt -400,nbad)
                   if nbad gt 0 then d[wbad] = !values.f_nan
                   sig_vwind_data[i,k] =d
                   e = num_data[i,k]            
@@ -242,39 +242,44 @@ for ii=0,n_elements(site_code)-1 do begin
 
   if site_time[0] ne 0 then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-
-     store_data,'iug_meteor_'+site_code[ii]+'_uwind',data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_uwind',ytitle=site_code[ii]+'!CHeight [km]',ztitle='Zonal wind [m/s]',psym=-5
-     store_data,'iug_meteor_'+site_code[ii]+'_vwind',data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_vwind',ytitle=site_code[ii]+'!CHeight [km]',ztitle='Meridional wind [m/s]'
-     store_data,'iug_meteor_'+site_code[ii]+'_uwindsig',data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_uwindsig',ytitle=site_code[ii]+'!CHeight [km]',ztitle='Sigma zonal wind [m/s]'
-     store_data,'iug_meteor_'+site_code[ii]+'_vwindsig',data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_vwindsig',ytitle=site_code[ii]+'!CHeight [km]',ztitle='Sigma meridional wind [m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_uwnd',data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_uwnd',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_vwnd',data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_vwnd',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_uwndsig',data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_uwndsig',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_vwndsig',data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_vwndsig',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
      store_data,'iug_meteor_'+site_code[ii]+'_mwnum',data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_mwnum',ytitle=site_code[ii]+'!CHeight [km]',ztitle='munber'
+     options,'iug_meteor_'+site_code[ii]+'_mwnum',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='mwnum'
 
 
-   ; add options
-     options, ['iug_meteor_'+site_code[ii]+'_uwind','iug_meteor_'+site_code[ii]+'_vwind',$
-               'iug_meteor_'+site_code[ii]+'_uwindsig','iug_meteor_'+site_code[ii]+'_vwindsig',$
+     ; add options
+     options, ['iug_meteor_'+site_code[ii]+'_uwnd','iug_meteor_'+site_code[ii]+'_vwnd',$
+               'iug_meteor_'+site_code[ii]+'_uwndsig','iug_meteor_'+site_code[ii]+'_vwndsig',$
                'iug_meteor_'+site_code[ii]+'_mwnum'], 'spec', 1
 
-   ; add options of setting labels
-     options,'iug_meteor_'+site_code[ii]+'_uwind', labels='MWR '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_vwind', labels='MWR '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_uwindsig', labels='MWR '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_vwindsig', labels='MWR '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_mwnum', labels='MWR '+site_code[ii]
+     ; add options of setting labels
+     options,'iug_meteor_'+site_code[ii]+'_uwnd', labels='MW '+site_code[ii]
+     options,'iug_meteor_'+site_code[ii]+'_vwnd', labels='MW '+site_code[ii]
+     options,'iug_meteor_'+site_code[ii]+'_uwndsig', labels='MW '+site_code[ii]
+     options,'iug_meteor_'+site_code[ii]+'_vwndsig', labels='MW '+site_code[ii]
+     options,'iug_meteor_'+site_code[ii]+'_mwnum', labels='MW '+site_code[ii]
+   endif
   
   ;Clear time and data buffer:
-  site_time=0
-  zon_wind=0
-  mer_wind=0
-  zon_thermal=0
-  mer_thermal=0
-  meteor_num=0
-  endif
+   site_time=0
+   zon_wind=0
+   mer_wind=0
+   zon_thermal=0
+   mer_thermal=0
+   meteor_num=0
+   ; add tdegap
+   tdegap, 'iug_meteor_'+site_code[ii]+'_uwnd',/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_vwnd',/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_uwndsig',/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_vwndsig',/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_mwnum',/overwrite
    
   endif
   jj=n_elements(local_paths) 
