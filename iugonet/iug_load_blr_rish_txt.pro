@@ -12,6 +12,8 @@
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_blr_rish_txt, datatype = 'troposphere'.
+;            The default is 'troposphere'. 
 ;   site = BLR observation site.  
 ;          For example, iug_load_blr_rish_txt, site = 'ktb'.
 ;          The default is 'all', i.e., load all available observation points.
@@ -38,13 +40,18 @@
 ; $URL $
 ;-
 
-pro iug_load_blr_rish_txt, site=site, parameter=parameter, $
+pro iug_load_blr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
                            downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
+
+;**************
+;datatype check:
+;**************
+if (not keyword_set(datatype)) then datatype= 'troposphere'
 
 ;***********
 ;site codes:
@@ -227,14 +234,13 @@ for ii=0,n_elements(site_code)-1 do begin
   ;******************************
 
           if time ne 0 then begin 
-             if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then begin 
-                o=0
-             endif else if strmid(parameters[ii],0,2) eq 'pw' then o=1    
+             if strmid(parameters[iii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then o=0 
+             if strmid(parameters[iii],0,2) eq 'pw' then o=1    
              dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
              store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
              options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$
                      ztitle=parameters[iii]+'!C['+unit_all[o]+']'
-             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii], labels='BLR'
+             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii], labels='BLR-'+site_code[ii]+' [km]'
              ; add options
              options, 'iug_blr_'+site_code[ii]+'_'+parameters[iii], 'spec', 1    
           endif

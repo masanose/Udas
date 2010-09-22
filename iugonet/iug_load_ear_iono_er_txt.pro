@@ -12,6 +12,8 @@
 ;                           downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_ear_iono_er_txt, datatype = 'ionosphere'.
+;            The default is 'ionosphere'. 
 ;  parameter1 = first parameter name of EAR FAI obervation data.  
 ;          For example, iug_load_ear_iono_txt, parameter = 'dpl1'.
 ;          The default is 'all', i.e., load all available parameters.
@@ -52,12 +54,12 @@ if (not keyword_set(verbose)) then verbose=2
 if (not keyword_set(datatype)) then datatype='ionosphere'
 
 ;***********
-;parameters:
+;parameters1:
 ;***********
-;--- all parameters (default)
+;--- all parameters1 (default)
 parameter1_all = strsplit('efb1p16 efb1p16a efb1p16b eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a'+$
                           'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb4p2c eb4p2d'+$
-                          'eb4p4 eb4p4a eb4p4b eb4p4d eb2p1a eb5p4a',$
+                          'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a',$
                           ' ', /extract)
 
 ;--- check site codes
@@ -225,13 +227,12 @@ for ii=0,n_elements(parameters)-1 do begin
       acknowledgstring = ''
 
       if time ne 0 then begin
-         if strmid(parameters2[iii],0,2) eq 'dp' || 'wd' then begin 
-            o=0
-         endif else if strmid(parameters2[iii],0,2) eq 'pw' || 'pn' then o=1
+         if strmid(parameters2[iii],0,2) eq 'dp' || 'wd' then o=0 
+         if strmid(parameters2[iii],0,2) eq 'pw' || 'pn' then o=1
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
          options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
-         options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii], labels='EAR'
+         options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI E-region [km]'
          ; add options
          if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
       endif 

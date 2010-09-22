@@ -12,6 +12,8 @@
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
+;            The default is 'troposphere'. 
 ;  parameter = parameter name of MU troposphere standard obervation data.  
 ;          For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
@@ -46,7 +48,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;****************************************
 ;Load 'toroposphere' data by default:
 ;****************************************
-if (not keyword_set(datatype)) then datatype='toroposphere'
+if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;***********
 ;parameters:
@@ -196,9 +198,8 @@ for ii=0,n_elements(parameters)-1 do begin
        acknowledgstring = ''
 
        if time ne 0 then begin
-          if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then begin 
-             o=0
-          endif else if strmid(parameters[ii],0,2) eq 'pw' then o=1  
+          if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then o=0
+          if strmid(parameters[ii],0,2) eq 'pw' then o=1  
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
           options,'iug_mu_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
@@ -212,7 +213,7 @@ for ii=0,n_elements(parameters)-1 do begin
        mu_time=0
        mu_data=0
        ; add tdegap
-      tdegap, 'iug_mu_'+parameters[ii],/overwrite,/overwrite
+      tdegap, 'iug_mu_'+parameters[ii],/overwrite
    endif
   jj=n_elements(local_paths)
 endfor

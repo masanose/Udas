@@ -8,9 +8,11 @@
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_mf_rish_pon_txt, site=site,downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mf_rish_pon_txt, datatype = datatype, site = site, downloadonly = downloadonly, trange = trange, verbose = verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_mf_rish_pon_txt, datatype = 'thermosphere'.
+;            The default is 'thermosphere'. 
 ;   site  = Observatory code name.  For example, iug_load_meteor_rish_txt, site = 'pon'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -35,13 +37,18 @@
 ; $URL $
 ;-
 
-pro iug_load_mf_rish_pon_txt, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_mf_rish_pon_txt, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 ;verbose
 if ~keyword_set(verbose) then verbose=2
+
+;*****************************************
+;dataype check:
+;*****************************************
+if (not keyword_set(dataype)) then datatype='thermosphere'
 
 ;***********
 ;site codes:
@@ -189,17 +196,17 @@ if(downloadonly eq 0) then begin
 
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pon_time, y:zon_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uwnd',ztitle='Zonal wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pon!Cheight!C[m]',ztitle='uwnd [m/s]'
       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pon_time, y:mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_vwnd',ztitle='Meridional wind [m/s]'
+      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pon!Cheight!C[m]',ztitle='vwnd [m/s]'
   
 
     ; add options
       options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd'], 'spec', 1
   
     ; add options of setting lanels
-      options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR pon'
-      options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR pon'
+      options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR-pon [km]'
+      options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR-pon [km]'
     endif
   ;Clear time and data buffer:
   pon_time=0

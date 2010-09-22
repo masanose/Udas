@@ -12,6 +12,8 @@
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_mu_meteor_txt, datatype = 'mw'.
+;            The default is 'mw'. 
 ;  parameter = parameter name of MU meteor special obervation data.  
 ;          For example, iug_load_mu_meteor_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
@@ -45,9 +47,9 @@ pro iug_load_mu_meteor_txt, datatype=datatype, parameters = parameters, trange=t
 ;verbose
 if ~keyword_set(verbose) then verbose=2
 
-;*****************************************
-;Load 'thermosphere_wind' data by default:
-;*****************************************
+;**************************
+;Load 'mw' data by default:
+;**************************
 if ~keyword_set(datatype) then datatype='mw'
 
 ;********************************
@@ -257,11 +259,11 @@ if mu_time[0] ne 0 then begin
                'iug_mu_meteor_mwnum'], 'spec', 1
 
    ; add options of setting labels
-     options,'iug_mu_meteor_uwnd', labels='MU-MW'
-     options,'iug_mu_meteor_vwnd', labels='MU-MW'
-     options,'iug_mu_meteor_uwndsig', labels='MU-MW'
-     options,'iug_mu_meteor_vwndsig', labels='MU-MW'
-     options,'iug_mu_meteor_mwnum', labels='MU-MW'
+     options,'iug_mu_meteor_uwnd', labels='MU-MW [km]'
+     options,'iug_mu_meteor_vwnd', labels='MU-MW [km]'
+     options,'iug_mu_meteor_uwndsig', labels='MU-MW [km]'
+     options,'iug_mu_meteor_vwndsig', labels='MU-MW [km]'
+     options,'iug_mu_meteor_mwnum', labels='MU-MW [km]'
   
   ;Clear time and data buffer:
   mu_time=0

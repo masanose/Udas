@@ -8,9 +8,11 @@
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_mf_rish_pam_bin, site=site,downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mf_rish_pam_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_mf_rish_pam_nc, datatype = 'thermosphere'.
+;            The default is 'thermosphere'. 
 ;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_nc, site = 'pam'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -36,12 +38,17 @@
 ;-
 
 
-pro iug_load_mf_rish_pam_nc, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_mf_rish_pam_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 if ~keyword_set(verbose) then verbose=2
+
+;************************************
+;Load 'thermosphere' data by default:
+;************************************
+if (not keyword_set(datatype)) then datatype='thermosphere'
 
 ;***********
 ;site codes:
@@ -86,7 +93,7 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/pam_NetCDF/'
+    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/NetCDF/'
     ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -223,9 +230,9 @@ if(downloadonly eq 0) then begin
     options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd'], 'spec', 1
   
     ; add options of setting lanels
-    options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR pam'
+    options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR-pam [km]'
+    options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR-pam [km]'
+    options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR-pam [km]'
 
  ; clear data and time buffer
    ear_time=0

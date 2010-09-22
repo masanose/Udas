@@ -8,10 +8,12 @@
 ;  and loads data intotplot format.
 ;
 ;Syntax:
-; iug_load_radiosonde_rish_sgk_txt, site = site, datatype = datatype, downloadonly = downloadonly, $
+; iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site = site, datatype = datatype, downloadonly = downloadonly, $
 ;                                     trange = trange, verbose=verbose
 ;
 ;Keywords:
+; datatype = Observation data type. For example, iug_load_radiosonde_rish_sgk_txt, datatype = 'troposphere'.
+;            The default is 'troposphere'. 
 ;  site  = Observatory code name.  For example, iug_load_meteor_rish_sgk_txt, site = 'sgk'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -34,17 +36,17 @@
 ; $URL $
 ;-
 
-pro iug_load_radiosonde_rish_sgk_txt, site=site, datatype = datatype, $
-                                        downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site=site, $
+                                      downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
  
-;****************************************
-;Load 'troposphere_wind' data by default:
-;****************************************
+;***********************************
+;Load 'troposphere' data by default:
+;***********************************
 if (not keyword_set(datatype)) then datatype='troposhere'
 
 ;***********
@@ -60,7 +62,7 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire meteor radar data, we ask that you' $
+acknowledgstring = 'If you acquire radio sonde radar data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
 + 'including text such as the dawin donde campaine data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $

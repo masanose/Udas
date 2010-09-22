@@ -8,10 +8,12 @@
 ;  and loads data intotplot format.
 ;
 ;Syntax:
-; iug_load_radiosonde_rish_dawex_txt, site = site, datatype = datatype, downloadonly = downloadonly, $
+; iug_load_radiosonde_rish_dawex_txt, datatype = datatype, site = site, datatype = datatype, downloadonly = downloadonly, $
 ;                                     trange = trange, verbose=verbose
 ;
 ;Keywords:
+; datatype = Observation data type. For example, iug_load_radiosonde_rish_dawex_txt, datatype = 'troposphere'.
+;            The default is 'troposphere'.
 ;  site  = Observatory code name.  For example, iug_load_radiosonde_rish_dawex_txt, site = 'srp'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -34,7 +36,7 @@
 ; $URL $
 ;-
 
-pro iug_load_radiosonde_rish_dawex_txt, site=site, datatype = datatype, $
+pro iug_load_radiosonde_rish_dawex_txt, datatype = datatype, site=site,$
                                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
@@ -42,9 +44,9 @@ pro iug_load_radiosonde_rish_dawex_txt, site=site, datatype = datatype, $
 ;**************
 if (not keyword_set(verbose)) then verbose=2
  
-;****************************************
-;Load 'troposphere_wind' data by default:
-;****************************************
+;***********************************
+;Load 'troposphere' data by default:
+;***********************************
 if (not keyword_set(datatype)) then datatype='troposhere'
 
 ;***********
@@ -274,12 +276,12 @@ for ii=0,n_elements(site_code)-1 do begin
                     'iug_radiosonde_'+site_code[ii]+'_uwnd','iug_radiosonde_'+site_code[ii]+'_vwnd'], 'spec', 1
 
           ; add options of setting labels
-          options,'iug_radiosonde_'+site_code[ii]+'_press', labels='RSND'+site_code[ii]
-          options,'iug_radiosonde_'+site_code[ii]+'_temp', labels='RSND'+site_code[ii]
-          options,'iug_radiosonde_'+site_code[ii]+'_rh', labels='RSND'+site_code[ii]
-          options,'iug_radiosonde_'+site_code[ii]+'_dewp', labels='RSND'+site_code[ii]
-          options,'iug_radiosonde_'+site_code[ii]+'_uwnd', labels='RSND'+site_code[ii]
-          options,'iug_radiosonde_'+site_code[ii]+'_vwnd', labels='RSND'+site_code[ii]
+          options,'iug_radiosonde_'+site_code[ii]+'_press', labels='RSND-'+site_code[ii]+' [m]'
+          options,'iug_radiosonde_'+site_code[ii]+'_temp', labels='RSND-'+site_code[ii]+' [m]'
+          options,'iug_radiosonde_'+site_code[ii]+'_rh', labels='RSND-'+site_code[ii]+' [m]'
+          options,'iug_radiosonde_'+site_code[ii]+'_dewp', labels='RSND-'+site_code[ii]+' [m]'
+          options,'iug_radiosonde_'+site_code[ii]+'_uwnd', labels='RSND-'+site_code[ii]+' [m]'
+          options,'iug_radiosonde_'+site_code[ii]+'_vwnd', labels='RSND-'+site_code[ii]+' [m]'
        endif 
        ;Clear time and data buffer:
        sonde_time = 0

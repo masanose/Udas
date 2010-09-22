@@ -12,6 +12,8 @@
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_ear_trop_txt, datatype = 'troposphere'.
+;            The default is 'troposphere'. 
 ;  parameter = parameter name of EAR troposphere standard obervation data.  
 ;          For example, iug_load_ear_trop_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
@@ -196,13 +198,12 @@ for ii=0,n_elements(parameters)-1 do begin
       acknowledgstring = ''
 
       if time ne 0 then begin
-         if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then begin 
-             o=0
-          endif else if strmid(parameters[ii],0,2) eq 'pw' then o=1  
+         if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then o=0 
+         if strmid(parameters[ii],0,2) eq 'pw' then o=1  
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ear_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
          options,'iug_ear_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
-         options,'iug_ear_'+parameters[ii], labels='EAR'
+         options,'iug_ear_'+parameters[ii], labels='EAR-trop [km]'
        ; add options
          options, 'iug_ear_'+parameters[ii], 'spec', 1
       endif   
@@ -211,11 +212,11 @@ for ii=0,n_elements(parameters)-1 do begin
       ear_time=0
       ear_data=0
     ; add tdegap
-      tdegap, 'iug_ear_'+parameters[ii],/overwrite,/overwrite
+      tdegap, 'iug_ear_'+parameters[ii],/overwrite
    endif
    jj=n_elements(local_paths)
 endfor
- 
+
 print,'**********************************************************************************
 print,'Data loading is successful!!'
 print,'**********************************************************************************

@@ -1,16 +1,20 @@
 ;+
 ;
 ;Name:
-;iug_load_mf_rish_pam_nc
+;iug_load_mf_rish_data
 ;
 ;Purpose:
 ;  Queries the Kyoto_RISH renkei2 servers for pameungpeuk data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_mf_rish_pam_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mf_rish_data, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
+; datatype = Observation data type. For example, iug_load_mf_rish_data, datatype = 'thermosphere'.
+;            The default is 'thermosphere'. 
+;   site  = Observatory code name.  For example, iug_load_mf_rish_data, site = 'pam'.
+;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
@@ -34,7 +38,7 @@
 ;-
 
 
-pro iug_load_mf_rish_data, site=site, datatype = datatype, $
+pro iug_load_mf_rish_data, datatype = datatype, site=site, $
                            downloadonly=downloadonly, trange=trange, verbose=verbose
 
 
@@ -44,9 +48,9 @@ pro iug_load_mf_rish_data, site=site, datatype = datatype, $
 ;**************
 if (not keyword_set(verbose)) then verbose=2
  
-;****************************************
-;Load 'troposphere_wind' data by default:
-;****************************************
+;************************************
+;Load 'thermosphere' data by default:
+;************************************
 if (not keyword_set(datatype)) then datatype='thermosphere'
 
 ;***********

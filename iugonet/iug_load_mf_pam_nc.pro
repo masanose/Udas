@@ -53,7 +53,7 @@ if ~keyword_set(verbose) then verbose=2
 ;*****************************************
 ;Load 'thermosphere_wind' data by default:
 ;*****************************************
-if ~keyword_set(datatype) then datatype='pameungpeuk'
+if ~keyword_set(datatype) then datatype='pam'
 
 ;**********************************
 ;Load 'parameters' data by default:

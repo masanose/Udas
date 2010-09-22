@@ -8,10 +8,12 @@
 ;  and loads data intotplot format.
 ;
 ;Syntax:
-; iug_load_meteor_rish_nc, site = site, downloadonly = downloadonly, $
+; iug_load_meteor_rish_nc, datatype = datatype, site = site, downloadonly = downloadonly, $
 ;                           trange = trange, verbose=verbose
 ;
 ;Keywords:
+;  datatype = Observation data type. For example, iug_load_meteor_rish_nc, datatype = 'thermosphere'.
+;            The default is 'thermosphere'. 
 ;  site  = Observatory code name.  For example, iug_load_meteor_rish_txt, site = 'srp'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -35,17 +37,17 @@
 ;-
 
 
-pro iug_load_meteor_rish_nc, site=site, datatype = datatype, $
-                             downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_meteor_rish_nc, datatype = datatype, site = site, $
+                             downloadonly = downloadonly, trange = trange, verbose = verbose
 
 ;**************
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
  
-;****************************************
-;Load 'troposphere_wind' data by default:
-;****************************************
+;************************************
+;Load 'thermosphere' data by default:
+;************************************
 if (not keyword_set(datatype)) then datatype='thermosphere'
 
 ;***********
@@ -260,11 +262,11 @@ for ii=0,n_elements(site_code)-1 do begin
                'iug_meteor_'+site_code[ii]+'_mwnum'], 'spec', 1
 
      ; add options of setting labels
-     options,'iug_meteor_'+site_code[ii]+'_uwnd', labels='MW '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_vwnd', labels='MW '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_uwndsig', labels='MW '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_vwndsig', labels='MW '+site_code[ii]
-     options,'iug_meteor_'+site_code[ii]+'_mwnum', labels='MW '+site_code[ii]
+     options,'iug_meteor_'+site_code[ii]+'_uwnd', labels='MW '+site_code[ii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_vwnd', labels='MW '+site_code[ii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_uwndsig', labels='MW '+site_code[ii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_vwndsig', labels='MW '+site_code[ii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_mwnum', labels='MW '+site_code[ii]+' [km]'
    endif
   
   ;Clear time and data buffer:
