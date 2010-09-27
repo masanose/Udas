@@ -198,8 +198,9 @@ for ii=0,n_elements(parameters)-1 do begin
       acknowledgstring = ''
 
       if time ne 0 then begin
-         if strmid(parameters[ii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then o=0 
-         if strmid(parameters[ii],0,2) eq 'pw' then o=1  
+         if strmid(parameters2[iii],0,2) eq 'dp' then o=0
+         if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
+         if strmid(parameters2[iii],0,2) eq 'pw' then o=1
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ear_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
          options,'iug_ear_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
