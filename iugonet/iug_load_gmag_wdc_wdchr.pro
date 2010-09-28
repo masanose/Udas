@@ -20,6 +20,7 @@
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
 ;Updated by:  Daiki Yoshida,  Sep 14, 2010
+;Updated by:  Daiki Yoshida,  Sep 28, 2010
 ;
 ;-
 
@@ -129,7 +130,7 @@ pro iug_load_gmag_wdc_wdchr, $
         endelse
         month = strmid(line,5,2)
         day = strmid(line,8,2)
-        basetime = time_double(year+'-'+month+'-'+day)
+        basetime = time_double(year+'-'+month+'-'+day) + 1800d
         
         element = strmid(line,7,1)     ; * for index
         version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final
@@ -215,7 +216,7 @@ pro iug_load_gmag_wdc_wdchr, $
         endelse
         month = strmid(line,5,2)
         day = strmid(line,8,2)
-        basetime = time_double(year+'-'+month+'-'+day)
+        basetime = time_double(year+'-'+month+'-'+day) + 1800d
         
         element = strmid(line,7,1)     ; * for index
         version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final

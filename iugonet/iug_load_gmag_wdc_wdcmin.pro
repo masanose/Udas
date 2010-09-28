@@ -21,6 +21,7 @@
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
 ;Updated by:  Daiki Yoshida,  Sep 13, 2010
+;Updated by:  Daiki Yoshida,  Sep 28, 2010
 ;
 ;-
 
@@ -133,7 +134,7 @@ pro iug_load_gmag_wdc_wdcmin, $
           dprint, 'invalid year value? (dir:'+year+', data:'+year_lower +')'
           continue
         endif
-        basetime = time_double(year+'-'+month+'-'+day) + hour * 3600d
+        basetime = time_double(year+'-'+month+'-'+day) + hour * 3600d + 30d
         
         element = strmid(line,18,1)
         
@@ -217,7 +218,7 @@ pro iug_load_gmag_wdc_wdcmin, $
         month = strmid(line, 14, 2)
         day = strmid(line, 16, 2)
         hour = strmid(line, 19, 2)
-        basetime = time_double(year+'-'+month+'-'+day) + hour * 3600d
+        basetime = time_double(year+'-'+month+'-'+day) + hour * 3600d + 30d
         
         element = strmid(line,18,1)
         ;version = strmid(line,13,1) ; 0:realtime, 1:prov., 2+:final
