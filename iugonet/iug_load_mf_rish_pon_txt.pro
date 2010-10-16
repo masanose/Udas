@@ -92,7 +92,7 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir =  root_data_dir() + 'iugonet/rish/mf/'+site_code
+    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/
     ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -153,7 +153,6 @@ if(downloadonly eq 0) then begin
            for k=0,6 do begin
                readf,lun,s
                data1 = strsplit(s,' ',/EXTRACT)
-               print, data1
                for l=0,2 do begin
                    height(k*3+l) = float(data1(l*3))
                    zon_wind_data(0,k*3+l) = float(data1(l*3+1))

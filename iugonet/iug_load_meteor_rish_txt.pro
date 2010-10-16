@@ -1,3 +1,4 @@
+
 ;+
 ;
 ;Name:
@@ -82,6 +83,7 @@ acknowledgstring = 'If you acquire meteor radar data, we ask that you' $
 ;===============================================
 h=0
 jj=0
+n=0
 for ii=0,n_elements(site_code)-1 do begin
 
     if ~size(fns,/type) then begin
@@ -117,15 +119,15 @@ for ii=0,n_elements(site_code)-1 do begin
     ;Read the files:
     ;===============
        s=''
-       height = fltarr(21)
-       zon_wind_data = fltarr(1,21)
-       mer_wind_data = fltarr(1,21)
-       zon_thermal_data = fltarr(1,21)
-       mer_thermal_data = fltarr(1,21)
-       meteor_num_data = fltarr(1,21)
-       time = dblarr(1)
-       time1 = dblarr(2)
-       n=0
+       height = fltarr(36)
+       zon_wind_data = fltarr(1,36)
+       mer_wind_data = fltarr(1,36)
+       zon_thermal_data = fltarr(1,36)
+       mer_thermal_data = fltarr(1,36)
+       meteor_num_data = fltarr(1,36)
+       data= fltarr(5)
+       time = 0
+       time_val = 0
        site_time=0
        zon_wind=0
        mer_wind=0
@@ -165,67 +167,79 @@ for ii=0,n_elements(site_code)-1 do begin
               ;get altitude data:
               ;=================
                 alt = fix(strmid(s,9,3))
-           
+                idx = (alt-52)/2
               ;get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
               ;=======================================================
                 data1 = strmid(s,12,55)
-                data = float(strsplit(data1, ' ', /extract))
-         
-                for k=0,n_elements(data)-1 do begin
-                    a = float(data[k])
-                    wbad = where(a gt 400 || a lt -400,nbad)
-                    ;wbad = where(a eq 999,nbad)
-                    if nbad gt 0 then a[wbad] = !values.f_nan
-                    data[k]=a
-                endfor
-              ;
-              ;Append data of time and U, V components at determined altitude:
-              ;=============================================================== 
+                data2 = strsplit(data1, ' ', /extract)
+                data(0) = float(data2[0])
+                data(1) = float(data2[1])
+                data(2) = float(data2[2])
+                data(3) = float(data2[3])
+                data(4) = float(data2[4])
               ;====convert time from LT to UT   
-                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                       -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
-                if (n mod 2 eq 0) then time1(0)= time
-                if (n mod 2 eq 1) then time1(1)= time        
-                   for g=0,20 do begin         
-                       if (70+g*2 eq alt) then begin
-                          zon_wind_data(0,g)= data(0)
-                          mer_wind_data(0,g)= data(1)
-                          zon_thermal_data(0,g)= data(2)
-                          mer_thermal_data(0,g)= data(3)
-                          meteor_num_data(0,g)= data(4)
-                       endif
-                   endfor
-                data(0)=0
-                data(1)=0
-                data(2)=0
-                data(3)=0
-                data(4)=0
-                if n ge 1 then begin
-                   if (time1(1)-time1(0) ne 0) then begin          
-                      append_array, site_time, time
+                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
+                       -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))                                
+                
+              ;insert data of zonal and meridional winds etc.
+                if n eq 0 then begin
+                   time_val3 = time
+                   zon_wind_data(0,idx)= data(0)
+                   mer_wind_data(0,idx)= data(1)
+                   zon_thermal_data(0,idx)= data(2)
+                   mer_thermal_data(0,idx)= data(3)
+                   meteor_num_data(0,idx)= data(4)
+                endif
+                time_diff=time-time_val
+                if n eq 0 then time_diff=3600
+                ;appned time and data if time_val is not equal to time
+                if time_val ne time then begin
+                   time_val=time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
+                            -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))          
+                   time_val2=time_val-time_diff
+                   if time_val2 eq 0 then time_val2=time_val+3600
+              ;
+              ;Append data of time and wind data at determined altitude:
+              ;=========================================================
+                if n ne 0 then begin
+                      append_array, site_time, time_val2
                       append_array, zon_wind, zon_wind_data
                       append_array, mer_wind, mer_wind_data
                       append_array, zon_thermal, zon_thermal_data
                       append_array, mer_thermal, mer_thermal_data
                       append_array, meteor_num, meteor_num_data
-                      for i=0, 20 do begin
-                          zon_wind_data(0,i)=!values.f_nan
-                          mer_wind_data(0,i)=!values.f_nan
-                          zon_thermal_data(0,i)=!values.f_nan
-                          mer_thermal_data(0,i)=!values.f_nan
-                          meteor_num_data(0,i)=!values.f_nan
-                      endfor
-                   endif
                 endif
-                n=n+1 
-                continue       
+                n=n+1
+                  for i=0, 35 do begin
+                    zon_wind_data(0,i)=!values.f_nan
+                    mer_wind_data(0,i)=!values.f_nan
+                    zon_thermal_data(0,i)=!values.f_nan
+                    mer_thermal_data(0,i)=!values.f_nan
+                    meteor_num_data(0,i)=!values.f_nan 
+                  endfor 
+                endif                
+                zon_wind_data(0,idx)= data(0)
+                mer_wind_data(0,idx)= data(1)
+                zon_thermal_data(0,idx)= data(2)
+                mer_thermal_data(0,idx)= data(3)
+                meteor_num_data(0,idx)= data(4)            
              endif
+           
            endwhile 
            free_lun,lun
+              ;
+              ;Append data of time and wind data at the last time in each file:
+              ;================================================================
+              append_array, site_time, time_val2+3600
+              append_array, zon_wind, zon_wind_data
+              append_array, mer_wind, mer_wind_data
+              append_array, zon_thermal, zon_thermal_data
+              append_array, mer_thermal, mer_thermal_data
+              append_array, meteor_num, meteor_num_data
        endfor
-
-       for g=0,20 do begin         
-           height[g]=70+g*2 
+          
+       for g=0,35 do begin         
+           height[g]=float(52+g*2) 
        endfor
  ;******************************
  ;Store data in TPLOT variables:

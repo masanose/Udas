@@ -176,15 +176,6 @@ if(downloadonly eq 0) then begin
               vwind_pam[i,k]=vwind[k+36*i]
               wwind_pam[i,k]=wwind[k+36*i]
               a = uwind_pam[i,k]            
-              wbad = where(a gt 400 || a lt -400,nbad)
-              if nbad gt 0 then a[wbad] = !values.f_nan
-              uwind_pam[i,k] =a
-              b = vwind_pam[i,k]            
-              wbad = where(b gt 400 || b lt -400,nbad)
-              if nbad gt 0 then b[wbad] = !values.f_nan
-              vwind_pam[i,k] =b
-              c = wwind_pam[i,k]            
-              wbad = where(c gt 40 || c lt -40,nbad)
               wbad = where(a eq -9999,nbad)
               if nbad gt 0 then a[wbad] = !values.f_nan
               uwind_pam[i,k] =a

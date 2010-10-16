@@ -187,12 +187,12 @@ for ii=0,n_elements(site_code)-1 do begin
           num_data=fltarr(n_elements(time),36)
 
           for i=0, n_elements(time)-1 do begin
-        ;Change hourtime since 1992-09-27 17:00:00 (Local Time) into unixtime (1970-01-01 00:00:00)
-              timeunix[i] = double(time[i])*3600$
-                            +time_double(string(1992)+'-'+string(09)+'-'+string(27)+'/'+string(17-7)+':'+string(00))
+        ;Change hourtime since 1992-10-27 17:00:00 (Local Time) into unixtime (1970-01-01 00:00:00)
+              timeunix[i] = double(time[i])*3600-3600*7$
+                            +time_double(string(1992)+'-'+string(10)+'-'+string(27)+'/'+string(17)+':'+string(00)+':'+string(00))
                       
               for k=0, 35 do begin
-                  height[k]=range[k]/1000
+                  height[k]=float(range[k])/1000
                   uwind_data[i,k]=uwind[k+36*i]
                   vwind_data[i,k]=vwind[k+36*i]
                   sig_uwind_data[i,k]=sig_uwind[k+36*i]
@@ -200,19 +200,19 @@ for ii=0,n_elements(site_code)-1 do begin
                   num_data[i,k]=num[k+36*i]
             
                   a = uwind_data[i,k]            
-                  wbad = where(a gt 400 || a lt -400,nbad)
+                  wbad = where(a eq -9999,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
                   uwind_data[i,k] =a
                   b = vwind_data[i,k]            
-                  wbad = where(b gt 400 || b lt -400,nbad)
+                  wbad = where(b eq -9999,nbad)
                   if nbad gt 0 then b[wbad] = !values.f_nan
                   vwind_data[i,k] =b
                   c = sig_uwind_data[i,k]            
-                  wbad = where(c gt 400 || c lt -400,nbad)
+                  wbad = where(c eq -9999,nbad)
                   if nbad gt 0 then c[wbad] = !values.f_nan
                   sig_uwind_data[i,k] =c
                   d = sig_vwind_data[i,k]            
-                  wbad = where(d gt 400 || d lt -400,nbad)
+                  wbad = where(d eq -9999,nbad)
                   if nbad gt 0 then d[wbad] = !values.f_nan
                   sig_vwind_data[i,k] =d
                   e = num_data[i,k]            

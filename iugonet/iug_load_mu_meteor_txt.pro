@@ -28,7 +28,7 @@
 ;  A. Shinbori, 19/09/2010.
 ;  
 ;Modifications:
-;  
+;  A. Shinbori, 15/10/2010.
 ; 
 ;  
 ;Acknowledgment:
@@ -118,28 +118,24 @@ endif else file_names=fns
 
 ;Read the files:
 ;===============
-s=''
-height = fltarr(31)
-zon_wind_data = fltarr(1,31)
-mer_wind_data = fltarr(1,31)
-zon_thermal_data = fltarr(1,31)
-mer_thermal_data = fltarr(1,31)
-meteor_num_data = fltarr(1,31)
-time = dblarr(1)
-time1 = dblarr(2)
+ s=''
+ height = fltarr(36)
+ zon_wind_data = fltarr(1,36)
+ mer_wind_data = fltarr(1,36)
+ zon_thermal_data = fltarr(1,36)
+ mer_thermal_data = fltarr(1,36)
+ meteor_num_data = fltarr(1,36)
+ data= fltarr(5)
+ time = 0
+ time_val = 0
+ site_time=0
+ zon_wind=0
+ mer_wind=0
+ zon_thermal=0
+ mer_thermal=0
+ meteor_num=0 
+ 
 
-n=0
-mu_time=0
-zon_wind=0
-mer_wind=0
-zon_thermal=0
-mer_thermal=0
-meteor_num=0
- 
- for i=0,19 do begin
-   height[i]=72+2*i   
- endfor
- 
 ;Loop on files (zonal component): 
 ;================================
  for j=0,n_elements(local_paths)-1 do begin
@@ -172,10 +168,16 @@ meteor_num=0
          ;get altitude data:
          ;=================
          alt = fix(strmid(s,9,3))
+         idx = (alt-52)/2
          ;get data of U, V, sigma-u, sigma-v, N-of-m:
          ;=======================================================
          data1 = strmid(s,12,55)
-         data = float(strsplit(data1, ' ', /extract))
+         data2 = strsplit(data1, ' ', /extract)
+         data(0) = float(data2[0])
+         data(1) = float(data2[1])
+         data(2) = float(data2[2])
+         data(3) = float(data2[3])
+         data(4) = float(data2[4])
          
          for k=0,4 do begin
            a = float(data[k])
@@ -187,56 +189,71 @@ meteor_num=0
          ;Append data of time and U, V components at determined altitude:
          ;=============================================================== 
          ;====convert time from LT to UT   
-         time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
+         time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
-         if (n mod 2 eq 0) then time1(0)= time
-         if (n mod 2 eq 1) then time1(1)= time 
-       for g=0,30 do begin         
-         if (70+g eq alt) then begin
-            zon_wind_data(0,g)= data(0)
-            mer_wind_data(0,g)= data(1)
-            zon_thermal_data(0,g)= data(2)
-            mer_thermal_data(0,g)= data(3)
-            meteor_num_data(0,g)= data(4)
+         ;insert data of zonal and meridional winds etc.
+         if n eq 0 then begin
+           time_val3 = time
+           zon_wind_data(0,idx)= data(0)
+           mer_wind_data(0,idx)= data(1)
+           zon_thermal_data(0,idx)= data(2)
+           mer_thermal_data(0,idx)= data(3)
+           meteor_num_data(0,idx)= data(4)
          endif
-       endfor
-         
-         data(0)=0
-         data(1)=0
-         data(2)=0
-         data(3)=0
-         data(4)=0
-         if n ge 1 then begin
-         if (time1(1)-time1(0) ne 0) then begin          
-            append_array, mu_time, time
-            append_array, zon_wind, zon_wind_data
-            append_array, mer_wind, mer_wind_data
-            append_array, zon_thermal, zon_thermal_data
-            append_array, mer_thermal, mer_thermal_data
-            append_array, meteor_num, meteor_num_data
-            for i=0, 30 do begin
-             zon_wind_data(0,i)=!values.f_nan
-             mer_wind_data(0,i)=!values.f_nan
-             zon_thermal_data(0,i)=!values.f_nan
-             mer_thermal_data(0,i)=!values.f_nan
-             meteor_num_data(0,i)=!values.f_nan
-            endfor
-         endif
-         endif
-         n=n+1 
-       continue       
-      endif
+         time_diff=time-time_val
+         if n eq 0 then time_diff=3600
+         ;appned time and data if time_val is not equal to time
+         if time_val ne time then begin
+           time_val=time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
+                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))          
+           time_val2=time_val-time_diff
+           if time_val2 eq 0 then time_val2=time_val+3600
+           ;
+           ;Append data of time and wind data at determined altitude:
+           ;=========================================================
+            if n ne 0 then begin
+              append_array, site_time, time_val2
+              append_array, zon_wind, zon_wind_data
+              append_array, mer_wind, mer_wind_data
+              append_array, zon_thermal, zon_thermal_data
+              append_array, mer_thermal, mer_thermal_data
+              append_array, meteor_num, meteor_num_data
+            endif
+            n=n+1
+            for i=0, 35 do begin
+              zon_wind_data(0,i)=!values.f_nan
+              mer_wind_data(0,i)=!values.f_nan
+              zon_thermal_data(0,i)=!values.f_nan
+              mer_thermal_data(0,i)=!values.f_nan
+              meteor_num_data(0,i)=!values.f_nan 
+            endfor 
+          endif                
+          zon_wind_data(0,idx)= data(0)
+          mer_wind_data(0,idx)= data(1)
+          zon_thermal_data(0,idx)= data(2)
+          mer_thermal_data(0,idx)= data(3)
+          meteor_num_data(0,idx)= data(4)            
+        endif          
     endwhile 
     free_lun,lun
-endfor
+    ;
+    ;Append data of time and wind data at the last time in each file:
+    ;================================================================
+    append_array, site_time, time_val2+3600
+    append_array, zon_wind, zon_wind_data
+    append_array, mer_wind, mer_wind_data
+    append_array, zon_thermal, zon_thermal_data
+    append_array, mer_thermal, mer_thermal_data
+    append_array, meteor_num, meteor_num_data
+  endfor
 
-for g=0,30 do begin         
-  height[g]=70+g 
-endfor
-;******************************
-;Store data in TPLOT variables:
-;******************************
-acknowledgstring = ''
+  for g=0,35 do begin         
+    height[g]=float(52+g*2) 
+  endfor
+ ;******************************
+ ;Store data in TPLOT variables:
+ ;******************************
+       acknowledgstring = ''
 
 if mu_time[0] ne 0 then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))

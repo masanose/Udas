@@ -8,7 +8,7 @@
 ;HISTORY:
 ;$LastChangedBy: Y.Tanaka $
 ;$LastChangedDate: 2010-04-20 $
-;
+; 
 ;Modifications:
 ;A. SHinbori, 12/05/2010
 ;A. SHinbori, 10/07/2010
@@ -18,6 +18,7 @@
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
                          instrument,$
+                         download,$
                          datatype,$
                          site_or_param,$
                          parameters,$
@@ -34,6 +35,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
   new_vars = ''
 
   tn_before = [tnames('*',create_time=cn_before)]
+  
+  if download eq 'plot' then downloadonly = 0
+  if download eq 'downloadonly' then downloadonly = 1
 
   ;====================================
   ;=== �����ŁAload�v���V�W����
@@ -73,100 +77,41 @@ pro thm_ui_load_iugonet_data_load_pro,$
     par_names='sd_' + datatype + '_' + parameters +'_0'
     erg_load_sdfit, trange=timeRange, sites=datetype    
   endif else if instrument eq 'EAR' then begin
-     if datatype eq 'trop_std' then begin
-        if site_or_param eq 'trop_wind' then par_names=parameters+'_wind_ear'
-        if site_or_param eq 'trop_pwr' then par_names='pwr_'+parameters
-        if site_or_param eq 'trop_spec_width' then par_names='sw_'+parameters
-           iug_load_ear_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
-     endif else if datatype eq 'iono_er_dpl' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_efr_dpl' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_fr_dpl' then begin 
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_er_pwr' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_efr_pwr' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_fr_pwr' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_er_spec_width' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_efr_spec_width' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_fr_spec_width' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_er_noise_lev' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_er, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_efr_noise_lev' then begin
-           par_names=site_or_param
-           par_names2=parameters
-           iug_load_ear_iono_efr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
-     endif else if datatype eq 'iono_fr_noise_lev' then begin
-           par_names=site_or_param
-           par_names2=parameters 
-           iug_load_ear_iono_fr, datatype =datatype, site_or_param=par_names, parameters=par_names2, trange = timeRange
+     if datatype eq 'troposphere' then begin
+        par_names='iug_ear_'+site_or_param
+        iug_load_ear_trop_nc, datatype = datatype, parameter = site_or_param, $
+                               downloadonly = downloadonly, trange = timeRange
      endif
-  endif else if instrument eq 'MF_radar' then begin
-        if site_or_param eq 'pameungpeuk' then begin
-           par_names=parameters+'_wind_pam'
-           iug_load_mf_pam_nc, datatype =datatype, parameters=par_names, trange = timeRange
-        endif else if site_or_param eq 'pontianak' then begin
-           par_names=parameters+'_wind_pon'
-           iug_load_mf_pon, datatype =datatype, parameters=par_names, trange = timeRange
-        endif
+     if datatype eq 'ionosphere' then begin
+        par_names='iug_ear_fai_'+site_or_param+'_'+parameters
+        iug_load_ear_iono_er_txt, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters,$
+                                  downloadonly = downloadonly, trange = timeRange
+     endif
+  endif else if instrument eq 'MF_radar' then begin 
+        par_names='iug_mf_'+site_or_param+'_'+parameters
+        iug_load_mf_rish_data, datatype = datatype, site =site_or_param, downloadonly = downloadonly, trange = timeRange
   endif else if instrument eq 'meteor_radar' then begin
-        if site_or_param eq 'kototabang' then begin
-           par_names=parameters+'_ktb'
-           iug_load_meteor_kot_nc, datatype =datatype, parameters=par_names, trange = timeRange
-        endif else if site_or_param eq 'serpong' then begin
-           par_names=parameters+'_srp'
-           iug_load_meteor_srp_nc, datatype =datatype, parameters=par_names, trange = timeRange
-        endif
+        par_names='iug_meteor_'+site_or_param+'_'+parameters
+        iug_load_meteor_rish_nc, datatype =datatype, site=site_or_param, downloadonly = downloadonly, trange = timeRange
   endif else if instrument eq 'MU' then begin
-     if datatype eq 'trop_std' then begin
-        if site_or_param eq 'trop_wind' then par_names=parameters+'_wind_mu'
-        if site_or_param eq 'trop_pwr' then par_names='pwr_'+parameters
-        if site_or_param eq 'trop_spec_width' then par_names='sw_'+parameters
-           iug_load_mu_trop, datatype =site_or_param, parameters=par_names, trange = timeRange
-     endif else if datatype eq 'mw_spc' then begin
-           par_names=parameters+'_mw'
-           iug_load_meteor_mu, datatype =datatype, parameters=par_names, trange = timeRange
+      if datatype eq 'troposphere' then begin
+        par_names='iug_mu_'+site_or_param
+        iug_load_mu_trop_txt, datatype = datatype, parameter = site_or_param, downloadonly = downloadonly, trange = timeRange
+     endif else if datatype eq 'mw' then begin
+        par_names='iug_mu_meteor_'+site_or_param
+        iug_load_mu_meteor_txt, datatype =datatype, parameters=site_or_param, downloadonly = downloadonly, trange = timeRange
      endif
   endif else if instrument eq 'BLR' then begin       
-        if site_or_param eq 'kototabang' then begin
-           datatype = datatype+'_kot'
-           par_names='kot_'+parameters
-           iug_load_blr_kot, datatype =datatype, parameters=par_names, trange = timeRange
-        endif else if site_or_param eq 'shigaraki' then begin
-           datatype = datatype+'_sgk'
-           par_names='sgk_'+parameters
-           iug_load_blr_sgk, datatype =datatype, parameters=par_names, trange = timeRange
-        endif else if site_or_param eq 'serpong' then begin
-           datatype = datatype+'_srp'
-           par_names='srp_'+parameters
-           iug_load_blr_srp, datatype =datatype, parameters=par_names, trange = timeRange
-        endif
+        par_names='iug_blr_'+site_or_param+'_'+parameters
+        iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, downloadonly = downloadonly, trange = timeRange
+  endif else if instrument eq 'RSND' then begin
+      if site_or_param eq 'daw' || 'gdp' || 'khc' then begin       
+         par_names='iug_radiosonde_'+site_or_param+'_'+parameters
+         iug_load_radiosonde_rish_dawex_txt, datatype = datatype, site =site_or_param, downloadonly = downloadonly, trange = timeRange
+      endif else if site_or_param eq 'sgk' then begin       
+         par_names='iug_radiosonde_'+site_or_param+'_'+parameters
+         iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, downloadonly = downloadonly, trange = timeRange
+      endif
   endif
   
   ;===========================================================
@@ -201,12 +146,16 @@ pro thm_ui_load_iugonet_data_load_pro,$
     store_data,to_delete,/delete
   endif
      
-  if loaded eq 1 then begin
-    statusBar->update,'IUGONET Data Loaded Successfully'
-    historyWin->update,'IUGONET Data Loaded Successfully'
+  if downloadonly eq 1 then begin
+       statusBar->update,'IUGONET Data Downloaded Successfully'
+       historyWin->update,'IUGONET Data Downloaded Successfully'
   endif else begin
-    statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
-    historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'    
-  endelse
-
+     if loaded eq 1 then begin
+        statusBar->update,'IUGONET Data Loaded Successfully'
+        historyWin->update,'IUGONET Data Loaded Successfully'
+     endif else begin
+        statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
+        historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
+     endelse
+  endelse   
 end
