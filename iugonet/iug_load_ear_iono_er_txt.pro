@@ -166,10 +166,10 @@ for ii=0,n_elements(parameters)-1 do begin
     ;=============================
           
           readf, lun, s
-          height = float(strsplit(s,',',/extract))
+          h_data = strsplit(s,',',/extract)
     
           for j=0,n_elements(height)-2 do begin
-              altitude[j] = height[j+1]
+              altitude[j] = float(h_data[j+1])
           endfor
           for j=0,n_elements(altitude)-1 do begin
               b = altitude[j]

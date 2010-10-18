@@ -121,7 +121,6 @@ for ii=0,n_elements(parameters)-1 do begin
       s=''
       u=''
       altitude = fltarr(120)
-      data = strarr(121)
       data2 = fltarr(1,120)
       time = dblarr(1)
 
@@ -144,10 +143,10 @@ for ii=0,n_elements(parameters)-1 do begin
     ;Read information of altitude:
     ;=============================
           readf, lun, s
-          height = float(strsplit(s,',',/extract))
+          h_data = strsplit(s,',',/extract)
     
           for j=0,119 do begin
-              altitude[j] = height[j+1]
+              altitude[j] = float(h_data[j+1])
           endfor
     ;
     ;Loop on readdata:
@@ -170,7 +169,7 @@ for ii=0,n_elements(parameters)-1 do begin
                 hour = strmid(u,11,2)
                 minute = strmid(u,14,2)  
             ;====convert time from LT to UT      
-                time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
+                time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
             ;
                 for j=0,119 do begin
@@ -198,9 +197,9 @@ for ii=0,n_elements(parameters)-1 do begin
       acknowledgstring = ''
 
       if time ne 0 then begin
-         if strmid(parameters2[iii],0,2) eq 'dp' then o=0
-         if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
-         if strmid(parameters2[iii],0,2) eq 'pw' then o=1
+         if strmid(parameters[ii],2,2) eq 'nd' then o=0
+         if strmid(parameters[ii],0,2) eq 'wd' then o=0 
+         if strmid(parameters[ii],0,2) eq 'pw' then o=1
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ear_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
          options,'iug_ear_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
