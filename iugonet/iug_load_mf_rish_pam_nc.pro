@@ -208,6 +208,7 @@ if(downloadonly eq 0) then begin
 
 ;Store data of pameungpeuk wind data:
 ;====================================
+    if(ear_time[0] ne 0) then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:ear_time, y:zon_wind, v:height},dlimit=dlimit
       options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
@@ -234,7 +235,7 @@ if(downloadonly eq 0) then begin
    tdegap, 'iug_mf_'+site_code[0]+'_uwnd',/overwrite
    tdegap, 'iug_mf_'+site_code[0]+'_vwnd',/overwrite
    tdegap, 'iug_mf_'+site_code[0]+'_wwnd',/overwrite
-   
+  endif 
 endif
 
 end

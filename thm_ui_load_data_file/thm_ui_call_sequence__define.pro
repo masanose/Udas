@@ -130,7 +130,6 @@ end
 ;============================================
 pro thm_ui_call_sequence::addloadiugonet,$
                             instrument,$
-                            download,$
                             datatype,$
                             site_or_param,$
                             parameters,$
@@ -140,7 +139,6 @@ pro thm_ui_call_sequence::addloadiugonet,$
                             
   in_st = {type:'loadiugonetdata', $
            instrument:instrument,$
-           download:download,$
            datatype:datatype,$
            site_or_param:site_or_param,$
            parameters:parameters,$
@@ -430,7 +428,6 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
    endif else if st.type eq 'loadiugonetdata' then begin
       thm_ui_load_iugonet_data_load_pro,$
                          st.instrument[0],$
-                         st.download[0],$
                          st.datatype[0],$
                          st.site_or_param,$ ; add to st.site_or_param by A. Shinbori.
                          st.parameters,$

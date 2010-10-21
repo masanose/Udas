@@ -233,9 +233,9 @@ for ii=0,n_elements(site_code)-1 do begin
   ;Store data in TPLOT variables:
   ;******************************
 
-          if time ne 0 then begin 
-             if strmid(parameters[iii],0,2) eq 'uw' || 'wd' || 'vw' || 'ww' then o=0 
-             if strmid(parameters[iii],0,2) eq 'pw' then o=1    
+          if blr_time[0] ne 0 then begin 
+             if parameters[iii] eq 'uwnd' || 'vwnd' || 'wwnd' || 'wdt1' || 'wdt2'|| 'wdt3'|| 'wdt4'|| 'wdt5' then o=0 
+             if parameters[iii] eq 'pwr1' || 'pwr2'|| 'pwr3'|| 'pwr4'|| 'pwr5' then o=1    
              dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
              store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
              options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$

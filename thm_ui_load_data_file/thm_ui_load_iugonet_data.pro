@@ -144,10 +144,6 @@ pro thm_ui_load_iugonet_data_event,event
         instrumentText = widget_info(instrument,/combobox_gettext)
         instrumentSelect = (where(instrumentText eq state.instrumentArray))[0] 
         
-        download = widget_info(event.handler,find_by_uname='download')
-        downloadText = widget_info(download,/combobox_gettext)
-        downloadSelect = (where(downloadText eq state.downloadArray))[0]  
-    
         type = widget_info(event.handler,find_by_uname='typelist')
         typeSelect = widget_info(type,/list_select)
      
@@ -170,11 +166,11 @@ pro thm_ui_load_iugonet_data_event,event
         
 ;======== "*"�̏����̕����B�ʓ|�Ȃ̂ŁA���͊O���B ========;
 ;        ;handle '*' type, if present, introduce all
-;        if in_set(0,paramSelect) then begin
-;          paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])
-;        endif else begin
+       ; if in_set(0,paramSelect) then begin
+       ;   paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])
+       ; endif else begin
           paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])[paramSelect]
-;        endelse
+       ; endelse
 ;=========================================================;
 
 ;=======================================================================================;
@@ -190,6 +186,13 @@ pro thm_ui_load_iugonet_data_event,event
           state.historyWin->update,'IUGONET add attempted without selecting parameter2'
           break
         endif
+        
+        ;handle '*' type, if present, introduce all
+        if in_set(0,param2Select) then begin
+          param2Text = (*(*state.param2Array[instrumentSelect])[typeSelect])
+        endif else begin
+          param2Text = (*(*state.param2Array[instrumentSelect])[typeSelect])[param2Select]
+        endelse
 ;=======================================================================================;
         timeRangeObj = state.timeRangeObj      
         timeRangeObj->getProperty,startTime=startTimeObj,endTime=endTimeObj
@@ -208,7 +211,6 @@ pro thm_ui_load_iugonet_data_event,event
         ;==============================================
         thm_ui_load_iugonet_data_load_pro, $
                                   instrumentText,$
-                                  downloadText,$
                                   typeText,$
                                   paramText,$
                                   param2Text,$ ;added to this parameter by A. Shinbori.
@@ -226,7 +228,6 @@ pro thm_ui_load_iugonet_data_event,event
         ;====================================
         state.callSequence->addloadiugonet,$
                                instrumentText,$
-                               downloadText,$
                                typeText,$
                                paramText,$
                                param2Text,$ ;added to this parameter by A. Shinbori.
@@ -303,26 +304,13 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   instrumentLabel = widget_label(instrumentBase,value='Instrument Type: ')
 
-  instrumentArray = ['gmag_index','gmag_fluxgate','gmag_induction','superdarn','EAR','MF_radar','meteor_radar','MU','BLR','RSND']
+  instrumentArray = ['gmag_index','gmag_fluxgate','gmag_induction','superdarn','ear','mf_radar','meteor_radar','mur','blr','rsnd']
   
   instrumentCombo = widget_combobox(instrumentBase,$
                                        value=instrumentArray,$
                                        uvalue='INSTRUMENT',$
                                        uname='instrument')
 
-  ;================================
-  ;======= Download or plot========
-  ;================================
-  downloadBase = widget_base(selectionBase,/row) 
-  
-  downloadLabel = widget_label(downloadBase,value='Plot or download only : ')
-
-  downloadArray = ['plot','downloadonly']
-  
-  downloadCombo = widget_combobox(downloadBase,$
-                                  value=downloadArray,$
-                                  uvalue='Plot or download only',$
-                                  uname='download')
                                               
   ;================================
   ;=========== Data Type ==========
@@ -333,7 +321,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[1] = ptr_new(['magdas','210mm','STEL_mag','WDC_kyoto'])
   typeArray[2] = ptr_new(['magdas','210mm','STEL_mag','WDC_kyoto'])
   typeArray[3] = ptr_new(['ionosphere'])
-  typeArray[4] = ptr_new(['troposphere','ionosphere E-region','ionosphere V-region','ionosphere F-region'])
+  typeArray[4] = ptr_new(['troposphere','e_region','v_region','f_region'])
   typeArray[5] = ptr_new(['thermosphere'])
   typeArray[6] = ptr_new(['thermosphere'])
   typeArray[7] = ptr_new(['troposphere','mesosphere','ionosphere','mw'])
@@ -393,7 +381,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[2])[2] = ptr_new(['mgd','ptk','sta'])
   (*paramArray[2])[3] = ptr_new(['??'])
   (*paramArray[3])[0] = ptr_new(['hok','syo'])
-  (*paramArray[4])[0] = ptr_new(['uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
+  (*paramArray[4])[0] = ptr_new(['ear_standard'])
   (*paramArray[4])[1] = ptr_new(['efb1p16','efb1p16a','efb1p16b','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a',$
                                  'eb3p2b','eb3p4a','eb3p4b','eb3p4c','eb3p4d','eb3p4e','eb3p4f','eb4p2c','eb4p2d',$
                                  'eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
@@ -401,10 +389,12 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[4])[3] = ptr_new(['TBD'])
   (*paramArray[5])[0] = ptr_new(['pam','pon'])                              
   (*paramArray[6])[0] = ptr_new(['ktb','srp'])
-  (*paramArray[7])[0] = ptr_new(['uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
-  (*paramArray[7])[1] = ptr_new(['doppler_velocity','power','spectrum','residual','condition','noise_level','jamming'])
-  (*paramArray[7])[2] = ptr_new(['iono_dpl','iono_pwr','iono_spec_width','iono_pn'])
-  (*paramArray[7])[3] = ptr_new(['uwnd','vwnd','uwndsig','vwndsig','mwnum'])
+  (*paramArray[7])[0] = ptr_new(['mur_standard'])
+  ;(*paramArray[7])[1] = ptr_new(['doppler_velocity','power','spectrum','residual','condition','noise_level','jamming'])
+  (*paramArray[7])[1] = ptr_new(['TBD'])
+  ;(*paramArray[7])[2] = ptr_new(['iono_dpl','iono_pwr','iono_spec_width','iono_pn'])
+  (*paramArray[7])[2] = ptr_new(['TBD'])
+  (*paramArray[7])[3] = ptr_new(['mur_special'])
   (*paramArray[8])[0] = ptr_new(['ktb','srp','sgk'])
   (*paramArray[9])[0] = ptr_new(['daw','gdp','khc','sgk','ktb'])
                  
@@ -449,23 +439,25 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[2])[1] = ptr_new(['H','D','Z'])
   (*param2Array[2])[2] = ptr_new(['H','D','Z'])
   (*param2Array[2])[3] = ptr_new(['H(X)','D(Y)','Z'])
-  (*param2Array[3])[0] = ptr_new(['azim_no','pwr','pwr_err','spec_width','spec_width_err',$
+  (*param2Array[3])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err',$
                                  'vlos','vlos_err','echo_flag','quality','quality_flag','position_tbl'])
-  (*param2Array[4])[0] = ptr_new(['*'])
-  (*param2Array[4])[1] = ptr_new(['dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
+  (*param2Array[4])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
+  (*param2Array[4])[1] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
                                   'wdt1','wdt2','wdt3','wdt4','wdt5','pn1','pn2','pn3','pn4','pn5'])
-  (*param2Array[4])[2] = ptr_new(['dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
+  (*param2Array[4])[2] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
                                   'wdt1','wdt2','wdt3','wdt4','wdt5','pn1','pn2','pn3','pn4','pn5'])
-  (*param2Array[4])[3] = ptr_new(['dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
+  (*param2Array[4])[3] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
                                   'wdt1','wdt2','wdt3','wdt4','wdt5','pn1','pn2','pn3','pn4','pn5'])                                  
-  (*param2Array[5])[0] = ptr_new(['uwnd','vwnd','wwnd'])                              
-  (*param2Array[6])[0] = ptr_new(['uwnd','vwnd','uwndsig','vwndsig','mwnum'])
-  (*param2Array[7])[0] = ptr_new(['*'])
-  (*param2Array[7])[1] = ptr_new(['beam1','beam2','beam3','beam4','beam5'])
-  (*param2Array[7])[2] = ptr_new(['beam1','beam2','beam3','beam4','beam5'])
-  (*param2Array[7])[3] = ptr_new(['*'])
-  (*param2Array[8])[0] = ptr_new(['uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','wdt1','wdt2','wdt3'])
-  (*param2Array[9])[0] = ptr_new(['press','temp','rh','dewp','uwnd','vwnd'])
+  (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
+  (*param2Array[6])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
+  (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
+  ;(*param2Array[7])[1] = ptr_new(['*','beam1','beam2','beam3','beam4','beam5'])
+  ;(*param2Array[7])[2] = ptr_new(['*','beam1','beam2','beam3','beam4','beam5'])
+  (*param2Array[7])[1] = ptr_new(['TBD'])
+  (*param2Array[7])[2] = ptr_new(['TBD'])
+  (*param2Array[7])[3] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
+  (*param2Array[8])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','wdt1','wdt2','wdt3'])
+  (*param2Array[9])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
                                    
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Parameter(s)-2:')
@@ -490,7 +482,6 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
            loadedData:loadedData,$
            callSequence:callSequence,$
            instrumentArray:instrumentArray,$
-           downloadArray:downloadArray,$
            typeArray:typeArray,$
            paramArray:paramArray,$
            param2Array:param2Array} ;;added to this parameter by A. Shinbori.
