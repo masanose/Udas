@@ -8,17 +8,17 @@
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_ear_iono_er_txt, datatype = datatype, parameter=parameter, $
-;                           downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_ear_iono_er_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
 ;  datatype = Observation data type. For example, iug_load_ear_iono_er_txt, datatype = 'ionosphere'.
 ;            The default is 'ionosphere'. 
 ;  parameter1 = first parameter name of EAR FAI obervation data.  
-;          For example, iug_load_ear_iono_txt, parameter = 'dpl1'.
+;          For example, iug_load_ear_iono_er_txt, parameter = 'efb1p16'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  parameter2 = second parameter name of EAR FAI obervation data.  
-;          For example, iug_load_ear_iono_txt, parameter = 'dpl1'.
+;          For example, iug_load_ear_iono_er_txt, parameter = 'dpl1'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -57,9 +57,9 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;***********
 ;--- all parameters1 (default)
-parameter1_all = strsplit('efb1p16 efb1p16a efb1p16b eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a'+$
-                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb4p2c eb4p2d'+$
-                          'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a',$
+parameter1_all = strsplit('efb1p16 efb1p16a efb1p16b eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
+                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb4p2c eb4p2d '+$
+                          'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a ',$
                           ' ', /extract)
 
 ;--- check site codes
@@ -73,7 +73,7 @@ print, parameters
 ;parameters2:
 ;***********
 ;--- all parameters2 (default)
-parameter2_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 pwr1 pwr2 pwr3 pwr4 pwr5'+$
+parameter2_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 pwr1 pwr2 pwr3 pwr4 pwr5 '+$
                           'wdt1 wdt2 wdt3 wdt4 wdt5 pn1 pn2 pn3 pn4 pn5',' ', /extract)
 
 ;--- check site codes

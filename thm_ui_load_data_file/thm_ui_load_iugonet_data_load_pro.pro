@@ -82,7 +82,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if instrument eq 'ear' then begin
      iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
      if datatype eq 'troposphere' then par_names='iug_ear_'+parameters
-     if datatype eq 'e_region' then par_names='iug_ear_fai_'+site_or_param+'_'+parameters
+     if datatype eq 'e_region' then par_names='iug_ear_fai'+site_or_param+'_'+parameters
   endif 
   
   if instrument eq 'mf_radar' then begin

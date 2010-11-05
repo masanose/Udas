@@ -76,11 +76,11 @@ endelse
   ;===============================
   ;load of ear tropsphere data
    if datatype eq 'troposphere' then begin
-      iug_load_ear_trop_nc, datatype = datatype, parameter = parameter2, trange = trange
+      iug_load_ear_trop_nc, datatype = datatype, parameter = site_or_param, trange = trange
    endif 
-   print, datatype
    if datatype eq 'e_region' then begin
-      iug_load_ear_iono_er_txt, datatype = datatype, parameter1 = parameter1, parameter2 = parameter2, trange = trange
+
+      iug_load_ear_iono_er_nc, datatype = datatype, parameter = site_or_param, trange = trange
    endif   
 end
 
