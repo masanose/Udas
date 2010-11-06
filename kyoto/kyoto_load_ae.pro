@@ -93,9 +93,10 @@ if ~keyword_set(verbose) then verbose=2
 ;**************************
 ;Load 'ae' data by default:
 ;**************************
-if ~keyword_set(datatype) then datatype='ae'
-
-
+if (not keyword_set(datatype)) then index='ae al au ao ax'
+  index2=strsplit(index, ' ',/extract)
+  datatype=index2
+  
 ;*****************
 ;Validate datypes:
 ;*****************
@@ -221,7 +222,6 @@ for i=0,n_elements(local_paths)-1 do begin
 	     dprint,' ',s,dlevel=5
 	   end
          endcase
-         continue
       endif
 
       ;if s eq 'DAY' then ok=1

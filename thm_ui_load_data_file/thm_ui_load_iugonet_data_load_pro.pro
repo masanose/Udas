@@ -39,25 +39,23 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;====================================
   ;=== �����ŁAload�v���V�W����
   ;====================================
-  if instrument eq 'gmag_index' then begin
-    if datatype eq 'Dst' then begin
+    if instrument eq 'gmag_index' then begin
+    if datatype eq 'Dst_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
          par_names='kyoto_'+parameters
          kyoto_load_dst, trange=timeRange
       endif
-    endif else if datatype eq 'AE' then begin
-      if site_or_param eq 'WDC_kyoto' then begin
-         if (parameters eq 'ae') or (parameters eq 'al') or (parameters eq 'ao') or (parameters eq 'au')  or (parameters eq 'ax') then begin
-             par_names='kyoto_'+parameters
-             kyoto_load_ae, trange=timeRange, datatype=parameters
-         endif
-      endif
-    endif else if datatype eq 'ASY' then begin
+    endif else if datatype eq 'AE_index' then begin
+       if site_or_param eq 'WDC_kyoto' then begin 
+          kyoto_load_ae, trange=timeRange         
+          if datatype eq 'AE_index' then par_names='kyoto_'+parameters
+       endif
+    endif else if datatype eq 'ASY_index' then begin
        if site_or_param eq 'WDC_kyoto' then begin
-         ;if (parameters eq 'asy_d') or (parameters eq 'asy_h') or (parameters eq 'sym_d') or (parameters eq 'sym_h')  then begin
-             par_names='kyoto_'+parameters
-             kyoto_load_asy, trange=timeRange, datatype=parameters
-         ;endif
+         if (parameters eq 'asy_d') or (parameters eq 'asy_h') or (parameters eq 'sym_d') or (parameters eq 'sym_h')  then begin
+             par_names='iug_gmag_wdc_min_index_'+strmid(parameters,0,3)+'-'+strmid(parameters,4,1)
+             iug_load_gmag_wdc_wdcmin, trange=timeRange
+         endif
       endif
     endif else if datatype eq 'other' then begin            
        if site_or_param eq 'Tohoku_U' then begin
@@ -65,12 +63,18 @@ pro thm_ui_load_iugonet_data_load_pro,$
           iug_load_gmag_pc3, trange=timeRange, site='onw'
       endif
     endif
-  endif 
-  
-  if instrument eq 'gmag_fluxgate' then begin
+  endif else if instrument eq 'gmag_fluxgate' then begin
     if datatype eq 'magdas' then begin
       par_names='serc_magdas_' + site_or_param + '_mag'
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
+    endif
+    if datatype eq 'WDC_kyoto' then begin
+      par_names='iug_gmag_wdc_min_'+site_or_param+'_'+strlowcase(strmid(parameters,0,1))
+      iug_load_gmag_wdc_wdcmin, trange=timeRange, site = site_or_param
+    endif
+    if datatype eq 'NIPR_mag' then begin
+      par_names='nipr_hdz_1sec_'+site_or_param
+      iug_load_gmag_nipr, trange=timeRange, site = site_or_param
     endif
   endif 
   
@@ -140,7 +144,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endfor
   endif
     
-  if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
+  if n_elemens(to_delete) gt 0 && is_string(to_delete) then begin
     store_data,to_delete,/delete
   endif
      
