@@ -76,10 +76,9 @@ endelse
   ;===============================
   ;load of ear tropsphere data
    if datatype eq 'troposphere' then begin
-      iug_load_ear_trop_nc, datatype = datatype, parameter = site_or_param, trange = trange
+      iug_load_ear_trop_nc, datatype = datatype, trange = trange
    endif 
    if datatype eq 'e_region' then begin
-
       iug_load_ear_iono_er_nc, datatype = datatype, parameter = site_or_param, trange = trange
    endif   
 end

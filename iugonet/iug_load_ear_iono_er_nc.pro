@@ -195,21 +195,12 @@ for j=0,n_elements(local_paths)-1 do begin
     day = fix(strmid(date,10,2))
                            
     ; Definition of arrary names
-    height3 = fltarr(n_elements(range))
-    height2 = fltarr(n_elements(beam),n_elements(range))
+    height2 = fltarr(n_elements(range))
     time2 = dblarr(n_elements(time))
-    pwr1_ear=fltarr(1,n_elements(range),n_elements(beam))
-    wdt1_ear=fltarr(1,n_elements(range),n_elements(beam))
-    dpl1_ear=fltarr(1,n_elements(range),n_elements(beam))
-    pnoise1_ear=fltarr(1,n_elements(beam)) 
-    
-  
-    
-    for i=0, n_elements(beam)-1 do begin
-        for k=0, n_elements(range)-1 do begin
-            height2[i,k] = height[k+n_elements(range)*beam[i]]
-        endfor
-    endfor
+    pwr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+    wdt1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+    dpl1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+    pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
     for i=0, n_elements(time)-1 do begin
     
@@ -231,9 +222,9 @@ for j=0,n_elements(local_paths)-1 do begin
                 wbad = where(c eq 10000000000,nbad)
                 if nbad gt 0 then c[wbad] = !values.f_nan
                 dpl[k,i,l] =c
-                pwr1_ear[0,k,l]=pwr[k,i,l]  
-                wdt1_ear[0,k,l]=width[k,i,l]  
-                dpl1_ear[0,k,l]=dpl[k,i,l]
+                pwr1_ear[i,k,l]=pwr[k,i,l]  
+                wdt1_ear[i,k,l]=width[k,i,l]  
+                dpl1_ear[i,k,l]=dpl[k,i,l]
 
             endfor        
         endfor
@@ -242,21 +233,20 @@ for j=0,n_elements(local_paths)-1 do begin
             wbad = where(d eq 10000000000,nbad)
             if nbad gt 0 then d[wbad] = !values.f_nan
             pnoise[i,l] =d
-            pnoise1_ear[0,l]=pnoise[i,l]
+            pnoise1_ear[i,l]=pnoise[i,l]
             
         endfor
-   
+    endfor
+    ncdf_close,cdfid  ; done
+       
      ; print, uwind, n_elements(uwind),n_elements(time)
      ;Append data of time and wind velocity:
      ;======================================
-      append_array, ear_time, time2[i]
+      append_array, ear_time, time2
       append_array, pwr1, pwr1_ear
       append_array, wdt1, wdt1_ear
       append_array, dpl1, dpl1_ear
       append_array, pn1, pnoise1_ear
-
-    endfor
-    ncdf_close,cdfid  ; done
 endfor
     print, n_elements(ear_time),n_elements(pwr1[0,*,*])
    ;******************************
@@ -278,7 +268,7 @@ endfor
              bname2[l]=string(beam[l]+1)
              bname[l]=strsplit(bname2[l],' ', /extract)
              for k=0, n_elements(range)-1 do begin
-                 height3[k]=height[k,l]
+                 height2[k]=height[k,l]
              endfor
              for i=0, n_elements(ear_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
@@ -286,7 +276,7 @@ endfor
                  endfor
              endfor
              ;print, pwr2_ear
-             store_data,'iug_ear_fai'+parameter1+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height3},dlimit=dlimit
+             store_data,'iug_ear_fai'+parameter1+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
              options,'iug_ear_fai'+parameter1+'_pwr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
              options,'iug_ear_fai'+parameter1+'_pwr'+bname[l], labels='EAR-iono [km]'
              options,'iug_ear_fai'+parameter1+'_pwr'+bname[l],'spec',1
@@ -297,7 +287,7 @@ endfor
                      wdt2_ear[i,k]=wdt1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_fai'+parameter1+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height3},dlimit=dlimit
+             store_data,'iug_ear_fai'+parameter1+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
              options,'iug_ear_fai'+parameter1+'_wdt'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
              options,'iug_ear_fai'+parameter1+'_wdt'+bname[l], labels='EAR-iono [km]'
              options,'iug_ear_fai'+parameter1+'_wdt'+bname[l],'spec',1
@@ -308,13 +298,13 @@ endfor
                      dpl2_ear[i,k]=dpl1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_fai'+parameter1+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height3},dlimit=dlimit
+             store_data,'iug_ear_fai'+parameter1+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
              options,'iug_ear_fai'+parameter1+'_dpl'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
              options,'iug_ear_fai'+parameter1+'_dpl'+bname[l], labels='EAR-iono [km]'
              options,'iug_ear_fai'+parameter1+'_dpl'+bname[l],'spec',1
              tdegap, 'iug_ear_fai'+parameter1+'_dpl'+bname[l], /overwrite
              for i=0, n_elements(time)-1 do begin
-             pnoise2_ear[i]=pn1[i,l]
+                 pnoise2_ear[i]=pn1[i,l]
              end
              store_data,'iug_ear_fai'+parameter1+'_pn'+bname[l],data={x:ear_time, y:pnoise[*,l]},dlimit=dlimit
              options,'iug_ear_fai'+parameter1+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
