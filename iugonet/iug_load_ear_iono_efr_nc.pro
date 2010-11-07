@@ -1,14 +1,14 @@
 ;+
 ;
 ;Name:
-;iug_load_ear_iono_er_nc
+;iug_load_ear_iono_efr_nc
 ;
 ;Purpose:
 ;  Queries the Kyoto_RISH servers for EAR data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_ear_iono_er_nc, datatype = datatype, parameter1=parameter1, $
+; iug_load_ear_iono_efr_nc, datatype = datatype, parameter1=parameter1, $
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
@@ -38,7 +38,7 @@
 ;-
 
 
-pro iug_load_ear_iono_er_nc, datatype = datatype, parameter1=parameter1,$
+pro iug_load_ear_iono_efr_nc, datatype = datatype, parameter1=parameter1,$
                              downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
@@ -55,13 +55,10 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;***********
 ;--- all parameters1 (default)
-parameter1_all = strsplit('efb1p16 efb1p16a efb1p16b eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
-                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb4p2c eb4p2d '+$
-                          'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a ',$
-                          ' ', /extract)
+parameter1_all = strsplit('efb1p16 efb1p16a efb1p16b',' ', /extract)
 
 ;--- check site codes
-if(not keyword_set(parameter1)) then parameter1='all'
+if(not keyword_set(parameter1)) then parameter1='efb1p16'
 parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
 
 print, parameters
@@ -188,7 +185,7 @@ for j=0,n_elements(local_paths)-1 do begin
     ncdf_varget, cdfid, 'width', width
     ncdf_varget, cdfid, 'dpl', dpl
     ncdf_varget, cdfid, 'pnoise', pnoise
-    
+
     ; Calculation of unix time:
     year = fix(strmid(date,4,4))
     month = fix(strmid(date,8,2))
@@ -248,7 +245,7 @@ for j=0,n_elements(local_paths)-1 do begin
       append_array, dpl1, dpl1_ear
       append_array, pn1, pnoise1_ear
 endfor
-    print, n_elements(ear_time),n_elements(pwr1[0,*,*])
+
    ;******************************
    ;Store data in TPLOT variables:
    ;******************************

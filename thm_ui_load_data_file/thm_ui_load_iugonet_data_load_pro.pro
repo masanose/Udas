@@ -86,7 +86,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if instrument eq 'ear' then begin
      iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
      if datatype eq 'troposphere' then par_names='iug_ear_'+parameters
-     if datatype eq 'e_region' then par_names='iug_ear_fai'+site_or_param+'_'+parameters
+     if datatype eq 'e_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
+     if datatype eq 'ef_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
+     if datatype eq 'v_region' then par_names='iug_ear_fai'+site_or_param+'_'+parameters
+     if datatype eq 'f_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
   endif 
   
   if instrument eq 'mf_radar' then begin
@@ -144,7 +147,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endfor
   endif
     
-  if n_elemens(to_delete) gt 0 && is_string(to_delete) then begin
+  if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
     store_data,to_delete,/delete
   endif
      

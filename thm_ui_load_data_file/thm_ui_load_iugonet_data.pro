@@ -320,7 +320,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[0] = ptr_new(['Dst_index','AE_index','ASY_index','other'])
   typeArray[1] = ptr_new(['magdas','210mm','STEL_mag','WDC_kyoto','NIPR_mag'])
   typeArray[2] = ptr_new(['ionosphere'])
-  typeArray[3] = ptr_new(['troposphere','e_region','v_region','f_region'])
+  typeArray[3] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
   typeArray[4] = ptr_new(['thermosphere'])
   typeArray[5] = ptr_new(['thermosphere'])
   typeArray[6] = ptr_new(['troposphere','mesosphere','ionosphere','mw'])
@@ -351,7 +351,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[0] = ptr_new(ptrarr(4))
   paramArray[1] = ptr_new(ptrarr(5))
   paramArray[2] = ptr_new(ptrarr(1))
-  paramArray[3] = ptr_new(ptrarr(4))
+  paramArray[3] = ptr_new(ptrarr(5))
   paramArray[4] = ptr_new(ptrarr(1))
   paramArray[5] = ptr_new(ptrarr(1))
   paramArray[6] = ptr_new(ptrarr(4))
@@ -375,11 +375,11 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[1])[4] = ptr_new(['syo'])
   (*paramArray[2])[0] = ptr_new(['hok','sye','sys'])
   (*paramArray[3])[0] = ptr_new(['ear_standard'])
-  (*paramArray[3])[1] = ptr_new(['efb1p16','efb1p16a','efb1p16b','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a', $
-                                 'eb3p2b','eb3p4a','eb3p4b','eb3p4c','eb3p4d','eb3p4e','eb3p4f','eb4p2c','eb4p2d', $
-                                 'eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
-  (*paramArray[3])[2] = ptr_new(['TBD'])
-  (*paramArray[3])[3] = ptr_new(['TBD'])
+  (*paramArray[3])[1] = ptr_new(['eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a','eb3p2b','eb3p4a','eb3p4b','eb3p4c',$
+                                 'eb3p4d','eb3p4e','eb3p4f','eb4p2c','eb4p2d','eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
+  (*paramArray[3])[2] = ptr_new(['efb1p16','efb1p16a','efb1p16b'])                               
+  (*paramArray[3])[3] = ptr_new(['vb3p4a','150p8c8b2a','150p8c8b2b','150p8c8b2c','150p8c8b2d','150p8c8b2e','150p8c8b2f'])
+  (*paramArray[3])[4] = ptr_new(['TBD'])
   (*paramArray[4])[0] = ptr_new(['pam','pon'])                              
   (*paramArray[5])[0] = ptr_new(['ktb','srp'])
   (*paramArray[6])[0] = ptr_new(['mur_standard'])
@@ -412,7 +412,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   param2Array[0] = ptr_new(ptrarr(4))
   param2Array[1] = ptr_new(ptrarr(5))
   param2Array[2] = ptr_new(ptrarr(1))
-  param2Array[3] = ptr_new(ptrarr(4))
+  param2Array[3] = ptr_new(ptrarr(5))
   param2Array[4] = ptr_new(ptrarr(1))
   param2Array[5] = ptr_new(ptrarr(1))
   param2Array[6] = ptr_new(ptrarr(4))
@@ -434,9 +434,9 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[3])[1] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
                                   'wdt1','wdt2','wdt3','wdt4','wdt5','pn1','pn2','pn3','pn4','pn5'])
-  (*param2Array[3])[2] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
-                                  'wdt1','wdt2','wdt3','wdt4','wdt5','pn1','pn2','pn3','pn4','pn5'])
-  (*param2Array[3])[3] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
+  (*param2Array[3])[2] = ptr_new(['*','dpl1','pwr1','wdt1','pn1'])
+  (*param2Array[3])[3] = ptr_new(['*','dpl1','dpl2','dpl3','pwr1','pwr2','pwr3','wdt1','wdt2','wdt3','pn1','pn2','pn3'])
+  (*param2Array[3])[4] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
                                   'wdt1','wdt2','wdt3','wdt4','wdt5','pn1','pn2','pn3','pn4','pn5'])                                  
   (*param2Array[4])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
   (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
