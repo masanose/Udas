@@ -16,7 +16,7 @@
 ;
 ;Keywords:
 ;  DATATYPE = The type of data to be loaded. In this load program,
-;             DATATYPEs are 'troposphere', 'mw' etc.
+;             DATATYPEs are 'troposphere', 'meteor_wind' etc.
 ;
 ;  PARAMETERS (I/O):
 ;    Set to wind parameters.  If not set, 'uwnd' is
@@ -80,7 +80,7 @@ endelse
    endif 
    
    ;load of MU meteor wind data
-   if datatype eq 'mw' then begin
+   if datatype eq 'meteor_wind' then begin
       iug_load_mu_meteor_txt, datatype = datatype, parameter = parameter2, trange = trange
    endif
       

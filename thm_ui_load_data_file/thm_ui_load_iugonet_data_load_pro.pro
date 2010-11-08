@@ -39,7 +39,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;====================================
   ;=== �����ŁAload�v���V�W����
   ;====================================
-    if instrument eq 'gmag_index' then begin
+  
+  if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
+     par_names=parameters
+     iug_load_tohokuu_iprt_sun, site =site_or_param, datatype=datatype, trange = timeRange
+  endif
+  
+    if instrument eq 'geomagnetic_field_index' then begin
     if datatype eq 'Dst_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
          par_names='kyoto_'+parameters
@@ -63,8 +69,8 @@ pro thm_ui_load_iugonet_data_load_pro,$
           iug_load_gmag_pc3, trange=timeRange, site='onw'
       endif
     endif
-  endif else if instrument eq 'gmag_fluxgate' then begin
-    if datatype eq 'magdas' then begin
+  endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
+    if datatype eq 'magdas(ERG)' then begin
       par_names='serc_magdas_' + site_or_param + '_mag'
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
@@ -72,18 +78,18 @@ pro thm_ui_load_iugonet_data_load_pro,$
       par_names='iug_gmag_wdc_min_'+site_or_param+'_'+strlowcase(strmid(parameters,0,1))
       iug_load_gmag_wdc_wdcmin, trange=timeRange, site = site_or_param
     endif
-    if datatype eq 'NIPR_mag' then begin
+    if datatype eq 'NIPR_mag(ERG)' then begin
       par_names='nipr_hdz_1sec_'+site_or_param
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param
     endif
   endif 
   
-  if instrument eq 'superdarn' then begin
+  if instrument eq 'superdarn(ERG)' then begin
     par_names='sd_' + datatype + '_' + parameters +'_0'
     erg_load_sdfit, trange=timeRange, sites=datetype    
   endif 
   
-  if instrument eq 'ear' then begin
+  if instrument eq 'Equatorial_Atomosphere_Radar' then begin
      iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
      if datatype eq 'troposphere' then par_names='iug_ear_'+parameters
      if datatype eq 'e_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
@@ -92,28 +98,28 @@ pro thm_ui_load_iugonet_data_load_pro,$
      if datatype eq 'f_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
   endif 
   
-  if instrument eq 'mf_radar' then begin
+  if instrument eq 'Medium_Frequency_radar' then begin
      par_names='iug_mf_'+site_or_param+'_'+parameters 
      iug_load_mf_rish_data, datatype = datatype, site =site_or_param, trange = timeRange
   endif 
   
-  if instrument eq 'meteor_radar' then begin
+  if instrument eq 'Meteor_Wind_radar' then begin
      par_names='iug_meteor_'+site_or_param+'_'+parameters
      iug_load_meteor_rish_nc, datatype =datatype, site=site_or_param, trange = timeRange
   endif 
   
-  if instrument eq 'mur' then begin
+  if instrument eq 'Middle_Upper_atomosphere_radar' then begin
      iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange
      if datatype eq 'troposphere' then par_names='iug_mu_'+parameters
-     if datatype eq 'mw' then par_names='iug_mu_meteor_'+parameters     
+     if datatype eq 'meteor_wind' then par_names='iug_mu_meteor_'+parameters     
   endif
   
-  if instrument eq 'blr' then begin       
+  if instrument eq 'Bandary_Layer_Radar' then begin       
      par_names='iug_blr_'+site_or_param+'_'+parameters
      iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
   endif
     
-  if instrument eq 'rsnd' then begin
+  if instrument eq 'Radio_sonde' then begin
      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
      iug_load_radiosonde_rish_dawex_txt, datatype = datatype, site =site_or_param, trange = timeRange      
      iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange

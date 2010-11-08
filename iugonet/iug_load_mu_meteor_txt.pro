@@ -12,7 +12,7 @@
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;  datatype = Observation data type. For example, iug_load_mu_meteor_txt, datatype = 'mw'.
+;  datatype = Observation data type. For example, iug_load_mu_meteor_txt, datatype = 'meteor_wind'.
 ;            The default is 'mw'. 
 ;  parameter = parameter name of MU meteor special obervation data.  
 ;          For example, iug_load_mu_meteor_txt, parameter = 'uwnd'.
@@ -50,7 +50,7 @@ if ~keyword_set(verbose) then verbose=2
 ;**************************
 ;Load 'mw' data by default:
 ;**************************
-if ~keyword_set(datatype) then datatype='mw'
+if ~keyword_set(datatype) then datatype='meteor_wind'
 
 ;********************************
 ;Load 'parameters' data by default:

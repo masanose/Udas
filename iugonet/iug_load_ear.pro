@@ -86,7 +86,10 @@ endelse
    endif  
    if datatype eq 'v_region' then begin
       iug_load_ear_iono_vr_nc, datatype = datatype, parameter = site_or_param, trange = trange
-   endif  
+   endif
+   if datatype eq 'f_region' then begin
+      iug_load_ear_iono_fr_nc, datatype = datatype, parameter = site_or_param, trange = trange
+   endif   
 end
 
 
