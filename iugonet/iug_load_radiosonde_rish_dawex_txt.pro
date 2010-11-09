@@ -14,7 +14,7 @@
 ;Keywords:
 ; datatype = Observation data type. For example, iug_load_radiosonde_rish_dawex_txt, datatype = 'troposphere'.
 ;            The default is 'troposphere'.
-;  site  = Observatory code name.  For example, iug_load_radiosonde_rish_dawex_txt, site = 'srp'.
+;  site  = Observatory code name.  For example, iug_load_radiosonde_rish_dawex_txt, site = 'daw'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -109,7 +109,7 @@ for ii=0,n_elements(site_code)-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/DAWEX/'+site_code[ii]+'/sonde/'
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/DAWEX/'+site_code[ii]+'/sonde/txt/'
 
     ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
@@ -193,12 +193,12 @@ for ii=0,n_elements(site_code)-1 do begin
                 height[i] =hh 
               ;get data of press., temp., rh, dewp, uwind, vwind:
               ;=======================================================
-               press[*,i] = float(data_comp[1])
-               temp[*,i] = float(data_comp[2])
-               rh[*,i] = float(data_comp[3])
-               dewp[*,i] = float(data_comp[4])
-               uwind[*,i] = float(data_comp[5])
-               vwind[*,i] = float(data_comp[6])
+               press[0,i] = float(data_comp[1])
+               temp[0,i] = float(data_comp[2])
+               rh[0,i] = float(data_comp[3])
+               dewp[0,i] = float(data_comp[4])
+               uwind[0,i] = float(data_comp[5])
+               vwind[0,i] = float(data_comp[6])
  
                 i=i+1 
                 continue       
@@ -206,30 +206,30 @@ for ii=0,n_elements(site_code)-1 do begin
            endwhile 
            free_lun,lun
            for i=0, 399 do begin
-                a = press[*,i]            
+                a = press[0,i]            
                 wbad = where(a eq -999 || a eq 0,nbad)
                 if nbad gt 0 then a[wbad] = !values.f_nan
-                press[*,i] =a 
-                b = temp[*,i]            
+                press[0,i] =a 
+                b = temp[0,i]            
                 wbad = where(b eq -999 || b eq 0,nbad)
                 if nbad gt 0 then b[wbad] = !values.f_nan
-                temp[*,i] =b 
-                c = rh[*,i]            
+                temp[0,i] =b 
+                c = rh[0,i]            
                 wbad = where(c eq -999 || c eq 0,nbad)
                 if nbad gt 0 then c[wbad] = !values.f_nan
-                rh[*,i] =c 
-                d = dewp[*,i]            
+                rh[0,i] =c 
+                d = dewp[0,i]            
                 wbad = where(d eq -999 || d eq 0,nbad)
                 if nbad gt 0 then d[wbad] = !values.f_nan
-                dewp[*,i] =d 
-                e = uwind[*,i]            
+                dewp[0,i] =d 
+                e = uwind[0,i]            
                 wbad = where(e eq -999 || e eq 0,nbad)
                 if nbad gt 0 then e[wbad] = !values.f_nan
-                uwind[*,i] =e 
-                f = vwind[*,i]            
+                uwind[0,i] =e 
+                f = vwind[0,i]            
                 wbad = where(f eq -999 || f eq 0,nbad)
                 if nbad gt 0 then f[wbad] = !values.f_nan
-                vwind[*,i] =f 
+                vwind[0,i] =f 
            endfor
            ;==== time from UT to UNIX Time
            time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute))
