@@ -99,8 +99,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif 
   
   if instrument eq 'Medium_Frequency_radar' then begin
-     par_names='iug_mf_'+site_or_param+'_'+parameters 
      iug_load_mf_rish_data, datatype = datatype, site =site_or_param, trange = timeRange
+     iug_load_mf_nipr, site = site_or_param, trange = timeRange
+     if site_or_param eq 'pam' or 'pon' then par_names='iug_mf_'+site_or_param+'_'+parameters 
+     if site_or_param eq 'syo' then par_names='mf_'+site_or_param+'_'+parameters 
   endif 
   
   if instrument eq 'Meteor_Wind_radar' then begin
@@ -121,7 +123,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     
   if instrument eq 'Radio_sonde' then begin
      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
-     iug_load_radiosonde_rish_dawex_txt, datatype = datatype, site =site_or_param, trange = timeRange      
+     iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange      
      iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
   endif
   

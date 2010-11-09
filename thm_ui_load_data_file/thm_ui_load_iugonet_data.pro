@@ -381,7 +381,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[4])[2] = ptr_new(['efb1p16','efb1p16a','efb1p16b'])                               
   (*paramArray[4])[3] = ptr_new(['vb3p4a','150p8c8b2a','150p8c8b2b','150p8c8b2c','150p8c8b2d','150p8c8b2e','150p8c8b2f'])
   (*paramArray[4])[4] = ptr_new(['fb1p16a','fb1p16b','fb1p16c','fb1p16d','fb1p16e','fb1p16f','fb1p16g','fb1p16h','fb1p16i'])
-  (*paramArray[5])[0] = ptr_new(['pam','pon'])                              
+  (*paramArray[5])[0] = ptr_new(['pam','pon','syo'])                              
   (*paramArray[6])[0] = ptr_new(['ktb','srp'])
   (*paramArray[7])[0] = ptr_new(['mur_standard'])
   ;(*paramArray[7])[1] = ptr_new(['doppler_velocity','power','spectrum','residual','condition','noise_level','jamming'])
@@ -443,7 +443,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[4])[4] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','dpl6','dpl7','dpl8','pwr1','pwr2','pwr3','pwr4','pwr5',$
                                   'pwr6','pwr7','pwr8','wdt1','wdt2','wdt3','wdt4','wdt5','wdt6','wdt7','wdt8','pn1',$
                                   'pn2','pn3','pn4','pn5','pn6','pn7','pn8'])                                  
-  (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
+  (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd','zonal_vel','merid_vel','zonal_std','merid_std'])                              
   (*param2Array[6])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
   (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
   ;(*param2Array[7])[1] = ptr_new(['*','beam1','beam2','beam3','beam4','beam5'])
