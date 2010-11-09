@@ -165,16 +165,16 @@ if(downloadonly eq 0) then begin
       ncdf_varget, cdfid, 'wwind', wwind
     
       ; Definition of arrary names
-      uwind_pam=fltarr(n_elements(time),36)
-      vwind_pam=fltarr(n_elements(time),36)
-      wwind_pam=fltarr(n_elements(time),36)
+      uwind_pam=fltarr(n_elements(time),n_elements(range))
+      vwind_pam=fltarr(n_elements(time),n_elements(range))
+      wwind_pam=fltarr(n_elements(time),n_elements(range))
 
       for i=0, n_elements(time)-1 do begin
           for k=0, 35 do begin
               height[k]=range[k]/1000
-              uwind_pam[i,k]=uwind[k+36*i]
-              vwind_pam[i,k]=vwind[k+36*i]
-              wwind_pam[i,k]=wwind[k+36*i]
+              uwind_pam[i,k]=uwind[0,k,i]
+              vwind_pam[i,k]=vwind[0,k,i]
+              wwind_pam[i,k]=wwind[0,k,i]
               a = uwind_pam[i,k]            
               wbad = where(a eq -9999,nbad)
               if nbad gt 0 then a[wbad] = !values.f_nan

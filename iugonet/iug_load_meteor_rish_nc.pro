@@ -180,11 +180,11 @@ for ii=0,n_elements(site_code)-1 do begin
     
     ; Definition of arrary names
           timeunix = dblarr(n_elements(time))
-          uwind_data=fltarr(n_elements(time),36)
-          vwind_data=fltarr(n_elements(time),36)
-          sig_uwind_data=fltarr(n_elements(time),36)
-          sig_vwind_data=fltarr(n_elements(time),36)
-          num_data=fltarr(n_elements(time),36)
+          uwind_data=fltarr(n_elements(time),n_elements(range))
+          vwind_data=fltarr(n_elements(time),n_elements(range))
+          sig_uwind_data=fltarr(n_elements(time),n_elements(range))
+          sig_vwind_data=fltarr(n_elements(time),n_elements(range))
+          num_data=fltarr(n_elements(time),n_elements(range))
 
           for i=0, n_elements(time)-1 do begin
         ;Change hourtime since 1992-10-27 17:00:00 (Local Time) into unixtime (1970-01-01 00:00:00)
@@ -192,12 +192,11 @@ for ii=0,n_elements(site_code)-1 do begin
                             +time_double(string(1992)+'-'+string(10)+'-'+string(27)+'/'+string(17)+':'+string(00)+':'+string(00))
                       
               for k=0, 35 do begin
-                  height[k]=float(range[k])/1000
-                  uwind_data[i,k]=uwind[k+36*i]
-                  vwind_data[i,k]=vwind[k+36*i]
-                  sig_uwind_data[i,k]=sig_uwind[k+36*i]
-                  sig_vwind_data[i,k]=sig_vwind[k+36*i]
-                  num_data[i,k]=num[k+36*i]
+                  uwind_data[i,k]=uwind[0,k,i]
+                  vwind_data[i,k]=vwind[0,k,i]
+                  sig_uwind_data[i,k]=sig_uwind[0,k,i]
+                  sig_vwind_data[i,k]=sig_vwind[0,k,i]
+                  num_data[i,k]=num[0,k,i]
             
                   a = uwind_data[i,k]            
                   wbad = where(a eq -9999,nbad)
