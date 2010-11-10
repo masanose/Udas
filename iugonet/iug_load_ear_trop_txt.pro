@@ -120,7 +120,6 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===============
       s=''
       u=''
-      altitude = fltarr(120)
       data2 = fltarr(1,120)
       time = dblarr(1)
 
@@ -144,8 +143,9 @@ for ii=0,n_elements(parameters)-1 do begin
     ;=============================
           readf, lun, s
           h_data = strsplit(s,',',/extract)
-    
-          for j=0,119 do begin
+          
+          altitude = fltarr(n_elements(h_data)-1)
+          for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])
           endfor
     ;
@@ -169,10 +169,10 @@ for ii=0,n_elements(parameters)-1 do begin
                 hour = strmid(u,11,2)
                 minute = strmid(u,14,2)  
             ;====convert time from LT to UT      
-                time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
+                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
             ;
-                for j=0,119 do begin
+                for j=0,n_elements(h_data)-2 do begin
                     a = float(data[j+1])
                     wbad = where(a eq 999,nbad)
                     if nbad gt 0 then a[wbad] = !values.f_nan
@@ -197,8 +197,8 @@ for ii=0,n_elements(parameters)-1 do begin
       acknowledgstring = ''
 
       if time ne 0 then begin
-         if parameters2[iii] eq 'uwnd' || 'vwnd' || 'wwnd' || 'wdt1' || 'wdt2' || 'wdt3' || 'wdt4' || 'wdt5' then o=0
-         if parameters2[iii] eq 'pwr1' || 'pwr2' || 'pwr3' || 'pwr4' || 'pwr5' then o=1
+         if parameters[ii] eq 'uwnd' || 'vwnd' || 'wwnd' || 'wdt1' || 'wdt2' || 'wdt3' || 'wdt4' || 'wdt5' then o=0
+         if parameters[ii] eq 'pwr1' || 'pwr2' || 'pwr3' || 'pwr4' || 'pwr5' then o=1
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ear_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
          options,'iug_ear_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'

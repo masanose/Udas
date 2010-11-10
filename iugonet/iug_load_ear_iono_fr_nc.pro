@@ -249,13 +249,13 @@ endfor
    ;******************************
    ;Store data in TPLOT variables:
    ;******************************
-   ;stop
-   bname2=strarr(n_elements(beam))
-   bname=strarr(n_elements(beam))
-   pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
-   wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
-   dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
-   pnoise2_ear=fltarr(n_elements(ear_time)) 
+   if n_elements(beam) gt 0 then begin
+      bname2=strarr(n_elements(beam))
+      bname=strarr(n_elements(beam))
+      pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
+      wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
+      dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
+      pnoise2_ear=fltarr(n_elements(ear_time)) 
     
       acknowledgstring = ''
       if time2[0] ne 0 then begin
@@ -308,18 +308,21 @@ endfor
              tdegap, 'iug_ear_fai'+parameter1+'_pn'+bname[l], /overwrite          
          endfor
       endif
+      
+      print,'**********************************************************************************
+      print,'Data loading is successful!!'
+      print,'**********************************************************************************
+      
    endif
-
+ endif
+ 
+ 
 ;Clear time and data buffer:
 ear_time=0
 pwr1 = 0
 wdt1 = 0
 dpl1 = 0
 pn1 = 0
-
-print,'**********************************************************************************
-print,'Data loading is successful!!'
-print,'**********************************************************************************
 
 end
 

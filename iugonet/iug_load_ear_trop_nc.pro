@@ -270,13 +270,14 @@ for j=0,n_elements(local_paths)-1 do begin
     
 endfor
 
+  if n_elements(beam) gt 0 then begin
    ; Definition of arrary names
-   bname2=strarr(n_elements(beam))
-   bname=strarr(n_elements(beam))
-   pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
-   wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
-   dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
-   pnoise2_ear=fltarr(n_elements(ear_time)) 
+     bname2=strarr(n_elements(beam))
+     bname=strarr(n_elements(beam))
+     pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
+     wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
+     dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
+     pnoise2_ear=fltarr(n_elements(ear_time)) 
    
    ;******************************
    ;Store data in TPLOT variables:
@@ -352,6 +353,13 @@ endfor
              tdegap, 'iug_ear_pn'+bname[l],/overwrite                    
          endfor    
       endif
+    
+   print,'**********************************************************************************
+   print,'Data loading is successful!!'
+   print,'**********************************************************************************
+   
+   endif
+ endif
 
     ;Clear time and data buffer:
       ear_time=0
@@ -362,11 +370,5 @@ endfor
       wdt1 = 0
       dpl1 = 0
       pn1 = 0
-   endif
-
-print,'**********************************************************************************
-print,'Data loading is successful!!'
-print,'**********************************************************************************
-
 end
 

@@ -141,7 +141,7 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===============
       s=''
       u=''
-      altitude = fltarr(180)
+
       data = strarr(181)
       data2 = fltarr(1,180)
       time = dblarr(1)
@@ -167,8 +167,9 @@ for ii=0,n_elements(parameters)-1 do begin
           
           readf, lun, s
           h_data = strsplit(s,',',/extract)
-    
-          for j=0,n_elements(height)-2 do begin
+          altitude = fltarr(n_elements(h_data)-1)
+          
+          for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])
           endfor
           for j=0,n_elements(altitude)-1 do begin
