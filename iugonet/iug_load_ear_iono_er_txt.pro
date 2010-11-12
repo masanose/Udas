@@ -172,6 +172,7 @@ for ii=0,n_elements(parameters)-1 do begin
           for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])
           endfor
+          
           for j=0,n_elements(altitude)-1 do begin
               b = altitude[j]
               wbad = where(b eq 0,nbad)
