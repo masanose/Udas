@@ -15,6 +15,7 @@
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
 ;Updated by:  Daiki Yoshida,  Sep 14, 2010
+;Updated by:  Daiki Yoshida,  Nov 12, 2010
 ;
 ;-
 
@@ -127,7 +128,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     
   endif else begin
   
-    tplot_name = 'iug_' + strlowcase(sname)
+    tplot_name = 'iug_mag_' + strlowcase(sname)
     tplot_ytitle = strupcase(sname)
     
     if n_elements(element) eq 1 then begin

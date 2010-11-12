@@ -40,7 +40,7 @@
 ;  Now support only for AE Dst SYM/ASY KAK data.
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
-;Last Updated:  Daiki Yoshida,  Sep 10, 2010
+;Last Updated:  Daiki Yoshida,  Nov 12, 2010
 ; 
 ;-
 
@@ -55,11 +55,13 @@ pro iug_load_gmag_wdc, site=site, $
 
 
   ; validate site settings
-  vsnames = 'kak asy sym ae dst'  ;ToDo: add all WDC stations
-  vsnames_all = strsplit(vsnames, ' ', /extract)
-  if(keyword_set(site)) then site_in = site else site_in = 'all'
+  vsnames = 'kak asy sym ae dst'
+  vsnames_sample = strsplit(vsnames, ' ', /extract)
+  vsnames_all = vsnames_sample
+  ;vsnames_all = iug_load_gmag_wdc_vsnames()  ;if all data become available
+  if(keyword_set(site)) then site_in = site else site_in = vsnames_sample
   wdc_sites = thm_check_valid_name(site_in, vsnames_all, $
-    /ignore_case, /include_all, /no_warning)
+    /ignore_case, /include_all)
   if wdc_sites[0] eq '' then return
   nsites = n_elements(wdc_sites)
 
