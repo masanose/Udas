@@ -136,7 +136,7 @@ for ii=0,n_elements(parameters)-1 do begin
              dprint,'EAR file ',file,' not found. Skipping'
              continue
           endelse
-             
+          stop   
           openr,lun,file,/get_lun    
     ;
     ;Read information of altitude:
