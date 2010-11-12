@@ -16,7 +16,6 @@
 ;          that if the input time range is not a full month, a full
 ;          month's data is loaded
 ;  /verbose : set to output some useful info
-;  /addmaster, if set, then times = [!values.d_nan, times]
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;  no_download: use only files which are online locally.
@@ -41,6 +40,7 @@
 
 function iug_load_gmag_wdc_qddays, $
    trange=trange, $
+   verbose=verbose, $
    downloadonly=downloadonly, $
    no_download=no_download
     
