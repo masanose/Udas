@@ -215,7 +215,7 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
   ;unless keyword noacknowledgement is defined.
   if ~keyword_set(noacknowledgement) then begin
     vstr = tnames(prefix+'pwr_?')
-    if strlen(vstr[0]) gt 5 then begin
+    if STRLEN(vstr[0]) gt 5 then begin
       get_data, vstr[0], data=d, dl=dl
       print, '############## RULES OF THE ROAD ################'
       print, dl.cdf.gatt.rules_of_use
