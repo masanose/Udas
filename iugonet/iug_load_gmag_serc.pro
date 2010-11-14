@@ -1,8 +1,8 @@
 ;+
-;Procedure: SERC_LOAD_GMAG_SAMPLE,
-;  serc_load_gmag_sample, site = site, datatype = datatype, $
-;                         trange = trange, verbose = verbose, $
-;                         addmaster=addmaster, downloadonly = downloadonly
+;Procedure: IUG_LOAD_GMAG_SERC,
+;  iug_load_gmag_serc, site = site, datatype = datatype, $
+;                      trange = trange, verbose = verbose, $
+;                      downloadonly = downloadonly
 ;Purpose:
 ;  This procedure allows you to download and plot MAGDAS magnetometer data on TDAS.
 ;  This is a sample code for IUGONET analysis software.
@@ -17,12 +17,11 @@
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /verbose, if set, then output some useful info
-;  /addmaster, if set, then times = [!values.d_nan, times]
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
 ;Example:
-;  serc_load_gmag_sample, site = 'kuj', trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
+;  iug_load_gmag_serc, site = 'kuj', trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
 ;Code:
 ;  Shuji Abe
@@ -30,6 +29,7 @@
 ;ChangeLog:
 ;  7-April-2010, abeshu, test release.
 ;  8-April-2010, abeshu, minor update.
+;  14-November-2010, abeshu, update.
 ;
 ;Acknowledgment:
 ;
@@ -44,8 +44,8 @@
 ;***** Procedure name *****
 ;**************************
 pro iug_load_gmag_serc, site = site, datatype = datatype, $
-                           trange = trange, verbose = verbose, $
-                           addmaster=addmaster, downloadonly = downloadonly
+                        trange = trange, verbose = verbose, $
+                        downloadonly = downloadonly
 
 
 ;*************************
@@ -61,7 +61,7 @@ if ~keyword_set(datatype) then datatype='mag'
 vns=['mag']
 if size(datatype,/type) eq 7 then begin
   datatype=thm_check_valid_name(datatype,vns, $
-                                /ignore_case, /include_all, /no_warning)
+                                /ignore_case, /include_all)
   if datatype[0] eq '' then return
 endif else begin
   message,'DATATYPE must be of string type.',/info
@@ -70,14 +70,14 @@ endelse
 
 ; site
 ; list of sites
-vsnames = 'anc asb cmd cst dav daw dvs eus her hob ilr kuj lmkw cq' + $
+vsnames = 'anc asb cmd cst dav daw dvs eus her hob ilr kuj lkw mcq' + $
           'mgd mlb mnd mut onw prp ptk roc sma tir twv wad yap'
 vsnames_all = strsplit(vsnames, ' ', /extract)
 
 ; validate sites
 if(keyword_set(site)) then site_in = site else site_in = 'all'
 magdas_sites = thm_check_valid_name(site_in, vsnames_all, $
-                                    /ignore_case, /include_all, /no_warning)
+                                    /ignore_case, /include_all)
 if magdas_sites[0] eq '' then return
 
 ; number of valid sites
@@ -87,7 +87,8 @@ nsites = n_elements(magdas_sites)
 acknowledgstring = 'Scientists who want to engage in collaboration with SERC ' + $
                    'should contact the project leader of MAGDAS/CPMN ' + $
                    'observations, Prof. Dr. K. Yumoto, Kyushu Univ., who will ' + $
-                   'organize such collaborations.'
+                   'organize such collaborations.' + $
+                   'For detail, please see the Rules of the Road for MAGDAS/CPMN Data Use.'
 
 
 ;*************************************************************************
@@ -101,13 +102,12 @@ for i=0, nsites-1 do begin
   ; define file names
   pathformat= strupcase(strmid(magdas_sites[i],0,3)) + '/Min/YYYY/' + $
               strupcase(strmid(magdas_sites[i],0,3)) + '_MIN_YYYYMMDD0000.mgd'
-  relpathnames = file_dailynames(file_format=pathformat, $
-                                 trange=trange, addmaster=addmaster)
+  relpathnames = file_dailynames(file_format=pathformat, trange=trange)
 
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'iugonet/gmag/'
+  source.local_data_dir = root_data_dir() + 'iugonet/serc/' + strupcase(strmid(magdas_sites[i],0,3))
   source.remote_data_dir = 'http://magdas.serc.kyushu-u.ac.jp/whi/data/'
 
   ; download data
@@ -164,7 +164,7 @@ for i=0, nsites-1 do begin
   ;=======================================
   if size(databuf,/type) eq 4 then begin
     ; tplot variable name
-    tplot_name = 'serc_magdas_' + strlowcase(strmid(magdas_sites[i],0,3)) + '_mag'
+    tplot_name = 'magdas_mag_' + strlowcase(strmid(magdas_sites[i],0,3))
   
     ; for bad data
     wbad = where(finite(databuf) gt 99999, nbad)
@@ -196,17 +196,46 @@ endfor
 ;******************************************
 ;***** Display additional information *****
 ;******************************************
-
-print,' 
-print,'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-print,' Multicore CPU on AA
-print,'  Pentium4 HT:  (�L�E�ցE�߁E�ցE`)
-print,'  Core2Duo:     ( ^��^ )( ^��^ )
-print,'  Core2Quad:    ( ^��^ )( ^��^ )�l( ^��^ )( ^��^ )
-print,'  Core i7:
-print,'          ����i �O�ցO�߁O�ցO�j������i �O�ցO�߁O�ցO�j��
-print,'          ����i �O�ցO�߁O�ցO�j������i �O�ցO�߁O�ցO�j��
-print,'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-print,' 
+print, 'Rules of the Road for MAGDAS/CPMN Data Use:'
+print, ''
+print, 'Scientists who want to engage in collaboration with SERC '
+print, 'should contact the project leader of MAGDAS/CPMN '
+print, 'observations, Prof. Dr. K. Yumoto, Kyushu Univ., who will '
+print, 'organize such collaborations.'
+print, ''
+print, 'There is a possibility that the PI of MAGDAS will arrange offers'
+print, 'so that there is less overlapping of themes between MAGDAS research groups'
+print, ''
+print, 'Before you use MAGDAS/CPMN data for your papers,'
+print, 'you must agree to the following points;'
+print, ''
+print, '  1. Before you submit your paper, you must contact the PI'
+print, '     (Prof. K. Yumoto: yumoto@serc.kyushu-u.ac.jp) and'
+print, '     discuss authorship.'
+print, '  2. When you submit your paper after doing the above item 1, you must mention'
+print, '     the source of the data in the acknowledgment section of your paper.'
+print, '  3. In general, you must use the following references:'
+print, '    1. Yumoto, K., and the 210MM Magnetic Observation Group, The STEP'
+print, '       210 magnetic meridian network project, J. Geomag. Geoelectr.,'
+print, '       48, 1297-1310., 1996.'
+print, '    2. Yumoto, K. and the CPMN Group, Characteristics of Pi 2 magnetic'
+print, '       pulsations observed at the CPMN stations: A review of the STEP'
+print, '       results, Earth Planets Space, 53, 981-992, 2001.'
+print, '    3. Yumoto K. and the MAGDAS Group, MAGDAS project and its application'
+print, "       for space weather, Solar Influence on the Heliosphere and Earth's"
+print, '       Environment: Recent Progress and Prospects, Edited by N. Gopalswamy'
+print, '       and A. Bhattacharyya, ISBN-81-87099-40-2, pp. 309-405, 2006.'
+print, '    4. Yumoto K. and the MAGDAS Group, Space weather activities at SERC' 
+print, '       for IHY: MAGDAS, Bull. Astr. Soc. India, 35, pp. 511-522, 2007.'
+print, '  4. In all circumstances, if anything is published you must send'
+print, '     a hardcopy to the following address:'
+print, ''
+print, '    Prof. Dr. Kiyohumi Yumoto'
+print, '    PI of MAGDAS/CPMN Project'
+print, '    Director of Space Environment Research Center,'
+print, '    Kyushu University 53'
+print, '    6-10-1 Hakozaki, Higashi-ku Fukuoka 812-8581, JAPAN'
+print, '    TEL/FAX:+81-92-642-4403, e-mail: yumoto@serc.kyushu-u.ac.jp'
+print, ''
 
 end
