@@ -2,7 +2,7 @@
 ;Procedure: iug_load_iprt_sun,
 ;  iug_load_iprt_sun, site = site, datatype = datatype, $
 ;                         trange = trange, verbose = verbose, $
-;                         addmaster=addmaster, downloadonly = downloadonly
+;                         downloadonly = downloadonly
 ;Purpose:
 ;  This procedure allows you to download and plot TOHOKUU_RADIO OBSERVATION data on TDAS.
 ;  This is a sample code for IUGONET analysis software.
@@ -10,13 +10,12 @@
 ;Keywords:
 ;  site  = Observatory name. Only 'iit' is allowed.
 ;  datatype = The type of data to be loaded.  In this sample
-;             procedure, there is only one option, the default value of 'pc3i'.
+;             procedure, there is only one option, the default value of 'Sun'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /verbose, if set, then output some useful info
-;  /addmaster, if set, then times = [!values.d_nan, times]
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
@@ -39,13 +38,11 @@
 ;  7-April-2010, abeshu, test release.
 ;  8-April-2010, abeshu, minor update.
 ;  27-JUL.-2010, revised for this procedure by M. Kagitani
+;  12-NOV.-2010, revised by M. Kagitani
 ;
 ;Acknowledgment:
 ;
 ;
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
 ; $URL: $
 ;-
 
@@ -56,7 +53,7 @@
 ;**************************
 pro iug_load_iprt_sun, site=site, datatype = datatype, $
                            trange = trange, verbose = verbose, $
-                           addmaster=addmaster, downloadonly = downloadonly
+                           downloadonly = downloadonly
 
 
 ;*************************
@@ -65,38 +62,42 @@ pro iug_load_iprt_sun, site=site, datatype = datatype, $
 ; verbose
 if ~keyword_set(verbose) then verbose=0
 
-; data type
+; dafault data type
 if ~keyword_set(datatype) then datatype='Sun'
-if ~keyword_set(site) then datatype='iit'
+
+; Currently only 'iit' is put in array "sites".
+; This part should be implemented in future to take multiple sites.
+if ~keyword_set(site) then site='iit'
 
 ; validate datatype
 vns=['Sun','Jupiter']
 if size(datatype,/type) eq 7 then begin
   datatype=thm_check_valid_name(datatype,vns, $
-                                /ignore_case, /include_all, /no_warning)
-;  if datatype[0] eq '' then return ;<=== NOTE FOR THIS LINE !!!
+                                /ignore_case, /include_all);, /no_warning)
+
+if datatype[0] eq '' then begin
+    stop
+    return ;<=== NOTE FOR THIS LINE !!!
+  endif
 endif else begin
   message,'DATATYPE must be of string type.',/info
   return
 endelse
 
-site = 'iit'
-; list of sites
 vsnames = 'iit'
 vsnames_all = strsplit(vsnames, ' ', /extract)
 
 ; validate sites
 if(keyword_set(site)) then site_in = site else site_in = 'all'
-magdas_sites = thm_check_valid_name(site_in, vsnames_all, $
+foo_sites = thm_check_valid_name(site_in, vsnames_all, $
                                     /ignore_case, /include_all, /no_warning)
 ;if magdas_sites[0] eq '' then return
 
 ; number of valid sites
-nsites = n_elements(magdas_sites)
+nsites = n_elements(foo_sites)
 
 ; acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Please contact Dr. Hiroaki Misawa.'
-
 
 ;*************************************************************************
 ;***** Download files, read data, and create tplot vars at each site *****
@@ -108,7 +109,7 @@ acknowledgstring = 'Please contact Dr. Hiroaki Misawa.'
 
 for i=0, nsites-1 do begin
   ; define file names
-  pathformat= strupcase(strmid(magdas_sites[i],0,3)) + '/' + $
+  pathformat= strupcase(strmid(foo_sites[i],0,3)) + '/' + $
               'iprt_sun_YYYYMMDD'
   relpathnames = file_dailynames(file_format=pathformat, $
                                  trange=trange, addmaster=addmaster)+'.fits'
@@ -118,8 +119,10 @@ for i=0, nsites-1 do begin
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'tohokuU/'
+  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/'
   source.remote_data_dir = 'http://pparc.gp.tohoku.ac.jp/whi/data/'
+
+  ;print,relpathnames
 
   ; download data
   local_files = file_retrieve(relpathnames, _extra=source)

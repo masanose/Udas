@@ -2,7 +2,7 @@
 ;Procedure: iug_load_gmag_pc3
 ;  iug_load_gmag_pc3, site = site, datatype = datatype, $
 ;                         trange = trange, verbose = verbose, $
-;                         addmaster=addmaster, downloadonly = downloadonly
+;                         downloadonly = downloadonly
 ;Purpose:
 ;  This procedure allows you to download and plot ONAGAWA Pc3 INDEX data on TDAS.
 ;  This is a sample code for IUGONET analysis software.
@@ -10,13 +10,12 @@
 ;Keywords:
 ;  site  = Observatory name. Only 'onw' is allowed.
 ;  datatype = The type of data to be loaded.  In this sample
-;             procedure, there is only one option, the default value of 'pc3i'.
+;             procedure, there is only one option, the default value of 'pc3'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /verbose, if set, then output some useful info
-;  /addmaster, if set, then times = [!values.d_nan, times]
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
@@ -53,8 +52,7 @@ function file_monthlynames_onw,dir,prefix,suffix,trange=trange, $
     times = times, $
     resolution =res, $
     yyyy_mm_dir=yyyy_mm_dir, $
-    yeardir=yeardir,$
-    addmaster=addmaster
+    yeardir=yeardir
 
 
 if not keyword_set(dir) then dir=''
@@ -82,7 +80,7 @@ mmtr = floor( tr / res + [0d,.999d] )
 n = (mmtr[1]-mmtr[0])  > 1
 
 times = (dindgen(n) + mmtr[0]) * res
-if keyword_set(addmaster) then times = [!values.d_nan,times]
+;if keyword_set(addmaster) then times = [!values.d_nan,times]
 
 dates = time_string( times , tformat=file_format)
 
@@ -109,7 +107,7 @@ end
 ;**************************
 pro iug_load_gmag_pc3, site=site, datatype = datatype, $
                            trange = trange, verbose = verbose, $
-                           addmaster=addmaster, downloadonly = downloadonly
+                           downloadonly = downloadonly
 
 ;*************************
 ;***** Keyword check *****
@@ -117,22 +115,24 @@ pro iug_load_gmag_pc3, site=site, datatype = datatype, $
 ; verbose
 if ~keyword_set(verbose) then verbose=0
 
-; data type
+; dafault data type
 if ~keyword_set(datatype) then datatype='pc3'
 
 ; validate datatype
-vns=['Pc3']
+vns=['pc3']
 if size(datatype,/type) eq 7 then begin
   datatype=thm_check_valid_name(datatype,vns, $
-                                /ignore_case, /include_all, /no_warning)
+                                /ignore_case, /include_all);, /no_warning)
   if datatype[0] eq '' then return
 endif else begin
   message,'DATATYPE must be of string type.',/info
   return
 endelse
 
+; Currently only 'onw' is put in array "sites".
+; This part should be implemented in future to take multiple sites.
 site = 'onw'
-; list of sites
+
 vsnames = 'onw'
 vsnames_all = strsplit(vsnames, ' ', /extract)
 
@@ -146,7 +146,7 @@ if magdas_sites[0] eq '' then return
 nsites = n_elements(magdas_sites)
 
 ; acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'Please contact Prof. Shoichi Okano.'
+acknowledgstring = 'Please contact Prof. Takeshi Sakanoi.'
 
 
 ;*************************************************************************
@@ -159,18 +159,18 @@ acknowledgstring = 'Please contact Prof. Shoichi Okano.'
 
 for i=0, nsites-1 do begin
   ; define file names
-  pathformat= strupcase(strmid(magdas_sites[i],0,3)) + '/' + $
+  pathformat= strupcase(strmid(magdas_sites[i],0,3)) + '/pc3/' + $
               strupcase(strmid(magdas_sites[i],0,3)) + '_pc3_YYYYMM.dat'
   ;relpathnames = file_dailynames(file_format=pathformat, $
   ;                               trange=trange, addmaster=addmaster)
   relpathnames = file_monthlynames_onw(file_format=pathformat, $
-                                 trange=trange, addmaster=addmaster)
+                                 trange=trange)
 
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'geom_indices/pc3/'
-  source.remote_data_dir = 'http://magdas.serc.kyushu-u.ac.jp/whi/data/'
+  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/'
+  source.remote_data_dir = 'http://pparc.gp.tohoku.ac.jp/foobar/
 
   ; download data
   local_files = file_retrieve(relpathnames, _extra=source)
@@ -260,7 +260,7 @@ for i=0, nsites-1 do begin
   if size(databuf,/type) eq 4 then begin
     ; tplot variable name
     ;tplot_name = 'onw_pc3_' + strlowcase(strmid(magdas_sites[i],0,3)) + '_pc3'
-    tplot_name = 'onw_pc3'
+    tplot_name = 'iug_pc3_onw'
 
     ; for bad data
     wbad = where(finite(databuf) gt 99999, nbad)
