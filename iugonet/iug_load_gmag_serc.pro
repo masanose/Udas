@@ -70,7 +70,7 @@ endelse
 
 ; site
 ; list of sites
-vsnames = 'anc asb cmd cst dav daw dvs eus her hob ilr kuj lkw mcq' + $
+vsnames = 'anc asb cmd cst dav daw dvs eus her hob ilr kuj lkw mcq ' + $
           'mgd mlb mnd mut onw prp ptk roc sma tir twv wad yap'
 vsnames_all = strsplit(vsnames, ' ', /extract)
 
@@ -107,7 +107,7 @@ for i=0, nsites-1 do begin
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'iugonet/serc/' + strupcase(strmid(magdas_sites[i],0,3))
+  source.local_data_dir = root_data_dir() + 'iugonet/serc/'
   source.remote_data_dir = 'http://magdas.serc.kyushu-u.ac.jp/whi/data/'
 
   ; download data
