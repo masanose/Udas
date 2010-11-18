@@ -120,26 +120,28 @@ for i=0,n_elements(site_code)-1 do begin
     print, gatt.LINK_TEXT, ' ', gatt.HTTP_LINK
     print, '**************************************************************************************'
 
-    ;--- Load data into tplot variables
-    if(not keyword_set(downloadonly)) then downloadonly=0
-
-    if(downloadonly eq 0) then begin
-      cdf2tplot, file=files, verbose=source.verbose, varformat=varformat
-
-      ;--- Rename tplot variables
-      tplot_name='iug_mag_'+site_code[i]
-      copy_data, varformat, tplot_name
-      store_data, varformat, /delete
-
-      ;--- Missing data -1.e+31 --> NaN
-      tclip, newvar, -1e+5, 1e+5, /overwrite
-
-      ;--- Labels
-      options, tplot_name, labels=['H','D','Z'], $
-                           ytitle = strupcase(strmid(site_code[i],0,3)), $
-                           ysubtitle = '[nT]'
-    endif
   endif
+
+  ;--- Load data into tplot variables
+  if(not keyword_set(downloadonly)) then downloadonly=0
+
+  if(downloadonly eq 0) then begin
+    cdf2tplot, file=files, verbose=source.verbose, varformat=varformat
+
+    ;--- Rename tplot variables
+    tplot_name='iug_mag_'+site_code[i]
+    copy_data, varformat, tplot_name
+    store_data, varformat, /delete
+
+    ;--- Missing data -1.e+31 --> NaN
+    tclip, newvar, -1e+5, 1e+5, /overwrite
+
+    ;--- Labels
+    options, tplot_name, labels=['H','D','Z'], $
+                         ytitle = strupcase(strmid(site_code[i],0,3)), $
+                         ysubtitle = '[nT]'
+  endif
+
 endfor
 
 ;---
