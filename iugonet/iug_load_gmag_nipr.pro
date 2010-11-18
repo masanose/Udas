@@ -134,7 +134,7 @@ for i=0,n_elements(site_code)-1 do begin
     store_data, varformat, /delete
 
     ;--- Missing data -1.e+31 --> NaN
-    tclip, newvar, -1e+5, 1e+5, /overwrite
+    tclip, tplot_name, -1e+5, 1e+5, /overwrite
 
     ;--- Labels
     options, tplot_name, labels=['H','D','Z'], $
