@@ -148,6 +148,7 @@ for ii=0,n_elements(site_code)-1 do begin
        ;
        ;Loop on readdata:
        ;=================
+           n=0
            while(not eof(lun)) do begin
              readf,lun,s
              ok=1

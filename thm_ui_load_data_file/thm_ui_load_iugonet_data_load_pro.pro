@@ -39,13 +39,14 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;====================================
   ;=== �����ŁAload�v���V�W����
   ;====================================
-  
+  ;load data of Iitate Planetary Radio Telescope
   if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
      par_names=parameters
      iug_load_tohokuu_iprt_sun, site =site_or_param, datatype=datatype, trange = timeRange
   endif
   
-    if instrument eq 'geomagnetic_field_index' then begin
+  ;load data of geomagnetic field index
+  if instrument eq 'geomagnetic_field_index' then begin
     if datatype eq 'Dst_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
          par_names='kyoto_'+parameters
@@ -84,11 +85,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif
   endif 
   
-  if instrument eq 'superdarn(ERG)' then begin
-    par_names='sd_' + datatype + '_' + parameters +'_0'
-    erg_load_sdfit, trange=timeRange, sites=datetype    
-  endif 
-  
+  ;load data of Equatorial Atomosphere Radar
   if instrument eq 'Equatorial_Atomosphere_Radar' then begin
      iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
      if datatype eq 'troposphere' then par_names='iug_ear_'+parameters
@@ -98,29 +95,34 @@ pro thm_ui_load_iugonet_data_load_pro,$
      if datatype eq 'f_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
   endif 
   
+  ;load data of Medium Frequency radar
   if instrument eq 'Medium_Frequency_radar' then begin
      iug_load_mf_rish_data, datatype = datatype, site =site_or_param, trange = timeRange
      iug_load_mf_nipr, site = site_or_param, trange = timeRange
      if site_or_param eq 'pam' or 'pon' then par_names='iug_mf_'+site_or_param+'_'+parameters 
      if site_or_param eq 'syo' then par_names='mf_'+site_or_param+'_'+parameters 
-  endif 
-  
+  endif
+   
+  ;load data of Meteor Wind radar
   if instrument eq 'Meteor_Wind_radar' then begin
      par_names='iug_meteor_'+site_or_param+'_'+parameters
      iug_load_meteor_rish_nc, datatype =datatype, site=site_or_param, trange = timeRange
   endif 
   
+  ;load data of Middle Upper atomosphere radar
   if instrument eq 'Middle_Upper_atomosphere_radar' then begin
      iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange
      if datatype eq 'troposphere' then par_names='iug_mu_'+parameters
      if datatype eq 'meteor_wind' then par_names='iug_mu_meteor_'+parameters     
   endif
   
+  ;load data of Bandary Layer Radar
   if instrument eq 'Bandary_Layer_Radar' then begin       
      par_names='iug_blr_'+site_or_param+'_'+parameters
      iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
   endif
-    
+  
+  ;load data of Radio sonde 
   if instrument eq 'Radio_sonde' then begin
      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
      iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange      

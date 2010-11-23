@@ -55,10 +55,13 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;***********
 ;--- all parameters1 (default)
-parameter1_all = strsplit('faifb1p16a faifb1p16b faifb1p16c faifb1p16d faifb1p16e faifb1p16f',' ', /extract)
+parameter1_all = strsplit('fb1p16a fb1p16b fb1p16c fb1p16d fb1p16e fb1p16f fb1p16g fb1p16h fb1p16i '+$
+                          'fb1p16j1 fb1p16j2 fb1p16j3 fb1p16j4 fb1p16j5 fb1p16j6 fb1p16j7 fb1p16j8 fb1p16j9 '+$
+                          'fb1p16j10 fb1p16j11 fb1p16k1 fb1p16k2 fb1p16k3 fb1p16k4 fb1p16k5 fb8p16k1 fb8p16k2 '+$
+                          'fb8p16k3 fb8p16k4 fb1p16m2 fb1p16m3 fb1p16m4 fb8p16m1 fb8p16m2',' ', /extract)
 
 ;--- check site codes
-if(not keyword_set(parameter1)) then parameter1='faifb1p16a'
+if(not keyword_set(parameter1)) then parameter1='all'
 parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
 
 print, parameters

@@ -77,6 +77,11 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
+;***************
+;data directory:
+;***************
+site_data_dir = strsplit('ktb/blr/ sgk/blr/ srp/blr/ ',' ', /extract)
+
 ;*****************
 ;defition of unit:
 ;*****************
@@ -108,10 +113,24 @@ acknowledgstring = 'If you acquire BLR data, we ask that you' $
 ;
 
 jj=0
+o=0
 for ii=0,n_elements(site_code)-1 do begin
   for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
-
+      ;Definition of blr site names:
+      if site_code[ii] eq 'ktb' then begin
+         h=0
+         site_code2='kototabang'
+      endif
+      if site_code[ii] eq 'sgk' then begin
+         h=1
+         site_code2='shigaraki'
+      endif
+      if site_code[ii] eq 'srp' then begin
+         h=2
+         site_code2='serpong'
+      endif
+      
     ;Get files for ith component:
     ;***************************
          file_names = file_dailynames( $
@@ -122,8 +141,8 @@ for ii=0,n_elements(site_code)-1 do begin
     ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_code[ii]+'/blr/'
-         source.remote_data_dir = 'ftp://ftp.rish.kyoto-u.ac.jp/pub/blr/'+site_code[ii]+'/data/ver02.0212/'
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[h]
+         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2[ii]+'/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -143,9 +162,6 @@ for ii=0,n_elements(site_code)-1 do begin
       ;===============
          s=''
          u=''
-         altitude = fltarr(63)
-         data = strarr(64)
-         data2 = fltarr(1,63)
          time = dblarr(1)
 
       ; Initialize data and time buffer
@@ -167,13 +183,17 @@ for ii=0,n_elements(site_code)-1 do begin
       ;=============================
              readf, lun, s
              height = float(strsplit(s,',',/extract))
-             number2 = n_elements(height)
-
-             for j=0,number2-2 do begin
+             
+             ;Definition of altitude and data arraies:
+             altitude = fltarr(n_elements(height)-1)
+             data = strarr(n_elements(height))
+             data2 = fltarr(1,n_elements(height)-1)
+             
+             for j=0,n_elements(height)-2 do begin
                  altitude[j] = height[j+1]
              endfor
-    
-             for j=0,62 do begin
+
+             for j=0,n_elements(height)-2 do begin
                  b = float(altitude[j])
                  wbad = where(b eq 0,nbad)
                  if nbad gt 0 then b[wbad] = !values.f_nan
@@ -209,7 +229,7 @@ for ii=0,n_elements(site_code)-1 do begin
                                -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                   endif
             ;
-                  for j=0,number2-2 do begin
+                  for j=0,n_elements(height)-2 do begin
                       a = float(data[j+1])
                       wbad = where(a eq 999,nbad)
                       if nbad gt 0 then a[wbad] = !values.f_nan
@@ -234,8 +254,13 @@ for ii=0,n_elements(site_code)-1 do begin
   ;******************************
 
           if blr_time[0] ne 0 then begin 
-             if parameters[iii] eq 'uwnd' || 'vwnd' || 'wwnd' || 'wdt1' || 'wdt2'|| 'wdt3'|| 'wdt4'|| 'wdt5' then o=0 
-             if parameters[iii] eq 'pwr1' || 'pwr2'|| 'pwr3'|| 'pwr4'|| 'pwr5' then o=1    
+             o=0 
+             if parameters[iii] eq 'pwr1' then o=1  
+             if parameters[iii] eq 'pwr2' then o=1
+             if parameters[iii] eq 'pwr3' then o=1
+             if parameters[iii] eq 'pwr4' then o=1
+             if parameters[iii] eq 'pwr5' then o=1
+ 
              dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
              store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
              options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$

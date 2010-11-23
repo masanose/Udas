@@ -180,6 +180,7 @@ for ii=0,n_elements(site_code)-1 do begin
     
     ; Definition of arrary names
           timeunix = dblarr(n_elements(time))
+          height=fltarr(n_elements(range))
           uwind_data=fltarr(n_elements(time),n_elements(range))
           vwind_data=fltarr(n_elements(time),n_elements(range))
           sig_uwind_data=fltarr(n_elements(time),n_elements(range))
@@ -197,7 +198,8 @@ for ii=0,n_elements(site_code)-1 do begin
                   sig_uwind_data[i,k]=sig_uwind[0,k,i]
                   sig_vwind_data[i,k]=sig_vwind[0,k,i]
                   num_data[i,k]=num[0,k,i]
-            
+                  height[k]= range[k]/1000
+                  
                   a = uwind_data[i,k]            
                   wbad = where(a eq -9999,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan

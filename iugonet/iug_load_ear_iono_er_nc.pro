@@ -86,14 +86,15 @@ acknowledgstring = 'If you acquire EAR data, we ask that you' $
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
 ;
-
+jj=0
+for ii=0,n_elements(parameters)-1 do begin
  if ~size(fns,/type) then begin
 
     ;Get files for ith component:
     ;***************************
        file_names = file_dailynames( $
        file_format='YYYY/'+$
-                   'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameter1+'.nc'
+                   'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.nc'
     ;
     ;Define FILE_RETRIEVE structure:
     ;===============================
@@ -130,7 +131,7 @@ acknowledgstring = 'If you acquire EAR data, we ask that you' $
     ;Loop on files (zonal component): 
     ;================================
     
-for j=0,n_elements(local_paths)-1 do begin
+  for j=jj,n_elements(local_paths)-1 do begin
     file= local_paths[j]
     if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
     else begin
@@ -276,39 +277,39 @@ endfor
                  endfor
              endfor
              ;print, pwr2_ear
-             store_data,'iug_ear_fai'+parameter1+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_fai'+parameter1+'_pwr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-             options,'iug_ear_fai'+parameter1+'_pwr'+bname[l], labels='EAR-iono [km]'
-             options,'iug_ear_fai'+parameter1+'_pwr'+bname[l],'spec',1
-             tdegap, 'iug_ear_fai'+parameter1+'_pwr'+bname[l], /overwrite
+             store_data,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
+             options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+             options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], labels='EAR-iono [km]'
+             options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],'spec',1
+             tdegap, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], /overwrite
              
              for i=0, n_elements(ear_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      wdt2_ear[i,k]=wdt1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_fai'+parameter1+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_fai'+parameter1+'_wdt'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-             options,'iug_ear_fai'+parameter1+'_wdt'+bname[l], labels='EAR-iono [km]'
-             options,'iug_ear_fai'+parameter1+'_wdt'+bname[l],'spec',1
-             tdegap, 'iug_ear_fai'+parameter1+'_wdt'+bname[l], /overwrite
+             store_data,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
+             options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+             options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], labels='EAR-iono [km]'
+             options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],'spec',1
+             tdegap, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], /overwrite
              
              for i=0, n_elements(ear_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      dpl2_ear[i,k]=dpl1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_fai'+parameter1+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_fai'+parameter1+'_dpl'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
-             options,'iug_ear_fai'+parameter1+'_dpl'+bname[l], labels='EAR-iono [km]'
-             options,'iug_ear_fai'+parameter1+'_dpl'+bname[l],'spec',1
-             tdegap, 'iug_ear_fai'+parameter1+'_dpl'+bname[l], /overwrite
+             store_data,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
+             options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
+             options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], labels='EAR-iono [km]'
+             options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
+             tdegap, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
              for i=0, n_elements(time)-1 do begin
                  pnoise2_ear[i]=pn1[i,l]
              end
-             store_data,'iug_ear_fai'+parameter1+'_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
-             options,'iug_ear_fai'+parameter1+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
-             tdegap, 'iug_ear_fai'+parameter1+'_pn'+bname[l], /overwrite          
+             store_data,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
+             options,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
+             tdegap, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], /overwrite          
          endfor
       endif
    
@@ -326,6 +327,7 @@ wdt1 = 0
 dpl1 = 0
 pn1 = 0
 
-
+jj=n_elements(local_paths)
+endfor
 end
 
