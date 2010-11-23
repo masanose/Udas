@@ -29,13 +29,11 @@
 ;   $URL: $
 ;
 ; revised by H. Tadokoro, June 1, 2010
-; revised by Y. Tanaka, August 11, 2010
+; revised by Y. Tanaka, November 19, 2010
 ;-
 
-;pro erg_load_gmag_mm210, site=site, datatype=datatype, $
-;        downloadonly=downloadonly, trange=trange
 pro iug_load_gmag_nipr, site = site, datatype=datatype, $
-        downloadonly=downloadonly, trange=trange, verbose=verbose
+        trange=trange, verbose=verbose, downloadonly=downloadonly
 
 
 ;*************************
@@ -44,30 +42,38 @@ pro iug_load_gmag_nipr, site = site, datatype=datatype, $
 ; verbose
 if ~keyword_set(verbose) then verbose=0
 
-; site
-; list of sites
-vsnames = 'syo'
-vsnames_all = strsplit(vsnames, ' ', /extract)
+;--- all sites (default)
+site_code_all = strsplit('syo hus tjo aed isa', /extract)
 
-; validate sites
-if(keyword_set(site)) then site_in = site else site_in = 'syo'
-mag_sites = thm_check_valid_name(site_in, vsnames_all, $
-                                /ignore_case, /include_all, /no_warning)
-if mag_sites[0] eq '' then return
+;--- check site codes
+if(not keyword_set(site)) then site='all'
+site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
+if site_code[0] eq '' then return
 
-; number of valid sites
-nsites = n_elements(mag_sites)
-print,nsites
+print, site_code
 
-;*** time resolution ***
+;--- validate datatype
 if(not keyword_set(datatype)) then datatype='1sec'
-case strlowcase(datatype) of
-  '1sec': varformat='*hdz_1sec*'
-  '1min': varformat='*hdz_1min*'
-  '1h':   varformat='*hdz_1h*'
-  else:   varformat='*hdz_1sec*'
 
+datatype_all=strsplit('1sec 20hz', /extract)
+if size(datatype,/type) eq 7 then begin
+  datatype=thm_check_valid_name(datatype,datatype_all, $
+                                /ignore_case, /include_all)
+  if datatype[0] eq '' then return
+endif else begin
+  message,'DATATYPE must be of string type.',/info
+  return
+endelse
+
+datatype=datatype[0]
+
+case strlowcase(datatype) of
+  '1sec': varformat='hdz_sec'
+  '20hz':   varformat='hdz_20hz'
+  else:   varformat='hdz_sec'
 endcase
+
+instr='fmag'
 
 ;*************************************************************************
 ;***** Download files, read data, and create tplot vars at each site *****
@@ -75,77 +81,70 @@ endcase
 ;=================================
 ;=== Loop on downloading files ===
 ;=================================
-; make remote path, local path, and download files
-for i=0, nsites-1 do begin
-
-  now_site = strlowcase(strmid(mag_sites[i],0,3))
-  print,now_site
-
-  ;*** load CDF ***
-
+;*** load CDF ***
+for i=0,n_elements(site_code)-1 do begin
+  
   ;--- Create (and initialize) a data file structure 
   source = file_retrieve(/struct)
   source.verbose = verbose
 
-  ;--- Set parameters for the data file class 
-  source.local_data_dir  = root_data_dir() + 'iugonet/nipr/gmag/'+now_site
-  source.remote_data_dir = '/pl09/iugonet/data/cdf/fmag/syo/'
-
-  ;--- Set the file path which is added to source.local_data_dir/remote_data_dir.
- 
-  ;--- Generate the file paths by expanding wilecards of date/time 
-  ;    (e.g., YYYY, YYYYMMDD) for the time interval set by "timespan"
-  ;relpathnames = file_dailynames(file_format=pathformat) 
+  ;--- Set parameters for the data file class
+  source.local_data_dir  = root_data_dir() + 'iugonet/nipr/'
+  source.remote_data_dir = 'http://www.nipr.ac.jp/~ytanaka/data/'
 
   relpathnames1 = file_dailynames(file_format='YYYY', trange=trange)
-  relpathnames2 = file_dailynames(file_format='YYYYMMDD', trange=trange) 
-  relpathnames3 = file_dailynames(file_format='MM', trange=trange) 
-  relpathnames4 = file_dailynames(file_format='DD', trange=trange) 
-
-   relpathnames  = relpathnames1 $
-                 + '/nipr_1sec_fmag_'+now_site+'_' + relpathnames2 + '_v01.cdf'
-
+  relpathnames2 = file_dailynames(file_format='YYYYMMDD', trange=trange)
+  relpathnames  = instr+'/'+site_code[i]+'/'+strlowcase(datatype)+'/'+$
+    relpathnames1 + '/nipr_????_'+instr+'_'+site_code[i]+'_'+$
+    relpathnames2 + '_v??.cdf'
 
   ;--- Download the designated data files from the remote data server
-  ;    if the local data files are older or do not exist. 
+  ;    if the local data files are older or do not exist.
   files = file_retrieve(relpathnames, _extra=source, /last_version)
 
   ;--- print PI info and rules of the road
-  if((findfile(files[0]))[0] ne '') then begin
+  if(file_test(files[0])) then begin
     gatt = cdf_var_atts(files[0])
 
     print, '**************************************************************************************'
-    print, gatt.project
+    ;print, gatt.project
     print, gatt.Logical_source_description
     print, ''
-  ;  print, 'Information about ', gatt.Station_code
-;    print, 'PI and Host PI(s): ', gatt.PI_name
-;    print, 'Affiliations: ', gatt.PI_affiliation
+    print, 'Information about ', gatt.Station_code
+    print, 'PI: ', gatt.PI_name
+    print, 'Affiliations: ', gatt.PI_affiliation
     print, ''
-;    print, 'Rules of the Road for 210 MM Data Use:'
-    print, 'Rules of the Road for syowa Data Use:'
+    print, 'Rules of the Road for NIPR Fluxgate Magnetometer Data:'
     print, gatt.text
-;    print, ''
+    print, ''
     print, gatt.LINK_TEXT, ' ', gatt.HTTP_LINK
     print, '**************************************************************************************'
 
-    ;--- Load data into tplot variables
-    if(not keyword_set(downloadonly)) then downloadonly=0
-
-    if(downloadonly eq 0) then begin
-      cdf2tplot, file=files, verbose=source.verbose, $
-        prefix='nipr_', suffix='_'+mag_sites[i], varformat=varformat
-
-      ;--- Missing data -1.e+31 --> NaN
-      tclip, 'nipr_hdz_1*_???', -1e+4, 1e+4, /overwrite
-      tclip, 'nipr_hdz_'+strlowcase(datatype)+'_'+mag_sites[i], -1e+4, 1e+4, /overwrite
-
-      ;--- Labels
-;      options, 'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], labels=['H','D','Z']
-      options, 'nipr_hdz_'+strlowcase(datatype)+'_'+mag_sites[i], labels=['H','D','Z']
-    endif
   endif
+
+  ;--- Load data into tplot variables
+  if(not keyword_set(downloadonly)) then downloadonly=0
+
+  if(downloadonly eq 0) then begin
+    cdf2tplot, file=files, verbose=source.verbose, varformat=varformat
+
+    ;--- Rename tplot variables
+    tplot_name='iug_mag_'+site_code[i]
+    copy_data, varformat, tplot_name
+    store_data, varformat, /delete
+
+    ;--- Missing data -1.e+31 --> NaN
+    tclip, tplot_name, -1e+5, 1e+5, /overwrite
+
+    ;--- Labels
+    options, tplot_name, labels=['H','D','Z'], $
+                         ytitle = strupcase(strmid(site_code[i],0,3)), $
+                         ysubtitle = '[nT]'
+  endif
+
 endfor
 
+;---
 return
 end
+
