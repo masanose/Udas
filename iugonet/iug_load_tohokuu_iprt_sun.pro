@@ -1,4 +1,4 @@
-;test
+;testa
 ;+
 ;Procedure: iug_load_tohokuu_iprt_sun,
 ;  iug_load_tohokuu_iprt_sun, site = site, datatype = datatype, $
