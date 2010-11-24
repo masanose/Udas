@@ -124,7 +124,7 @@ for ii=0,n_elements(site_code)-1 do begin
       zon_thermal=0
       mer_thermal=0
       meteor_num=0 
-      height = fltarr(36)
+      
  
  ;Loop on files (read the NetCDF files): 
  ;======================================
