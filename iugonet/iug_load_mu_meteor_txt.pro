@@ -149,6 +149,7 @@ endif else file_names=fns
     ;
     ;Loop on readdata:
     ;=================
+    n=0
     while(not eof(lun)) do begin
       readf,lun,s
       ok=1
@@ -212,7 +213,7 @@ endif else file_names=fns
            ;Append data of time and wind data at determined altitude:
            ;=========================================================
             if n ne 0 then begin
-              append_array, site_time, time_val2
+              append_array, mu_time, time_val2
               append_array, zon_wind, zon_wind_data
               append_array, mer_wind, mer_wind_data
               append_array, zon_thermal, zon_thermal_data
@@ -239,7 +240,7 @@ endif else file_names=fns
     ;
     ;Append data of time and wind data at the last time in each file:
     ;================================================================
-    append_array, site_time, time_val2+3600
+    append_array, mu_time, time_val2+3600
     append_array, zon_wind, zon_wind_data
     append_array, mer_wind, mer_wind_data
     append_array, zon_thermal, zon_thermal_data

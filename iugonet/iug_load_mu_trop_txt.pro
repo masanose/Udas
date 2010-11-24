@@ -196,10 +196,9 @@ for ii=0,n_elements(parameters)-1 do begin
    ;Store data in TPLOT variables:
    ;******************************
        acknowledgstring = ''
-
+       o=0
        if time ne 0 then begin
-          if parameters[iii] eq 'uwnd' || 'vwnd' || 'wwnd' || 'wdt1' || 'wdt2' || 'wdt3' || 'wdt4' || 'wdt5' then o=0
-          if parameters[iii] eq 'pwr1' || 'pwr2' || 'pwr3' || 'pwr4' || 'pwr5' then o=1
+          if strmid(parameters[iii],0,2) eq 'pw' then o=1
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
           options,'iug_mu_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
