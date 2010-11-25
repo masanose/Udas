@@ -51,7 +51,7 @@
 ;**************************
 ;***** Main Procedure *****
 ;**************************
-pro iug_load_iprt_sun, site=site, datatype = datatype, $
+pro iug_load_iprt, site=site, datatype = datatype, $
                            trange = trange, verbose = verbose, $
                            downloadonly = downloadonly
 

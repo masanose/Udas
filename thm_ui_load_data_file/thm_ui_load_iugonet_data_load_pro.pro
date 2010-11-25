@@ -42,7 +42,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;load data of Iitate Planetary Radio Telescope
   if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
      par_names=parameters
-     iug_load_tohokuu_iprt_sun, site =site_or_param, datatype=datatype, trange = timeRange
+     iug_load_iprt, site =site_or_param, datatype=datatype, trange = timeRange
   endif
   
   ;load data of geomagnetic field index
