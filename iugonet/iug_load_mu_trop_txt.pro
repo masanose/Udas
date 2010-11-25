@@ -198,7 +198,7 @@ for ii=0,n_elements(parameters)-1 do begin
        acknowledgstring = ''
        o=0
        if time ne 0 then begin
-          if strmid(parameters[iii],0,2) eq 'pw' then o=1
+          if strmid(parameters[ii],0,2) eq 'pw' then o=1
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
           options,'iug_mu_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
