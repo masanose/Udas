@@ -252,7 +252,7 @@ endfor
    ;******************************
    ;Store data in TPLOT variables:
    ;******************************
-   if n_elements(beam) gt 0 then begin
+   if n_elements(ear_time) gt 1 then begin
       bname2=strarr(n_elements(beam))
       bname=strarr(n_elements(beam))
       pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))

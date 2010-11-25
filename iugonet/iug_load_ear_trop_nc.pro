@@ -270,7 +270,7 @@ for j=0,n_elements(local_paths)-1 do begin
     
 endfor
 
-  if n_elements(beam) gt 0 then begin
+  if n_elements(ear_time) gt 1 then begin
    ; Definition of arrary names
      bname2=strarr(n_elements(beam))
      bname=strarr(n_elements(beam))
