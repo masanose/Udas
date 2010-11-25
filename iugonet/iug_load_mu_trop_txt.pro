@@ -120,10 +120,6 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===============
       s=''
       u=''
-      altitude = fltarr(120)
-      data = strarr(121)
-      data2 = fltarr(1,120)
-      time = dblarr(1)
 
     ; Initialize data and time buffer
       mu_time=0
@@ -144,15 +140,15 @@ for ii=0,n_elements(parameters)-1 do begin
     ;Read information of altitude:
     ;=============================
           readf, lun, s
-          height = float(strsplit(s,',',/extract))
-    
-          for j=0,119 do begin
-              altitude[j] = height[j+1]
+          h_data = strsplit(s,',',/extract)
+          
+          altitude = fltarr(n_elements(h_data)-1)
+          for j=0,n_elements(h_data)-2 do begin
+              altitude[j] = float(h_data[j+1])
           endfor
     ;
     ;Loop on readdata:
     ;=================
-          k=0
           while(not eof(lun)) do begin
              readf,lun,s
              ok=1
@@ -160,7 +156,7 @@ for ii=0,n_elements(parameters)-1 do begin
              if ok && keyword_set(s) then begin
                 dprint,s ,dlevel=5
                 data = strsplit(s,',',/extract)
-         
+                data2 = fltarr(n_elements(data)-1)
             ;Calcurate time:
             ;==============
                 u=data(0)
@@ -170,10 +166,10 @@ for ii=0,n_elements(parameters)-1 do begin
                 hour = strmid(u,11,2)
                 minute = strmid(u,14,2)  
             ;====convert time from LT to UT      
-                time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
+                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
             ;
-                for j=0,119 do begin
+                for j=0,n_elements(h_data)-2 do begin
                     a = float(data[j+1])
                     wbad = where(a eq 999,nbad)
                     if nbad gt 0 then a[wbad] = !values.f_nan

@@ -120,8 +120,6 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===============
       s=''
       u=''
-      data2 = fltarr(1,120)
-      time = dblarr(1)
 
     ; Initialize data and time buffer
       ear_time=0
@@ -142,8 +140,7 @@ for ii=0,n_elements(parameters)-1 do begin
     ;Read information of altitude:
     ;=============================
           readf, lun, s
-          h_data = strsplit(s,',',/extract)
-          
+          h_data = strsplit(s,',',/extract)  
           altitude = fltarr(n_elements(h_data)-1)
           for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])
@@ -151,7 +148,6 @@ for ii=0,n_elements(parameters)-1 do begin
     ;
     ;Loop on readdata:
     ;=================
-          k=0
           while(not eof(lun)) do begin
              readf,lun,s
              ok=1
@@ -159,7 +155,7 @@ for ii=0,n_elements(parameters)-1 do begin
              if ok && keyword_set(s) then begin
                 dprint,s ,dlevel=5
                 data = strsplit(s,',',/extract)
-         
+                data2 = fltarr(n_elements(data)-1)
             ;Calcurate time:
             ;==============
                 u=data(0)
