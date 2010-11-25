@@ -249,11 +249,11 @@ for ii=0,n_elements(parameters)-1 do begin
       append_array, dpl1, dpl1_ear
       append_array, pn1, pnoise1_ear
 endfor
-    print, n_elements(ear_time),n_elements(pwr1[0,*,*])
+
    ;******************************
    ;Store data in TPLOT variables:
    ;******************************
-   if n_elements(beam) gt 0 then begin
+   if n_elements(ear_time) gt 1 then begin
       bname2=strarr(n_elements(beam))
       bname=strarr(n_elements(beam))
       pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
