@@ -140,8 +140,7 @@ for ii=0,n_elements(parameters)-1 do begin
     ;Read information of altitude:
     ;=============================
           readf, lun, s
-          h_data = strsplit(s,',',/extract)
-          
+          h_data = strsplit(s,',',/extract)     
           altitude = fltarr(n_elements(h_data)-1)
           for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])

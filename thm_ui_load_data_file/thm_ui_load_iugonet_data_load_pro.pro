@@ -72,7 +72,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
     if datatype eq 'magdas(ERG)' then begin
-      par_names='serc_magdas_' + site_or_param + '_mag'
+      par_names='magdas_mag_' + site_or_param 
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
     if datatype eq 'WDC_kyoto' then begin
