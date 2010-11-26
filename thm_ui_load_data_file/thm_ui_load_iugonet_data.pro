@@ -10,13 +10,11 @@
 ;$LastChangedDate: 2010-04-20 $
 ;
 ;Modifications:
-;A. Shinbori, 12/05/2010
-;A. Shinbori, 13/05/2010
-;A. Shinbori, 24/06/2010
-;A. Shinbori, 10/07/2010
-;A. Shinbori, 06/08/2010
+;A. Shinbori, 25/11/2010
 ;
-;  �e�X�g�v���V�W���Bthm_ui_load_iugonet_data.pro���������B
+;
+;
+;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_event,event
 
@@ -162,14 +160,12 @@ pro thm_ui_load_iugonet_data_event,event
           break
         endif
         
-;======== "*"�̏����̕����B�ʓ|�Ȃ̂ŁA���͊O���B ========;
 ;        ;handle '*' type, if present, introduce all
        ; if in_set(0,paramSelect) then begin
        ;   paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])
        ; endif else begin
           paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])[paramSelect]
        ; endelse
-;=========================================================;
 
 ;=======================================================================================;
 ;       Added to the following sentences of handling the parameter 2 by A. Shinbori.
@@ -226,7 +222,7 @@ pro thm_ui_load_iugonet_data_event,event
                                instrumentText,$
                                typeText,$
                                paramText,$
-                               param2Text,$ ;added to this parameter by A. Shinbori.
+                               param2Text,$ ;added this parameter by A. Shinbori.
                                [startTimeString,endTimeString]
       
       end
@@ -255,15 +251,15 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   thm_ui_match_background, tabid, rightArrow 
   thm_ui_match_background, tabid, leftArrow
   
-  ;===== event��thm_ui_load_iugonet_data_event�� =====;
+  ;===== added thm_ui_load_iugonet_data_event =====;
   topBase = Widget_Base(tabid, /Row, /Align_Top, /Align_Left, YPad=1,event_pro='thm_ui_load_iugonet_data_event') 
   
   leftBase = widget_base(topBase,/col)
   middleBase = widget_base(topBase,/col,/align_center)
   rightBase = widget_base(topBase,/col)
   
-  ;===== ���x�� =====;
-  leftLabel = widget_label(leftBase,value='IUGONET Data Selection:',/align_left)
+  ;===== Modified leftLabel =====;
+  leftLabel = widget_label(leftBase,value='IUGONET Data Selection (*provided by ERG-SC):',/align_left)
   rightLabel = widget_label(rightBase,value='Data Loaded:',/align_left)
   
   selectionBase = widget_base(leftBase,/col,/frame)
@@ -316,7 +312,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   typeArray[0] = ptr_new(['troposphere'])
   typeArray[1] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
-  typeArray[2] = ptr_new(['magdas(ERG)','210mm(ERG)','STEL_mag(ERG)','WDC_kyoto','NIPR_mag(ERG)'])
+  typeArray[2] = ptr_new(['magdas*','210mm*','STEL_mag*','WDC_kyoto','NIPR_mag*'])
   typeArray[3] = ptr_new(['Dst_index','AE_index','ASY_index','Pc3_index'])
   typeArray[4] = ptr_new(['Sun','Jupiter'])
   typeArray[5] = ptr_new(['thermosphere'])
@@ -326,7 +322,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                      
   dataBase = widget_base(selectionBase,/row)
   typeBase = widget_base(dataBase,/col)
-  typeLabel = widget_label(typeBase,value='Data Type: ')
+  typeLabel = widget_label(typeBase,value='Data Type:')
   typeList = widget_list(typeBase,$
                           value=*typeArray[0],$
                           uname='typelist',$

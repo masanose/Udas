@@ -24,10 +24,11 @@
 ;
 ;OUTPUT:
 ;  none
-;
-;    IUGONETタブが入れられるように改良。 by Y.Tanaka  20/04/2010
+;  
+;Modifications:
+;  A. Shinbori, 26/11/2010.
+;  
 ;-
-
 
 pro thm_ui_init_load_update_tree_copy,state
 
@@ -36,7 +37,7 @@ pro thm_ui_init_load_update_tree_copy,state
   tab = widget_info(state.tabBase,/tab_current)
   
   ;angular spectra panel has no data tree 
-  if tab gt 0 then tab-=1
+  if tab eq 1 then tab-=1
   
   if obj_valid(state.treeArray[tab]) then begin
     *state.treeCopyPtr = state.treeArray[tab]->getCopy()
@@ -96,19 +97,22 @@ pro thm_ui_init_load_window_event, event
   IF (Tag_Names(event, /Structure_Name) EQ 'WIDGET_TAB') THEN BEGIN
     tab = event.tab
     
-    thm_ui_time_widget_update,state.timeArray[tab]
+    thm_ui_time_widget_update,state.timeArray[tab], $
+      oneday= thm_ui_time_widget_is_oneday(state.timeArray[state.previoustab])
     
     widget_control,event.top,tlb_set_title=state.tabTitleText[tab]
     
     ;angular spectra panel has no data tree
-    if tab gt 0 then tab-=1
-    
-   if obj_valid(state.treeArray[state.previousTab]) then begin
-    *state.treeCopyPtr = state.treeArray[state.previousTab]->getCopy()
-   endif
-    
-    if obj_valid(state.treeArray[tab]) then begin
-      state.treeArray[tab]->update,from_copy=*state.treeCopyPtr
+    if state.previousTab ne 1 then begin
+      if obj_valid(state.treeArray[state.previousTab]) then begin
+        *state.treeCopyPtr = state.treeArray[state.previousTab]->getCopy()
+      endif
+    endif
+      
+    if tab ne 1 then begin
+      if obj_valid(state.treeArray[tab]) then begin
+        state.treeArray[tab]->update,from_copy=*state.treeCopyPtr
+      endif
     endif
   
     state.previousTab = tab
@@ -147,13 +151,12 @@ pro thm_ui_init_load_window_event, event
   RETURN
 end
 
-
 pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
                              dataFlag, dataButtons, timerange, treeCopyPtr
 
   compile_opt idl2, hidden
   
-  tabNum = 6   ;<===== タブの数 =====;
+  tabNum = 6 ;<===== Modified the tabNum from 5 to 6 in order to add the IUGONET tab =====;
   treeNum = tabNum - 1
   
   tlb = widget_base(/Col, Title = "THEMIS: Load Ground and Probe Data", Group_Leader = gui_id, $
@@ -166,7 +169,7 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
       goesTab = widget_base(tabBase, title='GOES Data')
       windTab = widget_base(tabBase, title='WIND Data')
       aceTab = widget_base(tabBase,title='ACE Data')
-      iugonetTab = widget_base(tabBase,title='IUGONET Data')   ;<===== IUGONETタブ =====;
+      iugonetTab = widget_base(tabBase,title='IUGONET Data')   ;<===== Added to IUGONET tab =====;
       
     ;statusBase = Widget_Base(tlb, /Row)
     bottomBase = widget_base(tlb, /Col, YPad=6, /Align_Left)
@@ -198,34 +201,36 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   
   thm_ui_load_ace_data,aceTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
                         callSequence,loadTree=aceTree,timeWidget=aceTimeWidget
-  ;=======================================
-  ;=== IUGONETタブが選ばれたときの動作 ===
-  ;=======================================
+  ;=========================================================
+  ;=== Added to the procedure 'thm_ui_load_iugonet_data' ===
+  ;=========================================================
   thm_ui_load_iugonet_data,iugonetTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
                         callSequence,loadTree=iugonetTree,timeWidget=iugonetTimeWidget
-                     
-  treeArray = objarr(treeNum)
+                                                  
+
+  treeArray = objarr(treeNum+1)
   timeArray = lonarr(tabNum)
   
   treeArray[0] = themisTree
-  treeArray[1] = goesTree
-  treeArray[2] = windTree
-  treeArray[3] = aceTree 
-  treeArray[4] = iugonetTree  ;<===== IUGONET Tree =====;
+  treeArray[1] = obj_new() ;filler obj, should not be referenced 
+  treeArray[2] = goesTree
+  treeArray[3] = windTree
+  treeArray[4] = aceTree 
+  treeArray[5] = iugonetTree  ;<===== Added to IUGONET Tree =====;  
   
   timeArray[0] = loadTimeWidget
   timeArray[1] = specTimeWidget
   timeArray[2] = goesTimeWidget
   timeArray[3] = windTimeWidget
   timeArray[4] = aceTimeWidget
-  timeArray[5] = iugonetTimeWidget   ;<===== IUGONET TimeWidget =====;
+  timeArray[5] = iugonetTimeWidget   ;<===== Added to IUGONET TimeWidget =====;  
   
   tabTitleText = ["Themis: Load Ground and Probe Data",$
                   "Themis: Load Derived Particle Energy and Angular Spectra",$
                   "GOES: Load Data",$
                   "WIND: Load Data",$
                   "ACE: Load Data",$
-                  "IUGONET: Load Data"]   ;<===== IUGONET load ウインドウのタイトル =====;
+                  "IUGONET: Load Data"]  ;<===== Added to the comment of IUGONET load Data=====;
 
   state = {tlb:tlb, gui_id:gui_id,tabBase:tabBase, historyWin:historyWin, statusText:statusText,treeArray:treeArray,timeArray:timeArray,treeCopyPtr:treeCopyPtr,previousTab:0,tabTitleText:tabTitleText}
 

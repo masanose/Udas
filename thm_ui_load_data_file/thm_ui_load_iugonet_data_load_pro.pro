@@ -10,11 +10,10 @@
 ;$LastChangedDate: 2010-04-20 $
 ; 
 ;Modifications:
-;A. SHinbori, 12/05/2010
-;A. SHinbori, 10/07/2010
+;A. Shinbori, 12/05/2010
+;A. Shinbori, 10/07/2010
+;A. Shinbori, 25/11/2010
 ;
-;  �e�X�g�v���V�W���Bthm_ui_load_wind_data.pro���������B
-;  �Ƃ肠�����A�������B
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
                          instrument,$
@@ -37,7 +36,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
 
   ;====================================
-  ;=== �����ŁAload�v���V�W����
+  ;=== Load data of the IUGONET data
   ;====================================
   ;load data of Iitate Planetary Radio Telescope
   if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
@@ -71,7 +70,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       endif
     endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
-    if datatype eq 'magdas(ERG)' then begin
+    if datatype eq 'magdas*' then begin
       par_names='magdas_mag_' + site_or_param 
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
@@ -79,7 +78,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       par_names='iug_gmag_wdc_min_'+site_or_param+'_'+strlowcase(strmid(parameters,0,1))
       iug_load_gmag_wdc_wdcmin, trange=timeRange, site = site_or_param
     endif
-    if datatype eq 'NIPR_mag(ERG)' then begin
+    if datatype eq 'NIPR_mag*' then begin
       par_names='nipr_hdz_1sec_'+site_or_param
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param
     endif
@@ -129,10 +128,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
   endif
   
-  ;===========================================================
-  ;=== �V����load���ꂽtplot�ϐ���T����loadedData�ɓo�^�H ===
-  ;=== �ȉ��́A�C�����K�v�I�I�I ==============================
-  ;===========================================================
+
   thm_ui_cleanup_tplot,tn_before,create_time_before=cn_before,del_vars=to_delete,new_vars=new_vars
 
   if new_vars[0] ne '' then begin
@@ -142,10 +138,6 @@ pro thm_ui_load_iugonet_data_load_pro,$
     ;loop over loaded data
     for i = 0,n_elements(new_vars)-1 do begin
     
-      ;===================================
-      ;=== loadedData��tplot�ϐ���o�^ ===
-      ;=== Tree�\��������Ō��܂�H ======
-      ;===================================
       ;result = loadedData->add(new_vars[i],mission='IUGONET',instrument=instrument,observatory=datatype)
       ;===  instrument=instrumenty->instrument=datatype, observatory=datatype->observatory=instrument  ===
        result = loadedData->add(new_vars[i],mission='IUGONET',instrument=site_or_param,observatory=instrument)
