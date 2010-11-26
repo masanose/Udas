@@ -28,6 +28,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 10/09/2010.
+;  A. Shinbori, 25/11/2010.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -69,9 +70,9 @@ site_data_dir = strsplit('/meteor/koto_h2km_t60min00_netCDF/ /meteor/winddata/se
 site_data_lastmane = strsplit('_koto.nc _serp.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire meteor radar data, we ask that you' $
+acknowledgstring = 'If you acquire meteor wind radar data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as the kototabang MW data provided by Research Institute' $
++ 'including text such as the meteor wind radar data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -287,9 +288,22 @@ for ii=0,n_elements(site_code)-1 do begin
   endif
   jj=n_elements(local_paths) 
 endfor 
-print,'**********************************************************************************
+
+print,'******************************
 print, 'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire meteor wind radar data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as meteor wind radar data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.' 
 
 end
 

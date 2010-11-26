@@ -27,7 +27,7 @@
 ;  A. Shinbori, 10/09/2010.
 ;
 ;Modifications:
-;
+;  A. Shinbori, 25/11/2010.
 ;
 ;  
 ;Acknowledgment:
@@ -70,5 +70,16 @@ for i=0, n_elements(site_code)-1 do begin
   if site_code[i] eq 'pon' then iug_load_mf_rish_pon_txt, site = site_code[i], downloadonly=downloadonly, trange=trange, verbose=verbose
 endfor
 
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire MF radar data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as MF radar data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end

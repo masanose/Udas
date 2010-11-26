@@ -32,7 +32,7 @@
 ;  A. Shinbori, 12/08/2010.
 ;  
 ;Modifications:
-;  
+;  A. Shinbori, 26/11/2010.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -228,9 +228,21 @@ print, parameters
 mu_time=0
 meso_nl=0
   
-print,'**********************************************************************************
+print,'******************************
 print, 'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire MU data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as MU data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end
 

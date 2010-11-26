@@ -282,9 +282,9 @@ for ii=0,n_elements(site_code)-1 do begin
        jj=n_elements(local_paths)
 endfor 
    
-print,'******************************
+print,'*****************************
 print,'Data loading is successful!!'
-print,'******************************
+print,'*****************************
 
 ;******************************
 ;print of acknowledgement:

@@ -29,7 +29,8 @@
 ; A. Shinbori, 19/09/2010.
 ;
 ;Modifications:
-;
+; A. Shinbori, 25/11/2010.
+; 
 ;Acknowledgment:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -327,5 +328,18 @@ pn1 = 0
 
 jj=n_elements(local_paths)
 endfor
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire EAR data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as EAR data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
+
 end
 

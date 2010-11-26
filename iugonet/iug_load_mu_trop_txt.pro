@@ -29,7 +29,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 10/09/2010.
-;  
+;  A. Shinbori, 25/11/2010.
 ;Acknowledgment:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -212,10 +212,20 @@ for ii=0,n_elements(parameters)-1 do begin
   jj=n_elements(local_paths)
 endfor
 
-
-print,'**********************************************************************************
+print,'*****************************
 print,'Data loading is successful!!'
-print,'**********************************************************************************
+print,'*****************************
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire MU data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as MU data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.' 
 
 end
 

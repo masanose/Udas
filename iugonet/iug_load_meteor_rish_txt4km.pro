@@ -27,6 +27,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 10/09/2010.
+;  A. Shinbori, 26/11/2010.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -36,7 +37,7 @@
 ;-
 
 pro iug_load_meteor_rish_txt4km, site=site, datatype = datatype, $
-                              downloadonly=downloadonly, trange=trange, verbose=verbose
+                                 downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -148,6 +149,7 @@ for ii=0,n_elements(site_code)-1 do begin
        ;
        ;Loop on readdata:
        ;=================
+           n=0
            while(not eof(lun)) do begin
              readf,lun,s
              ok=1
@@ -292,9 +294,21 @@ for ii=0,n_elements(site_code)-1 do begin
    jj=n_elements(local_paths)
 endfor 
 
-print,'**********************************************************************************
+print,'******************************
 print, 'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire meteor wind radar data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as meteor wind radar data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end
 

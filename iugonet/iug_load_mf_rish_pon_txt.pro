@@ -27,7 +27,7 @@
 ;  A. Shinbori, 10/09/2010.
 ;
 ;Modifications:
-;
+;  A. Shinbori, 26/11/2010.
 ;
 ;  
 ;Acknowledgment:
@@ -214,9 +214,21 @@ if(downloadonly eq 0) then begin
 
 endif
           
-print,'**********************************************************************************
+print,'******************************
 print, 'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire MF radar data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as MF radar data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end
 

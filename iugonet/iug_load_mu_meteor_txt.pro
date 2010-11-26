@@ -29,7 +29,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 15/10/2010.
-; 
+;  A. Shinbori, 26/11/2010.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -298,9 +298,21 @@ if mu_time[0] ne 0 then begin
   tdegap,'iug_mu_meteor_vwndsig',/overwrite
   tdegap,'iug_mu_meteor_mwnum',/overwrite 
              
-print,'**********************************************************************************
+print,'******************************
 print, 'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire MU data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as MU data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end
 

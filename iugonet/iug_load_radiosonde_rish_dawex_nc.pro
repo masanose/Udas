@@ -28,6 +28,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 19/09/2010.
+;  A. Shinbori, 26/11/2010.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -67,9 +68,9 @@ print, site_code
 site_data_premane = strsplit('nD nG nK',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire meteor radar data, we ask that you' $
+acknowledgstring = 'If you acquire the Dawin campagin data of radio sonde, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as the dawin donde campaine data provided by Research Institute' $
++ 'including text such as the Dawin campagin data of radio sonde provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -316,9 +317,21 @@ for ii=0,n_elements(site_code)-1 do begin
   jj=n_elements(local_paths)
 endfor 
 
-print,'**********************************************************************************
+print,'******************************
 print, 'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire the Dawin campagin data of radio sonde, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as the Dawin campagin data of radio sonde provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end
 
