@@ -1,8 +1,8 @@
 ;+
-;Procedure: iug_load_iprt_sun,
-;  iug_load_iprt_sun, site = site, datatype = datatype, $
-;                         trange = trange, verbose = verbose, $
-;                         downloadonly = downloadonly
+;Procedure: iug_load_iprt,
+;  iug_load_iprt, site = site, datatype = datatype, $
+;           trange = trange, verbose = verbose, $
+;           downloadonly = downloadonly
 ;Purpose:
 ;  This procedure allows you to download and plot TOHOKUU_RADIO OBSERVATION data on TDAS.
 ;  This is a sample code for IUGONET analysis software.
@@ -23,7 +23,7 @@
 ;  fits_read,sxpar,
 ;
 ;Example:
-;  timespan,'2010-02-07',/day
+;  timespan,'2010-11-01',/day
 ;  iug_load_iprt_sun
 ;  tplot_names
 ;  zlim,'iprt_sun_L',0,12
@@ -39,6 +39,7 @@
 ;  8-April-2010, abeshu, minor update.
 ;  27-JUL.-2010, revised for this procedure by M. Kagitani
 ;  12-NOV.-2010, revised by M. Kagitani
+;  25-NOV.-2010, renamed to 'iug_load_iprt.pro' by M. Kagitani
 ;
 ;Acknowledgment:
 ;
@@ -70,13 +71,12 @@ if ~keyword_set(datatype) then datatype='Sun'
 if ~keyword_set(site) then site='iit'
 
 ; validate datatype
-vns=['Sun','Jupiter']
+vns=['Sun'];vns=['Sun','Jupiter']
 if size(datatype,/type) eq 7 then begin
   datatype=thm_check_valid_name(datatype,vns, $
                                 /ignore_case, /include_all);, /no_warning)
 
 if datatype[0] eq '' then begin
-    stop
     return ;<=== NOTE FOR THIS LINE !!!
   endif
 endif else begin
@@ -110,22 +110,20 @@ acknowledgstring = 'Please contact Dr. Hiroaki Misawa.'
 for i=0, nsites-1 do begin
   ; define file names
   pathformat= strupcase(strmid(foo_sites[i],0,3)) + '/' + $
-              'iprt_sun_YYYYMMDD'
-  relpathnames = file_dailynames(file_format=pathformat, $
+            'YYYY/YYYYMMDD_IPRT'
+
+  relpathnames = file_dailynames(file_format='YYYY/YYYYMMDD_IPRT', $
                                  trange=trange, addmaster=addmaster)+'.fits'
-  ;relpathnames = file_monthlynames_onw(file_format=pathformat, $
-  ;                               trange=trange, addmaster=addmaster)
 
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/'
-  source.remote_data_dir = 'http://pparc.gp.tohoku.ac.jp/whi/data/'
-
-  ;print,relpathnames
+  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/IIT/'
+  source.remote_data_dir = 'http://radio.gp.tohoku.ac.jp/db/IPRT-SUN/DATA2/'
 
   ; download data
-  local_files = file_retrieve(relpathnames, _extra=source)
+  ;local_files = file_retrieve(relpathnames, _extra=source)
+  local_files = file_retrieve(relpathnames, _extra=source, /last_version)
 
   ; if downloadonly set, go to the top of this loop
   if keyword_set(downloadonly) then continue
@@ -135,7 +133,6 @@ for i=0, nsites-1 do begin
   ;===================================
   print,(local_files)
 
-
   for j=0,n_elements(local_files)-1 do begin
     file = local_files[j]
 
@@ -144,16 +141,14 @@ for i=0, nsites-1 do begin
       fexist = 1
     endif else begin
       dprint,'Loading IPRT SOLAR RADIO DATA file ',file,' not found. Skipping'
+      stop
       continue
     endelse
 
     ; create base time
-    year = (strmid(relpathnames[j],strlen(relpathnames[j])-10,4))
-    month = (strmid(relpathnames[j],strlen(relpathnames[j])-6,2))
-    ;year = (strmid(relpathnames[j],21,4))
-    ;month = (strmid(relpathnames[j],25,2))
+    year = (strmid(relpathnames[j],strlen(relpathnames[j])-18,4))
+    month = (strmid(relpathnames[j],strlen(relpathnames[j])-14,2))
     ;day = (strmid(relpathnames[j],27,2))
-    ;day = '01'
     ;basetime = time_double(year+'-'+month+'-'+day)
 
 
