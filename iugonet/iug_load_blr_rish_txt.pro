@@ -32,7 +32,7 @@
 ;  
 ;Modifications:
 ;  A. Shinbori, 10/09/2010.
-;  
+;  A. Shinbori, 25/11/2010.
 ;Acknowledgment:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -261,7 +261,7 @@ for ii=0,n_elements(site_code)-1 do begin
              if parameters[iii] eq 'pwr4' then o=1
              if parameters[iii] eq 'pwr5' then o=1
  
-             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring))
+             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
              store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
              options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$
                      ztitle=parameters[iii]+'!C['+unit_all[o]+']'
@@ -273,6 +273,7 @@ for ii=0,n_elements(site_code)-1 do begin
           ;Clear time and data buffer:
           blr_data = 0
           blr_time = 0
+          
           ; add tdegap
          tdegap, 'iug_blr_'+site_code[ii]+'_'+parameters[iii],/overwrite
        endif
@@ -281,9 +282,21 @@ for ii=0,n_elements(site_code)-1 do begin
        jj=n_elements(local_paths)
 endfor 
    
-print,'**********************************************************************************
+print,'******************************
 print,'Data loading is successful!!'
-print,'**********************************************************************************
+print,'******************************
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire BLR data, we ask that you acknowledge us'
+print, 'in your use of the data. This may be done by including text' 
+print, 'such as BLR data provided by Research Institute for Sustainable' 
+print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
+print, 'a copy of the relevant publications.'
 
 end
 
