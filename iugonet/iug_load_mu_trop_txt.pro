@@ -197,7 +197,7 @@ for ii=0,n_elements(parameters)-1 do begin
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
           options,'iug_mu_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
-          options,'iug_mu_'+parameters[ii], labels='MU-'+parameters[ii]
+          options,'iug_mu_'+parameters[ii], labels='MU-trop [km]'
        endif   
 
        ; add options
