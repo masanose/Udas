@@ -155,7 +155,7 @@ for ii=0,n_elements(parameters)-1 do begin
              if ok && keyword_set(s) then begin
                 dprint,s ,dlevel=5
                 data = strsplit(s,',',/extract)
-                data2 = fltarr(n_elements(data)-1)
+                data2 = fltarr(1,n_elements(data)-1)
             ;Calcurate time:
             ;==============
                 u=data(0)
@@ -172,7 +172,7 @@ for ii=0,n_elements(parameters)-1 do begin
                     a = float(data[j+1])
                     wbad = where(a eq 999,nbad)
                     if nbad gt 0 then a[wbad] = !values.f_nan
-                    data2[k,j]=a
+                    data2[0,j]=a
                 endfor
             ;
             ;Append data of time:
@@ -197,7 +197,7 @@ for ii=0,n_elements(parameters)-1 do begin
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
           options,'iug_mu_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
-          options,'iug_mu_'+parameters[ii], labels='MU'
+          options,'iug_mu_'+parameters[ii], labels='MU-'+parameters[ii]
        endif   
 
        ; add options
