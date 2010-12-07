@@ -116,7 +116,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif
   
   ;load data of Bandary Layer Radar
-  if instrument eq 'Bandary_Layer_Radar' then begin       
+  if instrument eq 'Boundary_Layer_Radar' then begin       
      par_names='iug_blr_'+site_or_param+'_'+parameters
      iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
   endif

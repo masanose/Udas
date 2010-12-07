@@ -10,7 +10,7 @@
 ;$LastChangedDate: 2010-04-20 $
 ;
 ;Modifications:
-;A. Shinbori, 25/11/2010
+;A. Shinbori, 07/12/2010
 ;
 ;
 ;
@@ -253,19 +253,22 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   ;===== added thm_ui_load_iugonet_data_event =====;
   topBase = Widget_Base(tabid, /Row, /Align_Top, /Align_Left, YPad=1,event_pro='thm_ui_load_iugonet_data_event') 
-  
+ ; bottomBase=widget_base(topBase,/col,/align_bottom)
   leftBase = widget_base(topBase,/col)
   middleBase = widget_base(topBase,/col,/align_center)
   rightBase = widget_base(topBase,/col)
   
   ;===== Modified leftLabel =====;
-  leftLabel = widget_label(leftBase,value='IUGONET Data Selection (* in collaboration with ERG-SC):',/align_left)
+  leftLabel = widget_label(leftBase,value='IUGONET Data Selection:',/align_left)
   rightLabel = widget_label(rightBase,value='Data Loaded:',/align_left)
+  
+  ;clearDataBase = widget_base(bottomBase,/align_bottom)
+ ; NotesLabel = widget_label(clearDataBase,value='* in collaboration with ERG-SC')
   
   selectionBase = widget_base(leftBase,/col,/frame)
   
   treeBase = widget_base(rightBase,/col,/frame)
-  
+
   addButton = Widget_Button(middleBase, Value=rightArrow, /Bitmap,  UValue='ADD', $
               ToolTip='Load data selection')
   minusButton = Widget_Button(middleBase, Value=leftArrow, /Bitmap, $
@@ -278,10 +281,12 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   loadTree->update,from_copy=*treeCopyPtr
   
   clearDataBase = widget_base(rightBase,/row,/align_center)
-  
   clearDataButton = widget_button(clearDataBase,value='Delete All Data',uvalue='CLEARDATA',/align_center,ToolTip='Deletes all loaded data')
-  
-  
+ 
+  ;===== Added to the left-bottom label ===========================================;
+  NotesBase = widget_base(leftBase,/row,/align_left)
+  NotesLabel = widget_label(NotesBase,value='Note: * in collaboration with ERG-SC')
+  ;================================================================================;
   timeWidget = thm_ui_time_widget(selectionBase,$
                                   statusBar,$
                                   historyWin,$
@@ -296,7 +301,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   instrumentLabel = widget_label(instrumentBase,value='Instrument Type: ')
 
-  instrumentArray = ['Bandary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
+  instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
                      'Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar','Radio_sonde']
   
   instrumentCombo = widget_combobox(instrumentBase,$
@@ -312,12 +317,12 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   typeArray[0] = ptr_new(['troposphere'])
   typeArray[1] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
-  typeArray[2] = ptr_new(['magdas*','210mm*','STEL_mag*','WDC_kyoto','NIPR_mag*'])
+  typeArray[2] = ptr_new(['magdas','210mm*','WDC_kyoto','NIPR_mag*'])
   typeArray[3] = ptr_new(['Dst_index','AE_index','ASY_index','Pc3_index'])
   typeArray[4] = ptr_new(['Sun','Jupiter'])
   typeArray[5] = ptr_new(['thermosphere'])
   typeArray[6] = ptr_new(['thermosphere'])
-  typeArray[7] = ptr_new(['troposphere','mesosphere','ionosphere','meteor_wind'])  
+  typeArray[7] = ptr_new(['troposphere','meteor_wind'])  
   typeArray[8] = ptr_new(['troposphere'])
                                      
   dataBase = widget_base(selectionBase,/row)
@@ -343,7 +348,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray = ptrarr(9)
   paramArray[0] = ptr_new(ptrarr(1))
   paramArray[1] = ptr_new(ptrarr(5))
-  paramArray[2] = ptr_new(ptrarr(5))
+  paramArray[2] = ptr_new(ptrarr(4))
   paramArray[3] = ptr_new(ptrarr(4))
   paramArray[4] = ptr_new(ptrarr(2))
   paramArray[5] = ptr_new(ptrarr(1))
@@ -369,23 +374,18 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                  'ktb','ktn','lmt','lnp','mgd','mcq','msr','mut','onw', $
                                  'ppi','ptk','ptn','rik','tik','wep','wew','wtk','yak', $
                                  'yap','ymk','zgn','zyk'])
-  (*paramArray[2])[2] = ptr_new(['kag','kot','msr','rik'])
-  (*paramArray[2])[3] = ptr_new(['kak'])
-  (*paramArray[2])[4] = ptr_new(['syo'])
+  (*paramArray[2])[2] = ptr_new(['kak'])
+  (*paramArray[2])[3] = ptr_new(['syo'])
   (*paramArray[3])[0] = ptr_new(['WDC_kyoto'])
   (*paramArray[3])[1] = ptr_new(['WDC_kyoto'])
   (*paramArray[3])[2] = ptr_new(['WDC_kyoto'])
   (*paramArray[3])[3] = ptr_new(['Tohoku_U'])
   (*paramArray[4])[0] = ptr_new(['iit']) 
   (*paramArray[4])[1] = ptr_new(['iit']) 
-  (*paramArray[5])[0] = ptr_new(['pam','pon','syo'])                              
+  (*paramArray[5])[0] = ptr_new(['pam','pon'])                              
   (*paramArray[6])[0] = ptr_new(['ktb','srp'])
   (*paramArray[7])[0] = ptr_new(['mur_standard'])
-  ;(*paramArray[7])[1] = ptr_new(['doppler_velocity','power','spectrum','residual','condition','noise_level','jamming'])
-  (*paramArray[7])[1] = ptr_new(['TBD'])
-  ;(*paramArray[7])[2] = ptr_new(['iono_dpl','iono_pwr','iono_spec_width','iono_pn'])
-  (*paramArray[7])[2] = ptr_new(['TBD'])
-  (*paramArray[7])[3] = ptr_new(['mur_special'])  
+  (*paramArray[7])[1] = ptr_new(['mur_special'])  
   (*paramArray[8])[0] = ptr_new(['daw','gdp','khc','sgk','ktb'])
                  
   paramBase = widget_base(dataBase,/col)
@@ -408,7 +408,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   param2Array = ptrarr(9)
   param2Array[0] = ptr_new(ptrarr(1))
   param2Array[1] = ptr_new(ptrarr(5))
-  param2Array[2] = ptr_new(ptrarr(5))
+  param2Array[2] = ptr_new(ptrarr(4))
   param2Array[3] = ptr_new(ptrarr(4))
   param2Array[4] = ptr_new(ptrarr(2))
   param2Array[5] = ptr_new(ptrarr(1))
@@ -428,24 +428,18 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'pn2','pn3','pn4','pn5','pn6','pn7','pn8']) 
   (*param2Array[2])[0] = ptr_new(['*','H','D','Z','F'])
   (*param2Array[2])[1] = ptr_new(['*','H','D','Z'])
-  (*param2Array[2])[2] = ptr_new(['*','H','D','Z'])
-  (*param2Array[2])[3] = ptr_new(['*','H(X)','D(Y)','Z','F'])
-  (*param2Array[2])[4] = ptr_new(['*','H','D','Z'])  
+  (*param2Array[2])[2] = ptr_new(['*','H(X)','D(Y)','Z','F'])
+  (*param2Array[2])[3] = ptr_new(['*','H','D','Z'])  
   (*param2Array[3])[0] = ptr_new(['*','dst'])
   (*param2Array[3])[1] = ptr_new(['*','ae','al','ao','au','ax'])
   (*param2Array[3])[2] = ptr_new(['*','asy_d','asy_h','sym_d','sym_h'])
   (*param2Array[3])[3] = ptr_new(['*','onw_pc3'])
   (*param2Array[4])[0] = ptr_new(['*','iprt_sun_L','iprt_sun_R'])
   (*param2Array[4])[1] = ptr_new(['*','iprt_jupiter_L','iprt_jupiter_R'])                             
-  (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd','zonal_vel','merid_vel','zonal_std','merid_std'])                              
+  (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
   (*param2Array[6])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
   (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
-  ;(*param2Array[7])[1] = ptr_new(['*','beam1','beam2','beam3','beam4','beam5'])
-  ;(*param2Array[7])[2] = ptr_new(['*','beam1','beam2','beam3','beam4','beam5'])
-  (*param2Array[7])[1] = ptr_new(['TBD'])
-  (*param2Array[7])[2] = ptr_new(['TBD'])
-  (*param2Array[7])[3] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
-
+  (*param2Array[7])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
   (*param2Array[8])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
                                    
   paramBase = widget_base(dataBase,/col)
@@ -473,7 +467,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
            instrumentArray:instrumentArray,$
            typeArray:typeArray,$
            paramArray:paramArray,$
-           param2Array:param2Array} ;;added to this parameter by A. Shinbori.
+           param2Array:param2Array} ;added to this parameter by A. Shinbori.
            
   widget_control,topBase,set_uvalue=state
                                   
