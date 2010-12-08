@@ -76,10 +76,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif
     if datatype eq 'WDC_kyoto' then begin
       par_names='iug_gmag_wdc_min_'+site_or_param+'_'+strlowcase(strmid(parameters,0,1))
-      iug_load_gmag_wdc_wdcmin, trange=timeRange, site = site_or_param
+      iug_load_gmag_wdc, trange=timeRange, site = site_or_param
     endif
     if datatype eq 'NIPR_mag*' then begin
-      par_names='nipr_hdz_1sec_'+site_or_param
+      par_names='iug_mag_'+site_or_param
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param
     endif
   endif 
