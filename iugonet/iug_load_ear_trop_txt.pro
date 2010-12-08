@@ -124,6 +124,7 @@ for ii=0,n_elements(parameters)-1 do begin
     ; Initialize data and time buffer
       ear_time=0
       ear_data=0
+      time=0
     ;Loop on files (zonal component): 
     ;================================
 
