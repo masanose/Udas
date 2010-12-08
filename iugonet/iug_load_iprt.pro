@@ -79,7 +79,6 @@ if size(datatype,/type) eq 7 then begin
 if datatype[0] eq '' then begin
   dprint,'IPRT file ',file,' not found. Skipping'
     ;continue
-;    return ;<=== NOTE FOR THIS LINE !!!
   endif
 endif else begin
   dprint,'DATATYPE must be of string type.'
