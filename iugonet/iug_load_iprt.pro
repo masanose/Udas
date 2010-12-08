@@ -77,11 +77,13 @@ if size(datatype,/type) eq 7 then begin
                                 /ignore_case, /include_all);, /no_warning)
 
 if datatype[0] eq '' then begin
-    return ;<=== NOTE FOR THIS LINE !!!
+  dprint,'IPRT file ',file,' not found. Skipping'
+    ;continue
+;    return ;<=== NOTE FOR THIS LINE !!!
   endif
 endif else begin
-  message,'DATATYPE must be of string type.',/info
-  return
+  dprint,'DATATYPE must be of string type.'
+;  continue
 endelse
 
 vsnames = 'iit'
@@ -141,7 +143,6 @@ for i=0, nsites-1 do begin
       fexist = 1
     endif else begin
       dprint,'Loading IPRT SOLAR RADIO DATA file ',file,' not found. Skipping'
-      stop
       continue
     endelse
 
