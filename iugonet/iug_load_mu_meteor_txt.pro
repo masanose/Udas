@@ -119,12 +119,12 @@ endif else file_names=fns
 ;Read the files:
 ;===============
  s=''
- height = fltarr(36)
- zon_wind_data = fltarr(1,36)
- mer_wind_data = fltarr(1,36)
- zon_thermal_data = fltarr(1,36)
- mer_thermal_data = fltarr(1,36)
- meteor_num_data = fltarr(1,36)
+ height = fltarr(41)
+ zon_wind_data = fltarr(1,41)
+ mer_wind_data = fltarr(1,41)
+ zon_thermal_data = fltarr(1,41)
+ mer_thermal_data = fltarr(1,41)
+ meteor_num_data = fltarr(1,41)
  data= fltarr(5)
  time = 0
  time_val = 0
@@ -169,7 +169,7 @@ endif else file_names=fns
          ;get altitude data:
          ;=================
          alt = fix(strmid(s,9,3))
-         idx = (alt-52)/2
+         idx = (alt-70)/1
          ;get data of U, V, sigma-u, sigma-v, N-of-m:
          ;=======================================================
          data1 = strmid(s,12,55)
@@ -206,7 +206,7 @@ endif else file_names=fns
          ;appned time and data if time_val is not equal to time
          if time_val ne time then begin
            time_val=time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
-                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))          
+                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))          
            time_val2=time_val-time_diff
            if time_val2 eq 0 then time_val2=time_val+3600
            ;
@@ -221,7 +221,7 @@ endif else file_names=fns
               append_array, meteor_num, meteor_num_data
             endif
             n=n+1
-            for i=0, 35 do begin
+            for i=0, 40 do begin
               zon_wind_data(0,i)=!values.f_nan
               mer_wind_data(0,i)=!values.f_nan
               zon_thermal_data(0,i)=!values.f_nan
@@ -248,8 +248,8 @@ endif else file_names=fns
     append_array, meteor_num, meteor_num_data
   endfor
 
-  for g=0,35 do begin         
-    height[g]=float(52+g*2) 
+  for g=0,40 do begin         
+    height[g]=float(70+g*1) 
   endfor
  ;******************************
  ;Store data in TPLOT variables:
