@@ -276,6 +276,7 @@ for i=0, nsites-1 do begin
                          ytitle = 'Onw', $
                          ysubtitle = '', $
                          title = 'Onagawa Pc3 index'
+    
   endif
 
   ; clear data and time buffer

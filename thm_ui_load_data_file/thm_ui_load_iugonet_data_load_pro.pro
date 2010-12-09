@@ -46,24 +46,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of geomagnetic field index
   if instrument eq 'geomagnetic_field_index' then begin
-    if datatype eq 'Dst_index' then begin
+    if datatype eq 'Dst_index' or datatype eq 'AE_index' or datatype eq 'ASY_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
-         par_names='kyoto_'+parameters
-         kyoto_load_dst, trange=timeRange
-      endif
-    endif else if datatype eq 'AE_index' then begin
-       if site_or_param eq 'WDC_kyoto' then begin 
-          kyoto_load_ae, trange=timeRange         
-          if datatype eq 'AE_index' then begin
-             par_names='kyoto_'+parameters
-          endif
-       endif
-    endif else if datatype eq 'ASY_index' then begin
-       if site_or_param eq 'WDC_kyoto' then begin
-         ;if (parameters eq 'asy_d') or (parameters eq 'asy_h') or (parameters eq 'sym_d') or (parameters eq 'sym_h')  then begin
-             par_names='iug_gmag_wdc_min_index_'+strmid(parameters,0,3)+'-'+strmid(parameters,4,1)
-             iug_load_gmag_wdc_wdcmin, trange=timeRange
-         ;endif
+         par_names='iug_'+parameters
+         iug_load_gmag_wdc, site=parameters, trange=timeRange        
       endif
     endif else if datatype eq 'Pc3_index' then begin            
        if site_or_param eq 'Tohoku_U' then begin
@@ -77,8 +63,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
       par_names='magdas_mag_' + site_or_param 
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
+    if datatype eq '210mm*' then begin
+      par_names='mm210_hdz_' + site_or_param+'_'+parameters 
+      erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=parameters
+    endif
     if datatype eq 'WDC_kyoto' then begin
-      par_names='iug_gmag_wdc_min_'+site_or_param+'_'+strlowcase(strmid(parameters,0,1))
+      par_names='iug_mag_'+site_or_param
       iug_load_gmag_wdc, trange=timeRange, site = site_or_param
     endif
     if datatype eq 'NIPR_mag*' then begin
@@ -100,9 +90,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;load data of Medium Frequency radar
   if instrument eq 'Medium_Frequency_radar' then begin
      iug_load_mf_rish_data, datatype = datatype, site =site_or_param, trange = timeRange
-     iug_load_mf_nipr, site = site_or_param, trange = timeRange
      if site_or_param eq 'pam' or 'pon' then par_names='iug_mf_'+site_or_param+'_'+parameters 
-     if site_or_param eq 'syo' then par_names='mf_'+site_or_param+'_'+parameters 
   endif
    
   ;load data of Meteor Wind radar
