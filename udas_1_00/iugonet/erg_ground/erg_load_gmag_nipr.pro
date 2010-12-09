@@ -10,11 +10,6 @@
 ; Purpose:
 ;   Loading the fluxgate magnetometer data obtained by NIPR.
 ;
-; Note:
-;   At the moment, CDF files are avaible only for Syowa data (syo) 
-;   with 1-sec resolution in the interval from Feb. 4, 2003 to 
-;   Jan. 31, 2010.
-;
 ; KEYWORDS:
 ;   site  = Observatory name, example, erg_load_gmag_nipr, site='syo',
 ;           the default is 'all', i.e., load all available stations.
@@ -38,6 +33,14 @@
 ; EXAMPLE:
 ;   erg_load_gmag_nipr, site='syo', $
 ;                 trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
+;
+; NOTE: There is an alias of this procedure named "iug_load_gmag_nipr".
+;   Some load procedures for the ground-based observational data 
+;   in the  ERG mission, named "erg_load_???", can be also called  
+;   by "iug_load_???", because these data are related to the both 
+;   ERG and IUGONET projects.
+;   For more information, see http://www.iugonet.org/en/ 
+;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
 ;
 ; Written by H. Tadokoro, June 1, 2010
 ; Revised by Y.-M. Tanaka, December 6, 2010 (ytanaka at nipr.ac.jp)

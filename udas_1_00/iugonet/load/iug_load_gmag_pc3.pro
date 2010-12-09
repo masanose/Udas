@@ -75,14 +75,7 @@ if not keyword_set(file_format) then file_format = 'YYYYMM'
 
 
 tr = timerange(trange)
-
-mmtr = floor( tr / res + [0d,.999d] )
-n = (mmtr[1]-mmtr[0])  > 1
-
-times = (dindgen(n) + mmtr[0]) * res
-;if keyword_set(addmaster) then times = [!values.d_nan,times]
-
-dates = time_string( times , tformat=file_format)
+dates = time_string( tr , tformat=file_format)
 
 if keyword_set(dir_format) then  datedir = time_string(times,tformat=dir_format)  else datedir=''
 
@@ -108,7 +101,7 @@ end
 pro iug_load_gmag_pc3, site=site, datatype = datatype, $
                            trange = trange, verbose = verbose, $
                            downloadonly = downloadonly
-
+                           
 ;*************************
 ;***** Keyword check *****
 ;*************************
@@ -204,7 +197,6 @@ for i=0, nsites-1 do begin
     day = '01'
     basetime = time_double(year+'-'+month+'-'+day)
 
-
     ;===================================
     buf = fltarr(6)
     line=''
@@ -215,7 +207,9 @@ for i=0, nsites-1 do begin
     readf,lun,line ; file header
     readf,lun,line ; file header
     readf,lun,yy,mm,dd,doy,pc3i,pc3p
+    Nday=1
     while not eof(lun) do begin
+      Nday = Nday + 1
       readf,lun,buf
       yy=[yy,buf[0]]
       mm=[mm,buf[1]]
@@ -227,7 +221,7 @@ for i=0, nsites-1 do begin
     free_lun,lun
 
     append_array,databuf,pc3i
-    append_array,timebuf,basetime + dindgen(31)*86400d
+    append_array,timebuf,basetime + (dindgen(Nday))*86400d
     ;===================================
 ;stop
 ;    ; open file
