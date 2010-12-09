@@ -108,7 +108,7 @@ end
 pro iug_load_gmag_pc3, site=site, datatype = datatype, $
                            trange = trange, verbose = verbose, $
                            downloadonly = downloadonly
-
+                           
 ;*************************
 ;***** Keyword check *****
 ;*************************

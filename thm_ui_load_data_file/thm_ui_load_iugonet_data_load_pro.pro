@@ -54,19 +54,22 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif else if datatype eq 'AE_index' then begin
        if site_or_param eq 'WDC_kyoto' then begin 
           kyoto_load_ae, trange=timeRange         
-          if datatype eq 'AE_index' then par_names='kyoto_'+parameters
+          if datatype eq 'AE_index' then begin
+             par_names='kyoto_'+parameters
+          endif
        endif
     endif else if datatype eq 'ASY_index' then begin
        if site_or_param eq 'WDC_kyoto' then begin
-         if (parameters eq 'asy_d') or (parameters eq 'asy_h') or (parameters eq 'sym_d') or (parameters eq 'sym_h')  then begin
+         ;if (parameters eq 'asy_d') or (parameters eq 'asy_h') or (parameters eq 'sym_d') or (parameters eq 'sym_h')  then begin
              par_names='iug_gmag_wdc_min_index_'+strmid(parameters,0,3)+'-'+strmid(parameters,4,1)
              iug_load_gmag_wdc_wdcmin, trange=timeRange
-         endif
+         ;endif
       endif
-    endif else if datatype eq 'other' then begin            
+    endif else if datatype eq 'Pc3_index' then begin            
        if site_or_param eq 'Tohoku_U' then begin
-          par_names=parameters
-          iug_load_gmag_pc3, trange=timeRange, site='onw'
+          iug_load_gmag_pc3, site='onw',trange=timeRange 
+          if datatype eq 'Pc3_index' then par_names='iug_'+parameters
+          print, par_names
       endif
     endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
