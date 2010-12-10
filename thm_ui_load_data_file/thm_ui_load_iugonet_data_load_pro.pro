@@ -34,7 +34,6 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
   tn_before = [tnames('*',create_time=cn_before)]
   
-
   ;====================================
   ;=== Load data of the IUGONET data
   ;====================================
@@ -46,10 +45,27 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of geomagnetic field index
   if instrument eq 'geomagnetic_field_index' then begin
-    if datatype eq 'Dst_index' or datatype eq 'AE_index' or datatype eq 'ASY_index' then begin
+    if datatype eq 'ASY_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
          par_names='iug_'+parameters
          iug_load_gmag_wdc, site=parameters, trange=timeRange        
+      endif
+    endif else if datatype eq 'Dst_index' or datatype eq 'AE_index' then begin
+      if site_or_param eq 'WDC_kyoto' then begin
+        case datatype of
+          'Dst_index': vns='dst'
+          'AE_index':  vns='ae'
+        endcase
+        if parameters[0] eq 'prov' then begin
+          par_names='iug_'+vns+'_prov'
+          iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+        endif else if parameters[0] eq 'final' then begin
+          par_names='iug_'+vns
+          iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+        endif else begin
+          iug_load_gmag_wdc, site=vns, trange=timeRange
+          par_names=tnames('iug_'+vns+'*')
+        endelse
       endif
     endif else if datatype eq 'Pc3_index' then begin            
        if site_or_param eq 'Tohoku_U' then begin
@@ -64,7 +80,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif
     if datatype eq '210mm*' then begin
       vns=parameters
-      if parameters[0] eq ' ' then vns=['1min']
+      if parameters[0] eq '*' then vns=['1min']
       for i=0, n_elements(vns)-1 do begin
           par_names='mm210_mag_' + site_or_param+'_'+vns[i]+'_hdz'  
           erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns[i]
@@ -157,15 +173,3 @@ pro thm_ui_load_iugonet_data_load_pro,$
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
   endelse   
 end
-dif
-    
-  if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
-    store_data,to_delete,/delete
-  endif
-     
-  if loaded eq 1 then begin
-     statusBar->update,'IUGONET Data Loaded Successfully'
-     historyWin->update,'IUGONET Data Loaded Successfully'
-  endif else begin
-     statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
-     historyWin->update,'No IUGONET Data Loaded.  Data may not b
