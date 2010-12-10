@@ -118,8 +118,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;load data of Radio sonde 
   if instrument eq 'Radio_sonde' then begin
      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
-     iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange      
-     iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
+     iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange
+     if site_or_param eq 'sgk' then begin      
+        iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
+     endif
   endif
   
 

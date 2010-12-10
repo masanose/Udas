@@ -55,7 +55,6 @@ pro thm_ui_load_iugonet_data_load_pro,$
        if site_or_param eq 'Tohoku_U' then begin
           iug_load_gmag_pc3, site='onw',trange=timeRange 
           if datatype eq 'Pc3_index' then par_names='iug_'+parameters
-          print, par_names
       endif
     endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
@@ -64,8 +63,17 @@ pro thm_ui_load_iugonet_data_load_pro,$
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
     if datatype eq '210mm*' then begin
-      par_names='mm210_hdz_' + site_or_param+'_'+parameters 
+<<<<<<< HEAD
+      vns=parameters
+      if parameters[0] eq ' ' then vns=['1min']
+      for i=0, n_elements(vns)-1 do begin
+          par_names='mm210_hdz_' + vns[i]+'_'+site_or_param 
+          erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns[i]
+      endfor
+=======
+      par_names='mm210_mag_' + site_or_param+'_'+parameters+'_hdz' 
       erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=parameters
+>>>>>>> fecc561cddf338c682a9f28a85184312bf58f28e
     endif
     if datatype eq 'WDC_kyoto' then begin
       par_names='iug_mag_'+site_or_param
@@ -115,8 +123,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;load data of Radio sonde 
   if instrument eq 'Radio_sonde' then begin
      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
-     iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange      
-     iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
+     iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange
+     if site_or_param eq 'sgk' then begin      
+        iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
+     endif
   endif
   
 

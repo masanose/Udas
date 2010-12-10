@@ -27,10 +27,10 @@
 ;             ERG-Science Center, STEL, Nagoya Univ.
 ;             erg-sc-core at st4a.stelab.nagoya-u.ac.jp
 ;
-;   $LastChangedBy: miyasita $
-;   $LastChangedDate: 2010-07-30 11:53:38 +0900 (Fri, 30 Jul 2010) $
-;   $LastChangedRevision: 44 $
-;   $URL: file:///var/svn/repos/ergsc/branches/test_release_201007/erg/ground/geomag/erg_load_gmag_mm210.pro $
+;   $LastChangedBy$
+;   $LastChangedDate$
+;   $LastChangedRevision$
+;   $URL$
 ;-
 
 pro erg_load_gmag_mm210, site=site, datatype=datatype, $
@@ -39,6 +39,7 @@ pro erg_load_gmag_mm210, site=site, datatype=datatype, $
 ;*** site codes ***
 ;--- aliases
 if(keyword_set(site)) then begin
+  site=strjoin(site, ' ')
   site=strsplit(strlowcase(site), ' ', /extract)
   if(where(site eq 'tix') ne -1) then site[where(site eq 'tix')]='tik'
   if(where(site eq 'lem') ne -1) then site[where(site eq 'lem')]='lmt'
@@ -126,13 +127,17 @@ for i=0,n_elements(site_code)-1 do begin
       cdf2tplot, file=files, verbose=source.verbose, $
                  prefix='mm210_', suffix='_'+site_code[i], varformat=varformat
 
+      ;--- Rename
+      copy_data,  'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], $
+                  'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz'
+      store_data, 'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], /delete
+
       ;--- Missing data -1.e+31 --> NaN
-      tclip, 'mm210_hdz_1*_???', -1e+4, 1e+4, /overwrite
-      tclip, 'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], -1e+4, 1e+4, /overwrite
+      tclip, 'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz', -1e+4, 1e+4, /overwrite
 
       ;--- Labels
-;      options, 'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], labels=['H','D','Z']
-      options, 'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], labels=['Ch1','Ch2','Ch3']
+;      options, 'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz', labels=['H','D','Z']
+      options, 'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz', labels=['Ch1','Ch2','Ch3']
     endif
   endif
 endfor
