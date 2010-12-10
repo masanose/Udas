@@ -474,3 +474,11 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   return
 
 end
+
+           treeCopyPtr:treeCopyPtr,$
+           timeRangeObj:timeRangeObj,$
+           statusBar:statusBar,$
+           historyWin:historyWin,$
+           loadedData:loadedData,$
+           callSequence:callSequence,$
+           instrumentArray:instrument

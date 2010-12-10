@@ -55,7 +55,6 @@ pro thm_ui_load_iugonet_data_load_pro,$
        if site_or_param eq 'Tohoku_U' then begin
           iug_load_gmag_pc3, site='onw',trange=timeRange 
           if datatype eq 'Pc3_index' then par_names='iug_'+parameters
-          print, par_names
       endif
     endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
@@ -64,8 +63,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
     if datatype eq '210mm*' then begin
-      par_names='mm210_hdz_' + site_or_param+'_'+parameters 
-      erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=parameters
+      vns=parameters
+      if parameters[0] eq ' ' then vns=['1min']
+      for i=0, n_elements(vns)-1 do begin
+          par_names='mm210_hdz_' + vns[i]+'_'+site_or_param 
+          erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns[i]
+      endfor
     endif
     if datatype eq 'WDC_kyoto' then begin
       par_names='iug_mag_'+site_or_param
@@ -152,3 +155,15 @@ pro thm_ui_load_iugonet_data_load_pro,$
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
   endelse   
 end
+dif
+    
+  if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
+    store_data,to_delete,/delete
+  endif
+     
+  if loaded eq 1 then begin
+     statusBar->update,'IUGONET Data Loaded Successfully'
+     historyWin->update,'IUGONET Data Loaded Successfully'
+  endif else begin
+     statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
+     historyWin->update,'No IUGONET Data Loaded.  Data may not b
