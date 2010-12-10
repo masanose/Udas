@@ -427,7 +427,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'pwr6','pwr7','pwr8','wdt1','wdt2','wdt3','wdt4','wdt5','wdt6','wdt7','wdt8','pn1',$
                                   'pn2','pn3','pn4','pn5','pn6','pn7','pn8']) 
   (*param2Array[2])[0] = ptr_new(['*'])
-  (*param2Array[2])[1] = ptr_new(['1min','1h'])
+  (*param2Array[2])[1] = ptr_new(['*','1min','1h'])
   (*param2Array[2])[2] = ptr_new(['*'])
   (*param2Array[2])[3] = ptr_new(['*'])  
   (*param2Array[3])[0] = ptr_new(['*','dst','dst_prov'])
