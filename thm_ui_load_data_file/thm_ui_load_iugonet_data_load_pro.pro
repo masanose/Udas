@@ -66,7 +66,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       vns=parameters
       if parameters[0] eq ' ' then vns=['1min']
       for i=0, n_elements(vns)-1 do begin
-          par_names='mm210_hdz_' + vns[i]+'_'+site_or_param 
+          par_names='mm210_mag_' + site_or_param+'_'+vns[i]+'_hdz'  
           erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns[i]
       endfor
     endif

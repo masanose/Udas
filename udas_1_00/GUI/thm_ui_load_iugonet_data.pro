@@ -262,9 +262,6 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   leftLabel = widget_label(leftBase,value='IUGONET Data Selection:',/align_left)
   rightLabel = widget_label(rightBase,value='Data Loaded:',/align_left)
   
-  ;clearDataBase = widget_base(bottomBase,/align_bottom)
- ; NotesLabel = widget_label(clearDataBase,value='* in collaboration with ERG-SC')
-  
   selectionBase = widget_base(leftBase,/col,/frame)
   
   treeBase = widget_base(rightBase,/col,/frame)
