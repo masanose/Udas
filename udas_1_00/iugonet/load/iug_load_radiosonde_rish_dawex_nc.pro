@@ -48,7 +48,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;***********************************
 ;Load 'troposphere' data by default:
 ;***********************************
-if (not keyword_set(datatype)) then datatype='troposhere'
+if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;***********
 ;site codes:
