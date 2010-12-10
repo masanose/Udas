@@ -157,3 +157,15 @@ pro thm_ui_load_iugonet_data_load_pro,$
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
   endelse   
 end
+dif
+    
+  if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
+    store_data,to_delete,/delete
+  endif
+     
+  if loaded eq 1 then begin
+     statusBar->update,'IUGONET Data Loaded Successfully'
+     historyWin->update,'IUGONET Data Loaded Successfully'
+  endif else begin
+     statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
+     historyWin->update,'No IUGONET Data Loaded.  Data may not b

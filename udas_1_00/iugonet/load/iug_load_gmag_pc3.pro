@@ -152,8 +152,8 @@ acknowledgstring = 'Please contact Prof. Takeshi Sakanoi.'
 
 for i=0, nsites-1 do begin
   ; define file names
-  pathformat= strupcase(strmid(magdas_sites[i],0,3)) + '/pc3/' + $
-              strupcase(strmid(magdas_sites[i],0,3)) + '_pc3_YYYYMM.dat'
+  pathformat= strlowcase(strmid(magdas_sites[i],0,3)) + '/pc3/' + $
+              strlowcase(strmid(magdas_sites[i],0,3)) + '_pc3_YYYYMM.dat'
   ;relpathnames = file_dailynames(file_format=pathformat, $
   ;                               trange=trange, addmaster=addmaster)
   relpathnames = file_monthlynames_onw(file_format=pathformat, $

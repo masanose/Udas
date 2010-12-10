@@ -122,7 +122,7 @@ for i=0, nsites-1 do begin
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/IIT/'
+  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/iit/'
   source.remote_data_dir = 'http://radio.gp.tohoku.ac.jp/db/IPRT-SUN/DATA2/'
 
   ; download data
