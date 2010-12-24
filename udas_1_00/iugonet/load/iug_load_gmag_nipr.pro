@@ -44,10 +44,7 @@
 ;   iug_load_gmag_nipr, site='syo', $
 ;                 trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
 ;
-; Written by H. Tadokoro, June 1, 2010
-; Revised by Y.-M. Tanaka, December 6, 2010 (ytanaka at nipr.ac.jp)
-; The prototype of this procedure was written by Y. Miyashita, Apr 22, 2010, 
-;        ERG-Science Center, STEL, Nagoya Univ.
+; Written by Y.-M. Tanaka, December 24, 2010 (ytanaka at nipr.ac.jp)
 ;-
 
 pro iug_load_gmag_nipr, site=site, datatype=datatype, $
