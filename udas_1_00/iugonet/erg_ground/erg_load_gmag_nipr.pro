@@ -7,8 +7,11 @@
 ;                     downloadonly=downloadonly, $
 ;                     no_download=no_download
 ;
-; Purpose:
+; PURPOSE:
 ;   Loading the fluxgate magnetometer data obtained by NIPR.
+;   At the moment, CDF files are available only for Syowa data (syo) 
+;   with 1-sec resolution in the interval from Feb. 4, 2003 to 
+;   Jan. 31, 2010.
 ;
 ; KEYWORDS:
 ;   site  = Observatory name, example, erg_load_gmag_nipr, site='syo',
@@ -155,7 +158,7 @@ for i=0,n_elements(site_code)-1 do begin
       print, 'No tplot var loaded for '+site_code[i]+'.'
     endif else begin
       ;--- Rename tplot variables
-      tplot_name_new='iug_mag_'+site_code[i]
+      tplot_name_new='nipr_mag_'+site_code[i]+'_'+datatype
       copy_data, tplot_name_tmp, tplot_name_new
       store_data, tplot_name_tmp, /delete
 
