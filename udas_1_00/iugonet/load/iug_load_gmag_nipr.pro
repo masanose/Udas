@@ -7,7 +7,7 @@
 ;                     downloadonly=downloadonly
 ;                     no_download=no_download
 ;
-; Purpose:
+; PURPOSE:
 ;   Loading the fluxgate magnetometer data obtained by NIPR.
 ;
 ; NOTE: This procedure is a simple alias to "erg_load_gmag_nipr" 
