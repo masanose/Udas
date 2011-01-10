@@ -4,7 +4,7 @@
 ;iug_load_mu
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH servers for all EAR data and loads data into
+;  Queries the Kyoto_RISH servers for all MU data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
@@ -76,7 +76,7 @@ endelse
   ;===============================
   ;load of MU tropsphere data
    if datatype eq 'troposphere' then begin
-      iug_load_mu_trop_txt, datatype = datatype, parameter = parameter2, trange = trange
+      iug_load_mu_trop_nc, datatype = datatype, trange = trange
    endif 
    
    ;load of MU meteor wind data

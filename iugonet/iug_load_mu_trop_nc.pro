@@ -1,17 +1,17 @@
 ;+
 ;
 ;Name:
-;iug_load_ear_trop_nc
+;iug_load_mu_trop_nc
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH servers for the NetCDF data of the equatorial atomosphere radar (EAR) 
-;  and the loaded data intotplot format.
+;  Queries the Kyoto_RISH servers for the NetCDF formatted data of the Middle Upper (MU) atmosphere radar 
+;  and loads data into tplot format.
 ;
 ;Syntax:
-; iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mu_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;  datatype = Observation data type. For example, iug_load_ear_trop_nc, datatype = 'troposphere'.
+;  datatype = Observation data type. For example, iug_load_mu_trop_nc, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -21,12 +21,11 @@
 ;                 into variables.
 ;
 ;Code:
-;  A. Shinbori, 09/09/2010.
+;  A. Shinbori, 11/01/2010.
 ;  
 ;Modifications:
-;  A. Shinbori, 10/09/2010.
-;  A. Shinbori, 06/11/2010.
-;  A. Shinbori, 26/11/2010.
+;
+;
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -35,7 +34,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_mu_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
 ;keyword check:
@@ -49,9 +48,9 @@ if (not keyword_set(datatype)) then datatype='troposphere'
 
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire EAR data, we ask that you' $
+acknowledgstring = 'If you acquire MU data, we ask that you' $
 + 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as EAR data provided by Research Institute' $
++ 'including text such as MU data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -74,8 +73,8 @@ acknowledgstring = 'If you acquire EAR data, we ask that you' $
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ear/troposphere/'
-       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
+       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/'
+       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -96,9 +95,15 @@ acknowledgstring = 'If you acquire EAR data, we ask that you' $
    ;Read the files:
    ;===============
 
+      height1 = fltarr(150)
+      height2 = fltarr(150)
+      height3 = fltarr(150)
+      height4 = fltarr(150)
+      height5 = fltarr(150)
+      time2 = dblarr(144)
       
     ; Initialize data and time buffer
-      ear_time=0
+      mu_time=0
       zon_wind=0
       mer_wind=0
       ver_wind=0
@@ -188,20 +193,19 @@ for j=0,n_elements(local_paths)-1 do begin
     day = fix(strmid(date,10,2))
                            
     ; Definition of arrary names
-    time2 = dblarr(n_elements(time))
     height2 = fltarr(n_elements(range))
-    uwind_ear=fltarr(n_elements(time),n_elements(range))
-    vwind_ear=fltarr(n_elements(time),n_elements(range))
-    wwind_ear=fltarr(n_elements(time),n_elements(range))
-    pwr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
-    wdt1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
-    dpl1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
-    pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
+    uwind_mu=fltarr(n_elements(time),n_elements(range))
+    vwind_mu=fltarr(n_elements(time),n_elements(range))
+    wwind_mu=fltarr(n_elements(time),n_elements(range))
+    pwr1_mu=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+    wdt1_mu=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+    dpl1_mu=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+    pnoise1_mu=fltarr(n_elements(time),n_elements(beam)) 
     
     for i=0, n_elements(time)-1 do begin
     
          time2[i] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(0)+':'+string(0)+':'+string(0))+double(time[i]) $
-                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
+                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                                
         for k=0, n_elements(range)-1 do begin
 
@@ -218,9 +222,9 @@ for j=0,n_elements(local_paths)-1 do begin
             if nbad gt 0 then c[wbad] = !values.f_nan
             wwind[k,i] =c
                         
-            uwind_ear[i,k]=uwind[k,i]
-            vwind_ear[i,k]=vwind[k,i]
-            wwind_ear[i,k]=wwind[k,i]
+            uwind_mu[i,k]=uwind[k,i]
+            vwind_mu[i,k]=vwind[k,i]
+            wwind_mu[i,k]=wwind[k,i]
                        
             for l=0, n_elements(beam)-1 do begin           
                 e = pwr[k,i,l]            
@@ -241,10 +245,10 @@ for j=0,n_elements(local_paths)-1 do begin
                 if nbad gt 0 then d[wbad] = !values.f_nan
                 pnoise[i,l] =d
                 
-                pwr1_ear[i,k,l]=pwr[k,i,l]
-                wdt1_ear[i,k,l]=width[k,i,l]
-                dpl1_ear[i,k,l]=dpl[k,i,l]
-                pnoise1_ear[i,l]=pnoise[i,l]
+                pwr1_mu[i,k,l]=pwr[k,i,l]
+                wdt1_mu[i,k,l]=width[k,i,l]
+                dpl1_mu[i,k,l]=dpl[k,i,l]
+                pnoise1_mu[i,l]=pnoise[i,l]
              endfor 
         endfor
 
@@ -253,27 +257,27 @@ for j=0,n_elements(local_paths)-1 do begin
    ; print, uwind, n_elements(uwind),n_elements(time)
    ;Append data of time and wind velocity:
    ;======================================
-    append_array, ear_time, time2
-    append_array, zon_wind, uwind_ear
-    append_array, mer_wind, vwind_ear
-    append_array, ver_wind, wwind_ear
-    append_array, pwr1, pwr1_ear
-    append_array, wdt1, wdt1_ear
-    append_array, dpl1, dpl1_ear
-    append_array, pn1, pnoise1_ear
+    append_array, mu_time, time2
+    append_array, zon_wind, uwind_mu
+    append_array, mer_wind, vwind_mu
+    append_array, ver_wind, wwind_mu
+    append_array, pwr1, pwr1_mu
+    append_array, wdt1, wdt1_mu
+    append_array, dpl1, dpl1_mu
+    append_array, pn1, pnoise1_mu
 
     ncdf_close,cdfid  ; done
     
 endfor
 
-  if n_elements(ear_time) gt 1 then begin
+  if n_elements(mu_time) gt 1 then begin
    ; Definition of arrary names
      bname2=strarr(n_elements(beam))
      bname=strarr(n_elements(beam))
-     pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
-     wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
-     dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
-     pnoise2_ear=fltarr(n_elements(ear_time)) 
+     pwr2_mu=fltarr(n_elements(mu_time),n_elements(range))
+     wdt2_mu=fltarr(n_elements(mu_time),n_elements(range))
+     dpl2_mu=fltarr(n_elements(mu_time),n_elements(range))
+     pnoise2_mu=fltarr(n_elements(mu_time)) 
    
    ;******************************
    ;Store data in TPLOT variables:
@@ -283,23 +287,23 @@ endfor
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          
          ;Store data of wind velocity
-         store_data,'iug_ear_uwnd',data={x:ear_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_ear_uwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-         options,'iug_ear_uwnd', labels='EAR-trop [km]'
-         options, 'iug_ear_uwnd','spec',1
-         tdegap, 'iug_ear_uwnd',/overwrite
+         store_data,'iug_mu_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
+         options,'iug_mu_uwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+         options,'iug_mu_uwnd', labels='MUR-trop [km]'
+         options, 'iug_mu_uwnd','spec',1
+         tdegap, 'iug_mu_uwnd',/overwrite
          
-         store_data,'iug_ear_vwnd',data={x:ear_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_ear_vwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-         options,'iug_ear_vwnd', labels='EAR-trop [km]'
-         options, 'iug_ear_vwnd','spec',1
-         tdegap, 'iug_ear_vwnd',/overwrite
+         store_data,'iug_mu_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
+         options,'iug_mu_vwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+         options,'iug_mu_vwnd', labels='MUR-trop [km]'
+         options, 'iug_mu_vwnd','spec',1
+         tdegap, 'iug_mu_vwnd',/overwrite
          
-         store_data,'iug_ear_wwnd',data={x:ear_time, y:ver_wind, v:height_vw},dlimit=dlimit
-         options,'iug_ear_wwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
-         options,'iug_ear_wwnd', labels='EAR-trop [km]'
-         options, 'iug_ear_wwnd','spec',1
-         tdegap, 'iug_ear_wwnd',/overwrite
+         store_data,'iug_mu_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
+         options,'iug_mu_wwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
+         options,'iug_mu_wwnd', labels='MUR-trop [km]'
+         options, 'iug_mu_wwnd','spec',1
+         tdegap, 'iug_mu_wwnd',/overwrite
                  
          ;Store data of echo intensity, spectral width, and niose level:
          for l=0, n_elements(beam)-1 do begin
@@ -308,45 +312,45 @@ endfor
              for k=0, n_elements(range)-1 do begin
                  height2[k]=height[k,l]
              endfor
-             for i=0, n_elements(ear_time)-1 do begin
+             for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
-                     pwr2_ear[i,k]=pwr1[i,k,l]
+                     pwr2_mu[i,k]=pwr1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_pwr'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-             options,'iug_ear_pwr'+bname[l], labels='EAR-trop [km]'
-             options, 'iug_ear_pwr'+bname[l],'spec',1
-             tdegap, 'iug_ear_pwr'+bname[l],/overwrite
+             store_data,'iug_mu_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
+             options,'iug_mu_pwr'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+             options,'iug_mu_pwr'+bname[l], labels='MUR-trop [km]'
+             options, 'iug_mu_pwr'+bname[l],'spec',1
+             tdegap, 'iug_mu_pwr'+bname[l],/overwrite
              
-             for i=0, n_elements(ear_time)-1 do begin
+             for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
-                     wdt2_ear[i,k]=wdt1[i,k,l]
+                     wdt2_mu[i,k]=wdt1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_wdt'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-             options,'iug_ear_wdt'+bname[l], labels='EAR-trop [km]'
-             options, 'iug_ear_wdt'+bname[l],'spec',1
-             tdegap, 'iug_ear_wdt'+bname[l],/overwrite 
-             for i=0, n_elements(ear_time)-1 do begin
+             store_data,'iug_mu_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
+             options,'iug_mu_wdt'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+             options,'iug_mu_wdt'+bname[l], labels='MUR-trop [km]'
+             options, 'iug_mu_wdt'+bname[l],'spec',1
+             tdegap, 'iug_mu_wdt'+bname[l],/overwrite 
+             for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
-                     dpl2_ear[i,k]=dpl1[i,k,l]
+                     dpl2_mu[i,k]=dpl1[i,k,l]
                  endfor
              endfor             
-             store_data,'iug_ear_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_dpl'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[dB]'
-             options,'iug_ear_dpl'+bname[l], labels='EAR-trop [km]'
-             options, 'iug_ear_dpl'+bname[l],'spec',1
-             tdegap, 'iug_ear_dpl'+bname[l],/overwrite 
+             store_data,'iug_mu_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
+             options,'iug_mu_dpl'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
+             options,'iug_mu_dpl'+bname[l], labels='MUR-trop [km]'
+             options, 'iug_mu_dpl'+bname[l],'spec',1
+             tdegap, 'iug_mu_dpl'+bname[l],/overwrite 
              
-             for i=0, n_elements(ear_time)-1 do begin
-                 pnoise2_ear[i]=pn1[i,l]
+             for i=0, n_elements(mu_time)-1 do begin
+                 pnoise2_mu[i]=pn1[i,l]
              endfor
-             store_data,'iug_ear_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
-             options,'iug_ear_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]'
-             options,'iug_ear_pn'+bname[l], labels='EAR-trop [km]'
-             tdegap, 'iug_ear_pn'+bname[l],/overwrite                    
+             store_data,'iug_mu_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
+             options,'iug_mu_pn'+bname[l],ytitle='MUR-trop!Cpn'+bname[l]+'!C[dB]'
+             options,'iug_mu_pn'+bname[l], labels='MUR-trop [km]'
+             tdegap, 'iug_mu_pn'+bname[l],/overwrite                    
          endfor    
       endif
     
@@ -358,7 +362,7 @@ endfor
  endif
 
     ;Clear time and data buffer:
-      ear_time=0
+      mu_time=0
       zon_wind=0
       mer_wind=0
       ver_wind=0
@@ -373,9 +377,9 @@ endfor
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire EAR data, we ask that you acknowledge us'
+print, 'If you acquire MU data, we ask that you acknowledge us'
 print, 'in your use of the data. This may be done by including text' 
-print, 'such as EAR data provided by Research Institute for Sustainable' 
+print, 'such as MU data provided by Research Institute for Sustainable' 
 print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
 print, 'a copy of the relevant publications.'
       

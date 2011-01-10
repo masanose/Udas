@@ -438,7 +438,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[4])[1] = ptr_new(['*','iprt_jupiter_L','iprt_jupiter_R'])                             
   (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
   (*param2Array[6])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
-  (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
+  (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5',$
+                                  'dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[7])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
   (*param2Array[8])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
                                    

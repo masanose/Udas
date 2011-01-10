@@ -4,8 +4,8 @@
 ;iug_load_meteor_rish_nc
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for ACII data of the meteor radar 
-;  and loads data intotplot format.
+;  Queries the Kyoto_RISH renkei2 servers for the NetCDF data of the meteor radar 
+;  and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_meteor_rish_nc, datatype = datatype, site = site, downloadonly = downloadonly, $
@@ -66,8 +66,9 @@ print, site_code
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/meteor/koto_h2km_t60min00_netCDF/ /meteor/winddata/serp_wind_h2km_t60min00netCDF/',' ', /extract)
-site_data_lastmane = strsplit('_koto.nc _serp.nc',' ', /extract)
+site_data_dir = strsplit('/meteor/h2km_t60min00_netCDF/ /meteor/winddata/h2km_t60min00_netCDF/'+$
+                         ' /meteor/winddata/h4km_t240min00_netCDF/',' ', /extract)
+site_data_lastmane = strsplit('_koto.nc _serp_h2t60.nc _serp_h4t240.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire meteor wind radar data, we ask that you' $
@@ -90,7 +91,7 @@ for ii=0,n_elements(site_code)-1 do begin
 
   if ~size(fns,/type) then begin
       if site_code[ii] eq 'ktb' then h=0
-      if site_code[ii] eq 'srp' then h=1
+      if site_code[ii] eq 'srp' then h=2
     ;Get files for ith component:
     ;***************************       
       file_names = file_dailynames( $
@@ -193,7 +194,7 @@ for ii=0,n_elements(site_code)-1 do begin
               timeunix[i] = double(time[i])*3600-3600*7$
                             +time_double(string(1992)+'-'+string(10)+'-'+string(27)+'/'+string(17)+':'+string(00)+':'+string(00))
                       
-              for k=0, 35 do begin
+              for k=0, n_elements(range)-1 do begin
                   uwind_data[i,k]=uwind[0,k,i]
                   vwind_data[i,k]=vwind[0,k,i]
                   sig_uwind_data[i,k]=sig_uwind[0,k,i]

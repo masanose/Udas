@@ -66,7 +66,7 @@ print, site_code
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/meteor/koto_h2km_t60min00_netCDF/ /meteor/winddata/serp_wind_h2km_t60min00netCDF/',' ', /extract)
+site_data_dir = strsplit('/meteor/h2km_t60min00_netCDF/ /meteor/winddata/h2km_t60min00_netCDF/',' ', /extract)
 site_data_lastmane = strsplit('_koto.nc _serp.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)

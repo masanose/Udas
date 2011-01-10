@@ -4,8 +4,8 @@
 ;iug_load_ear_trop_nc
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH servers for ACII data of the equatorial atomosphere radar (EAR) 
-;  and loads data intotplot format.
+;  Queries the Kyoto_RISH servers for the NetCDF data of the equatorial atomosphere radar (EAR) 
+;  and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
@@ -330,7 +330,7 @@ endfor
                  endfor
              endfor
              store_data,'iug_ear_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_wdt'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/sa]'
+             options,'iug_ear_wdt'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
              options,'iug_ear_wdt'+bname[l], labels='EAR-trop [km]'
              options, 'iug_ear_wdt'+bname[l],'spec',1
              tdegap, 'iug_ear_wdt'+bname[l],/overwrite 
@@ -340,7 +340,7 @@ endfor
                  endfor
              endfor             
              store_data,'iug_ear_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_dpl'+bname[l],ytitle='dpl'+bname[l]+'!C[dB]'
+             options,'iug_ear_dpl'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[dB]'
              options,'iug_ear_dpl'+bname[l], labels='EAR-trop [km]'
              options, 'iug_ear_dpl'+bname[l],'spec',1
              tdegap, 'iug_ear_dpl'+bname[l],/overwrite 
