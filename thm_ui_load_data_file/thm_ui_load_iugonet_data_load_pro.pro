@@ -13,6 +13,7 @@
 ;A. Shinbori, 12/05/2010
 ;A. Shinbori, 10/07/2010
 ;A. Shinbori, 25/11/2010
+;A. Shinbori, 10/01/2011
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -108,7 +109,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of Medium Frequency radar
   if instrument eq 'Medium_Frequency_radar' then begin
-     iug_load_mf_rish_data, datatype = datatype, site =site_or_param, trange = timeRange
+     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange
      if site_or_param eq 'pam' or 'pon' then par_names='iug_mf_'+site_or_param+'_'+parameters 
   endif
    
