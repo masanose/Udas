@@ -12,34 +12,32 @@
 ;                   kag ymk cbi gua yap kor ktb bik wew daw
 ;                   wep bsv dal can adl kot cst ewa asa mcq
 ;   datatype = Time resolution. '1min' for 1 min, and '1h' for 1 h.
-;              The default is '1min'.
+;              The default is 'all'.
 ;   /downloadonly, if set, then only download the data, do not load it into variables.
+;   /no_server, use only files which are online locally.
+;   /no_download, use only files which are online locally. (Identical to no_server keyword.)
 ;   trange = (Optional) Time range of interest  (2 element array).
 ;
 ; EXAMPLE:
 ;   erg_load_gmag_mm210, site='rik onw', datatype='1min', $
 ;                        trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
 ;
-; NOTE: There is an alias of this procedure named "iug_load_gmag_mm210".
-;   Some load procedures for the ground-based observational data 
-;   in the  ERG mission, named "erg_load_???", can be also called  
-;   by "iug_load_???", because these data are related to the both 
-;   ERG and IUGONET projects.
-;   For more information, see http://www.iugonet.org/en/ 
-;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
+; NOTE: See the rules of the road.
+;       For more information, see http://stdb2.stelab.nagoya-u.ac.jp/mm210/
 ;
 ; Written by: Y. Miyashita, Apr 22, 2010
 ;             ERG-Science Center, STEL, Nagoya Univ.
 ;             erg-sc-core at st4a.stelab.nagoya-u.ac.jp
 ;
-;   $LastChangedBy$
-;   $LastChangedDate$
-;   $LastChangedRevision$
-;   $URL$
+;   $LastChangedBy: miyasita $
+;   $LastChangedDate: 2011-01-11 15:49:34 +0900 (Tue, 11 Jan 2011) $
+;   $LastChangedRevision: 97 $
+;   $URL: file:///var/svn/repos/ergsc/trunk/erg/ground/geomag/erg_load_gmag_mm210.pro $
 ;-
 
 pro erg_load_gmag_mm210, site=site, datatype=datatype, $
-        downloadonly=downloadonly, trange=trange
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange
 
 ;*** site codes ***
 ;--- aliases
@@ -69,18 +67,23 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 
 print, site_code
 
-;*** time resolution ***
-if(not keyword_set(datatype)) then datatype='1min'
+;*** keyword set ***
+if(not keyword_set(datatype)) then datatype='all'
+if(not keyword_set(downloadonly)) then downloadonly=0
+if(not keyword_set(no_server)) then no_server=0
+if(not keyword_set(no_download)) then no_download=0
 
+;*** time resolution ***
 case strlowcase(datatype) of
-  '1min': varformat='*hdz_1min*'
-  '1h':   varformat='*hdz_1h*'
-  else:   varformat='*hdz_1min*'
+  '1min': tres=['1min']
+  '1h':   tres=['1h']
+  'all':  tres=['1min', '1h']
+  else:   tres=['1min', '1h']
 endcase
 
+;*** load CDF ***
 fres='1min'
 
-;*** load CDF ***
 for i=0,n_elements(site_code)-1 do begin
 
   ;--- Create (and initialize) a data file structure 
@@ -105,7 +108,8 @@ for i=0,n_elements(site_code)-1 do begin
 
   ;--- Download the designated data files from the remote data server
   ;    if the local data files are older or do not exist. 
-  files = file_retrieve(relpathnames, _extra=source, /last_version)
+  files = file_retrieve(relpathnames, _extra=source, /last_version, $
+            no_server=no_server, no_download=no_download)
 
   ;--- print PI info and rules of the road
   if(file_test(files[0])) then begin
@@ -126,26 +130,26 @@ for i=0,n_elements(site_code)-1 do begin
     print, '**************************************************************************************'
 
     ;--- Load data into tplot variables
-    if(not keyword_set(downloadonly)) then downloadonly=0
-
     if(downloadonly eq 0) then begin
       cdf2tplot, file=files, verbose=source.verbose, $
-                 prefix='mm210_', suffix='_'+site_code[i], varformat=varformat
+                 prefix='mm210_', suffix='_'+site_code[i], varformat='*hdz_'+tres+'*'
 
-      ;--- Rename
-      copy_data,  'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], $
-                  'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz'
-      store_data, 'mm210_hdz_'+strlowcase(datatype)+'_'+site_code[i], /delete
+      for k=0, n_elements(tres)-1 do begin
+        ;--- Rename
+        copy_data,  'mm210_hdz_'+tres[k]+'_'+site_code[i], 'mm210_mag_'+site_code[i]+'_'+tres[k]+'_hdz'
+        store_data, 'mm210_hdz_'+tres[k]+'_'+site_code[i], /delete
 
-      ;--- Missing data -1.e+31 --> NaN
-      tclip, 'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz', -1e+4, 1e+4, /overwrite
+        ;--- Missing data -1.e+31 --> NaN
+        tclip, 'mm210_mag_'+site_code[i]+'_'+tres[k]+'_hdz', -1e+4, 1e+4, /overwrite
 
-      ;--- Labels
-;      options, 'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz', labels=['H','D','Z']
-      options, 'mm210_mag_'+site_code[i]+'_'+strlowcase(datatype)+'_hdz', labels=['Ch1','Ch2','Ch3']
+        ;--- Labels
+;        options, 'mm210_mag_'+site_code[i]+'_'+tres[k]+'_hdz', labels=['H','D','Z']
+        options, 'mm210_mag_'+site_code[i]+'_'+tres[k]+'_hdz', labels=['Ch1','Ch2','Ch3']
+      endfor
     endif
   endif
-endfor
+
+endfor   ; end of for loop of i
 
 ;---
 return

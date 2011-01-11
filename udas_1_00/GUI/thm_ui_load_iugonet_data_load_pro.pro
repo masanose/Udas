@@ -13,7 +13,7 @@
 ;A. Shinbori, 12/05/2010
 ;A. Shinbori, 10/07/2010
 ;A. Shinbori, 25/11/2010
-;A. Shinbori, 10/01/2011
+;A. Shinbori, 11/10/2011
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -81,11 +81,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif
     if datatype eq '210mm*' then begin
       vns=parameters
-      if parameters[0] eq '*' then vns=['1min']
-      for i=0, n_elements(vns)-1 do begin
-          par_names='mm210_mag_' + site_or_param+'_'+vns[i]+'_hdz'  
-          erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns[i]
-      endfor
+      if parameters[0] eq '*' then vns=['all']
+      erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
+      par_names=tnames('mm210_mag_'+site_or_param+'_'+'*'+'_hdz')
     endif
     if datatype eq 'WDC_kyoto' then begin
       par_names='iug_mag_'+site_or_param
