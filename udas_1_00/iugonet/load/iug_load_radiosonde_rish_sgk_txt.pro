@@ -4,8 +4,8 @@
 ;iug_load_radiosonde_rish_sgk_txt
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for ACII data of the meteor radar 
-;  and loads data intotplot format.
+;  Queries the Kyoto RISH data servers for ACII data of the radiosonde radar 
+;  and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site = site, datatype = datatype, downloadonly = downloadonly, $
@@ -22,6 +22,11 @@
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
+;                 
+;Data Availability:
+;  Please check the following homepage of the time schedule of radiosonde observation 
+;  before you analyze these data using this software. 
+;  http://www.rish.kyoto-u.ac.jp/radar-group/mu/sondedb/
 ;
 ;Code:
 ;  A. Shinbori, 13/09/2010.

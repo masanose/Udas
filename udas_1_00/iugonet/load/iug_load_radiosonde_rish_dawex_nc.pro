@@ -22,6 +22,11 @@
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
+;                 
+;Data Availability:
+;  The Dawin sonde observation data have been obtained by the DAWEX (Darwin Area Wave Experiment) campagin.
+;  We can analyze only the sonde data within three time spans:
+;  2001/10/13 to 2001/10/18, 2001/11/15 to 2001/10/20, and 2001/12/11 to 2001/12/16.
 ;
 ;Code:
 ;  A. Shinbori, 13/09/2010.

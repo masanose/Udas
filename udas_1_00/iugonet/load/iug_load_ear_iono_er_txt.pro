@@ -27,6 +27,10 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
+;Data Availability:
+;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
+;  before you analyze the FAI data using this software. 
+;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 ;
 ;Code:
 ; A. Shinbori, 19/09/2010.

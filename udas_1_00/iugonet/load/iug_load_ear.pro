@@ -28,6 +28,11 @@
 ;      be read a la the RISH format, and the RISH server will not be queried.
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
+;Data Availability:
+;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
+;  before you analyze the FAI data using this software. 
+;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
+;
 ;Code:
 ;A. Shinbori, 13/05/2010.
 ;
