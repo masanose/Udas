@@ -16,15 +16,16 @@
 ;  site  = Station ABB code or name of geomagnetic index.
 ;          Ex1) iug_load_gmag_wdc, site = 'kak', ...
 ;          Ex2) iug_load_gmag_wdc, site = ['dst', 'ae'], ...
+;          If you skip this option, AE Dst SYM/ASY and KAK data are retrieved.
 ;  trange= (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full month, a full
-;          month's data is loaded
+;          month's data is loaded.
 ;  reolution = Time resolution of the data: 'min' or 'hour',
 ;          default set to 'min' for AE index and geomag data.
 ;  level = The level of the data, the default is 'final' for geomag data.
-;          For AE and Dst index, default is ['final', 'provsional']
-;  /verbose : set to output some useful info
+;          For AE and Dst index, the default is ['final', 'provsional'].
+;  /verbose : set to output some useful info.
 ;  /addmaster, if set, then times = [!values.d_nan, times]
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
@@ -35,12 +36,11 @@
 ;   ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
 ;Notes:
-;  '/no_download' option is necessary for this procedure.
-;  At WDC Kyoto, data service for TDAS will be open in Spring, 2012.
-;  Now support only for AE Dst SYM/ASY KAK data.
+;  At WDC Kyoto, data service for TDAS clients is beta testing.
+;  Please check the data catalog at http://wdc-data.iugonet.org/.
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
-;Last Updated:  Daiki Yoshida,  Nov 12, 2010
+;Last Updated:  Daiki Yoshida,  Jan 11, 2011
 ; 
 ;-
 
@@ -57,8 +57,7 @@ pro iug_load_gmag_wdc, site=site, $
   ; validate site settings
   vsnames = 'kak asy sym ae dst'
   vsnames_sample = strsplit(vsnames, ' ', /extract)
-  vsnames_all = vsnames_sample
-  ;vsnames_all = iug_load_gmag_wdc_vsnames()  ;if all data become available
+  vsnames_all = iug_load_gmag_wdc_vsnames()
   if(keyword_set(site)) then site_in = site else site_in = vsnames_sample
   wdc_sites = thm_check_valid_name(site_in, vsnames_all, $
     /ignore_case, /include_all)

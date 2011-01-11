@@ -22,6 +22,7 @@
 ;Updated by:  Daiki Yoshida,  Sep 14, 2010
 ;Updated by:  Daiki Yoshida,  Sep 28, 2010
 ;Updated by:  Daiki Yoshida,  Nov 12, 2010
+;Updated by:  Daiki Yoshida,  Jan 11, 2011
 ;
 ;-
 
@@ -79,7 +80,7 @@ pro iug_load_gmag_wdc_wdchr, $
     source = file_retrieve(/struct)
     source.verbose = verbose
     source.local_data_dir = root_data_dir() + 'iugonet/wdc_kyoto/geomag/'
-    source.remote_data_dir = 'http://localhost/~daiki/test/wdc/data/'
+    source.remote_data_dir = 'http://wdc-data.iugonet.org/data/'
     if (keyword_set(no_download)) then source.no_server = 1
     
     ; download data

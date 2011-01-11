@@ -34,7 +34,7 @@
 ;  reference: http://wdc.kugi.kyoto-u.ac.jp/qddays/index.html
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
-;Last Updated:  Daiki Yoshida,  Nov 12, 2010
+;Last Updated:  Daiki Yoshida,  Jan 11, 2010
 ; 
 ;-
 
@@ -58,7 +58,7 @@ function iug_load_gmag_wdc_qddays, $
   source = file_retrieve(/struct)
   source.verbose = verbose
   source.local_data_dir = root_data_dir() + 'iugonet/wdc_kyoto/geomag/'
-  source.remote_data_dir = 'http://localhost/~daiki/test/wdc/data/'
+  source.remote_data_dir = 'http://wdc-data.iugonet.org/data/'
   if (keyword_set(no_download)) then source.no_server = 1
     
   ; download data

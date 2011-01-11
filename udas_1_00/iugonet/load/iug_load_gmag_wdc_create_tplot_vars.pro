@@ -16,6 +16,7 @@
 ;Written by:  Daiki Yoshida,  Aug 2010
 ;Updated by:  Daiki Yoshida,  Sep 14, 2010
 ;Updated by:  Daiki Yoshida,  Nov 12, 2010
+;Updated by:  Daiki Yoshida,  Jan 11, 2011
 ;
 ;-
 
@@ -60,10 +61,10 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
   if strlowcase(sname) eq 'dst' then begin
   
     if strcmp(level, 'prov', 4, /fold_case) eq 1 then begin
-      tplot_name = 'iug_dst_prov'
+      tplot_name = 'wdc_mag_dst_prov'
       tplot_ytitle = 'Prov. Dst'
     endif else begin
-      tplot_name = 'iug_dst'
+      tplot_name = 'wdc_mag_dst'
       tplot_ytitle = 'Dst'
     endelse
     tplot_ysubtitle = '[nT]'
@@ -72,10 +73,10 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
   endif else if strlowcase(sname) eq 'sym' or strlowcase(sname) eq 'asy' then begin
   
     if n_elements(element) eq 1 then begin
-      tplot_name = 'iug_' + strlowcase(sname+'-'+element)
+      tplot_name = 'wdc_mag_' + strlowcase(sname+'-'+element)
       tplot_ytitle = strupcase(sname+'-'+element)
     endif else begin
-      tplot_name = 'iug_' + strlowcase(sname)
+      tplot_name = 'wdc_mag_' + strlowcase(sname)
       tplot_ytitle = strupcase(sname)
     endelse
     tplot_ysubtitle = '[nT]'
@@ -92,7 +93,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     
     if n_elements(element) eq 1 then begin
     
-      tplot_name = 'iug_a' + strlowcase(element)
+      tplot_name = 'wdc_mag_a' + strlowcase(element)
       tplot_ytitle = 'A' + strupcase(element)
       
       if strupcase(element) eq 'X' then begin
@@ -102,7 +103,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
       endelse
       
     endif else begin
-      tplot_name = 'iug_ae'
+      tplot_name = 'wdc_mag_ae'
       tplot_ytitle = 'AE'
       tplot_ysubtitle = '[nT]'
     endelse
@@ -119,8 +120,10 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     endif
     
     if res eq 'min' then begin
+      tplot_name = tplot_name + '_1min'
       tplot_ytitle = tplot_ytitle + '!c(1-min)'
     endif else if res eq 'hour' or res eq 'hr' then begin
+      tplot_name = tplot_name + '_1hr'
       tplot_ytitle = tplot_ytitle + '!c(hourly)'
     endif
     
@@ -128,7 +131,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     
   endif else begin
   
-    tplot_name = 'iug_mag_' + strlowcase(sname)
+    tplot_name = 'wdc_mag_' + strlowcase(sname)
     tplot_ytitle = strupcase(sname)
     
     if n_elements(element) eq 1 then begin
@@ -153,8 +156,10 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     endif
     
     if res eq 'min' then begin
+      tplot_name = tplot_name + '_1min'
       tplot_ytitle = tplot_ytitle + '!c(1-min)'
     endif else if res eq 'hour' or res eq 'hr' then begin
+      tplot_name = tplot_name + '_1hr'
       tplot_ytitle = tplot_ytitle + '!c(hourly)'
     endif
     
