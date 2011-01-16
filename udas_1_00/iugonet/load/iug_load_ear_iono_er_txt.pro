@@ -80,7 +80,7 @@ print, parameters
 parameter2_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 pwr1 pwr2 pwr3 pwr4 pwr5 '+$
                           'wdt1 wdt2 wdt3 wdt4 wdt5 pn1 pn2 pn3 pn4 pn5',' ', /extract)
 
-;--- check site codes
+;--- check parameters
 if(not keyword_set(parameter2)) then parameter2='all'
 parameters2 = thm_check_valid_name(parameter2, parameter2_all, /ignore_case, /include_all)
 

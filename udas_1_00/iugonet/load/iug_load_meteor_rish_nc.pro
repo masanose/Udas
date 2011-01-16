@@ -38,7 +38,7 @@
 ;-
 
 
-pro iug_load_meteor_rish_nc, datatype = datatype, site = site, $
+pro iug_load_meteor_rish_nc, datatype = datatype, site = site, parameter = parameter, $
                              downloadonly = downloadonly, trange = trange, verbose = verbose
 
 ;**************
@@ -63,12 +63,25 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 
 print, site_code
 
+;***********
+;site codes:
+;***********
+
+;--- all sites (default)
+parameter_all = strsplit('_h2t60min00 _h2T60min30 _h4t60min00 _h4T60min30 _h2t60min00 _h4t240min00',' ', /extract)
+
+;--- check parameters
+if(not keyword_set(parameter)) then parameter='all'
+parameter = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+
+print, parameter
+
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/meteor/h2km_t60min00_netCDF/ /meteor/winddata/h2km_t60min00_netCDF/'+$
-                         ' /meteor/winddata/h4km_t240min00_netCDF/',' ', /extract)
-site_data_lastmane = strsplit('_koto.nc _serp_h2t60.nc _serp_h4t240.nc',' ', /extract)
+site_data_dir = strsplit('/meteor/netCDF/h2km_t60min00/ /meteor/netCDF/h2km_t60min30/ /meteor/netCDF/h4km_t60min00/ ' +$
+                         '/meteor/netCDF/h4km_t60min30/ /meteor/netCDF/h2km_t60min00/ /meteor/netCDF/h4km_t240min00/',' ', /extract)
+site_data_lastmane = strsplit('_koto_h2t60min00.nc _koto_h2T60min30.nc _koto_h4t60min00.nc _koto_h4T60min30.nc _serp_h2t60min00.nc _serp_h4t240min00.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire meteor wind radar data, we ask that you' $
@@ -89,20 +102,31 @@ h=0
 jj=0
 for ii=0,n_elements(site_code)-1 do begin
 
-  if ~size(fns,/type) then begin
-      if site_code[ii] eq 'ktb' then h=0
-      if site_code[ii] eq 'srp' then h=2
+  if site_code[ii] eq 'ktb' then begin 
+     h_min=0
+     h_max=4
+  endif
+  
+  if site_code[ii] eq 'srp' then begin 
+     h_min=4
+     h_max=6
+  endif
+  
+  for iii=h_min,h_max-1 do begin
+  
+    if ~size(fns,/type) then begin
+
     ;Get files for ith component:
     ;***************************       
       file_names = file_dailynames( $
                    file_format='YYYY/'+$
-                   'YYYYMM',trange=trange,times=times,/unique)+site_data_lastmane[h]
+                   'YYYYMM',trange=trange,times=times,/unique)+site_data_lastmane[iii]
     ;        
     ;Define FILE_RETRIEVE structure:
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code[ii]+site_data_dir[h]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code[ii]+site_data_dir[iii]
 
     ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
@@ -234,7 +258,7 @@ for ii=0,n_elements(site_code)-1 do begin
       append_array, mer_thermal, sig_vwind_data
       append_array, meteor_num, num_data
       ncdf_close,cdfid  ; done
-    
+
   endfor
 
 ;******************************
@@ -247,29 +271,29 @@ for ii=0,n_elements(site_code)-1 do begin
 
   if site_time[0] ne 0 then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-     store_data,'iug_meteor_'+site_code[ii]+'_uwnd',data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_uwnd',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-     store_data,'iug_meteor_'+site_code[ii]+'_vwnd',data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_vwnd',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-     store_data,'iug_meteor_'+site_code[ii]+'_uwndsig',data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_uwndsig',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
-     store_data,'iug_meteor_'+site_code[ii]+'_vwndsig',data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_vwndsig',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
-     store_data,'iug_meteor_'+site_code[ii]+'_mwnum',data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
-     options,'iug_meteor_'+site_code[ii]+'_mwnum',ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='mwnum'
+     store_data,'iug_meteor_'+site_code[ii]+'_uwnd'+parameter[iii],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_uwnd'+parameter[iii],ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_vwnd'+parameter[iii],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_vwnd'+parameter[iii],ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_uwndsig'+parameter[iii],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_uwndsig'+parameter[iii],ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_vwndsig'+parameter[iii],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_vwndsig'+parameter[iii],ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
+     store_data,'iug_meteor_'+site_code[ii]+'_mwnum'+parameter[iii],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
+     options,'iug_meteor_'+site_code[ii]+'_mwnum'+parameter[iii],ytitle='MW-'+site_code[ii]+'!CHeight!C[km]',ztitle='mwnum'
 
 
      ; add options
-     options, ['iug_meteor_'+site_code[ii]+'_uwnd','iug_meteor_'+site_code[ii]+'_vwnd',$
-               'iug_meteor_'+site_code[ii]+'_uwndsig','iug_meteor_'+site_code[ii]+'_vwndsig',$
-               'iug_meteor_'+site_code[ii]+'_mwnum'], 'spec', 1
+     options, ['iug_meteor_'+site_code[ii]+'_uwnd'+parameter[iii],'iug_meteor_'+site_code[ii]+'_vwnd'+parameter[iii],$
+               'iug_meteor_'+site_code[ii]+'_uwndsig'+parameter[iii],'iug_meteor_'+site_code[ii]+'_vwndsig'+parameter[iii],$
+               'iug_meteor_'+site_code[ii]+'_mwnum'+parameter[iii]], 'spec', 1
 
      ; add options of setting labels
-     options,'iug_meteor_'+site_code[ii]+'_uwnd', labels='MW '+site_code[ii]+' [km]'
-     options,'iug_meteor_'+site_code[ii]+'_vwnd', labels='MW '+site_code[ii]+' [km]'
-     options,'iug_meteor_'+site_code[ii]+'_uwndsig', labels='MW '+site_code[ii]+' [km]'
-     options,'iug_meteor_'+site_code[ii]+'_vwndsig', labels='MW '+site_code[ii]+' [km]'
-     options,'iug_meteor_'+site_code[ii]+'_mwnum', labels='MW '+site_code[ii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_uwnd'+parameter[iii], labels='MW '+site_code[ii]+parameter[iii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_vwnd'+parameter[iii], labels='MW '+site_code[ii]+parameter[iii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_uwndsig'+parameter[iii], labels='MW '+site_code[ii]+parameter[iii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_vwndsig'+parameter[iii], labels='MW '+site_code[ii]+parameter[iii]+' [km]'
+     options,'iug_meteor_'+site_code[ii]+'_mwnum'+parameter[iii], labels='MW '+site_code[ii]+parameter[iii]+' [km]'
    endif
   
   ;Clear time and data buffer:
@@ -280,13 +304,15 @@ for ii=0,n_elements(site_code)-1 do begin
    mer_thermal=0
    meteor_num=0
    ; add tdegap
-   tdegap, 'iug_meteor_'+site_code[ii]+'_uwnd',/overwrite
-   tdegap, 'iug_meteor_'+site_code[ii]+'_vwnd',/overwrite
-   tdegap, 'iug_meteor_'+site_code[ii]+'_uwndsig',/overwrite
-   tdegap, 'iug_meteor_'+site_code[ii]+'_vwndsig',/overwrite
-   tdegap, 'iug_meteor_'+site_code[ii]+'_mwnum',/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_uwnd'+parameter[iii],/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_vwnd'+parameter[iii],/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_uwndsig'+parameter[iii],/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_vwndsig'+parameter[iii],/overwrite
+   tdegap, 'iug_meteor_'+site_code[ii]+'_mwnum'+parameter[iii],/overwrite
    
   endif
+  jj=n_elements(local_paths)
+  endfor
   jj=n_elements(local_paths) 
 endfor 
 

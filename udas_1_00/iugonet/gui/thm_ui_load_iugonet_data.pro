@@ -231,8 +231,8 @@ pro thm_ui_load_iugonet_data_event,event
   endif
   
   Widget_Control, event.handler, Set_UValue=state, /No_Copy
-  
   return
+  
   
 end
 
@@ -437,7 +437,11 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[4])[0] = ptr_new(['*','iprt_sun_L','iprt_sun_R'])
   (*param2Array[4])[1] = ptr_new(['*','iprt_jupiter_L','iprt_jupiter_R'])                             
   (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
-  (*param2Array[6])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
+  (*param2Array[6])[0] = ptr_new(['*','uwnd_h2t60min00','vwnd_h2t60min00','uwndsig_h2t60min00','vwndsig_h2t60min00','mwnum_h2t60min00',$
+                                     'uwnd_h2t60min30','vwnd_h2t60min30','uwndsig_h2t60min30','vwndsig_h2t60min30','mwnum_h2t60min30',$
+                                     'uwnd_h4t60min00','vwnd_h4t60min00','uwndsig_h4t60min00','vwndsig_h4t60min00','mwnum_h4t60min00',$
+                                     'uwnd_h4t60min30','vwnd_h4t60min30','uwndsig_h4t60min30','vwndsig_h4t60min30','mwnum_h4t60min30',$
+                                     'uwnd_h4t240min00','vwnd_h4t240min00','uwndsig_h4t240min00','vwndsig_h4t240min00','mwnum_h4t240min00'])
   (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[7])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
@@ -473,5 +477,5 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   widget_control,topBase,set_uvalue=state
                                   
   return
-
+  
 end

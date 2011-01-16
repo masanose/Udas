@@ -135,6 +135,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
           'f_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
      endcase
      iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
+
   endif 
   
   ;load data of Medium Frequency radar
@@ -155,7 +156,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
           'troposphere': par_names='iug_mu_'+parameters
           'meteor_win':  par_names='iug_mu_meteor_'+parameter
      endcase
-     iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange  
+     iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
   endif
   
   ;load data of Bandary Layer Radar
@@ -197,12 +198,15 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
     store_data,to_delete,/delete
   endif
-     
+                                     
   if loaded eq 1 then begin
+     ;output of the acknowledgement message:
+     iug_load_acknowledgement, instrument=instrument, datatype=datatype
      statusBar->update,'IUGONET Data Loaded Successfully'
      historyWin->update,'IUGONET Data Loaded Successfully'
   endif else begin
      statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
-  endelse   
+  endelse
+
 end
