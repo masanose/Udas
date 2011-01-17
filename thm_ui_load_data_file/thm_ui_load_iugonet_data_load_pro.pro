@@ -13,7 +13,7 @@
 ;A. Shinbori, 12/05/2010
 ;A. Shinbori, 10/07/2010
 ;A. Shinbori, 25/11/2010
-;A. Shinbori, 10/01/2011
+;A. Shinbori, 11/10/2011
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -48,7 +48,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if instrument eq 'geomagnetic_field_index' then begin
     if datatype eq 'ASY_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
-         par_names='iug_'+parameters
+         par_names='wdc_mag_'+parameters
          iug_load_gmag_wdc, site=parameters, trange=timeRange        
       endif
     endif else if datatype eq 'Dst_index' or datatype eq 'AE_index' then begin
@@ -57,21 +57,47 @@ pro thm_ui_load_iugonet_data_load_pro,$
           'Dst_index': vns='dst'
           'AE_index':  vns='ae'
         endcase
-        if parameters[0] eq 'prov' then begin
-          par_names='iug_'+vns+'_prov'
-          iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
-        endif else if parameters[0] eq 'final' then begin
-          par_names='iug_'+vns
-          iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
-        endif else begin
-          iug_load_gmag_wdc, site=vns, trange=timeRange
-          par_names=tnames('iug_'+vns+'*')
-        endelse
+        if vns eq 'dst' then begin 
+           if parameters[0] eq 'prov' then begin
+              par_names='wdc_mag_'+vns+'_prov'
+              iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+           endif else if parameters[0] eq 'final' then begin
+              par_names='wdc_mag_'+vns
+              iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+           endif else begin
+              iug_load_gmag_wdc, site=vns, trange=timeRange
+              par_names=tnames('wdc_mag_'+vns+'*')
+           endelse
+        endif
+        if vns eq 'ae' then begin 
+           if parameters[0] eq '*' then begin
+              vns2=['min','hour','prov_min','prov_hour']
+              vns4=['min','hour','min','hour']
+              for i=0, n_elements(vns2)-1 do begin
+                if vns2[i] eq ('min' or 'hour') then vns3='final'
+                if vns2[i] eq ('prov_min' or 'prov_hour') then vns3='prov'
+                iug_load_gmag_wdc, site=vns, trange=timeRange, level=vns3, resolution=vns4[i]
+              endfor
+              par_names=tnames('wdc_mag_'+vns+'_'+'*')             
+           endif else if parameters eq 'prov_min' then begin
+              par_names='wdc_mag_'+vns+'_prov_1min'
+              iug_load_gmag_wdc, site=vns, trange=timeRange, level='prov', resolution='min'
+           endif else if parameters eq 'prov_hour' then begin
+              par_names='wdc_mag_'+vns+'_prov_1hr'
+              iug_load_gmag_wdc, site=vns, trange=timeRange, level='prov', resolution='hour'
+           endif else if parameters eq 'min' then begin
+              par_names='wdc_mag_'+vns+'_1min'
+              iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='min'
+           endif else if parameters eq 'hour' then begin
+              par_names='wdc_mag_'+vns+'_1hr'
+              iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='hour'
+           endif 
+        endif
       endif
     endif else if datatype eq 'Pc3_index' then begin            
        if site_or_param eq 'Tohoku_U' then begin
-          iug_load_gmag_pc3, site='onw',trange=timeRange 
           if datatype eq 'Pc3_index' then par_names='iug_'+parameters
+          iug_load_gmag_pc3, site='onw',trange=timeRange 
       endif
     endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
@@ -81,15 +107,17 @@ pro thm_ui_load_iugonet_data_load_pro,$
     endif
     if datatype eq '210mm*' then begin
       vns=parameters
-      if parameters[0] eq '*' then vns=['1min']
-      for i=0, n_elements(vns)-1 do begin
-          par_names='mm210_mag_' + site_or_param+'_'+vns[i]+'_hdz'  
-          erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns[i]
-      endfor
+      if parameters[0] eq '*' then vns=['all']
+      erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
+      par_names=tnames('mm210_mag_'+site_or_param+'_'+'*'+'_hdz')
     endif
     if datatype eq 'WDC_kyoto' then begin
-      par_names='iug_mag_'+site_or_param
-      iug_load_gmag_wdc, trange=timeRange, site = site_or_param
+      vns=parameters
+      if parameters[0] eq '*' then vns=['min', 'hour']
+      for i=0, n_elements(vns)-1 do begin
+         iug_load_gmag_wdc, trange=timeRange, site = site_or_param, resolution=vns[i]
+      end
+      par_names=tnames('wdc_mag_'+site_or_param+'_'+'*')
     endif
     if datatype eq 'NIPR_mag*' then begin
       par_names='iug_mag_'+site_or_param
@@ -99,18 +127,21 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of Equatorial Atomosphere Radar
   if instrument eq 'Equatorial_Atomosphere_Radar' then begin
+     case datatype of
+          'troposphere': par_names='iug_ear_'+parameters
+          'e_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
+          'ef_region': par_names='iug_ear_fai'+site_or_param+'_'+parameters
+          'v_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
+          'f_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
+     endcase
      iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
-     if datatype eq 'troposphere' then par_names='iug_ear_'+parameters
-     if datatype eq 'e_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
-     if datatype eq 'ef_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
-     if datatype eq 'v_region' then par_names='iug_ear_fai'+site_or_param+'_'+parameters
-     if datatype eq 'f_region'  then par_names='iug_ear_fai'+site_or_param+'_'+parameters
+
   endif 
   
   ;load data of Medium Frequency radar
   if instrument eq 'Medium_Frequency_radar' then begin
-     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange
-     if site_or_param eq 'pam' or 'pon' then par_names='iug_mf_'+site_or_param+'_'+parameters 
+     par_names='iug_mf_'+site_or_param+'_'+parameters
+     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
   endif
    
   ;load data of Meteor Wind radar
@@ -121,9 +152,11 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of Middle Upper atomosphere radar
   if instrument eq 'Middle_Upper_atomosphere_radar' then begin
-     iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange
-     if datatype eq 'troposphere' then par_names='iug_mu_'+parameters
-     if datatype eq 'meteor_wind' then par_names='iug_mu_meteor_'+parameters     
+     case datatype of
+          'troposphere': par_names='iug_mu_'+parameters
+          'meteor_win':  par_names='iug_mu_meteor_'+parameter
+     endcase
+     iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
   endif
   
   ;load data of Bandary Layer Radar
@@ -165,12 +198,15 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
     store_data,to_delete,/delete
   endif
-     
+                                     
   if loaded eq 1 then begin
+     ;output of the acknowledgement message:
+     iug_load_acknowledgement, instrument=instrument, datatype=datatype
      statusBar->update,'IUGONET Data Loaded Successfully'
      historyWin->update,'IUGONET Data Loaded Successfully'
   endif else begin
      statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
-  endelse   
+  endelse
+
 end

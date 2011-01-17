@@ -231,8 +231,8 @@ pro thm_ui_load_iugonet_data_event,event
   endif
   
   Widget_Control, event.handler, Set_UValue=state, /No_Copy
-  
   return
+  
   
 end
 
@@ -428,16 +428,20 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'pn2','pn3','pn4','pn5','pn6','pn7','pn8']) 
   (*param2Array[2])[0] = ptr_new(['*'])
   (*param2Array[2])[1] = ptr_new(['*','1min','1h'])
-  (*param2Array[2])[2] = ptr_new(['*'])
+  (*param2Array[2])[2] = ptr_new(['*','min','hour'])
   (*param2Array[2])[3] = ptr_new(['*'])  
   (*param2Array[3])[0] = ptr_new(['*','final','prov'])
-  (*param2Array[3])[1] = ptr_new(['*','final','prov'])
+  (*param2Array[3])[1] = ptr_new(['*','min','hour','prov_min','prov_hour'])
   (*param2Array[3])[2] = ptr_new(['*','asy','sym'])
   (*param2Array[3])[3] = ptr_new(['*','pc3_onw'])
   (*param2Array[4])[0] = ptr_new(['*','iprt_sun_L','iprt_sun_R'])
   (*param2Array[4])[1] = ptr_new(['*','iprt_jupiter_L','iprt_jupiter_R'])                             
   (*param2Array[5])[0] = ptr_new(['*','uwnd','vwnd','wwnd'])                              
-  (*param2Array[6])[0] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
+  (*param2Array[6])[0] = ptr_new(['*','uwnd_h2t60min00','vwnd_h2t60min00','uwndsig_h2t60min00','vwndsig_h2t60min00','mwnum_h2t60min00',$
+                                     'uwnd_h2t60min30','vwnd_h2t60min30','uwndsig_h2t60min30','vwndsig_h2t60min30','mwnum_h2t60min30',$
+                                     'uwnd_h4t60min00','vwnd_h4t60min00','uwndsig_h4t60min00','vwndsig_h4t60min00','mwnum_h4t60min00',$
+                                     'uwnd_h4t60min30','vwnd_h4t60min30','uwndsig_h4t60min30','vwndsig_h4t60min30','mwnum_h4t60min30',$
+                                     'uwnd_h4t240min00','vwnd_h4t240min00','uwndsig_h4t240min00','vwndsig_h4t240min00','mwnum_h4t240min00'])
   (*param2Array[7])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[7])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
@@ -473,5 +477,5 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   widget_control,topBase,set_uvalue=state
                                   
   return
-
+  
 end
