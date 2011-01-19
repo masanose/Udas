@@ -57,7 +57,7 @@ if messagetype ne 7 then begin
 endif
 
 if keyword_Set(noname) then begin
-   answer = dialog_message(theMessage, _Extra=extra, Title=title, Information=information)
+   answer = dialog_message(theMessage, /Cancel, _Extra=extra, Title=title, Information=information)
 endif
 
 print, answer

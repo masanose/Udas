@@ -356,7 +356,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[7] = ptr_new(ptrarr(4)) 
   paramArray[8] = ptr_new(ptrarr(1))
   
-  (*paramArray[0])[0] = ptr_new(['ktb','sgk'])
+  (*paramArray[0])[0] = ptr_new(['ktb','sgk','srp'])
   (*paramArray[1])[0] = ptr_new(['ear_standard'])
   (*paramArray[1])[1] = ptr_new(['eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a','eb3p2b','eb3p4a','eb3p4b','eb3p4c',$
                                  'eb3p4d','eb3p4e','eb3p4f','eb4p2c','eb4p2d','eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
