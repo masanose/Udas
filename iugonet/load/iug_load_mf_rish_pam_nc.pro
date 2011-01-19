@@ -65,11 +65,20 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire pameungpeuk data, we ask that you' $
-+ 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as pameungpeuk data provided by Research Institute' $
-+ 'for Sustainable Humanosphere of Kyoto University. We would also' $
-+ 'appreciate receiving a copy of the relevant publications.'
+acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
++ 'should contact the principal investigator of the MF radar in Indonesia ' $
++ 'Prof. Toshitaka Tsuda, Kyoto University, who will organize such collaborations. ' $
++ 'There is a possibility that the PI of the MF radar will arrange offers so that there is less overlapping of themes between our research groups' $
++ 'Before you use the MF radar data for your papers, you must agree to the following points;' $
++ '  1. Before you submit your paper, you must contact the PI (Prof. Toshitaka Tsuda: tsuda@rish.kyoto-u.ac.jp) and discuss authorship.' $
++ '  2. When you submit your paper after doing the above item 1, you must mention the source of the data in the acknowledgment section of your paper.' $
++ '  3. In all circumstances, if anything is published you must send a hardcopy to the following address:' $
++ '    Prof. Toshitaka Tsuda' $
++ '    PI of the MF radar in Indonesia' $
++ '    Director of Research Institute for Sustainable Humanosphere,' $
++ '    Kyoto University' $
++ '    Gokasyo, Uji Kyoto 611-0011, Japan' $
++ '    e-mail: tsuda@rish.kyoto-u.ac.jp' 
 
 ;==================================================================
 ;Download files, read data, and create tplot vars at each component
@@ -204,7 +213,6 @@ if(downloadonly eq 0) then begin
 ;******************************
 ;Store data in TPLOT variables:
 ;******************************
-  acknowledgstring = ''
 
 ;Store data of pameungpeuk wind data:
 ;====================================
@@ -248,10 +256,19 @@ print,'******************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire MF radar data, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as MF radar data provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.'
+print, 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' 
+print, 'should contact the principal investigator of the MF radar in Indonesia ' 
+print, 'Prof. Toshitaka Tsuda, Kyoto University, who will organize such collaborations. ' 
+print, 'There is a possibility that the PI of the MF radar will arrange offers so that there is less overlapping of themes between our research groups' 
+print, 'Before you use the MF radar data for your papers, you must agree to the following points;' 
+print, '  1. Before you submit your paper, you must contact the PI (Prof. Toshitaka Tsuda: tsuda@rish.kyoto-u.ac.jp) and discuss authorship.' 
+print, '  2. When you submit your paper after doing the above item 1, you must mention the source of the data in the acknowledgment section of your paper.' 
+print, '  3. In all circumstances, if anything is published you must send a hardcopy to the following address:' 
+print, '    Prof. Toshitaka Tsuda' 
+print, '    PI of the MF radar in Indonesia' 
+print, '    Director of Research Institute for Sustainable Humanosphere,' 
+print, '    Kyoto University' 
+print, '    Gokasyo, Uji Kyoto 611-0011, Japan' 
+print, '    e-mail: tsuda@rish.kyoto-u.ac.jp'
 
 end

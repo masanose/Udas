@@ -71,9 +71,9 @@ endelse
 
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire MU data, we ask that you' $
-+ 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as MU data provided by Research Institute' $
+acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
++ 'we ask that you acknowledge us in your use of the data. This may be done by' $
++ 'including text such as the MU data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -254,7 +254,6 @@ endif else file_names=fns
  ;******************************
  ;Store data in TPLOT variables:
  ;******************************
-       acknowledgstring = ''
 
 if mu_time[0] ne 0 then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
@@ -308,11 +307,11 @@ print,'******************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire MU data, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as MU data provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.'
+print, 'If you acquire the middle and upper atmosphere (MU) radar data, '
+print, 'we ask that you acknowledge us in your use of the data. ' 
+print, 'This may be done by including text such as MU data provided ' 
+print, 'by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
+print, 'We would also appreciate receiving a copy of the relevant publications.'
 
 end
 

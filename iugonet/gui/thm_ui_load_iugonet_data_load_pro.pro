@@ -181,29 +181,36 @@ pro thm_ui_load_iugonet_data_load_pro,$
     ;only add the requested new parameters
     new_vars = ssl_set_intersection([par_names],[new_vars])
     loaded = 1
+    
+    ;output of the acknowledgement message:
+    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+    
+    if Answer ne 'Cancel' then begin
     ;loop over loaded data
-    for i = 0,n_elements(new_vars)-1 do begin
+      for i = 0,n_elements(new_vars)-1 do begin
     
       ;result = loadedData->add(new_vars[i],mission='IUGONET',instrument=instrument,observatory=datatype)
       ;===  instrument=instrumenty->instrument=datatype, observatory=datatype->observatory=instrument  ===
-       result = loadedData->add(new_vars[i],mission='IUGONET',instrument=site_or_param,observatory=instrument)
-      if ~result then begin
-        statusBar->update,'Error loading: ' + new_vars[i]
-        historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
-        return
-      endif
-    endfor
-  endif
-    
+         result = loadedData->add(new_vars[i],mission='IUGONET',instrument=site_or_param,observatory=instrument)
+        if ~result then begin
+          statusBar->update,'Error loading: ' + new_vars[i]
+          historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
+          return
+        endif
+      endfor
+    endif
+  endif 
+  
   if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
     store_data,to_delete,/delete
   endif
                                      
-  if loaded eq 1 then begin
-     ;output of the acknowledgement message:
-     iug_load_acknowledgement, instrument=instrument, datatype=datatype
+  if (loaded eq 1) and (Answer ne 'Cancel') then begin     
      statusBar->update,'IUGONET Data Loaded Successfully'
      historyWin->update,'IUGONET Data Loaded Successfully'
+  endif else if (loaded eq 1) and (Answer eq 'Cancel') then begin     
+     statusBar->update,'You must accept the rules of the road for IUGONET data ussage before you load and plot the data.'
+     historyWin->update,'You must accept the rules of the road for IUGONET data ussage before you load and plot the data.'
   endif else begin
      statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 

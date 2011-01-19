@@ -96,17 +96,6 @@ endelse
       iug_load_ear_iono_fr_nc, datatype = datatype, parameter = site_or_param, trange = trange
    endif 
    
-;******************************
-;print of acknowledgement:
-;******************************
-print, '****************************************************************
-print, 'Acknowledgement'
-print, '****************************************************************
-print, 'If you acquire EAR data, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as EAR data provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.'
   
 end
 

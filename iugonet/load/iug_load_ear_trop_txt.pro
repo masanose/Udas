@@ -69,9 +69,9 @@ print, parameters
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire EAR data, we ask that you' $
-+ 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as EAR data provided by Research Institute' $
+acknowledgstring = 'If you acquire the equatorial atmospheric radar (EAR) data, ' $
++ 'we ask that you acknowledge us in your use of the data. This may be done by' $
++ 'including text such as the EAR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -191,7 +191,6 @@ for ii=0,n_elements(parameters)-1 do begin
    ;******************************
    ;Store data in TPLOT variables:
    ;******************************
-      acknowledgstring = ''
       o=0
       if time ne 0 then begin
          if strmid(parameters[ii],0,2) eq 'pw' then o=1
@@ -222,11 +221,11 @@ print,'*****************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire EAR data, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as EAR data provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.' 
+print, 'If you acquire the equatorial atmospheric radar (EAR) data, '
+print, 'we ask that you acknowledge us in your use of the data. ' 
+print, 'This may be done by including text such as EAR data provided ' 
+print, 'by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
+print, 'We would also appreciate receivinga copy of the relevant publications.' 
 
 end
 

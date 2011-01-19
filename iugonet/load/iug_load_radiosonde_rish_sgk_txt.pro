@@ -233,7 +233,6 @@ for ii=0,n_elements(site_code)-1 do begin
  ;******************************
  ;Store data in TPLOT variables:
  ;******************************
-       acknowledgstring = ''
 
  ;Store data of meteor wind data:
  ;===============================

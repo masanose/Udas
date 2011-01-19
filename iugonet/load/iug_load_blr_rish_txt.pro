@@ -89,9 +89,9 @@ site_data_dir = strsplit('ktb/blr/ sgk/blr/ srp/blr/ ',' ', /extract)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire BLR data, we ask that you' $
-+ 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as BLR data provided by Research Institute' $
+acknowledgstring = 'If you acquire the boundary layer radar (BLR) data, ' $
++ 'we ask that you acknowledge us in your use of the data. This may be done by' $
++ 'including text such as the BLR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 

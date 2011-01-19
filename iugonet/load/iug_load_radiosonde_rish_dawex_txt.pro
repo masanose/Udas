@@ -249,7 +249,6 @@ for ii=0,n_elements(site_code)-1 do begin
  ;******************************
  ;Store data in TPLOT variables:
  ;******************************
-       acknowledgstring = ''
 
  ;Store data of meteor wind data:
  ;===============================
@@ -312,11 +311,11 @@ print,'******************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire the Dawin campagin data of radio sonde, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as the Dawin campagin data of radio sonde provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.'
+print, 'If you acquire the Dawin campagin data of radio sonde, '
+print, 'we ask that you acknowledge us in your use of the data. ' 
+print, 'This may be done by including text such as the Dawin campagin data of radio sonde ' 
+print, 'provided by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
+print, 'We would also appreciate receiving a copy of the relevant publications.'
 
 end
 

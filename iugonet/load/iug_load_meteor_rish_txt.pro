@@ -68,11 +68,20 @@ site_data_dir = strsplit('/meteor/h2km_t60min00/ /meteor/winddata/h2km_t60min00/
 site_data_premane = strsplit('Wk jkt',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire meteor wind radar data, we ask that you' $
-+ 'acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as the meteor wind data provided by Research Institute' $
-+ 'for Sustainable Humanosphere of Kyoto University. We would also' $
-+ 'appreciate receiving a copy of the relevant publications.'
+acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
++ 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' $
++ 'Prof. Toshitaka Tsuda, Kyoto University, who will organize such collaborations. ' $
++ 'There is a possibility that the PI of the MW radar will arrange offers so that there is less overlapping of themes between our research groups' $
++ 'Before you use the MW radar data for your papers, you must agree to the following points;' $
++ '  1. Before you submit your paper, you must contact the PI (Prof. Toshitaka Tsuda: tsuda@rish.kyoto-u.ac.jp) and discuss authorship.' $
++ '  2. When you submit your paper after doing the above item 1, you must mention the source of the data in the acknowledgment section of your paper.' $
++ '  3. In all circumstances, if anything is published you must send a hardcopy to the following address:' $
++ '    Prof. Toshitaka Tsuda' $
++ '    PI of the MW radar in Indonesia' $
++ '    Director of Research Institute for Sustainable Humanosphere,' $
++ '    Kyoto University' $
++ '    Gokasyo, Uji Kyoto 611-0011, Japan' $
++ '    e-mail: tsuda@rish.kyoto-u.ac.jp' 
 
 ;==================================================================
 ;Download files, read data, and create tplot vars at each component
@@ -246,7 +255,6 @@ for ii=0,n_elements(site_code)-1 do begin
  ;******************************
  ;Store data in TPLOT variables:
  ;******************************
-       acknowledgstring = ''
 
  ;Store data of meteor wind data:
  ;===============================
@@ -304,11 +312,20 @@ print,'******************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire meteor wind radar data, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as meteor wind radar data provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.' 
+print, 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' 
+print, 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' 
+print, 'Prof. Toshitaka Tsuda, Kyoto University, who will organize such collaborations. ' 
+print, 'There is a possibility that the PI of the MW radar will arrange offers so that there is less overlapping of themes between our research groups' 
+print, 'Before you use the MW radar data for your papers, you must agree to the following points;' 
+print, '  1. Before you submit your paper, you must contact the PI (Prof. Toshitaka Tsuda: tsuda@rish.kyoto-u.ac.jp) and discuss authorship.' 
+print, '  2. When you submit your paper after doing the above item 1, you must mention the source of the data in the acknowledgment section of your paper.' 
+print, '  3. In all circumstances, if anything is published you must send a hardcopy to the following address:' 
+print, '    Prof. Toshitaka Tsuda' 
+print, '    PI of the MW radar in Indonesia' 
+print, '    Director of Research Institute for Sustainable Humanosphere,' 
+print, '    Kyoto University' 
+print, '    Gokasyo, Uji Kyoto 611-0011, Japan' 
+print, '    e-mail: tsuda@rish.kyoto-u.ac.jp' 
 
 end
 
