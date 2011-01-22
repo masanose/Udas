@@ -119,9 +119,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
       end
       par_names=tnames('wdc_mag_'+site_or_param+'_'+'*')
     endif
-    if datatype eq 'NIPR_mag*' then begin
-      par_names='iug_mag_'+site_or_param
+    if datatype eq 'NIPR_mag*' then begin     
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param
+      par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
     endif
   endif 
   
@@ -176,6 +176,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
 
   thm_ui_cleanup_tplot,tn_before,create_time_before=cn_before,del_vars=to_delete,new_vars=new_vars
+  
+  ;Definition of answer
+  Answer = ''
 
   if new_vars[0] ne '' then begin
     ;only add the requested new parameters
@@ -184,9 +187,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
     
     ;output of the acknowledgement message:
     Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
-    
+
     if Answer ne 'Cancel' then begin
     ;loop over loaded data
+
       for i = 0,n_elements(new_vars)-1 do begin
     
       ;result = loadedData->add(new_vars[i],mission='IUGONET',instrument=instrument,observatory=datatype)

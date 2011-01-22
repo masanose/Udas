@@ -171,7 +171,6 @@ for i=0,n_elements(site_code)-1 do begin
                          ysubtitle = '[nT]'
     endelse
   endif
-
 endfor
 
 ;---

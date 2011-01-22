@@ -60,7 +60,6 @@ if keyword_Set(noname) then begin
    answer = dialog_message(theMessage, /CANCEL, _Extra=extra, Title=title, Information=information)
 endif
 
-print, answer
 return, answer
 
 end
