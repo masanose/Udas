@@ -101,7 +101,25 @@ foo_sites = thm_check_valid_name(site_in, vsnames_all, $
 nsites = n_elements(foo_sites)
 
 ; acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'Please contact Dr. Hiroaki Misawa.'
+acknowledgstring = '"We would like to present the following two guidelines.' $
++ 'The 1st one concerns what we would like you to do when you use the data.' $
++ '1. Tell us what you are working on.' $
++ 'This is partly because to protect potential Ph.D. thesis projects.' $
++ 'Also, if your project coincides with one that team members are working on,' $
++ 'that can lead to a fruitful collaboration. The 2nd one concerns what you do '$
++ 'when you make any presentations and publications using the data.' $
++ '2. Co-authorship:' $
++ 'When the data forms an important part of your work, we would like you to '$
++ 'offer us co-authorship.' $
++ '3. Acknowledgements:' $
++ 'All presentations and publications should carry the following sentence:' $
++ ' "IPRT(Iitate Planetary Radio Telescope) is a Japanese radio telescope '$
++ 'developed and operated by Tohoku University."' $
++ '4. Entry to publication list:'$
++ 'When your publication is accepted, or when you make a presentation at a '$
++ 'conference on your result, please let us know by sending email to PIs.'
+
+
 
 ;*************************************************************************
 ;***** Download files, read data, and create tplot vars at each site *****
