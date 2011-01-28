@@ -61,12 +61,25 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 
 print, site_code
 
+;***********
+;parameters:
+;***********
+;--- all parameters (default)
+parameter_all = strsplit('h2t60min00 h2T60min30 h4t60min00 h4T60min30 h2t60min00 h4t240min00',' ', /extract)
+
+;--- check parameters
+if(not keyword_set(parameter)) then parameter='all'
+parameter = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+
+print, parameter
+
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/meteor/h2km_t60min00/ /meteor/winddata/h2km_t60min00/ ',' ', /extract)
+site_data_dir = strsplit('/meteor/h2km_t60min00/ /meteor/h2km_t60min30/ /meteor/h4km_t60min00/ /meteor/h4km_t60min30/'+$
+                         ' /meteor/winddata/h2km_t60min00/ /meteor/winddata/h4km_t240min00/',' ', /extract)
 site_data_premane = strsplit('Wk jkt',' ', /extract)
-
+site_data_lastmane = strsplit('.h2t60 .h2T60 .h4t60 .h4T60 .h2t60 .h4t60',' ', /extract)
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
 + 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' $

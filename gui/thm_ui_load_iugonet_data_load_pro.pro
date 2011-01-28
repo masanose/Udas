@@ -40,8 +40,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;====================================
   ;load data of Iitate Planetary Radio Telescope
   if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
-     par_names=parameters
      iug_load_iprt, site =site_or_param, datatype=datatype, trange = timeRange
+     if parameters[0] eq '*' then begin
+        par_names=tnames('*')
+     endif else begin
+        par_names=parameters
+     endelse
   endif
   
   ;load data of geomagnetic field index
@@ -146,8 +150,11 @@ pro thm_ui_load_iugonet_data_load_pro,$
    
   ;load data of Meteor Wind radar
   if instrument eq 'Meteor_Wind_radar' then begin
-     par_names='iug_meteor_'+site_or_param+'_'+parameters
-     iug_load_meteor_rish_nc, datatype =datatype, site=site_or_param, trange = timeRange
+     if parameters[0] ne '*' then para=strsplit(parameters,'_',/extract)
+     vns=para[1]
+     if parameters[0] eq '*' then vns=['all']
+     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameters = vns, trange = timeRange
+     par_names=tnames('iug_meteor_'+site_or_param+'_'+'*')
   endif 
   
   ;load data of Middle Upper atomosphere radar
