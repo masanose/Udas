@@ -13,7 +13,8 @@
 ;A. Shinbori, 12/05/2010
 ;A. Shinbori, 10/07/2010
 ;A. Shinbori, 25/11/2010
-;A. Shinbori, 11/10/2011
+;A. Shinbori, 11/01/2011
+;A. Shinbori, 01/02/2011
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -171,7 +172,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
      par_names='iug_blr_'+site_or_param+'_'+parameters
      iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
   endif
-  
+
+  ;load data of Lower Troposphere Radar
+  if instrument eq 'Lower_Troposphere_Radar' then begin       
+     par_names='iug_ltr_'+site_or_param+'_'+parameters
+     iug_load_ltr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+  endif
+    
   ;load data of Radio sonde 
   if instrument eq 'Radio_sonde' then begin
      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
