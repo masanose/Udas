@@ -26,11 +26,11 @@
 ;
 ;
 ;Example:
-;  timespan,'2010-11-01',/day
-;  iug_load_iprt_sun
+;  timespan,'2010-11-02',day=2
+;  iug_load_iprt
 ;  tplot_names
-;  zlim,'iprt_sun_L',0,12
-;  zlim,'iprt_sun_R',0,12
+;  zlim,'iprt_sun_L',20,120
+;  zlim,'iprt_sun_R',20,120
 ;  tplot,['iprt_sun_L','iprt_sun_R']
 ;
 ;
@@ -134,7 +134,7 @@ for i=0, nsites-1 do begin
   pathformat= strupcase(strmid(foo_sites[i],0,3)) + '/' + $
             'YYYY/YYYYMMDD_IPRT'
 
-  relpathnames = file_dailynames(file_format='YYYY/YYYYMMDD_IPRT', $
+  relpathnames = file_dailynames(file_format='/YYYY/YYYYMMDD_IPRT', $
                                  trange=trange, addmaster=addmaster)+'.fits'
 
   ; define remote and local path information
