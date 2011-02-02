@@ -185,18 +185,20 @@ for ii=0,n_elements(site_code)-1 do begin
              height = strsplit(s,',',/extract)
              
              ;Definition of altitude and data arraies:
-             altitude = fltarr(n_elements(height)-1)
-             data = strarr(n_elements(height))
-             data2 = fltarr(1,n_elements(height)-1)
+             altitude = fltarr(70)
+             data = strarr(70)
+             data2 = fltarr(1,70)
              
              for j=0,n_elements(height)-2 do begin
                  altitude[j] = float(height[j+1])
              endfor
 
-             for j=0,n_elements(height)-2 do begin
+             for j=0, n_elements(altitude)-1 do begin
                  b = float(altitude[j])
                  wbad = where(b eq 0,nbad)
                  if nbad gt 0 then b[wbad] = !values.f_nan
+                 data[j] = !values.f_nan
+                 data2[j] = !values.f_nan
                  altitude[j]=b
              endfor
 

@@ -94,13 +94,6 @@ acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar dat
    ;===========================================================
    ;Read the files:
    ;===============
-
-      height1 = fltarr(150)
-      height2 = fltarr(150)
-      height3 = fltarr(150)
-      height4 = fltarr(150)
-      height5 = fltarr(150)
-      time2 = dblarr(144)
       
     ; Initialize data and time buffer
       ear_time=0
@@ -193,6 +186,7 @@ for j=0,n_elements(local_paths)-1 do begin
     day = fix(strmid(date,10,2))
                            
     ; Definition of arrary names
+    time2 = dblarr(n_elements(time))
     height2 = fltarr(n_elements(range))
     uwind_mu=fltarr(n_elements(time),n_elements(range))
     vwind_mu=fltarr(n_elements(time),n_elements(range))

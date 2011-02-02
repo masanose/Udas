@@ -60,7 +60,7 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;***********
 ;--- all parameters1 (default)
-parameter1_all = strsplit('efb1p16 efb1p16a efb1p16b eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
+parameter1_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
                           'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb4p2c eb4p2d '+$
                           'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a ',$
                           ' ', /extract)

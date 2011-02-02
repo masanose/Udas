@@ -151,8 +151,8 @@ for iii=0,n_elements(parameters)-1 do begin
          time = dblarr(1)
 
       ; Initialize data and time buffer
-         blr_data = 0
-         blr_time = 0
+         ltr_data = 0
+         ltr_time = 0
 
       ;Loop on files (zonal component): 
       ;================================
@@ -171,9 +171,9 @@ for iii=0,n_elements(parameters)-1 do begin
              height = strsplit(s,',',/extract)
              
              ;Definition of altitude and data arraies:
-             altitude = fltarr(50)
-             data = strarr(50)
-             data2 = fltarr(1,50)
+             altitude = fltarr(70)
+             data = strarr(70)
+             data2 = fltarr(1,70)
              
              for j=0,n_elements(height)-2 do begin
                  altitude[j] = float(height[j+1])
@@ -255,8 +255,8 @@ for iii=0,n_elements(parameters)-1 do begin
           endif
 
           ;Clear time and data buffer:
-          blr_data = 0
-          blr_time = 0
+          ltr_data = 0
+          ltr_time = 0
           
           ; add tdegap
          tdegap, 'iug_ltr_'+site_code[0]+'_'+parameters[iii],/overwrite
