@@ -17,7 +17,7 @@
 
 ;Specify timespan:
 ;=================
-timespan,'2005-08-24',3
+timespan,'2005-08-24',3,/day
 
 ;Load field aligned irregularity (FAI) observation data taken by EAR in timespan:
 ;Details of the parameter1 and parameter2 are described in the EAR-FAI homepage
@@ -34,6 +34,7 @@ iug_load_ear, datatype = 'e_region',  parameter1 = 'eb3p4b', parameter2 = 'dpl1'
 ;=======================================================================================
 tplot,['iug_ear_faieb34p_dpl1','iug_ear_faieb3p4b_pwr1']
 
+stop
 
 ;Load all the standard observation data of the troposphere and stratosphere 
 ;taken by the EAR in timespan:
@@ -51,10 +52,17 @@ tplot,['iug_ear_faieb34p_dpl1','iug_ear_faieb3p4b_pwr1']
 iug_load_ear, datatype = 'troposphere'
 
 
-;Plot time-height distribution of Doppler velocity in the ionosphere and zonal wind in the troposphere:
-;======================================================================================================
+;Plot time-height distribution of Doppler velocity and echo intensity in the ionosphere 
+;and zonal wind in the troposphere:
+;======================================================================================
 tplot,['iug_ear_faieb3p4b_dpl1','iug_ear_faieb3p4b_pwr1','iug_ear_uwnd','iug_ear_vwnd']
 
+stop
+
+; Set up the plot time range of EAR data in the ionosphere and troposphere:
+;==========================================================================
+tlimit, '2005-08-24 11:00:00', '2005-08-25 00:00:00'
+tplot
 
 end
 

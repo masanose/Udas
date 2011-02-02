@@ -17,7 +17,7 @@
 
 ;Specify timespan:
 ;=================
-timespan,'2005-12-01',31
+timespan,'2005-12-01',31,/day
 
 
 ;Load the zonal wind data taken by the LTR at Shigaraki in timespan:
@@ -34,6 +34,7 @@ iug_load_ltr_rish_txt, site = 'sgk', parameter = 'uwnd'
 ;============================================
 tplot,['iug_ltr_sgk_uwnd']
 
+stop
 
 ;Load the meridional wind data taken by the LTR at Shigaraki in timespan:
 ;========================================================================
@@ -44,7 +45,12 @@ iug_load_ltr_rish_txt, site = 'sgk', parameter = 'vwnd'
 ;============================================================
 tplot,['iug_ltr_sgk_uwnd','iug_ltr_sgk_vwnd']
 
+stop
 
+; Set up the plot time range of zonal and meridional winds in the troposphere:
+;===============================================================================
+tlimit, '2005-12-01 00:00:00', '2005-12-04 00:00:00'
+tplot
 end
 
 

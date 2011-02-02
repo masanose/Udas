@@ -17,7 +17,7 @@
 
 ;Specify timespan:
 ;=================
-timespan,'2002-09-23',4
+timespan,'2002-09-23',4,/day
 
 ;Load all the radiosonde observation data at Shigaraki in timespan:
 ;We can select the parameters as 'uwnd', 'vwnd', 'wwnd', 'pwr1', 'pwr2', 'pwr3',

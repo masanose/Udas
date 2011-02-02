@@ -17,7 +17,7 @@
 
 ;Specify timespan:
 ;=================
-timespan,'1994-09-29',1
+timespan,'1994-09-29',1,/day
 
 ;Load all the standard observation data of the troposphere and stratosphere 
 ;taken by the MU radar in timespan:
@@ -39,6 +39,13 @@ iug_load_mu, datatype = 'troposphere'
 ;===============================================================================
 tplot,['iug_mu_uwnd','iug_mu_pwr1','iug_mu_wdt1','iug_mu_dpl1', 'iug_mu_pn1']
 
+stop
+
+; Set up the plot time range of zonal wind, and echo intensity, spectral width,
+;radial Doppler velocity, and noise level for beam number 1 in the troposphere:
+;===============================================================================
+tlimit, '1994-09-29 10:00:00', '1994-09-29 15:00:00'
+tplot
 
 end
 

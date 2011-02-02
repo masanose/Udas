@@ -17,7 +17,7 @@
 
 ;Specify timespan:
 ;=================
-timespan,'2007-08-01',31
+timespan,'2007-08-01',31,/day
 
 
 ;Load zonal wind data at Kototabang in timespan:
@@ -34,6 +34,7 @@ iug_load_blr_rish_txt, site = 'ktb', parameter = 'uwnd'
 ;============================================
 tplot,['iug_blr_ktb_uwnd']
 
+stop
 
 ;Load meridional wind data at Kototabang in timespan:
 ;====================================================
@@ -44,6 +45,12 @@ iug_load_blr_rish_txt, site = 'ktb', parameter = 'vwnd'
 ;============================================================
 tplot,['iug_blr_ktb_uwnd','iug_blr_ktb_vwnd']
 
+stop
+
+; Set up the plot time range of zonal and meridional winds in the troposphere:
+;===============================================================================
+tlimit, '2007-08-01 00:00:00', '2007-08-05 00:00:00'
+tplot
 
 end
 
