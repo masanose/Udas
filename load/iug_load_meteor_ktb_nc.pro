@@ -25,11 +25,10 @@
 ;                 into variables.
 ;
 ;Code:
-;  A. Shinbori, 28/08/2010.
+;  A. Shinbori, 02/04/2011.
 ;  
 ;Modifications:
-;  A. Shinbori, 10/09/2010.
-;  A. Shinbori, 25/11/2010.
+;
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -38,7 +37,7 @@
 ; $URL $
 ;-
 
-pro iug_load_meteor_ktb_nc, datatype = datatype, parameters = parameters, $
+pro iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, $
                              downloadonly = downloadonly, trange = trange, verbose = verbose
 
 ;**************

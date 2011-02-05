@@ -132,61 +132,101 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of Equatorial Atomosphere Radar
   if instrument eq 'Equatorial_Atomosphere_Radar' then begin
-     case datatype of
-          'troposphere': par_names='iug_ear_'+parameters
-          'e_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
-          'ef_region': par_names='iug_ear_fai'+site_or_param+'_'+parameters
-          'v_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
-          'f_region':  par_names='iug_ear_fai'+site_or_param+'_'+parameters
-     endcase
-     iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
-
+     if parameters[0] eq '*' then begin
+        vns=['all']
+        iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = vns, trange = timeRange
+        case datatype of
+             'troposphere': par_names=tnames('iug_ear_'+'*')
+             'e_region':  par_names=tnames('iug_ear_fai'+site_or_param+'_'+'*')
+             'ef_region': par_names=tnames('iug_ear_fai'+site_or_param+'_'+'*')
+             'v_region':  par_names=tnames('iug_ear_fai'+site_or_param+'_'+'*')
+             'f_region':  par_names=tnames('iug_ear_fai'+site_or_param+'_'+'*')
+        endcase
+     endif else begin
+        vns=parameters
+        iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = vns, trange = timeRange
+        case datatype of
+             'troposphere': par_names='iug_ear_'+vns
+             'e_region':  par_names='iug_ear_fai'+site_or_param+'_'+vns
+             'ef_region': par_names='iug_ear_fai'+site_or_param+'_'+vns
+             'v_region':  par_names='iug_ear_fai'+site_or_param+'_'+vns
+             'f_region':  par_names='iug_ear_fai'+site_or_param+'_'+vns
+        endcase
+     endelse
   endif 
   
   ;load data of Medium Frequency radar
-  if instrument eq 'Medium_Frequency_radar' then begin
-     par_names='iug_mf_'+site_or_param+'_'+parameters
-     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
-  endif
+;  if instrument eq 'Medium_Frequency_radar' then begin
+;     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
+;     if parameters[0] eq '*' then begin
+;        par_names=tnames('iug_mf_'+site_or_param+'_'+'*')
+;     endif else begin
+;        par_names='iug_mf_'+site_or_param+'_'+parameters
+;     endelse
+;  endif
    
   ;load data of Meteor Wind radar
-  if instrument eq 'Meteor_Wind_radar' then begin
-     if parameters[0] ne '*' then para=strsplit(parameters,'_',/extract)
-     vns=para[1]
-     if parameters[0] eq '*' then vns=['all']
-     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameters = vns, trange = timeRange
-     par_names=tnames('iug_meteor_'+site_or_param+'_'+'*')
-  endif 
+;  if instrument eq 'Meteor_Wind_radar' then begin
+;     if parameters[0] ne '*' then para=strsplit(parameters,'_',/extract)
+;     vns=para[1]
+;     if parameters[0] eq '*' then vns=['all']
+;     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameters = vns, trange = timeRange
+;     par_names=tnames('iug_meteor_'+site_or_param+'_'+'*')
+;  endif 
   
   ;load data of Middle Upper atomosphere radar
   if instrument eq 'Middle_Upper_atomosphere_radar' then begin
-     case datatype of
-          'troposphere': par_names='iug_mu_'+parameters
-          'meteor_win':  par_names='iug_mu_meteor_'+parameter
-     endcase
      iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
+     if parameters[0] eq '*' then begin
+        case datatype of
+          'troposphere': par_names=tnames('iug_mu_'+'*')
+;          'meteor_win':  par_names=tnames('iug_mu_meteor_'+'*')
+        endcase
+     endif else begin
+        case datatype of
+          'troposphere': par_names='iug_mu_'+parameters
+;          'meteor_win':  par_names='iug_mu_meteor_'+parameters
+        endcase
+     endelse
   endif
   
   ;load data of Bandary Layer Radar
-  if instrument eq 'Boundary_Layer_Radar' then begin       
-     par_names='iug_blr_'+site_or_param+'_'+parameters
+  if instrument eq 'Boundary_Layer_Radar' then begin          
      iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+     if parameters[0] eq '*' then begin
+        par_names=tnames('iug_blr_'+site_or_param+'_'+'*')
+     endif else begin
+        par_names='iug_blr_'+site_or_param+'_'+parameters
+     endelse
   endif
 
   ;load data of Lower Troposphere Radar
   if instrument eq 'Lower_Troposphere_Radar' then begin       
-     par_names='iug_ltr_'+site_or_param+'_'+parameters
      iug_load_ltr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+     if parameters[0] eq '*' then begin
+        par_names=tnames('iug_ltr_'+site_or_param+'_'+'*')
+     endif else begin
+        par_names='iug_ltr_'+site_or_param+'_'+parameters
+     endelse
   endif
     
   ;load data of Radio sonde 
-  if instrument eq 'Radio_sonde' then begin
-     par_names='iug_radiosonde_'+site_or_param+'_'+parameters
-     iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange
-     if site_or_param eq 'sgk' then begin      
-        iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
-     endif
-  endif
+  ;if instrument eq 'Radio_sonde' then begin
+  ;   iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange
+  ;   if parameters[0] eq '*' then begin 
+  ;      par_names=tnames('iug_radiosonde_'+site_or_param+'_'+'*')
+  ;   endif else begin
+  ;      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
+  ;   endelse        
+  ;   if site_or_param eq 'sgk' then begin      
+  ;      iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
+  ;      if parameters[0] eq '*' then begin 
+  ;         par_names=tnames('iug_radiosonde_'+site_or_param+'_'+'*')
+  ;      endif else begin
+  ;         par_names='iug_radiosonde_'+site_or_param+'_'+parameters
+  ;      endelse
+  ;   endif
+  ;endif
   
 
   thm_ui_cleanup_tplot,tn_before,create_time_before=cn_before,del_vars=to_delete,new_vars=new_vars
