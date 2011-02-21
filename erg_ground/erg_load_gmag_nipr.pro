@@ -9,9 +9,6 @@
 ;
 ; PURPOSE:
 ;   Loading the fluxgate magnetometer data obtained by NIPR.
-;   At the moment, CDF files are available only for Syowa data (syo) 
-;   with 1-sec resolution in the interval from Feb. 4, 2003 to 
-;   Jan. 31, 2010.
 ;
 ; KEYWORDS:
 ;   site  = Observatory name, example, erg_load_gmag_nipr, site='syo',
@@ -46,7 +43,7 @@
 ;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
 ;
 ; Written by H. Tadokoro, June 1, 2010
-; Revised by Y.-M. Tanaka, December 24, 2010 (ytanaka at nipr.ac.jp)
+; Revised by Y.-M. Tanaka, February 17, 2011 (ytanaka at nipr.ac.jp)
 ; The prototype of this procedure was written by Y. Miyashita, Apr 22, 2010, 
 ;        ERG-Science Center, STEL, Nagoya Univ.
 ;-
@@ -86,12 +83,6 @@ endelse
 
 datatype=datatype[0]
 
-case strlowcase(datatype) of
-  '1sec': varformat='hdz_sec'
-  '20hz': varformat='hdz_20hz'
-  else:   varformat='hdz_sec'
-endcase
-
 instr='fmag'
 
 ;*************************************************************************
@@ -103,19 +94,45 @@ instr='fmag'
 ;*** load CDF ***
 for i=0,n_elements(site_code)-1 do begin
   
+  tr=timerange(trange)
+  tr0=tr(0)
+  if strlowcase(datatype) eq '1sec' then begin
+    if site_code[i] eq 'syo' then begin
+      crttime=time_double('1998-1-1')
+      if tr0 lt crttime then tres='2sec' else tres='1sec'
+    endif
+    if site_code[i] eq 'hus' then begin
+      crttime=time_double('2001-09-08')
+      if tr0 lt crttime then tres='2sec' else tres='02hz'
+    endif
+    if site_code[i] eq 'tjo' then begin
+      crttime=time_double('2001-9-12')
+      if tr0 lt crttime then tres='2sec' else tres='02hz'
+    endif
+    if site_code[i] eq 'aed' then begin
+      crttime=time_double('2001-9-27')
+      if tr0 lt crttime then tres='2sec' else tres='02hz'
+    endif
+    if site_code[i] eq 'isa' then begin
+      tres='2sec'
+    endif
+  endif else begin
+    tres=datatype
+  endelse
+
   ;--- Create (and initialize) a data file structure 
   source = file_retrieve(/struct)
   source.verbose = verbose
 
   ;--- Set parameters for the data file class
   source.local_data_dir  = root_data_dir() + 'iugonet/nipr/'
-  source.remote_data_dir = 'http://www.nipr.ac.jp/~ytanaka/data/'
+  source.remote_data_dir = 'http://iugonet0.nipr.ac.jp/data/'
   if keyword_set(no_download) then source.no_download = 1
 
   relpathnames1 = file_dailynames(file_format='YYYY', trange=trange)
   relpathnames2 = file_dailynames(file_format='YYYYMMDD', trange=trange)
-  relpathnames  = instr+'/'+site_code[i]+'/'+strlowcase(datatype)+'/'+$
-    relpathnames1 + '/nipr_????_'+instr+'_'+site_code[i]+'_'+$
+  relpathnames  = instr+'/'+site_code[i]+'/'+tres+'/'+$
+    relpathnames1 + '/nipr_'+tres+'_'+instr+'_'+site_code[i]+'_'+$
     relpathnames2 + '_v??.cdf'
 
   ;--- Download the designated data files from the remote data server
@@ -135,7 +152,30 @@ for i=0,n_elements(site_code)-1 do begin
     print, 'Affiliations: ', gatt.PI_affiliation
     print, ''
     print, 'Rules of the Road for NIPR Fluxgate Magnetometer Data:'
-    print, gatt.text
+    ;--- Show gatt.text ---;
+    linelen=100
+    textlen=strlen(gatt.text)
+    remtext=gatt.text
+    for iline=0, textlen/linelen do begin
+      remtextlen=strlen(remtext)
+      if remtextlen gt linelen then begin
+        line1=strmid(remtext, 0, linelen)
+        for istr=0, linelen-1 do begin
+          str1=strmid(line1,linelen-istr-1,1)
+          if str1 eq ' ' then begin
+            line1=strmid(line1, 0, linelen-istr-1)
+            remtext=strmid(remtext, linelen-istr, remtextlen-linelen+istr+1)
+            break
+          endif
+        endfor
+        print, line1
+      endif else begin
+        line1=strmid(remtext, 0, remtextlen)
+        print, line1
+        break
+      endelse
+    endfor
+    ;----------------------;
     print, ''
     print, gatt.LINK_TEXT, ' ', gatt.HTTP_LINK
     print, '**************************************************************************************'
@@ -147,6 +187,7 @@ for i=0,n_elements(site_code)-1 do begin
 
   if(downloadonly eq 0) then begin
     prefix_tmp='nipr_'
+    varformat='hdz_'+tres
     cdf2tplot, file=files, verbose=source.verbose, prefix=prefix_tmp, $
 	varformat=varformat
 
@@ -158,7 +199,7 @@ for i=0,n_elements(site_code)-1 do begin
       print, 'No tplot var loaded for '+site_code[i]+'.'
     endif else begin
       ;--- Rename tplot variables
-      tplot_name_new='nipr_mag_'+site_code[i]+'_'+datatype
+      tplot_name_new='nipr_mag_'+site_code[i]+'_'+tres
       copy_data, tplot_name_tmp, tplot_name_new
       store_data, tplot_name_tmp, /delete
 
@@ -171,6 +212,7 @@ for i=0,n_elements(site_code)-1 do begin
                          ysubtitle = '[nT]'
     endelse
   endif
+
 endfor
 
 ;---
