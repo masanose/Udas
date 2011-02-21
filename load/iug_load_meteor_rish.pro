@@ -4,7 +4,7 @@
 ;iug_load_meteor_rish
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for the kototabang and serpong data 
+;  Queries the Kyoto_RISH data server for the kototabang and serpong data 
 ;  and loads data into tplot format.
 ;
 ;Syntax:
@@ -42,7 +42,7 @@
 ;-
 
 
-pro iug_load_meteor_rish, datatype = datatype, site=site, parameters = parameters, $
+pro iug_load_meteor_rish, datatype = datatype, site=site, parameter = parameter, $
                            downloadonly=downloadonly, trange=trange, verbose=verbose
 
 
@@ -60,9 +60,9 @@ if (not keyword_set(datatype)) then datatype='thermosphere'
 ;****************
 ;Parameter check:
 ;****************
-if (not keyword_set(parameters)) then parameters='h2t60min00'
+if (not keyword_set(parameter)) then parameter='h2t60min00'
 
-print, parameters
+print, parameter
 ;***********
 ;site codes:
 ;***********
@@ -76,9 +76,9 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 for i=0, n_elements(site_code)-1 do begin
-  if (site_code[i] eq 'ktb') && (parameters ne 'h4t240min00') then iug_load_meteor_ktb_nc, datatype = datatype, parameters = parameters, $
+  if (site_code[i] eq 'ktb') && (parameter ne 'h4t240min00') then iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose
-  if site_code[i] eq 'srp' then iug_load_meteor_srp_nc, datatype = datatype, parameters = parameters, $
+  if site_code[i] eq 'srp' then iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose
 endfor
 

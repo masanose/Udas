@@ -125,8 +125,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
       par_names=tnames('wdc_mag_'+site_or_param+'_'+'*')
     endif
     if datatype eq 'NIPR_mag*' then begin     
-      iug_load_gmag_nipr, trange=timeRange, site = site_or_param
-      par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
+      iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
+      if parameters[0] eq '*' then begin
+         par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
+      endif else begin
+         par_names='nipr_mag_'+site_or_param+'_'+parameters
+      endelse
     endif
   endif 
   
@@ -156,23 +160,23 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif 
   
   ;load data of Medium Frequency radar
-;  if instrument eq 'Medium_Frequency_radar' then begin
-;     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
-;     if parameters[0] eq '*' then begin
-;        par_names=tnames('iug_mf_'+site_or_param+'_'+'*')
-;     endif else begin
-;        par_names='iug_mf_'+site_or_param+'_'+parameters
-;     endelse
-;  endif
+  if instrument eq 'Medium_Frequency_radar' then begin
+     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
+     if parameters[0] eq '*' then begin
+        par_names=tnames('iug_mf_'+site_or_param+'_'+'*')
+     endif else begin
+        par_names='iug_mf_'+site_or_param+'_'+parameters
+     endelse
+  endif
    
   ;load data of Meteor Wind radar
-;  if instrument eq 'Meteor_Wind_radar' then begin
-;     if parameters[0] ne '*' then para=strsplit(parameters,'_',/extract)
-;     vns=para[1]
-;     if parameters[0] eq '*' then vns=['all']
-;     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameters = vns, trange = timeRange
-;     par_names=tnames('iug_meteor_'+site_or_param+'_'+'*')
-;  endif 
+  if instrument eq 'Meteor_Wind_radar' then begin
+     if parameters[0] ne '*' then para=strsplit(parameters,'_',/extract)
+     vns=para[1]
+     if parameters[0] eq '*' then vns=['all']
+     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameters = vns, trange = timeRange
+     par_names=tnames('iug_meteor_'+site_or_param+'_'+'*')
+  endif 
   
   ;load data of Middle Upper atomosphere radar
   if instrument eq 'Middle_Upper_atomosphere_radar' then begin

@@ -27,12 +27,33 @@ timespan,'2005-08-24',3,/day
 ;V-region ----> datatype = 'v_region'
 ;F-region ----> datatype = 'F_region'
 ;===============================================================================
-iug_load_ear, datatype = 'e_region',  parameter1 = 'eb3p4b', parameter2 = 'dpl1'
+iug_load_ear, datatype = 'e_region',  parameter1 = 'eb3p4b', parameter2 = ['dpl1','pwr1','wdt1','pn1']
 
 
 ;Plot time-height distribution of radial Doppler velocity and echo intensity for beam 1:
 ;=======================================================================================
-tplot,['iug_ear_faieb34p_dpl1','iug_ear_faieb3p4b_pwr1']
+tplot,['iug_ear_faieb3p4b_dpl1','iug_ear_faieb3p4b_pwr1','iug_ear_faieb3p4b_wdt1','iug_ear_faieb3p4b_pn1']
+
+stop
+
+;Substract the average data of radial Doppler velocity, echo intensity, spectral width and noise level for beam 1:
+;=================================================================================================================
+tsub_average,'iug_ear_faieb3p4b_dpl1'
+tsub_average,'iug_ear_faieb3p4b_pwr1'
+tsub_average,'iug_ear_faieb3p4b_wdt1'
+tsub_average,'iug_ear_faieb3p4b_pn1'
+tplot,['iug_ear_faieb3p4b_dpl1-d','iug_ear_faieb3p4b_pwr1-d','iug_ear_faieb3p4b_wdt1-d','iug_ear_faieb3p4b_pn1-d']
+
+stop
+
+;1-hour running average  of radial Doppler velocity, echo intensity, spectral width and noise level for beam 1:
+;==============================================================================================================
+tsmooth_in_time, 'iug_ear_faieb3p4b_dpl1', 600
+tsmooth_in_time, 'iug_ear_faieb3p4b_pwr1', 600
+tsmooth_in_time, 'iug_ear_faieb3p4b_wdt1', 600
+tsmooth_in_time, 'iug_ear_faieb3p4b_pn1', 600
+
+tplot, ['iug_ear_faieb3p4b_dpl1_smoothed','iug_ear_faieb3p4b_pwr1_smoothed','iug_ear_faieb3p4b_wdt1_smoothed','iug_ear_faieb3p4b_pn1_smoothed']
 
 stop
 
@@ -52,10 +73,9 @@ stop
 iug_load_ear, datatype = 'troposphere'
 
 
-;Plot time-height distribution of Doppler velocity and echo intensity in the ionosphere 
-;and zonal wind in the troposphere:
-;======================================================================================
-tplot,['iug_ear_faieb3p4b_dpl1','iug_ear_faieb3p4b_pwr1','iug_ear_uwnd','iug_ear_vwnd']
+;Plot time-height distribution of zonal, meridional and vertical winds in the troposphere:
+;========================================================================================
+tplot,['iug_ear_uwnd','iug_ear_vwnd','iug_ear_wwnd']
 
 stop
 

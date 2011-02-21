@@ -4,17 +4,17 @@
 ;iug_load_meteor_srp_nc
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for the NetCDF data of the meteor radar at serpong
+;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor radar at serpong
 ;  and loads data into tplot format.
 ;
 ;Syntax:
-; iug_load_meteor_srp_nc, datatype = datatype, parameters = parameters, downloadonly = downloadonly, $
+; iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, downloadonly = downloadonly, $
 ;                           trange = trange, verbose=verbose
 ;
 ;Keywords:
-;  datatype = Observation data type. For example, iug_load_meteor_rish_nc, datatype = 'thermosphere'.
+;  datatype = Observation data type. For example, iug_load_meteor_srp_nc, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'. 
-;  parameters = Data parameter. For example, iug_load_meteor_rish, parameter = 'h2t60min00'. 
+;  parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
 ;             A kind of parameters is 2 types of 'h2t60min00', 'h4T60min00'.
 ;             The default is 'all'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -38,7 +38,7 @@
 ; $URL $
 ;-
 
-pro iug_load_meteor_srp_nc, datatype = datatype, parameters = parameters, $
+pro iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, $
                              downloadonly = downloadonly, trange = trange, verbose = verbose
 
 ;**************
@@ -59,16 +59,16 @@ if (not keyword_set(datatype)) then datatype='thermosphere'
 parameter_all = strsplit('h2t60min00 h4t240min00',' ', /extract)
 
 ;--- check parameters
-if(not keyword_set(parameters)) then parameters='all'
-parameters = thm_check_valid_name(parameters, parameter_all, /ignore_case, /include_all)
+if(not keyword_set(parameter)) then parameter='all'
+parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/meteor/netCDF/h2km_t60min00/ /meteor/netCDF/h4km_t240min00/',' ', /extract)
-site_data_lastmane = strsplit('_serp_h2t60.nc _serp_h4t240.nc',' ', /extract)
+site_data_dir = strsplit('/h2km_t60min00/ /h4km_t240min00/',' ', /extract)
+site_data_lastmane = strsplit('.h2t60min00.nc .h4t240min00.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
@@ -125,7 +125,7 @@ kk=0
     ;Get files for ith component:
     ;***************************       
       file_names = file_dailynames( $
-                   file_format='YYYY/'+$
+                   file_format='YYYY/jkt'+$
                    'YYYYMM',trange=trange,times=times,/unique)+site_data_lastmane[iii+kk]
     ;        
     ;Define FILE_RETRIEVE structure:
@@ -133,8 +133,7 @@ kk=0
        source = file_retrieve(/struct)
        source.verbose=verbose
        source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp'+site_data_dir[iii+kk]
-
-    ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc'+site_data_dir[iii+kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -308,12 +307,20 @@ kk=0
    zon_thermal=0
    mer_thermal=0
    meteor_num=0
+   
    ; add tdegap
    tdegap, 'iug_meteor_srp_uwnd_'+parameters[iii],/overwrite
    tdegap, 'iug_meteor_srp_vwnd_'+parameters[iii],/overwrite
    tdegap, 'iug_meteor_srp_uwndsig_'+parameters[iii],/overwrite
    tdegap, 'iug_meteor_srp_vwndsig_'+parameters[iii],/overwrite
    tdegap, 'iug_meteor_srp_mwnum_'+parameters[iii],/overwrite
+   
+   ; add tclip
+   tclip, 'iug_meteor_srp_uwnd_'+parameters[iii],-200,200,/overwrite
+   tclip, 'iug_meteor_srp_vwnd_'+parameters[iii],-200,200,/overwrite
+   tclip, 'iug_meteor_srp_uwndsig_'+parameters[iii],0,400,/overwrite
+   tclip, 'iug_meteor_srp_vwndsig_'+parameters[iii],0,400,/overwrite
+   tclip, 'iug_meteor_srp_mwnum_'+parameters[iii],0,1200,/overwrite  
    
   endif
   jj=n_elements(local_paths)
