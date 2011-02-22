@@ -244,7 +244,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     loaded = 1
     
     ;output of the acknowledgement message:
-    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+   ; Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
 
     if Answer ne 'Cancel' then begin
     ;loop over loaded data
@@ -271,8 +271,8 @@ pro thm_ui_load_iugonet_data_load_pro,$
      statusBar->update,'IUGONET Data Loaded Successfully'
      historyWin->update,'IUGONET Data Loaded Successfully'
   endif else if (loaded eq 1) and (Answer eq 'Cancel') then begin     
-     statusBar->update,'You must accept the rules of the road for IUGONET data ussage before you load and plot the data.'
-     historyWin->update,'You must accept the rules of the road for IUGONET data ussage before you load and plot the data.'
+     statusBar->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
+     historyWin->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
   endif else begin
      statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
      historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
