@@ -93,9 +93,12 @@ pro iug_load_gmag_wdc_wdchr, $
     elemlist = ''
     elemnum = -1
     elemlength = 0
-    timebuf_tmp = 0
     
-    
+    basetime_start = !values.d_nan
+    basetime_end = !values.d_nan
+    basetime_resolution = 86400d
+    data_resolution = 3600d
+
     ; scan data length and read time
     for j = 0l, n_elements(local_files) - 1 do begin
       file = local_files[j]
@@ -121,7 +124,7 @@ pro iug_load_gmag_wdc_wdchr, $
         
         year_lower = strmid(line, 3, 2)
         if strcmp(wdc_sites[i], 'dst', /fold_case) eq 1 then begin
-          year_upper= strmid(line, 14, 2)
+          year_upper = strmid(line, 14, 2)
           year = year_upper + year_lower
         endif else begin
           year = iug_load_gmag_wdc_relpath_to_year(relpathnames[j], wdc_sites[i])
@@ -132,13 +135,15 @@ pro iug_load_gmag_wdc_wdchr, $
         endelse
         month = strmid(line,5,2)
         day = strmid(line,8,2)
-        basetime = time_double(year+'-'+month+'-'+day) + 1800d
-        
+        basetime = time_double(year+'-'+month+'-'+day) + data_resolution / 2
+
+        if (finite(basetime_start, /nan)) then basetime_start = basetime $
+        else if (basetime lt basetime_start) then basetime_start = basetime
+        if (finite(basetime_end, /nan)) then basetime_end = basetime $
+        else if (basetime_end lt basetime) then basetime_end = basetime
+
         element = strmid(line,7,1)     ; * for index
         version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final
-        
-        ; store time_double
-        append_array, timebuf_tmp, basetime + dindgen(24)*3600d
         
         ; cache elements and count up
         for x = 0l, n_elements(elemlist) - 1 do begin
@@ -164,22 +169,33 @@ pro iug_load_gmag_wdc_wdchr, $
     
     ; if nodata
     dprint, size(elemlist,/n_dimensions), dlevel=5
+    dprint, time_string([basetime_start, basetime_end]), dlevel=5
     if size(elemlist, /n_dimensions) eq 0 then continue
-    if size(timebuf_tmp, /n_dimensions) eq 0 then continue
-    
-    
-    ; get timebuf
-    timebuf = timebuf_tmp[uniq(timebuf_tmp, sort(timebuf_tmp))]
-    if n_elements(timebuf) lt max(elemlength) * 24 then begin
+    if (finite(basetime_start, /nan) or $
+        finite(basetime_end, /nan)) then continue
+
+
+    ; create timebuf
+    buf_size = long((basetime_end - basetime_start + basetime_resolution) / $
+                    data_resolution)
+    if buf_size le 0 then begin
+      dprint, 'invalid time range (?)'
+      continue
+    end
+    timebuf = basetime_start + dindgen(buf_size) * data_resolution
+
+    if buf_size lt $
+       max(elemlength) * long(basetime_resolution / data_resolution) then begin
       dprint, 'warning: length of timebuf is too small for the data.'
-      dprint, 'timebuf length: ', n_elements(timebuf)
-      dprint, 'max of data length: ', max(elemlength) * 24
+      dprint, 'timebuf length: ', buf_size
+      dprint, 'max of data length: ', $
+              max(elemlength) * long(basetime_resolution / data_resolution)
     endif
-    
+
     
     ; setup databuf
     dprint, 'Data elements: ', elemlist
-    databuf = replicate(!values.f_nan, size(timebuf, /n_elements), size(elemlist, /n_elements))
+    databuf = replicate(!values.f_nan, buf_size, size(elemlist, /n_elements))
     elemnum = -1
     
     
@@ -218,7 +234,7 @@ pro iug_load_gmag_wdc_wdchr, $
         endelse
         month = strmid(line,5,2)
         day = strmid(line,8,2)
-        basetime = time_double(year+'-'+month+'-'+day) + 1800d
+        basetime = time_double(year+'-'+month+'-'+day) + data_resolution / 2
         
         element = strmid(line,7,1)     ; * for index
         version = strmid(line,13,1)    ; 0:realtime, 1:prov., 2+:final
@@ -250,16 +266,12 @@ pro iug_load_gmag_wdc_wdchr, $
         if nbad gt 0 then value[wbad] = !values.f_nan
         
         
-        idx = where(timebuf eq time_double(basetime), nidx)
-        if nidx lt 1 then begin
+        idx = long((time_double(basetime) - basetime_start) / data_resolution)
+        if (idx lt 0 or idx gt buf_size) then begin
           dprint, 'error: out of timerange?'
           continue
-        endif else if nidx gt 1 then begin
-          dprint, 'error: invalid timebuf?'
-          continue
         endif
-        databuf[idx[0], elemnum] = value
-        
+        databuf[idx, elemnum] = value
         
       endwhile
       free_lun,lun
