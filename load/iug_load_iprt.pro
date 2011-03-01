@@ -26,7 +26,7 @@
 ;
 ;
 ;Example:
-; timespan,'2010-11-02',1,/hours
+; timespan,'2010-11-03',1,/hours
 ;  iug_load_iprt
 ;  tplot_names
 ;  zlim,'iprt_sun_L',20,120
