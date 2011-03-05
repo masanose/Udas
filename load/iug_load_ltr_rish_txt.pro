@@ -77,11 +77,6 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
-;***************
-;data directory:
-;***************
-site_data_dir = strsplit('sgk/ltr/',' ', /extract)
-
 ;*****************
 ;defition of unit:
 ;*****************
@@ -127,7 +122,7 @@ for iii=0,n_elements(parameters)-1 do begin
     ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/ltr/csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/shigaraki/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:

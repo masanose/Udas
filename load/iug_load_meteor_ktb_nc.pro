@@ -66,7 +66,7 @@ print, parameters
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/h2km_t60min00/ /h2km_t60min30/ /h4km_t60min00/ /h4km_t60min30/',' ', /extract)
+site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60min30/',' ', /extract)
 site_data_lastmane = strsplit('.h2t60min00.nc .h2t60min30.nc .h4t60min00.nc .h4t60min30.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
@@ -141,8 +141,8 @@ kk=0
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/netcdf/'+site_data_dir[iii+kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc'+site_data_dir[iii+kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/'+site_data_dir[iii+kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/'+site_data_dir[iii+kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================

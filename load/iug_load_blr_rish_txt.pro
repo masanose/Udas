@@ -141,7 +141,7 @@ for ii=0,n_elements(site_code)-1 do begin
     ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[h]
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[h]+'csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2[ii]+'/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:

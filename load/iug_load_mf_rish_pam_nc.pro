@@ -102,7 +102,7 @@ if ~size(fns,/type) then begin
     ;===============================
     source = file_retrieve(/struct)
     source.verbose=verbose
-    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/netcdf/'
+    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/nc/'
     source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mf/pameungpeuk/nc/'
     
     ;Get files and local paths, and concatenate local paths:

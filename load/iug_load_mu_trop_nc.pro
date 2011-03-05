@@ -73,7 +73,7 @@ acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar dat
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/'
+       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/nc/'
        source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807/'
     
     ;Get files and local paths, and concatenate local paths:

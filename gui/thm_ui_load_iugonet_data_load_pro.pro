@@ -99,12 +99,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
            endif 
         endif
       endif
-    endif else if datatype eq 'Pc3_index' then begin            
-       if site_or_param eq 'Tohoku_U' then begin
-          if datatype eq 'Pc3_index' then par_names='iug_'+parameters
-          iug_load_gmag_pc3, site='onw',trange=timeRange 
-      endif
     endif
+   ; endif else if datatype eq 'Pc3_index' then begin            
+   ;    if site_or_param eq 'Tohoku_U' then begin
+   ;       if datatype eq 'Pc3_index' then par_names='iug_'+parameters
+    ;      iug_load_gmag_pc3, site='onw',trange=timeRange 
+    ;  endif
+   ; endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
     if datatype eq 'magdas' then begin
       par_names='magdas_mag_' + site_or_param 

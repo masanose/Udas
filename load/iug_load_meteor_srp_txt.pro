@@ -75,7 +75,7 @@ print, parameters
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('/h2km_t60min00/ /h4km_t240min00/ ',' ', /extract)
+site_data_dir = strsplit('h2km_t60min00/ h4km_t240min00/ ',' ', /extract)
 site_data_lastmane = strsplit('h2t60min00 h4t240min00',' ', /extract)
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
@@ -136,8 +136,8 @@ for ii=h_min,h_max-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp'+site_data_dir[ii]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/text'+site_data_dir[ii]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/text/'+site_data_dir[ii]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/text/'+site_data_dir[ii]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================

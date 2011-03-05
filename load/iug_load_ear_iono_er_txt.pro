@@ -122,7 +122,7 @@ for ii=0,n_elements(parameters)-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/ionosphere/'
+       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/ionosphere/e_region/csv/'
        source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/csv/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -232,7 +232,7 @@ for ii=0,n_elements(parameters)-1 do begin
          if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
          if strmid(parameters2[iii],0,2) eq 'pw' then o=1
          if strmid(parameters2[iii],0,2) eq 'pn' then o=1
-         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
          store_data,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
          options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
          options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI E-region [km]'

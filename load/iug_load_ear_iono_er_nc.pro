@@ -12,10 +12,10 @@
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;Keywords:
-;  datatype = Observation data type. For example, iug_load_ear_iono_er_nc, datatype = 'ionosphere'.
-;            The default is 'ionosphere'. 
+;  datatype = Observation data type. For example, iug_load_ear_iono_er_nc, datatype = 'fai'.
+;            The default is 'fai'. 
 ;  parameter1 = first parameter name of EAR FAI obervation data.  
-;          For example, iug_load_ear_iono_er_nc, parameter = 'efb1p16'.
+;          For example, iug_load_ear_iono_er_nc, parameter1 = 'eb1p2a'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -54,7 +54,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;****************************************
 ;Load 'ionosphere' data by default:
 ;****************************************
-if (not keyword_set(datatype)) then datatype='ionosphere'
+if (not keyword_set(datatype)) then datatype='fai'
 
 ;***********
 ;parameters1:
@@ -105,7 +105,7 @@ for ii=0,n_elements(parameters)-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/ionosphere/'
+       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/fai/e_region/nc/'
        source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/nc/'
     
     ;Get files and local paths, and concatenate local paths:
@@ -267,7 +267,7 @@ endfor
       pnoise2_ear=fltarr(n_elements(ear_time)) 
     
       if time2[0] ne 0 then begin
-         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))         
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))         
          ;Store data of wind velocity
          for l=0, n_elements(beam)-1 do begin
              bname2[l]=string(beam[l]+1)
@@ -344,7 +344,7 @@ print, 'If you acquire the equatorial atmospheric radar (EAR) data, '
 print, 'we ask that you acknowledge us in your use of the data. ' 
 print, 'This may be done by including text such as EAR data provided ' 
 print, 'by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
-print, 'We would also appreciate receivinga copy of the relevant publications.' 
+print, 'We would also appreciate receiving a copy of the relevant publications.' 
 
 
 end

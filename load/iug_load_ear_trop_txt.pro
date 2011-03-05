@@ -97,7 +97,7 @@ for ii=0,n_elements(parameters)-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ear/troposphere/'
+       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/troposphere/csv/'
        source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
