@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_mu_trop_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for the NetCDF formatted data of the Middle Upper (MU) atmosphere radar 
-;  and the loaded data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the NetCDF data of the Middle Upper (MU) atmosphere radar 
+;  and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_mu_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose

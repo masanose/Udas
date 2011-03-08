@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_meteor_rish
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data server for the kototabang and serpong data 
-;  and loads data into tplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH data server for the NetCDF data of meteor wind radars 
+;  at Kototabang and Serpong data and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_meteor_rish, datatype = datatype, site=site, parameters = parameters, $

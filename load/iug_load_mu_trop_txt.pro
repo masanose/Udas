@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_mu_trop_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for ACII data of the MU radar 
-;  and loads data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the CSV data of the MU radar 
+;  and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $

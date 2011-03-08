@@ -4,7 +4,7 @@
 ;iug_load_meteor_ktb_txt
 ;
 ;Purpose:
-;  Queries the Kyoto_RISH data servers for ACII data of the meteor radar 
+;  Queries the Kyoto_RISH data servers for the text data of the meteor wind radar at Kototabang 
 ;  and loads data intotplot format.
 ;
 ;Syntax:

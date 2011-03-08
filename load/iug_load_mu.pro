@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_mu
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for all MU data and loads data into
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for all the MU data and loads data into
 ;  tplot format.
 ;
 ;Syntax:

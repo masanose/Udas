@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_ear
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for all EAR data and loads data into
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for all the EAR data and loads data into
 ;  tplot format.
 ;
 ;Syntax:

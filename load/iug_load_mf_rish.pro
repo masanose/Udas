@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_mf_rish
 ;
-;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for the pameungpeuk and pontiank data 
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the NetCDF data of the MF radar at Pameungpeuk 
 ;  and loads data into tplot format.
 ;
 ;Syntax:
@@ -67,7 +67,7 @@ print, site_code
 
 for i=0, n_elements(site_code)-1 do begin
   if site_code[i] eq 'pam' then iug_load_mf_rish_pam_nc, site = site_code[i], downloadonly=downloadonly, trange=trange, verbose=verbose
-  if site_code[i] eq 'pon' then iug_load_mf_rish_pon_txt, site = site_code[i], downloadonly=downloadonly, trange=trange, verbose=verbose
+  ;if site_code[i] eq 'pon' then iug_load_mf_rish_pon_txt, site = site_code[i], downloadonly=downloadonly, trange=trange, verbose=verbose
 endfor
 
 end

@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_mf_rish_pam_bin
 ;
-;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for pameungpeuk data and loads data into
-;  tplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the binary data of the MF radar at Pameungpeuk data
+;  and loads data into tplot format.
 ;
 ;Syntax:
 ; iug_load_mf_rish_pam_bin, site=site,downloadonly=downloadonly, trange=trange, verbose=verbose

@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_meteor_srp_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor radar at serpong
+;PURPOSE:
+;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor radar at Serpong
 ;  and loads data into tplot format.
 ;
 ;Syntax:

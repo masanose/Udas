@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_meteor_ktb_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor radar at Kototabang
+;PURPOSE:
+;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor wind radar at Kototabang
 ;  and loads data into tplot format.
 ;
 ;Syntax:
