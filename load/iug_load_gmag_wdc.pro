@@ -1,5 +1,5 @@
 ;+
-;Procedure: IUG_LOAD_GMAG_WDC
+;PROCEDURE: IUG_LOAD_GMAG_WDC
 ; iug_load_gmag_wdc, site=site, $
 ;                        trange=trange, $
 ;                        resolution = resolution, $
@@ -9,10 +9,10 @@
 ;                        downloadonly=downloadonly, $
 ;                        no_download=no_download
 ;
-;Purpose:
+;PURPOSE:
 ;  Loading geomag data in WDC format from WDC for Geomag Kyoto.
 ;
-;Keywords:
+;KEYWORDS:
 ;  site  = Station ABB code or name of geomagnetic index.
 ;          Ex1) iug_load_gmag_wdc, site = 'kak', ...
 ;          Ex2) iug_load_gmag_wdc, site = ['dst', 'ae'], ...
@@ -31,16 +31,16 @@
 ;                 into variables.
 ;  no_download: use only files which are online locally.
 ;
-;Example:
+;EXAMPLE:
 ;   iug_load_gmag_wdc, site = 'kak', resolution = 'min', trange =
 ;   ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
-;Notes:
+;NOTES:
 ;  At WDC Kyoto, data service for TDAS clients is beta testing.
 ;  Please check the data catalog at http://wdc-data.iugonet.org/.
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
-;Last Updated:  Daiki Yoshida,  Jan 11, 2011
+;Last Updated:  Daiki Yoshida,  Mar 8, 2011
 ; 
 ;-
 
