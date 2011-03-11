@@ -76,18 +76,21 @@ pro iug_load_gmag_wdc, site=site, $
         endelse
      endif else level_in = level
 
+
+     if(~keyword_set(resolution)) then resolution_in = 'min' $
+     else resolution_in = resolution
+
      if strlowcase(wdc_sites[i]) eq 'sym' or $
         strlowcase(wdc_sites[i]) eq 'asy' then begin
-        resolution = 'min'
+        resolution_in = 'min'
      endif else if strlowcase(wdc_sites[i]) eq 'dst' then begin
-        resolution = 'hour'
+        resolution_in = 'hour'
      endif
-     if(~keyword_set(resolution)) then resolution = 'min'
 
 
      for j=0, n_elements(level_in)-1 do begin
-        if resolution eq 'hour' or $
-           resolution eq 'hr' then begin
+        if resolution_in eq 'hour' or $
+           resolution_in eq 'hr' then begin
            iug_load_gmag_wdc_wdchr, $
               site = wdc_sites[i], $
               trange = trange, $
@@ -97,7 +100,7 @@ pro iug_load_gmag_wdc, site=site, $
               downloadonly = downloadonly, $
               no_download = no_download, $
               _extra = _extra
-        endif else if resolution eq 'min' then begin
+        endif else if resolution_in eq 'min' then begin
            iug_load_gmag_wdc_wdcmin, $
               site = wdc_sites[i], $
               trange = trange, $
