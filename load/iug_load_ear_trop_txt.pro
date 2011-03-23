@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_ear_trop_txt
 ;
-;PURPOSE:
-;  Queries the Kyoto_RISH servers for the CSV data of the equatorial atomosphere radar (EAR) 
-;  and loads data into tplot format.
+;Purpose:
+;  Queries the Kyoto_RISH servers for ACII data of the equatorial atomosphere radar (EAR) 
+;  and loads data intotplot format.
 ;
 ;Syntax:
 ; iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $

@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_mf_rish_pam_nc
 ;
-;PURPOSE:
-;  Queries the Kyoto_RISH data servers for the NetCDF data of the MF radar at Pameungpeuk 
-;  and loads data into tplot format.
+;Purpose:
+;  Queries the Kyoto_RISH data servers for pameungpeuk data and loads data into
+;  tplot format.
 ;
 ;Syntax:
 ; iug_load_mf_rish_pam_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose

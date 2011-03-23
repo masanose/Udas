@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_ear_trop_nc
 ;
-;PURPOSE:
+;Purpose:
 ;  Queries the Kyoto_RISH servers for the NetCDF data of the equatorial atomosphere radar (EAR) 
-;  and the loaded data into tplot format.
+;  and the loaded data intotplot format.
 ;
 ;Syntax:
 ; iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose

@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_ear_iono_vr_txt
 ;
-;PURPOSE:
-;  Queries the Kyoto_RISH servers for the CSV data of the equatorial atomosphere radar (EAR) 
-;  and loads data into tplot format.
+;Purpose:
+;  Queries the Kyoto_RISH servers for EAR data and loads data into
+;  tplot format.
 ;
 ;Syntax:
 ; iug_load_ear_iono_vr_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
@@ -61,8 +61,7 @@ if (not keyword_set(datatype)) then datatype='fai'
 ;parameters1:
 ;***********
 ;--- all parameters1 (default)
-parameter1_all = strsplit('vb3p4a 150p8c8b2a 150p8c8b2b 150p8c8b2c 150p8c8b2d '+S
-                          '150p8c8b2e 150p8c8b2f',' ', /extract)
+parameter1_all = strsplit('vb3p4a 150p8c8b2a 150p8c8b2b 150p8c8b2c 150p8c8b2d 150p8c8b2e 150p8c8b2f',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter1)) then parameter1='all'

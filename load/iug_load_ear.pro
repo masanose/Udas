@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_ear
 ;
-;PURPOSE:
-;  Queries the Kyoto_RISH servers for all the EAR data and loads data into
+;Purpose:
+;  Queries the Kyoto_RISH servers for all EAR data and loads data into
 ;  tplot format.
 ;
 ;Syntax:
@@ -16,10 +16,10 @@
 ;
 ;Keywords:
 ;  DATATYPE = The type of data to be loaded. In this load program,
-;             DATATYPEs are 'trop_wind', 'trop_pwr', 'trop_spectral' etc.
+;             DATATYPEs are 'troposphere', 'e_region', 'v_region' etc.
 ;
 ;  PARAMETERS (I/O):
-;    Set to wind parameters.  If not set, 'ear_wind_zon' is
+;    Set to wind parameters.  If not set, 'uwnd' is
 ;      assumed.  Returns cleaned input, or shows default.  
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.

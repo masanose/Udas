@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_meteor_ktb_nc
 ;
-;PURPOSE:
-;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor wind radar at Kototabang
+;Purpose:
+;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor radar at Kototabang
 ;  and loads data into tplot format.
 ;
 ;Syntax:
@@ -15,7 +15,7 @@
 ;  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'. 
 ; parameters = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
-;             A kind of parameters is 4 types of 'h2t60min00', 'h2T60min00', 'h4t60min00', 'h4T60min00'.
+;             A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
 ;             The default is 'all'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note

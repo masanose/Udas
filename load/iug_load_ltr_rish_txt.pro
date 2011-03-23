@@ -3,9 +3,9 @@
 ;Name:
 ;iug_load_ltr_rish_txt
 ;
-;PURPOSE:
-;  Queries the Kyoto_RISH servers for the CSV data of the lower troposphere radar (LTR) 
-;  and loads data into tplot format.
+;Purpose:
+;  Queries the Kyoto_RISH servers for ACII data of the lower troposphere radar (LTR) 
+;  and loads data intotplot format.
 ;
 ;Syntax:
 ; iug_load_ltr_rish_txt, datatype = datatype, site=site,parameter=parameter, $

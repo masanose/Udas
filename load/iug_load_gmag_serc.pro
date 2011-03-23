@@ -1,13 +1,13 @@
 ;+
-;PROCEDURE: IUG_LOAD_GMAG_SERC,
+;Procedure: IUG_LOAD_GMAG_SERC,
 ;  iug_load_gmag_serc, site = site, datatype = datatype, $
 ;                      trange = trange, verbose = verbose, $
 ;                      downloadonly = downloadonly
-;PURPOSE:
+;Purpose:
 ;  This procedure allows you to download and plot MAGDAS magnetometer data on TDAS.
 ;  This is a sample code for IUGONET analysis software.
 ;
-;KEYWORDS:
+;Keywords:
 ;  site  = Observatory name.  For example, serc_load_gmag_sample, site = 'kuj'.
 ;          The default is 'all', i.e., load all available stations.
 ;  datatype = The type of data to be loaded.  In this sample
@@ -20,19 +20,18 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;EXAMPLE:
+;Example:
 ;  iug_load_gmag_serc, site = 'kuj', trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
-;CODE:
+;Code:
 ;  Shuji Abe
 ;
-;CHANGELOG:
-;  07-April-2010, abeshu, test release.
-;  08-April-2010, abeshu, minor update.
+;ChangeLog:
+;  7-April-2010, abeshu, test release.
+;  8-April-2010, abeshu, minor update.
 ;  14-November-2010, abeshu, update.
-;  08-March-2011, abeshu, update.
 ;
-;ACKNOWLEDGMENT:
+;Acknowledgment:
 ;
 ;
 ; $LastChangedBy: $

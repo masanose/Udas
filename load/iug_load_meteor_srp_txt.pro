@@ -3,8 +3,8 @@
 ;Name:
 ;iug_load_meteor_srp_txt
 ;
-;PURPOSE
-;  Queries the Kyoto_RISH data servers for the text data of the meteor wind radar at Serpong
+;Purpose:
+;  Queries the Kyoto_RISH data servers for ACII data of the meteor radar 
 ;  and loads data intotplot format.
 ;
 ;Syntax:

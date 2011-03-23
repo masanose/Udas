@@ -3,7 +3,7 @@
 ;Name:
 ;iug_load_blr_rish_txt
 ;
-;PURPOSE:
+;Purpose:
 ;  Queries the Kyoto_RISH servers for ACII data of the boundary layer radar (BLR) 
 ;  and loads data intotplot format.
 ;

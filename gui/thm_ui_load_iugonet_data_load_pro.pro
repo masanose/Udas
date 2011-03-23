@@ -128,38 +128,23 @@ pro thm_ui_load_iugonet_data_load_pro,$
     if datatype eq 'NIPR_mag*' then begin     
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
       if parameters[0] eq '*' then begin
-        par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
+         par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
       endif else begin
-  	tr=timerange(timeRange)
-  	tr0=tr[0]
-	if strlowcase(parameters[0]) eq '1sec' then begin
-    	  if site_or_param eq 'syo' then begin
-            crttime=time_double('1998-1-1')
-      	    if tr0 lt crttime then tres='2sec' else tres='1sec'
-    	  endif
-    	  if site_or_param eq 'hus' then begin
-            crttime=time_double('2001-9-8')
-            if tr0 lt crttime then tres='2sec' else tres='02hz'
-          endif
-          if site_or_param eq 'tjo' then begin
-      	    crttime=time_double('2001-9-12')
-      	    if tr0 lt crttime then tres='2sec' else tres='02hz'
-    	  endif
-          if site_or_param eq 'aed' then begin
-            crttime=time_double('2001-9-27')
-            if tr0 lt crttime then tres='2sec' else tres='02hz'
-          endif
-          if site_or_param eq 'isa' then begin
-            tres='2sec'
-          endif
-        endif else begin
-          tres=parameters
-        endelse
-        par_names='nipr_mag_'+site_or_param+'_'+tres
+         par_names='nipr_mag_'+site_or_param+'_'+parameters
       endelse
     endif
   endif 
-
+  
+  ;load data of SuperDARN
+  if instrument eq 'SuperDARN' then begin
+    erg_load_sdfit, trange=timeRange, sites=site_or_param
+    if parameters[0] eq '*' then begin
+       par_names=tnames('sd_' + site_or_param + '_' +'*')
+    endif else begin
+       par_names='sd_' + site_or_param + '_' + parameters +'_0'
+    endelse    
+  endif
+  
   ;load data of Equatorial Atomosphere Radar
   if instrument eq 'Equatorial_Atomosphere_Radar' then begin
      if parameters[0] eq '*' then begin
