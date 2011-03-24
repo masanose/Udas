@@ -1,16 +1,17 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_ear_trop_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for the NetCDF data of the equatorial atomosphere radar (EAR) 
-;  and the loaded data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
+;  in the NetCDF format taken by the equatorial atmosphere radar (EAR)and loads data into
+;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_ear_trop_nc, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -20,15 +21,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
-;  A. Shinbori, 09/09/2010.
-;  
-;Modifications:
-;  A. Shinbori, 10/09/2010.
-;  A. Shinbori, 06/11/2010.
-;  A. Shinbori, 26/11/2010.
-;  
-;Acknowledgment:
+;CODE:
+; A. Shinbori, 09/19/2010.
+;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
+;
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

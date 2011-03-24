@@ -1,20 +1,20 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_ear
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for all EAR data and loads data into
-;  tplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for all the observation data (troposphere and FAI)
+;  taken by the equatorial atmosphere radar (EAR) and loads data into tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ;  iug_load_ear [ ,DATATYPE = string ]
 ;                [ ,PARAMETERS = string]
 ;                [ ,TRANGE = [min,max] ]
 ;                [ ,FILENAMES = string scalar or array ]
 ;                [ ,<and data keywords below> ]
 ;
-;Keywords:
+;KEYWOARDS:
 ;  DATATYPE = The type of data to be loaded. In this load program,
 ;             DATATYPEs are 'troposphere', 'e_region', 'v_region' etc.
 ;
@@ -28,18 +28,18 @@
 ;      be read a la the RISH format, and the RISH server will not be queried.
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
-;Data Availability:
+;DATA AVAILABILITY:
 ;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
 ;  before you analyze the FAI data using this software. 
 ;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 ;
-;Code:
+;CODE:
 ;A. Shinbori, 13/05/2010.
 ;
-;Modifications:
+;MODIFICATIONS:
 ;A. Shinbori, 25/11/2010.
 ;
-;Acknowledgment:
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

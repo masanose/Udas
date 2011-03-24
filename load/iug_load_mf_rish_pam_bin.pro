@@ -1,16 +1,17 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_mf_rish_pam_bin
 ;
-;Purpose:
-;  Queries the Kyoto_RISH renkei2 servers for pameungpeuk data and loads data into
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the observation data (uwind, vwind, wwind)
+;  in the binary format (SSWMA) taken by the MF radar at Pameungpeuk and loads data into
 ;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_mf_rish_pam_bin, site=site,downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_bin, site = 'pam'.
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -20,15 +21,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
+;CODE:
+; A. Shinbori, 09/19/2010.
 ;
-;Code:
-;  A. Shinbori, 10/09/2010.
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
 ;
-;Modifications:
-;
-;
-;  
-;Acknowledgment:
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

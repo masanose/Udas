@@ -1,5 +1,5 @@
 ;+
-;Procedure: IUG_LOAD_GMAG_WDC
+;PROCEDURE: IUG_LOAD_GMAG_WDC
 ; iug_load_gmag_wdc, site=site, $
 ;                        trange=trange, $
 ;                        resolution = resolution, $
@@ -9,10 +9,10 @@
 ;                        downloadonly=downloadonly, $
 ;                        no_download=no_download
 ;
-;Purpose:
+;PURPOSE:
 ;  Loading geomag data in WDC format from WDC for Geomag Kyoto.
 ;
-;Keywords:
+;KEYWORDS:
 ;  site  = Station ABB code or name of geomagnetic index.
 ;          Ex1) iug_load_gmag_wdc, site = 'kak', ...
 ;          Ex2) iug_load_gmag_wdc, site = ['dst', 'ae'], ...
@@ -31,16 +31,16 @@
 ;                 into variables.
 ;  no_download: use only files which are online locally.
 ;
-;Example:
+;EXAMPLE:
 ;   iug_load_gmag_wdc, site = 'kak', resolution = 'min', trange =
 ;   ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
-;Notes:
+;NOTES:
 ;  At WDC Kyoto, data service for TDAS clients is beta testing.
 ;  Please check the data catalog at http://wdc-data.iugonet.org/.
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
-;Last Updated:  Daiki Yoshida,  Jan 11, 2011
+;Last Updated:  Daiki Yoshida,  Mar 8, 2011
 ; 
 ;-
 
@@ -76,18 +76,21 @@ pro iug_load_gmag_wdc, site=site, $
         endelse
      endif else level_in = level
 
+
+     if(~keyword_set(resolution)) then resolution_in = 'min' $
+     else resolution_in = resolution
+
      if strlowcase(wdc_sites[i]) eq 'sym' or $
         strlowcase(wdc_sites[i]) eq 'asy' then begin
-        resolution = 'min'
+        resolution_in = 'min'
      endif else if strlowcase(wdc_sites[i]) eq 'dst' then begin
-        resolution = 'hour'
+        resolution_in = 'hour'
      endif
-     if(~keyword_set(resolution)) then resolution = 'min'
 
 
      for j=0, n_elements(level_in)-1 do begin
-        if resolution eq 'hour' or $
-           resolution eq 'hr' then begin
+        if resolution_in eq 'hour' or $
+           resolution_in eq 'hr' then begin
            iug_load_gmag_wdc_wdchr, $
               site = wdc_sites[i], $
               trange = trange, $
@@ -97,7 +100,7 @@ pro iug_load_gmag_wdc, site=site, $
               downloadonly = downloadonly, $
               no_download = no_download, $
               _extra = _extra
-        endif else if resolution eq 'min' then begin
+        endif else if resolution_in eq 'min' then begin
            iug_load_gmag_wdc_wdcmin, $
               site = wdc_sites[i], $
               trange = trange, $

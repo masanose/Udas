@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_mu_trop_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for ACII data of the MU radar 
-;  and loads data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the standard observation data of the 
+;  troposphere and lower stratsphere in the CSV format taken by the Mille and 
+;  Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
 ;  parameter = parameter name of MU troposphere standard obervation data.  
@@ -24,13 +25,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
-;  A. Shinbori, 09/09/2010.
-;  
-;Modifications:
-;  A. Shinbori, 10/09/2010.
-;  A. Shinbori, 25/11/2010.
-;Acknowledgment:
+;CODE:
+; A. Shinbori, 09/19/2010.
+;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
+;
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

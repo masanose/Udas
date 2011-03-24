@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_meteor_srp_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data servers for the NetCDF data of the meteor radar at serpong
-;  and loads data into tplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
+;  in the NetCDF format taken by the meteor wind radar (MWR) at Serpong and loads data into
+;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, downloadonly = downloadonly, $
 ;                           trange = trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_meteor_srp_nc, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'. 
 ;  parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
@@ -24,14 +25,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
-;  A. Shinbori, 28/08/2010.
-;  
-;Modifications:
-;  A. Shinbori, 10/09/2010.
-;  A. Shinbori, 25/11/2010.
-;  
-;Acknowledgment:
+;CODE:
+; A. Shinbori, 09/19/2010.
+;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
+;
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

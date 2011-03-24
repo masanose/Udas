@@ -1,16 +1,17 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_mf_rish_pam_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data servers for pameungpeuk data and loads data into
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the observation data (uwind, vwind, wwind)
+;  in the NetCDF format taken by the MF radar at Pameungpeuk and loads data into
 ;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_mf_rish_pam_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_mf_rish_pam_nc, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'. 
 ;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_nc, site = 'pam'.
@@ -21,16 +22,14 @@
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
+;                 
+;CODE:
+; A. Shinbori, 09/19/2010.
 ;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
 ;
-;Code:
-;  A. Shinbori, 10/09/2010.
-;
-;Modifications:
-;  A. Shinbori, 26/11/2010.
-;
-;  
-;Acknowledgment:
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

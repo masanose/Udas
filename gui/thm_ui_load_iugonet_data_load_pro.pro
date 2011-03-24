@@ -182,10 +182,11 @@ pro thm_ui_load_iugonet_data_load_pro,$
    
   ;load data of Meteor Wind radar
   if instrument eq 'Meteor_Wind_radar' then begin
-     if parameters[0] ne '*' then para=strsplit(parameters,'_',/extract)
-     vns=para[1]
-     if parameters[0] eq '*' then vns=['all']
-     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameters = vns, trange = timeRange
+     if parameters[0] ne '*' then begin 
+        para=strsplit(parameters,'_',/extract)
+        vns=para
+     endif else if parameters[0] eq '*' then vns=['all']
+     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameter = vns, trange = timeRange
      par_names=tnames('iug_meteor_'+site_or_param+'_'+'*')
   endif 
   
@@ -255,7 +256,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     loaded = 1
     
     ;output of the acknowledgement message:
-   ; Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
 
     if Answer ne 'Cancel' then begin
     ;loop over loaded data
@@ -265,6 +266,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       ;result = loadedData->add(new_vars[i],mission='IUGONET',instrument=instrument,observatory=datatype)
       ;===  instrument=instrumenty->instrument=datatype, observatory=datatype->observatory=instrument  ===
          result = loadedData->add(new_vars[i],mission='IUGONET',instrument=site_or_param,observatory=instrument)
+         print, result
         if ~result then begin
           statusBar->update,'Error loading: ' + new_vars[i]
           historyWin->update,'IUGONET: Error loading: ' + new_vars[i]

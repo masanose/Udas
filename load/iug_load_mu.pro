@@ -1,20 +1,21 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_mu
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for all MU data and loads data into
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for all the observation data taken by 
+;  the Mille and Upper atmosphere (MU) radar at Shigaraki and loads data into
 ;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ;  iug_load_mu [ ,DATATYPE = string ]
 ;                [ ,PARAMETERS = string]
 ;                [ ,TRANGE = [min,max] ]
 ;                [ ,FILENAMES = string scalar or array ]
 ;                [ ,<and data keywords below> ]
 ;
-;Keywords:
+;KEYWOARDS:
 ;  DATATYPE = The type of data to be loaded. In this load program,
 ;             DATATYPEs are 'troposphere', 'meteor_wind' etc.
 ;
@@ -28,13 +29,13 @@
 ;      be read a la the RISH format, and the RISH server will not be queried.
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
-;Code:
-;A. Shinbori, 21/10/2010.
+;CODE:
+; A. Shinbori, 09/19/2010.
 ;
-;Modifications:
-;A. Shinbori, 25/11/2010.
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
 ;
-;Acknowledgment:
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

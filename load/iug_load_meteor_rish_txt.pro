@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_meteor_rish_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data server for the kototabang and serpong data 
-;  and loads data into tplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
+;  in the text format taken by the meteor wind radar (MWR) at Kototabang and Serpong and loads data into
+;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_meteor_rish, datatype = datatype, site=site, parameters = parameters, $
 ;                       downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ; datatype = Observation data type. For example, iug_load_meteor_rish_txt, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'. 
 ;   site  = Observatory code name.  For example, iug_load_meteor_rish_txt, site = 'ktb'.
@@ -26,15 +27,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
+;CODE:
+; A. Shinbori, 09/19/2010.
 ;
-;Code:
-;  A. Shinbori, 26/01/2011.
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
 ;
-;Modifications:
-;
-;  
-;  
-;Acknowledgment:
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

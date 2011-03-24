@@ -1,19 +1,20 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_ear_iono_efr_nc
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for EAR data and loads data into
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the FAI observation data in the NetCDF format 
+;  taken by the equatorial atmosphere radar (EAR)and loads data into
 ;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_ear_iono_efr_nc, datatype = datatype, parameter1=parameter1, $
-;                          downloadonly=downloadonly, trange=trange, verbose=verbose
+;                           downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_ear_iono_er_nc, datatype = 'ionosphere'.
-;            The default is 'ionosphere'. 
+;            The default is 'fai'. 
 ;  parameter1 = first parameter name of EAR FAI obervation data.  
 ;          For example, iug_load_ear_iono_er_nc, parameter = 'efb1p16'.
 ;          The default is 'all', i.e., load all available parameters.
@@ -24,18 +25,18 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Data Availability:
+;DATA AVAILABILITY:
 ;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
 ;  before you analyze the FAI data using this software. 
 ;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 ;
-;Code:
-; A. Shinbori, 19/09/2010.
+;CODE:
+; A. Shinbori, 09/19/2010.
 ;
-;Modifications:
-; A. Shinbori, 25/11/2010.
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
 ; 
-;Acknowledgment:
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $
@@ -54,7 +55,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;****************************************
 ;Load 'ionosphere' data by default:
 ;****************************************
-if (not keyword_set(datatype)) then datatype='ionosphere'
+if (not keyword_set(datatype)) then datatype='fai'
 
 ;***********
 ;parameters1:

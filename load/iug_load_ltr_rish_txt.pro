@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_ltr_rish_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for ACII data of the lower troposphere radar (LTR) 
-;  and loads data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
+;  in the CSV format taken by the L-band lower troposphere radar (LTR)and loads data into
+;  tplot format.
 ;
-;Syntax:
-; iug_load_ltr_rish_txt, datatype = datatype, site=site,parameter=parameter, $
+;SYNTAX:
+; iug_load_ltr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_ltr_rish_txt, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
 ;   site = LTR observation site.  
@@ -27,13 +28,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
-;  A. Shinbori, 01/02/2011.
-;  
-;Modifications:
-;  
-;  
-;Acknowledgment:
+;CODE:
+; A. Shinbori, 09/19/2010.
+;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
+;
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

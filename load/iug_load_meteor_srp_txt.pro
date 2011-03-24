@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_meteor_srp_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data servers for ACII data of the meteor radar 
-;  and loads data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
+;  in the text format taken by the meteor wind radar (MWR) at Serpong and loads data into
+;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_meteor_srp_txt, parameter = parameter, downloadonly = downloadonly, $
-;                           trange = trange, verbose=verbose
+;                          trange = trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  parameter = Data parameter. For example, iug_load_meteor_srp_txt, parameter = 'h2t60min00'. 
 ;              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
 ;              The default is 'all'.
@@ -22,13 +23,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
-;  A. Shinbori, 02/21/2011.
-;  
-;Modifications:
-;  
-;  
-;Acknowledgment:
+;CODE:
+; A. Shinbori, 09/19/2010.
+;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
+;
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_blr_rish_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH servers for ACII data of the boundary layer radar (BLR) 
-;  and loads data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH server for the CSV data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5) 
+;  of the troposphere taken by the boundary layer radar (BLR) at Kototabang, Shigaraki and Serpong
+;  and loads data into tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_blr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_blr_rish_txt, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
 ;   site = BLR observation site.  
@@ -27,13 +28,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
+;CODE:
 ;  A. Shinbori, 09/09/2010.
 ;  
-;Modifications:
-;  A. Shinbori, 10/09/2010.
-;  A. Shinbori, 25/11/2010.
-;Acknowledgment:
+;MODIFICATIONS:
+;  A. Shinbori, 03/23/2011.
+;  
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $

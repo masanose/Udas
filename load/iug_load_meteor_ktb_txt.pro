@@ -1,17 +1,18 @@
 ;+
 ;
-;Name:
+;NAME:
 ;iug_load_meteor_ktb_txt
 ;
-;Purpose:
-;  Queries the Kyoto_RISH data servers for ACII data of the meteor radar 
-;  and loads data intotplot format.
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
+;  in the text format taken by the meteor wind radar (MWR) at Kototabang and loads data into
+;  tplot format.
 ;
-;Syntax:
+;SYNTAX:
 ; iug_load_meteor_ktb_txt, parameter = parameter, downloadonly = downloadonly, $
 ;                           trange = trange, verbose=verbose
 ;
-;Keywords:
+;KEYWOARDS:
 ;  parameter = Data parameter. For example, iug_load_meteor_ktb_txt, parameter = 'h2t60min00'. 
 ;              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
 ;              The default is 'all'.
@@ -22,13 +23,13 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;Code:
-;  A. Shinbori, 02/04/2011.
-;  
-;Modifications:
-;  
-;  
-;Acknowledgment:
+;CODE:
+; A. Shinbori, 09/19/2010.
+;
+;MODIFICATIONS:
+; A. Shinbori, 03/24/2011.
+;
+;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
 ; $LastChangedRevision:  $
@@ -187,7 +188,7 @@ for ii=h_min,h_max-1 do begin
        mer_wind=0
        zon_thermal=0
        mer_thermal=0
-       meteor_num=0 
+       meteor_num=0
 
       ;Loop on files: 
       ;==============
@@ -285,12 +286,13 @@ for ii=h_min,h_max-1 do begin
               ;
               ;Append data of time and wind data at the last time in each file:
               ;================================================================
-              append_array, site_time, time_val2+3600
-              append_array, zon_wind, zon_wind_data
-              append_array, mer_wind, mer_wind_data
-              append_array, zon_thermal, zon_thermal_data
-              append_array, mer_thermal, mer_thermal_data
-              append_array, meteor_num, meteor_num_data
+              append_array, site_time2, time_val2+3600
+              append_array, zon_wind2, zon_wind_data
+              append_array, mer_wind2, mer_wind_data
+              append_array, zon_thermal2, zon_thermal_data
+              append_array, mer_thermal2, mer_thermal_data
+              append_array, meteor_num2, meteor_num_data
+              
        endfor
           
        for g=0,arr_num-1 do begin         
