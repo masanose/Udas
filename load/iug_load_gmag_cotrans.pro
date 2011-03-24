@@ -64,4 +64,3 @@ pro iug_load_gmag_cotrans
   print,'You success the coordinate transformation from HDZ to geo.'
 
 end
-

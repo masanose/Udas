@@ -49,10 +49,10 @@
 
 pro iug_load_gmag_nipr, site=site, datatype=datatype, $
         trange=trange, verbose=verbose, downloadonly=downloadonly, $
-	no_download=no_download
+  no_download=no_download
 
 erg_load_gmag_nipr, site=site, datatype=datatype, $
         trange=trange, verbose=verbose, downloadonly=downloadonly, $
-	no_download=no_download
+  no_download=no_download
 
 end

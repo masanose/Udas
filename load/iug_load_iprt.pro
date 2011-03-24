@@ -275,7 +275,3 @@ for i=0, nsites-1 do begin
 endfor
 
 end
-
-
-
-
