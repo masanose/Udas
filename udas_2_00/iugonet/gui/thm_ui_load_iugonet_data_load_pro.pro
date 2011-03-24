@@ -251,15 +251,14 @@ pro thm_ui_load_iugonet_data_load_pro,$
   Answer = ''
 
   if new_vars[0] ne '' then begin
-    
     ;only add the requested new parameters
     new_vars = ssl_set_intersection([par_names],[new_vars])
     loaded = 1
     
     ;output of the acknowledgement message:
     Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+
     if Answer ne 'Cancel' then begin
-    
     ;loop over loaded data
 
       for i = 0,n_elements(new_vars)-1 do begin
@@ -267,6 +266,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       ;result = loadedData->add(new_vars[i],mission='IUGONET',instrument=instrument,observatory=datatype)
       ;===  instrument=instrumenty->instrument=datatype, observatory=datatype->observatory=instrument  ===
          result = loadedData->add(new_vars[i],mission='IUGONET',instrument=site_or_param,observatory=instrument)
+         print, result
         if ~result then begin
           statusBar->update,'Error loading: ' + new_vars[i]
           historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
