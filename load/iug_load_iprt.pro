@@ -1,13 +1,13 @@
 ;+
-;Procedure: iug_load_iprt,
+;PROCEDURE: iug_load_iprt,
 ;  iug_load_iprt, site = site, datatype = datatype, $
 ;           trange = trange, verbose = verbose, $
 ;           downloadonly = downloadonly
-;Purpose:
+;PURPOSE:
 ;  This procedure allows you to download and plot TOHOKUU_RADIO OBSERVATION data on TDAS.
 ;  This is a sample code for IUGONET analysis software.
 ;
-;Keywords:
+;KEYWORDS:
 ;  site  = Observatory name. Only 'iit' is allowed.
 ;  datatype = The type of data to be loaded.  In this sample
 ;             procedure, there is only one option, the default value of 'Sun'.
@@ -25,7 +25,7 @@
 ;  the IDL Astronomy Library (http://idlastro.gsfc.nasa.gov/fitsio.html).
 ;
 ;
-;Example:
+;EXAMPLE:
 ; timespan,'2010-11-03',1,/hours
 ;  iug_load_iprt
 ;  tplot_names
@@ -34,10 +34,10 @@
 ;  tplot,['iprt_sun_L','iprt_sun_R']
 ;
 ;
-;Code:
+;CODE:
 ;  Shuji Abe, revised by M. Kagitani
 ;
-;ChangeLog:
+;CHANGELOG:
 ;  7-April-2010, abeshu, test release.
 ;  8-April-2010, abeshu, minor update.
 ;  27-JUL.-2010, revised for this procedure by M. Kagitani
