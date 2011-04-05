@@ -1,6 +1,8 @@
 ;+
 ; PROCEDURE: erg_load_gmag_mm210
-;   to load the 210 MM geomagnetic data from the STEL ERG-SC site 
+;
+; PURPOSE:
+;   To load the 210 MM geomagnetic data from the STEL ERG-SC site 
 ;
 ; KEYWORDS:
 ;   site  = Observatory name, example, erg_load_gmag_mm210, site='rik',
@@ -30,8 +32,8 @@
 ;             erg-sc-core at st4a.stelab.nagoya-u.ac.jp
 ;
 ;   $LastChangedBy: miyasita $
-;   $LastChangedDate: 2011-02-14 13:27:33 +0900 (Mon, 14 Feb 2011) $
-;   $LastChangedRevision: 115 $
+;   $LastChangedDate: 2011-03-08 16:43:04 +0900 (Tue, 08 Mar 2011) $
+;   $LastChangedRevision: 123 $
 ;   $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/geomag/erg_load_gmag_mm210.pro $
 ;-
 

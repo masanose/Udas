@@ -50,7 +50,7 @@
 
 pro erg_load_gmag_nipr, site=site, datatype=datatype, $
         trange=trange, verbose=verbose, downloadonly=downloadonly, $
-	no_download=no_download
+  no_download=no_download
 
 ;*************************
 ;***** Keyword check *****
@@ -189,7 +189,7 @@ for i=0,n_elements(site_code)-1 do begin
     prefix_tmp='nipr_'
     varformat='hdz_'+tres
     cdf2tplot, file=files, verbose=source.verbose, prefix=prefix_tmp, $
-	varformat=varformat
+  varformat=varformat
 
     tplot_name_tmp=prefix_tmp+varformat
     len=strlen(tnames(tplot_name_tmp))
@@ -218,4 +218,3 @@ endfor
 ;---
 return
 end
-
