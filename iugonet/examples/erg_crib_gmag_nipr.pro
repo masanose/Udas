@@ -13,7 +13,7 @@
 ; Written by: Y.-M. Tanaka, Feb. 18, 2011
 ;             National Institute of Polar Research, Japan.
 ;             ytanaka at nipr.ac.jp
-;
+;-
 
 ; initialize
 thm_init
