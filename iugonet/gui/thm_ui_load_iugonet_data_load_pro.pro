@@ -130,21 +130,21 @@ pro thm_ui_load_iugonet_data_load_pro,$
       if parameters[0] eq '*' then begin
         par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
       endif else begin
-    tr=timerange(timeRange)
-    tr0=tr[0]
-  if strlowcase(parameters[0]) eq '1sec' then begin
-        if site_or_param eq 'syo' then begin
+        tr=timerange(timeRange)
+        tr0=tr[0]
+        if strlowcase(parameters[0]) eq '1sec' then begin
+          if site_or_param eq 'syo' then begin
             crttime=time_double('1998-1-1')
             if tr0 lt crttime then tres='2sec' else tres='1sec'
-        endif
-        if site_or_param eq 'hus' then begin
+          endif
+          if site_or_param eq 'hus' then begin
             crttime=time_double('2001-9-8')
             if tr0 lt crttime then tres='2sec' else tres='02hz'
           endif
           if site_or_param eq 'tjo' then begin
             crttime=time_double('2001-9-12')
             if tr0 lt crttime then tres='2sec' else tres='02hz'
-        endif
+          endif
           if site_or_param eq 'aed' then begin
             crttime=time_double('2001-9-27')
             if tr0 lt crttime then tres='2sec' else tres='02hz'
