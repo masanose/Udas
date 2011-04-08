@@ -41,6 +41,9 @@ function gui_load_acknowledgement, datatype = datatype, par_names = par_names
      get_data, par_names[0], dlimit=str
      Result=acknowledgement_message(str.cdf.gatt.text, /noname, /center, title='Rules of the Road for IUGONET Data Use:')
 
+  endif else if datatype eq 'ionosphere' then begin
+     get_data, par_names[0], dlimit=str
+     Result=acknowledgement_message(str.cdf.gatt.rules_of_use, /noname, /center, title='Rules of the Road for IUGONET Data Use:')
   endif else begin  
 
      get_data, par_names[0], dlimit=str

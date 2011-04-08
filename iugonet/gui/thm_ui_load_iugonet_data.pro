@@ -246,10 +246,12 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;load bitmap resources
   getresourcepath,rpath
   rightArrow = read_bmp(rpath + 'arrow_000_medium.bmp', /rgb)
-  leftArrow = read_bmp(rpath + 'arrow_180_medium.bmp', /rgb)
+  ;leftArrow = read_bmp(rpath + 'arrow_180_medium.bmp', /rgb)
+  trashcan = read_bmp(rpath + 'trashcan.bmp', /rgb)
   
   thm_ui_match_background, tabid, rightArrow 
-  thm_ui_match_background, tabid, leftArrow
+  ;thm_ui_match_background, tabid, leftArrow
+  thm_ui_match_background, tabid, trashcan
   
   ;===== added thm_ui_load_iugonet_data_event =====;
   topBase = Widget_Base(tabid, /Row, /Align_Top, /Align_Left, YPad=1,event_pro='thm_ui_load_iugonet_data_event') 
@@ -271,7 +273,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
 
   addButton = Widget_Button(middleBase, Value=rightArrow, /Bitmap,  UValue='ADD', $
               ToolTip='Load data selection')
-  minusButton = Widget_Button(middleBase, Value=leftArrow, /Bitmap, $
+  minusButton = Widget_Button(middleBase, Value=trashcan, /Bitmap, $
                 Uvalue='DEL', $
                 ToolTip='Delete data selected in the list of loaded data')
   
@@ -392,7 +394,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[7])[0] = ptr_new(['ktb','srp'])
   (*paramArray[8])[0] = ptr_new(['mur_standard'])
 ;  (*paramArray[8])[1] = ptr_new(['mur_special'])  
-  (*paramArray[9])[0] = ptr_new(['hok','syo'])
+  (*paramArray[9])[0] = ptr_new(['hok','sye','sys'])
                  
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Site or parameter(s)-1:')
@@ -448,8 +450,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[7])[0] = ptr_new(['*','h2t60min00','h2t60min30','h4t60min00','h4t60min30','h4t240min00'])
   (*param2Array[8])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
-  (*param2Array[9])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err',$
-                                 'vlos','vlos_err','echo_flag','quality','quality_flag','position_tbl'])
+  (*param2Array[9])[0] = ptr_new(['azim_no_0','pwr','pwr_err','spec_width','spec_width_err',$
+                                 'vlos','vlos_err','echo_flag','quality','quality_flag']);,'position_tbl'])
 ;  (*param2Array[8])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
 ;  (*param2Array[9])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
                                    
