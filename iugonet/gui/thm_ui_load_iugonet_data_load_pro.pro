@@ -282,7 +282,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     loaded = 1
     
     ;output of the acknowledgement message:
-    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+;    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
     if Answer ne 'Cancel' then begin
     
     ;loop over loaded data
