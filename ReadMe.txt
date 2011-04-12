@@ -114,4 +114,5 @@ GUI:
 - Medium_Freq._radar	thermosphere	pam		*       2004-03-25
 - Meteor_wind_radar	thermosphere	ktb		*	2002-12-01
 - MUpper_atom._radar 	troposphere	mur_standard	*	2003-03-10
+- SuperDARN 		ionosphere	hok		pwr	2006-12-15
 --------------------------------------------------------------------------
