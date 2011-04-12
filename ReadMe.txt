@@ -28,8 +28,6 @@ The following files (directories) are included in this package:
 ------------------------------------------------------------
 <erg_ground>
 Load procedures for ERG-related data :
-- erg_load_gmag_mm210  	; 210-degree Magnetic Meridian magnetometer data
-- erg_load_gmag_nipr 	; Magnetometer data from NIPR
 - erg_load_sdfit 	; SuperDARN radar data
 
 <load>
@@ -61,8 +59,6 @@ IUGONET/ERG data
 
 CUI:
 ------------------------------------------------------------------------
-- timespan,'2006-12-01' & erg_load_gmag_mm210, site='tik'
-- timespan,'2006-12-01' & erg_load_gmag_nipr, site='syo'
 - timespan,'2007-06-21' & erg_load_sdfit, site='hok'
 - timespan,'2006-12-01' & iug_load_blr_rish_txt, site='ktb'
 - timespan,'2003-03-25' & iug_load_ear
@@ -73,6 +69,8 @@ CUI:
 - timespan,'2005-03-20' & iug_load_meteor_rish, site = 'ktb'
 - timespan,'2005-03-20' & iug_load_mf_rish, site = 'pam'
 - timespan,'2003-03-10' & iug_load_mu
+- timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
+- timespan,'2006-12-01' & iug_load_gmag_nipr, site='syo'
 ------------------------------------------------------------------------
 
 /********************* !!! NOTICE !!! **********************
