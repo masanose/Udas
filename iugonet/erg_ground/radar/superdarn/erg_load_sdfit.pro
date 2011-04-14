@@ -35,13 +35,13 @@
 ;
 ;As for questions and request for the data, please feel free to contact
 ;the ERG-SC office (E-mail:  erg-sc-core at st4a.stelab.nagoya-u.ac.jp,
-;please replace â€œ at â€ by â€œ@â€).
+;please replace "at" by "@").
 ;------------------------------------------------------------------------------
 ;
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-03-08 18:02:21 +0900 (Tue, 08 Mar 2011) $
-; $LastChangedRevision: 124 $
+; $LastChangedDate: 2011-04-14 16:07:58 +0900 (Thu, 14 Apr 2011) $
+; $LastChangedRevision: 128 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/erg_load_sdfit.pro $
 ;-
 ;---------------------------------------------------
@@ -110,7 +110,7 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
       PRINT, 'Cannot find any of the data file(s): ', cdffn
       RETURN
     ENDIF
-    ;;sites=''
+    IF KEYWORD_SET(sites) THEN stn = sites[0] ELSE stn='stn'
   ENDELSE
   
   ;for the case of "donwload only"
@@ -123,7 +123,7 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
     /convert_int1_to_int2
  
   ;Quit if no data have been loaded 
-  if n_elements(tnames(prefix+'*') ) lt 1 then begin
+  if strlen((tnames(prefix+'*'))[0] ) lt 7 then begin
     print, 'No tplot var loaded.'
     return
   endif
@@ -227,11 +227,11 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
   
   
   ;Load the position table(s) ;;;;;;;;;;;;;;;;;;
-  ;Currently supports SD fitacf CDFs containing up to 3 pos. tables.
-  tbl_0='' & tbl_1='' & tbl_2=''
-  time_0='' & time_1='' & time_2=''
-  tbllist = ['tbl_0', 'tbl_1' , 'tbl_2']
-  timelist = ['time_0','time_1','time_2']
+  ;Currently supports SD fitacf CDFs containing up to 4 pos. tables.
+  tbl_0='' & tbl_1='' & tbl_2='' &tbl_3=''
+  time_0='' & time_1='' & time_2='' & time_3=''
+  tbllist = ['tbl_0', 'tbl_1' , 'tbl_2', 'tbl_3']
+  timelist = ['time_0','time_1','time_2','time_3']
   FOR i=0L, N_ELEMENTS(datfiles)-1 DO BEGIN
     cdfi = cdf_load_vars( datfiles[i], varformat='*',/convert_int1_to_int2 )
     timevn = strfilter( cdfi.vars.name, 'Epoch_?' )
@@ -296,3 +296,4 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
   ;Normal end
   RETURN
 END
+
