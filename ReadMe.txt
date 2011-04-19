@@ -1,6 +1,6 @@
 =========================================================
 ; UDAS plug-in software package for tdas_6_00
-; 				April 11, 2011
+; 				April 19, 2011
 =========================================================
 
 UDAS is a plug-in software package for TDAS (Themis Data Analysis Software suite), developed by IUGONET development team. UDAS includes software to read and visualize ground-based observational data in the IUGONET project. For more information of the IUGONET project, please see the IUGONET website:
@@ -43,6 +43,7 @@ Load procedures for IUGONET data :
 - iug_load_mu		; Middle Upper (MU) atmosphere radar data from RISH
 - iug_load_gmag_mm210	; Alias for Ågerg_load_gmag_mm210Åh
 - iug_load_gmag_nipr	; Alias for Ågerg_load_gmag_niprÅh
+- iug_load_sdfit	; Alias for Ågerg_load_sdfitÅh
 
 <examples>
 Example crib sheets for IUGONET/ERG data
