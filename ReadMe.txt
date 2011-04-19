@@ -41,9 +41,9 @@ Load procedures for IUGONET data :
 - iug_load_meteor_rish	; Meteor wind radar data from RISH      
 - iug_load_mf_rish	; MF radar data from RISH
 - iug_load_mu		; Middle Upper (MU) atmosphere radar data from RISH
-- iug_load_gmag_mm210	; Alias for Ågerg_load_gmag_mm210Åh
-- iug_load_gmag_nipr	; Alias for Ågerg_load_gmag_niprÅh
-- iug_load_sdfit	; Alias for Ågerg_load_sdfitÅh
+- iug_load_gmag_mm210	; Alias for "erg_load_gmag_mm210"
+- iug_load_gmag_nipr	; Alias for "erg_load_gmag_nipr"
+- iug_load_sdfit	; Alias for "erg_load_sdfit"
 
 <examples>
 Example crib sheets for IUGONET/ERG data
@@ -84,7 +84,7 @@ The data will be open to foreign researchers in future upon
 confirmation by the SuperDARN PI committee.
   As for questions and request for the data, please feel free to contact
 the ERG-SC office (E-mail:  erg-sc-core at st4a.stelab.nagoya-u.ac.jp,
-please replace Åg at Åh by Åg@Åh).
+please replace "at" by "@").
 
 2. Procedure "iug_load_iprt" calls fits_read, sxpar, fits_open, 
 fits_close, gettok, sxdelpar. For the use of this procedure,
