@@ -244,9 +244,9 @@ if(downloadonly eq 0) then begin
    tclip, 'iug_mf_'+site_code[0]+'_wwnd',-200,200,/overwrite   
    
  ; add tdegap
-   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=600,/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=600,/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=600,/overwrite
   endif 
 endif
 

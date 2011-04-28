@@ -319,17 +319,17 @@ kk=0
    meteor_num=0
    
    ; add tdegap
-   tdegap, 'iug_meteor_ktb_uwnd_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_ktb_vwnd_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_ktb_uwndsig_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_ktb_vwndsig_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_ktb_mwnum_'+parameters[iii],/overwrite
+   tdegap, 'iug_meteor_ktb_uwnd_'+parameters[iii],dt=86400,/overwrite
+   tdegap, 'iug_meteor_ktb_vwnd_'+parameters[iii],dt=86400,/overwrite
+   tdegap, 'iug_meteor_ktb_uwndsig_'+parameters[iii],dt=86400,/overwrite
+   tdegap, 'iug_meteor_ktb_vwndsig_'+parameters[iii],dt=86400,/overwrite
+   tdegap, 'iug_meteor_ktb_mwnum_'+parameters[iii],dt=86400,/overwrite
    
    ; add tclip
-   tclip, 'iug_meteor_ktb_uwnd_'+parameters[iii],-200,200,/overwrite
-   tclip, 'iug_meteor_ktb_vwnd_'+parameters[iii],-200,200,/overwrite
-   tclip, 'iug_meteor_ktb_uwndsig_'+parameters[iii],0,400,/overwrite
-   tclip, 'iug_meteor_ktb_vwndsig_'+parameters[iii],0,400,/overwrite
+   tclip, 'iug_meteor_ktb_uwnd_'+parameters[iii],-400,400,/overwrite
+   tclip, 'iug_meteor_ktb_vwnd_'+parameters[iii],-400,400,/overwrite
+   tclip, 'iug_meteor_ktb_uwndsig_'+parameters[iii],0,800,/overwrite
+   tclip, 'iug_meteor_ktb_vwndsig_'+parameters[iii],0,800,/overwrite
    tclip, 'iug_meteor_ktb_mwnum_'+parameters[iii],0,1200,/overwrite   
    
   endif

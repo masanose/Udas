@@ -111,7 +111,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       par_names='magdas_mag_' + site_or_param 
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
     endif
-    if datatype eq '210mm*' then begin
+    if datatype eq '210mm#' then begin
       vns=parameters
       if parameters[0] eq '*' then vns=['all']
       erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
@@ -125,7 +125,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       end
       par_names=tnames('wdc_mag_'+site_or_param+'_'+'*')
     endif
-    if datatype eq 'NIPR_mag*' then begin     
+    if datatype eq 'NIPR_mag#' then begin     
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
       if parameters[0] eq '*' then begin
         par_names=tnames('nipr_mag_'+site_or_param+'_'+'*')
@@ -161,10 +161,18 @@ pro thm_ui_load_iugonet_data_load_pro,$
   endif  
   
   ;load data of SuperDARN
-  if instrument eq 'SuperDARN' then begin
+  if instrument eq 'SuperDARN#' then begin
     erg_load_sdfit, trange=timeRange, sites=site_or_param
+    
+    ;Delete the tplot variables not allowed on the GUI:
+    store_data, 'sd_hok_position_tbl_*',/delete
+    store_data, 'sd_hok_positioncnt_tbl_*',/delete
+    store_data, 'sd_hok_veast_bothscat_*',/delete
+    store_data, 'sd_hok_vnorth_bothscat_*',/delete
+    store_data, 'sd_hok_vlos_bothscat_*',/delete
+    
     if parameters[0] eq '*' then begin
-       par_names=tnames('sd_' + site_or_param + '_' +'*')
+       par_names=tnames('sd_' + site_or_param + '_' +'*',/all)
     endif else begin
        par_names='sd_' + site_or_param + '_' + parameters +'_0'
     endelse    
@@ -282,7 +290,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     loaded = 1
     
     ;output of the acknowledgement message:
-;    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+   ; Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
     if Answer ne 'Cancel' then begin
     
     ;loop over loaded data

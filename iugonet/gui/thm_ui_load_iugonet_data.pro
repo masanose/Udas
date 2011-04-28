@@ -278,17 +278,19 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                 ToolTip='Delete data selected in the list of loaded data')
   
   loadTree = Obj_New('thm_ui_widget_tree', treeBase, 'LOADTREE', loadedData, $
-                     XSize=500, YSize=425, mode=0, /multi,/showdatetime)
+                     XSize=400, YSize=425, mode=0, /multi,/showdatetime)
                      
   loadTree->update,from_copy=*treeCopyPtr
   
   clearDataBase = widget_base(rightBase,/row,/align_center)
   clearDataButton = widget_button(clearDataBase,value='Delete All Data',uvalue='CLEARDATA',/align_center,ToolTip='Deletes all loaded data')
  
-  ;===== Added to the left-bottom label ===========================================;
+  ;===== Added to the left-bottom label =============================================================================================================;
   NotesBase = widget_base(leftBase,/row,/align_left)
-  NotesLabel = widget_label(NotesBase,value='Note: * in collaboration with ERG-SC')
-  ;================================================================================;
+  NotesLabel = widget_label(NotesBase,value='Note: # means that the load procedure has been developed')
+  NotesBase = widget_base(leftBase,/row,/align_left)
+  NotesLabel = widget_label(NotesBase,value='       in collaboration with the ERG Science Center.')
+  ;==================================================================================================================================================;
   timeWidget = thm_ui_time_widget(selectionBase,$
                                   statusBar,$
                                   historyWin,$
@@ -306,7 +308,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
  ; instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
   ;                   'Lower_Troposphere_Radar','Middle_Upper_atomosphere_radar']
   instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
-                     'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar', 'SuperDARN']
+                     'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar', 'SuperDARN#']
   
   instrumentCombo = widget_combobox(instrumentBase,$
                                        value=instrumentArray,$
@@ -321,7 +323,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   typeArray[0] = ptr_new(['troposphere'])
   typeArray[1] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
-  typeArray[2] = ptr_new(['magdas','210mm*','WDC_kyoto','NIPR_mag*'])
+  typeArray[2] = ptr_new(['magdas','210mm#','WDC_kyoto','NIPR_mag#'])
   typeArray[3] = ptr_new(['Dst_index','AE_index','ASY_index'])
   typeArray[4] = ptr_new(['Sun'])
   typeArray[5] = ptr_new(['troposphere'])
@@ -450,8 +452,9 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[7])[0] = ptr_new(['*','h2t60min00','h2t60min30','h4t60min00','h4t60min30','h4t240min00'])
   (*param2Array[8])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
-  (*param2Array[9])[0] = ptr_new(['azim_no_0','pwr','pwr_err','spec_width','spec_width_err',$
-                                 'vlos','vlos_err','echo_flag','quality','quality_flag']);,'position_tbl'])
+  (*param2Array[9])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err','vlos','vlos_err',$
+                                  'echo_flag','quality','quality_flag','vnorth','veast','vlos_iscat','vlos_gscat',$
+                                  'vnorth_iscat','vnorth_gscat','veast_iscat','veast_gscat']);,'position_tbl'])
 ;  (*param2Array[8])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
 ;  (*param2Array[9])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
                                    

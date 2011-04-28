@@ -16,7 +16,7 @@
 ;  datatype = Observation data type. For example, iug_load_meteor_srp_nc, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'. 
 ;  parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
-;             A kind of parameters is 2 types of 'h2t60min00', 'h4T60min00'.
+;             A kind of parameters is 2 types of 'h2t60min00', 'h4t60min00'.
 ;             The default is 'all'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -309,17 +309,17 @@ kk=0
    meteor_num=0
    
    ; add tdegap
-   tdegap, 'iug_meteor_srp_uwnd_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_srp_vwnd_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_srp_uwndsig_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_srp_vwndsig_'+parameters[iii],/overwrite
-   tdegap, 'iug_meteor_srp_mwnum_'+parameters[iii],/overwrite
+   tdegap, 'iug_meteor_srp_uwnd_'+parameters[iii],dt=3600,/overwrite
+   tdegap, 'iug_meteor_srp_vwnd_'+parameters[iii],dt=3600,/overwrite
+   tdegap, 'iug_meteor_srp_uwndsig_'+parameters[iii],dt=3600,/overwrite
+   tdegap, 'iug_meteor_srp_vwndsig_'+parameters[iii],dt=3600,/overwrite
+   tdegap, 'iug_meteor_srp_mwnum_'+parameters[iii],dt=3600,/overwrite
    
    ; add tclip
-   tclip, 'iug_meteor_srp_uwnd_'+parameters[iii],-200,200,/overwrite
-   tclip, 'iug_meteor_srp_vwnd_'+parameters[iii],-200,200,/overwrite
-   tclip, 'iug_meteor_srp_uwndsig_'+parameters[iii],0,400,/overwrite
-   tclip, 'iug_meteor_srp_vwndsig_'+parameters[iii],0,400,/overwrite
+   tclip, 'iug_meteor_srp_uwnd_'+parameters[iii],-400,400,/overwrite
+   tclip, 'iug_meteor_srp_vwnd_'+parameters[iii],-400,400,/overwrite
+   tclip, 'iug_meteor_srp_uwndsig_'+parameters[iii],0,800,/overwrite
+   tclip, 'iug_meteor_srp_vwndsig_'+parameters[iii],0,800,/overwrite
    tclip, 'iug_meteor_srp_mwnum_'+parameters[iii],0,1200,/overwrite  
    
   endif
