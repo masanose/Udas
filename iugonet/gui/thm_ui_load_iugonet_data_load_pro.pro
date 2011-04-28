@@ -174,7 +174,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
     if parameters[0] eq '*' then begin
        par_names=tnames('sd_' + site_or_param + '_' +'*',/all)
     endif else begin
-       par_names='sd_' + site_or_param + '_' + parameters +'_0'
+       par_names=tnames('sd_' + site_or_param + '_' + parameters[0] +'_*',/all)
     endelse    
   endif
   
