@@ -28,14 +28,14 @@ tplot_names
 stop
 
 ; plot the loaded data
-tplot,'serc_mag_*'
+tplot,'magdas_mag_*'
 stop
 
 ; set new timespan
 timespan,'2008-03-28/02:00:00',4,/hours
 
 ; set y-axis
-ylim,'serc_mag_*',-4000,2000
+ylim,'magdas_mag_*',-4000,2000
 
 ; replot
 tplot
