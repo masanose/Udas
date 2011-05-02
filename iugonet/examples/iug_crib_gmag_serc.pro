@@ -31,11 +31,27 @@ stop
 tplot,'magdas_mag_*'
 stop
 
+; subtract mean value and replot data
+get_data, 'magdas_mag_onw', data=d
+for i=0,3 do d.y(*,i)=d.y(*,i)-mean(d.y(*,i),/NaN)
+store_data, "magdas_mag_onw_new", data=d
+
+get_data, 'magdas_mag_cmd', data=d
+for i=0,3 do d.y(*,i)=d.y(*,i)-mean(d.y(*,i),/NaN)
+store_data, "magdas_mag_cmd_new", data=d
+
+get_data, 'magdas_mag_anc', data=d
+for i=0,3 do d.y(*,i)=d.y(*,i)-mean(d.y(*,i),/NaN)
+store_data, "magdas_mag_anc_new", data=d
+
+tplot, 'magdas_mag_*_new'
+stop
+
 ; set new timespan
-timespan,'2008-03-28/02:00:00',4,/hours
+timespan,'2008-03-28/10:00:00',4,/hours
 
 ; set y-axis
-ylim,'magdas_mag_*',-4000,2000
+ylim,'magdas_mag_*_new',-50,50
 
 ; replot
 tplot
