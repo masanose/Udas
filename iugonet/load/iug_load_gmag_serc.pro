@@ -31,6 +31,7 @@
 ;  08-April-2010, abeshu, minor update.
 ;  14-November-2010, abeshu, update.
 ;  08-March-2011, abeshu, update.
+;  01-May-2011, abeshu, modify title and ylabel on tdas plot.
 ;
 ;ACKNOWLEDGMENT:
 ;
@@ -181,9 +182,9 @@ for i=0, nsites-1 do begin
 
     ; add options
     options, tplot_name, labels=['H','D','Z','F'] , $
-                         ytitle = strupcase(strmid(magdas_sites[i],0,3)), $
-                         ysubtitle = '[nT]', $
-                         title = 'SERC MAGDAS magnetometer'
+                         ytitle = 'MAGDAS ' + strupcase(strmid(magdas_sites[i],0,3)), $
+                         ysubtitle = '[nT]'
+                         ;title = 'SERC MAGDAS magnetometer'
   endif
 
   ; clear data and time buffer
