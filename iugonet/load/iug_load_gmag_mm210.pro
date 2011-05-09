@@ -38,9 +38,7 @@
 ;   For more information, see http://www.iugonet.org/en/ 
 ;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
 ;
-; Written by: Y. Miyashita, Apr 22, 2010
-;             ERG-Science Center, STEL, Nagoya Univ.
-;             erg-sc-core at st4a.stelab.nagoya-u.ac.jp
+; Written by: Y.-M Tanaka, Apr 22, 2010
 ;
 ;   $LastChangedBy$
 ;   $LastChangedDate$
