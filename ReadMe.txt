@@ -1,15 +1,17 @@
-=========================================================
+==================================================================
 ; UDAS plug-in software package for tdas_6_00
 ; 					May 2, 2011
-=========================================================
+==================================================================
 
-UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
-suite), developed by IUGONET development team. UDAS includes software to 
-read and visualize ground-based observational data in the IUGONET project. 
-For more information of the IUGONET project, please see the IUGONET website:
-http://www.iugonet.org/en/.
-
-Our software development is conducted in collaboration with the ERG Science 
+  UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
+suite). UDAS includes IDL procedures to read and visualize ground-based 
+observational data in the IUGONET project. For more information of the 
+IUGONET project, please see the IUGONET website: http://www.iugonet.org/en/.
+  TDAS can be downloaded from the following web page:
+http://themis.ssl.berkeley.edu/software.shtml.
+We acknowledge the cooperation and generosity of the Themis Science Support 
+Team in allowing us to use TDAS for our analysis software.
+  Our software development is conducted in collaboration with the ERG Science 
 Center. The detailed information of the ERG mission is described in the 
 website: http://gemsissc.stelab.nagoya-u.ac.jp/erg/.
 
@@ -17,30 +19,29 @@ website: http://gemsissc.stelab.nagoya-u.ac.jp/erg/.
 ++++++++++++++++++++++++++++++++
 +     System Requirements      +
 ++++++++++++++++++++++++++++++++
-The system requirements are the same as required for TDAS.
-TDAS can be obtained from the following web page:
-http://themis.ssl.berkeley.edu/software.shtml
+  The system requirements are the same as required for TDAS.
 Please see TDAS Users' Guide.
+(http://themis.ssl.berkeley.edu/software.shtml)
 
 
 ++++++++++++++++++++++++++++++++
 +    Contents on the package   +
 ++++++++++++++++++++++++++++++++
-The following files (directories) are included in this package:
+  The following files (directories) are included in this package:
 
 <iugonet>
 ------------------------------------------------------------
 <erg_ground>
-Load procedures for ERG-related data :
+Load procedures for ERG-related data:
 - erg_load_sdfit 	; SuperDARN radar data
 
 <load>
-Load procedures for IUGONET data :
-- iug_load_blr_rish_txt	; Boundary layer radar data from RISH, Kyoto Univ.
+Load procedures for IUGONET data:
+- iug_load_blr_rish_txt	; Boundary layer radar data from RISH, Kyoto Univ
 - iug_load_ear		; Equatorial Atmospheric Radar (EAR) data from RISH
-- iug_load_gmag_serc	; MAGDAS magnetometer data from SERC, Kyushu Univ.
-- iug_load_gmag_wdc	; WDC geomagnetic indices and the magnetometer data.
-- iug_load_iprt		; Iitate Planetary Ratio Telescope data from Tohoku Univ.
+- iug_load_gmag_serc	; MAGDAS magnetometer data from SERC, Kyushu Univ
+- iug_load_gmag_wdc	; WDC geomagnetic indices and the magnetometer data
+- iug_load_iprt		; Iitate Planetary Ratio Telescope data from Tohoku Univ
 - iug_load_ltr_rish_txt	; Lower troposphere radar from RISH
 - iug_load_meteor_rish	; Meteor wind radar data from RISH
 - iug_load_mf_rish	; MF radar data from RISH
@@ -64,18 +65,18 @@ IUGONET/ERG data
 
 CUI:
 ------------------------------------------------------------------------
-- timespan,'2007-06-21' & erg_load_sdfit, site='hok'
-- timespan,'2006-12-01' & iug_load_blr_rish_txt, site='ktb'
-- timespan,'2003-03-25' & iug_load_ear
-- timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
-- timespan,'2006-12-01' & iug_load_gmag_nipr, site='syo'
-- timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
-- timespan,'2006-12-01',31 & iug_load_gmag_wdc, site='sym'
-- timespan,'2010-11-01',/hours,5 & iug_load_iprt
-- timespan,'2004-10-01' & iug_load_ltr_rish_txt, site='sgk'
-- timespan,'2005-03-20' & iug_load_meteor_rish, site = 'ktb'
-- timespan,'2005-03-20' & iug_load_mf_rish, site = 'pam'
-- timespan,'2003-03-10' & iug_load_mu
+  timespan,'2007-06-21' & erg_load_sdfit, site='hok'
+  timespan,'2006-12-01' & iug_load_blr_rish_txt, site='ktb'
+  timespan,'2003-03-25' & iug_load_ear
+  timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
+  timespan,'2006-12-01' & iug_load_gmag_nipr, site='syo'
+  timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
+  timespan,'2006-12-01',31 & iug_load_gmag_wdc, site='sym'
+  timespan,'2010-11-01',/hours,5 & iug_load_iprt
+  timespan,'2004-10-01' & iug_load_ltr_rish_txt, site='sgk'
+  timespan,'2005-03-20' & iug_load_meteor_rish, site = 'ktb'
+  timespan,'2005-03-20' & iug_load_mf_rish, site = 'pam'
+  timespan,'2003-03-10' & iug_load_mu
 ------------------------------------------------------------------------
 
 GUI:
@@ -104,7 +105,9 @@ GUI:
 --------------------------------------------------------------------------
 
 
-/********************* !!! NOTICE !!! **********************
+++++++++++++++++++++++++++++++++
++        !!! NOTICE !!!        +
+++++++++++++++++++++++++++++++++
 1. Japanese SuperDARN radar data (HOK,KSR,SYE,SYS) in CDF are distributed
 by Energization and Radiation in Geospace Science Center (ERG-SC) at
 Solar-Terrestrial Environment Laboratory, Nagoya University, in
@@ -113,8 +116,7 @@ collaboration with Japanese SuperDARN PI groups.
 The data will be open to foreign researchers in future upon
 confirmation by the SuperDARN PI committee.
   As for questions and request for the data, please feel free to contact
-the ERG-SC office (E-mail:  erg-sc-core at st4a.stelab.nagoya-u.ac.jp,
-please replace "at" by "@").
+the ERG-SC office (E-mail: erg-sc-core at st4a.stelab.nagoya-u.ac.jp).
 
 2. Procedure "iug_load_iprt" calls fits_read, sxpar, fits_open, 
 fits_close, gettok, sxdelpar. For the use of this procedure,
@@ -127,4 +129,10 @@ http://search.iugonet.org/iugonet/.
 
 4. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
-*************************************************************/
+
+
+++++++++++++++++++++++++++++++++
++            Contact           +
+++++++++++++++++++++++++++++++++
+  For questions, comments, and requests about UDAS, please contact 
+the UDAS development team (udas at iugonet.org).
