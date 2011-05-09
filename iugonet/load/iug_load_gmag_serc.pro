@@ -32,6 +32,7 @@
 ;  14-November-2010, abeshu, update.
 ;  08-March-2011, abeshu, update.
 ;  01-May-2011, abeshu, modify title and ylabel on tdas plot.
+;  09-May-2011, abeshu, modify the rules of the road.
 ;
 ;ACKNOWLEDGMENT:
 ;
@@ -198,7 +199,14 @@ endfor
 ;******************************************
 ;***** Display additional information *****
 ;******************************************
+print, ''
 print, 'Rules of the Road for MAGDAS/CPMN Data Use:'
+print, ''
+print, 'The Data Citation Rules of the MAGDAS Project are based on "ULTIMA'
+print, 'Memorandum of Understanding for Use of Geomagnetic Data"(in progress).'
+print, 'ULTIMA (http://www.serc.kyushu-u.ac.jp/ultima/ultima.html)'
+print, 'was established on 17 November 2006.
+print, 'It is an international consortium of ground-based magnetometer arrays.'
 print, ''
 print, 'Scientists who want to engage in collaboration with SERC '
 print, 'should contact the project leader of MAGDAS/CPMN '
@@ -239,5 +247,11 @@ print, '    Kyushu University 53'
 print, '    6-10-1 Hakozaki, Higashi-ku Fukuoka 812-8581, JAPAN'
 print, '    TEL/FAX:+81-92-642-4403, e-mail: yumoto@serc.kyushu-u.ac.jp'
 print, ''
+print, 'Note:'
+print, 'This procedure allows you to read MAGDAS 1-minute averaged magnetometer data'
+print, 'observed during recent WHI campaign (from March 20 to April 16, 2008).'
+print, 'You can see more details about this data:'
+print, 'http://magdas.serc.kyushu-u.ac.jp/whi/index.php'
+print, 'Future data release is a work in progress.'
 
 end
