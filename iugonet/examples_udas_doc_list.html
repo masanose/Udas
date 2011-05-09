@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Tue Apr 12 10:10:56 2011.<P>
+<STRONG>Last modified: </STRONG>Tue May 10 00:08:29 2011.<P>
  
 <HR>
  
@@ -19,11 +19,10 @@ This page was created by the IDL library routine
 <H1>Directory Listing of Routines</H1></A>
 <UL>
 <H1>iugonet/examples</H1>
-<LI><A HREF="#ERG_CRIB_GMAG_MM210">ERG_CRIB_GMAG_MM210</A>
-<LI><A HREF="#ERG_CRIB_GMAG_NIPR">ERG_CRIB_GMAG_NIPR</A>
 <LI><A HREF="#ERG_CRIB_SUPERDARN">ERG_CRIB_SUPERDARN</A>
 <LI><A HREF="#IUG_CRIB_BLR_RISH_TXT">IUG_CRIB_BLR_RISH_TXT</A>
 <LI><A HREF="#IUG_CRIB_EAR">IUG_CRIB_EAR</A>
+<LI><A HREF="#IUG_CRIB_GMAG_NIPR">IUG_CRIB_GMAG_NIPR</A>
 <LI><A HREF="#IUG_CRIB_LTR_RISH_TXT">IUG_CRIB_LTR_RISH_TXT</A>
 <LI><A HREF="#IUG_CRIB_METEOR_RISH_KTB_NC">IUG_CRIB_METEOR_RISH_KTB_NC</A>
 <LI><A HREF="#IUG_CRIB_METEOR_RISH_SRP_NC">IUG_CRIB_METEOR_RISH_SRP_NC</A>
@@ -34,60 +33,8 @@ This page was created by the IDL library routine
 <HR>
  
 <H1>Routine Descriptions</H1>
-<A NAME="ERG_CRIB_GMAG_MM210">
-<H2>ERG_CRIB_GMAG_MM210</H2></A>
-<A HREF="#ERG_CRIB_GMAG_NIPR">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- PROGRAM: erg_crib_gmag_mm210
-   This is an example crib sheet that will load 210 MM magnetometer data.
-   Open this file in a text editor and then use copy and paste to copy
-   selected lines into an idl window.
-   Or alternatively compile and run using the command:
-     .run erg_crib_gmag_mm210
-
- NOTE: See the rules of the road.
-       For more information, see http://stdb2.stelab.nagoya-u.ac.jp/mm210/
-
- Written by: Y. Miyashita, Jun 16, 2010
-             ERG-Science Center, STEL, Nagoya Univ.
-             erg-sc-core at st4a.stelab.nagoya-u.ac.jp
-
-   $LastChangedBy: miyasita $
-   $LastChangedDate: 2010-11-29 17:42:55 +0900 (Mon, 29 Nov 2010) $
-   $LastChangedRevision: 67 $
-   $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/examples/erg_crib_gmag_mm210.pro $
-</PRE><P>
-<STRONG>(See <A href="examples/erg_crib_gmag_mm210.pro">iugonet/examples/erg_crib_gmag_mm210.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="ERG_CRIB_GMAG_NIPR">
-<H2>ERG_CRIB_GMAG_NIPR</H2></A>
-<A HREF="#ERG_CRIB_GMAG_MM210">[Previous Routine]</A>
-<A HREF="#ERG_CRIB_SUPERDARN">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- PROGRAM: erg_crib_gmag_nipr
-   This is an example crib sheet that will load the magnetometer data 
-   otained by NIPR, Japan. Open this file in a text editor and then 
-   use copy and paste to copy selected lines into an idl window.
-   Or alternatively compile and run using the command:
-     .run erg_crib_gmag_nipr
-
- NOTE: See the rules of the road.
-       For more information, see:
-       http://polaris.nipr.ac.jp/~dbase/e/100/e/100_03_UAPM_at_Syowa_e.htm
-    &  http://polaris.nipr.ac.jp/~dbase/e/100/e/100_15_Iceland_e.htm
- Written by: Y.-M. Tanaka, Feb. 18, 2011
-             National Institute of Polar Research, Japan.
-             ytanaka at nipr.ac.jp
-</PRE><P>
-<STRONG>(See <A href="examples/erg_crib_gmag_nipr.pro">iugonet/examples/erg_crib_gmag_nipr.pro</A>)</STRONG><P>
-<HR>
- 
 <A NAME="ERG_CRIB_SUPERDARN">
 <H2>ERG_CRIB_SUPERDARN</H2></A>
-<A HREF="#ERG_CRIB_GMAG_NIPR">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_BLR_RISH_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -139,7 +86,7 @@ Modifications:
 <A NAME="IUG_CRIB_EAR">
 <H2>IUG_CRIB_EAR</H2></A>
 <A HREF="#IUG_CRIB_BLR_RISH_TXT">[Previous Routine]</A>
-<A HREF="#IUG_CRIB_LTR_RISH_TXT">[Next Routine]</A>
+<A HREF="#IUG_CRIB_GMAG_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -159,9 +106,33 @@ Modifications:
 <STRONG>(See <A href="examples/iug_crib_ear.pro">iugonet/examples/iug_crib_ear.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_CRIB_GMAG_NIPR">
+<H2>IUG_CRIB_GMAG_NIPR</H2></A>
+<A HREF="#IUG_CRIB_EAR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_LTR_RISH_TXT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROGRAM: iug_crib_gmag_nipr
+   This is an example crib sheet that will load the magnetometer data 
+   obtained by NIPR, Japan. Open this file in a text editor and then 
+   use copy and paste to copy selected lines into an idl window.
+   Or alternatively compile and run using the command:
+     .run iug_crib_gmag_nipr
+
+ NOTE: See the rules of the road.
+       For more information, see:
+       http://polaris.nipr.ac.jp/~dbase/e/100/e/100_03_UAPM_at_Syowa_e.htm
+    &  http://polaris.nipr.ac.jp/~dbase/e/100/e/100_15_Iceland_e.htm
+ Written by: Y.-M. Tanaka, May 2, 2011
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_gmag_nipr.pro">iugonet/examples/iug_crib_gmag_nipr.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_CRIB_LTR_RISH_TXT">
 <H2>IUG_CRIB_LTR_RISH_TXT</H2></A>
-<A HREF="#IUG_CRIB_EAR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_GMAG_NIPR">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_METEOR_RISH_KTB_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>

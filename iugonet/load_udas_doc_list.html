@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Tue Apr 12 10:10:56 2011.<P>
+<STRONG>Last modified: </STRONG>Tue May 10 00:08:29 2011.<P>
  
 <HR>
  
@@ -19,6 +19,10 @@ This page was created by the IDL library routine
 <H1>Directory Listing of Routines</H1></A>
 <UL>
 <H1>iugonet/load</H1>
+<LI><A HREF="#FILE_HTTP_COPY_IUG">FILE_HTTP_COPY_IUG</A>
+<br>This procedure is the modified version of file_http_copy in tdas_6_00 for IUGONET data.
+<LI><A HREF="#FILE_RETRIEVE_IUG">FILE_RETRIEVE_IUG</A>
+<br>This procedure is the modified version of file_retrieve in tdas_6_00 for IUGONET data.
 <LI><A HREF="#IUG_LOAD_BLR_RISH_TXT">IUG_LOAD_BLR_RISH_TXT</A>
 <br>Queries the Kyoto_RISH server for the CSV data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
 <LI><A HREF="#IUG_LOAD_EAR">IUG_LOAD_EAR</A>
@@ -45,9 +49,9 @@ This page was created by the IDL library routine
 <br>Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
 <LI><A HREF="#IUG_LOAD_GMAG_MM210">IUG_LOAD_GMAG_MM210</A>
 <LI><A HREF="#IUG_LOAD_GMAG_NIPR">IUG_LOAD_GMAG_NIPR</A>
-<br>Loading the fluxgate magnetometer data obtained by NIPR.
+<br>Loads the fluxgate magnetometer data obtained by NIPR.
 <LI><A HREF="#IUG_LOAD_GMAG_SERC">IUG_LOAD_GMAG_SERC</A>
-<br>This procedure allows you to download and plot MAGDAS magnetometer data on TDAS.
+<br>This procedure allows you to download and plot MAGDAS 1-minute
 <LI><A HREF="#IUG_LOAD_GMAG_WDC">IUG_LOAD_GMAG_WDC</A>
 <br>Loading geomag data in WDC format from WDC for Geomag Kyoto.
 <LI><A HREF="#IUG_LOAD_GMAG_WDC_CREATE_TPLOT_VARS">
@@ -86,13 +90,49 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of the
 <LI><A HREF="#IUG_LOAD_MU_TROP_TXT">IUG_LOAD_MU_TROP_TXT</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of the
+<LI><A HREF="#IUG_LOAD_SDFIT">IUG_LOAD_SDFIT</A>
 <br>
 </UL><P>
 <HR>
  
 <H1>Routine Descriptions</H1>
+<A NAME="FILE_HTTP_COPY_IUG">
+<H2>FILE_HTTP_COPY_IUG</H2></A>
+<A HREF="#FILE_RETRIEVE_IUG">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ NAME:
+    file_http_copy_iug
+
+ PURPOSE:
+    This procedure is the modified version of file_http_copy in tdas_6_00 for IUGONET data.
+    New input parameter "host" was added.
+
+ Modified by Y. Koyama, April 28, 2011.
+</PRE><P>
+<STRONG>(See <A href="load/file_http_copy_iug.pro">iugonet/load/file_http_copy_iug.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="FILE_RETRIEVE_IUG">
+<H2>FILE_RETRIEVE_IUG</H2></A>
+<A HREF="#FILE_HTTP_COPY_IUG">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_BLR_RISH_TXT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ FUNCTION file_retrieve_iug(pathnames,local_data_dir=local_data_dir)
+
+ PURPOSE:
+    This procedure is the modified version of file_retrieve in tdas_6_00 for IUGONET data.
+    It calls file_http_copy_iug inside.
+
+ Modified by Y. Tanaka, May 9, 2011.
+</PRE><P>
+<STRONG>(See <A href="load/file_retrieve_iug.pro">iugonet/load/file_retrieve_iug.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_BLR_RISH_TXT">
 <H2>IUG_LOAD_BLR_RISH_TXT</H2></A>
+<A HREF="#FILE_RETRIEVE_IUG">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_EAR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -758,9 +798,7 @@ ACKNOWLEDGEMENT:
    For more information, see http://www.iugonet.org/en/ 
                          and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
 
- Written by: Y. Miyashita, Apr 22, 2010
-             ERG-Science Center, STEL, Nagoya Univ.
-             erg-sc-core at st4a.stelab.nagoya-u.ac.jp
+ Written by: Y.-M Tanaka, Apr 22, 2010 (ytanaka at nipr.ac.jp)
 
    $LastChangedBy$
    $LastChangedDate$
@@ -785,7 +823,7 @@ ACKNOWLEDGEMENT:
                      no_download=no_download
 
  PURPOSE:
-   Loading the fluxgate magnetometer data obtained by NIPR.
+   Loads the fluxgate magnetometer data obtained by NIPR.
 
  NOTE: This procedure is a simple alias to "erg_load_gmag_nipr" 
    and calls the original one by just providing the same 
@@ -837,8 +875,13 @@ PROCEDURE: IUG_LOAD_GMAG_SERC,
                       trange = trange, verbose = verbose, $
                       downloadonly = downloadonly
 PURPOSE:
-  This procedure allows you to download and plot MAGDAS magnetometer data on TDAS.
-  This is a sample code for IUGONET analysis software.
+  This procedure allows you to download and plot MAGDAS 1-minute
+  averaged magnetometer data on TDAS.
+  It is currently applicable only to MAGDAS 1-minute averaged
+  data observed during recent WHI campaign (from March 20 to April 16, 2008).
+  You can see more details about this data:
+  http://magdas.serc.kyushu-u.ac.jp/whi/index.php
+  Future data release is a work in progress.
 
 KEYWORDS:
   site  = Observatory name.  For example, serc_load_gmag_sample, site = 'kuj'.
@@ -864,6 +907,8 @@ CHANGELOG:
   08-April-2010, abeshu, minor update.
   14-November-2010, abeshu, update.
   08-March-2011, abeshu, update.
+  01-May-2011, abeshu, modify title and ylabel on tdas plot.
+  09-May-2011, abeshu, modify the rules of the road.
 
 ACKNOWLEDGMENT:
 
@@ -1483,7 +1528,7 @@ KEYWOARDS:
   datatype = Observation data type. For example, iug_load_meteor_srp_nc, datatype = 'thermosphere'.
             The default is 'thermosphere'. 
   parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
-             A kind of parameters is 2 types of 'h2t60min00', 'h4T60min00'.
+             A kind of parameters is 2 types of 'h2t60min00', 'h4t60min00'.
              The default is 'all'.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
@@ -1782,6 +1827,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_MU_TROP_TXT">
 <H2>IUG_LOAD_MU_TROP_TXT</H2></A>
 <A HREF="#IUG_LOAD_MU_TROP_NC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_SDFIT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -1823,5 +1869,43 @@ ACKNOWLEDGEMENT:
  $URL $
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_mu_trop_txt.pro">iugonet/load/iug_load_mu_trop_txt.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_SDFIT">
+<H2>IUG_LOAD_SDFIT</H2></A>
+<A HREF="#IUG_LOAD_MU_TROP_TXT">[Previous Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: iug_load_sdfit
+   to load the SuperDARN fitacf data from the STEL ERG-SC site 
+
+ NOTE: This procedure is a simple alias to "<A href="iugonet/erg_ground/radar/superdarn_udas_doc_list.html#ERG_LOAD_SDFIT">ERG_LOAD_SDFIT</A>" 
+   and calls the original one by just providing the same 
+   arguments/keywords given.
+   Some load procedures for the ground-based observational data 
+   in the  ERG mission, named "erg_load_???", can be also called  
+   by "iug_load_???", because these data are related to the both 
+   ERG and IUGONET projects.
+   For more information, see http://www.iugonet.org/en/ 
+                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
+
+ :KEYWORDS:
+    sites: 3-letter code of SD radar name. 
+           Currently only the following codes work: 
+           'hok', 'ksr'  
+    cdffn: File path of a CDF file if given explicitly. 
+    get_support_data: Turn this on to load the supporting data 
+    trange: time range for which data are loaded. 
+            e.g., ['2008-10-01/00:00:00','2008-10-02/00:00:00'] 
+
+ :AUTHOR: 
+     Tomo Hori (E-mail: horit at stelab.nagoya-u.ac.jp)
+ :HISTORY:
+   2010/03/09: Created as a draft version
+   2010/07/01: now work for hok and ksr
+   2010/09/10: added some keywords
+
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_sdfit.pro">iugonet/load/iug_load_sdfit.pro</A>)</STRONG><P>
 <HR>
  
