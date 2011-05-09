@@ -4,8 +4,13 @@
 ;                      trange = trange, verbose = verbose, $
 ;                      downloadonly = downloadonly
 ;PURPOSE:
-;  This procedure allows you to download and plot MAGDAS magnetometer data on TDAS.
-;  This is a sample code for IUGONET analysis software.
+;  This procedure allows you to download and plot MAGDAS 1-minute
+;  averaged magnetometer data on TDAS.
+;  It is currently applicable only to MAGDAS 1-minute averaged
+;  data observed during recent WHI campaign (from March 20 to April 16, 2008).
+;  You can see more details about this data:
+;  http://magdas.serc.kyushu-u.ac.jp/whi/index.php
+;  Future data release is a work in progress.
 ;
 ;KEYWORDS:
 ;  site  = Observatory name.  For example, serc_load_gmag_sample, site = 'kuj'.
@@ -248,8 +253,9 @@ print, '    6-10-1 Hakozaki, Higashi-ku Fukuoka 812-8581, JAPAN'
 print, '    TEL/FAX:+81-92-642-4403, e-mail: yumoto@serc.kyushu-u.ac.jp'
 print, ''
 print, 'Note:'
-print, 'This procedure allows you to read MAGDAS 1-minute averaged magnetometer data'
-print, 'observed during recent WHI campaign (from March 20 to April 16, 2008).'
+print, 'This procedure is currently applicable only to MAGDAS 1-minute averaged'
+print, 'magnetometer data observed during recent WHI campaign'
+print, '(from March 20 to April 16, 2008).'
 print, 'You can see more details about this data:'
 print, 'http://magdas.serc.kyushu-u.ac.jp/whi/index.php'
 print, 'Future data release is a work in progress.'
