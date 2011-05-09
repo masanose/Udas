@@ -118,16 +118,22 @@ confirmation by the SuperDARN PI committee.
   As for questions and request for the data, please feel free to contact
 the ERG-SC office (E-mail: erg-sc-core at st4a.stelab.nagoya-u.ac.jp).
 
-2. Procedure "iug_load_iprt" calls fits_read, sxpar, fits_open, 
+2. Load procedure of MAGDAS data (iug_load_gmag_serc) is currently applicable 
+only to MAGDAS 1-minute averaged data observed during recent WHI campaign 
+(from March 20 to April 16, 2008). You can see more details about this data:
+http://magdas.serc.kyushu-u.ac.jp/whi/index.php
+Future data release is a work in progress.
+
+3. Procedure "iug_load_iprt" calls fits_read, sxpar, fits_open, 
 fits_close, gettok, sxdelpar. For the use of this procedure,
 get FITS I/O procedures from the IDL Astronomy Library   
 (http://idlastro.gsfc.nasa.gov/fitsio.html).
 
-3. You can get useful information of our data (ex., data availability, 
+4. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database:
 http://search.iugonet.org/iugonet/.
 
-4. For some kinds of data, it may be difficult to load more than one 
+5. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
 
 
