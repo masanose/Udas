@@ -55,14 +55,14 @@ function iug_load_gmag_wdc_qddays, $
   print,relpathnames
 
     ; define remote and local path information
-  source = file_retrieve(/struct)
+  source = file_retrieve_iug(/struct)
   source.verbose = verbose
   source.local_data_dir = root_data_dir() + 'iugonet/wdc_kyoto/geomag/'
   source.remote_data_dir = 'http://wdc-data.iugonet.org/data/'
   if (keyword_set(no_download)) then source.no_server = 1
     
   ; download data
-  local_files = file_retrieve(relpathnames, _extra=source)
+  local_files = file_retrieve_iug(relpathnames, _extra=source)
   print, local_files
   if keyword_set(downloadonly) then return, 0
     
