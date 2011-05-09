@@ -38,7 +38,7 @@
 ;   For more information, see http://www.iugonet.org/en/ 
 ;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
 ;
-; Written by: Y.-M Tanaka, Apr 22, 2010
+; Written by: Y.-M Tanaka, Apr 22, 2010 (ytanaka at nipr.ac.jp)
 ;
 ;   $LastChangedBy$
 ;   $LastChangedDate$
