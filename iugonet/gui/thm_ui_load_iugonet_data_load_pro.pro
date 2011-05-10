@@ -53,8 +53,11 @@ pro thm_ui_load_iugonet_data_load_pro,$
     if instrument eq 'geomagnetic_field_index' then begin
     if datatype eq 'ASY_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
-         par_names='wdc_mag_'+parameters
-         iug_load_gmag_wdc, site=parameters, trange=timeRange        
+         if parameters[0] eq '*' then vns=['asy','sym']
+         for i=0, n_elements(vns)-1 do begin
+             iug_load_gmag_wdc, site = vns[i], trange=timeRange 
+         end
+         par_names=tnames('wdc_mag_'+'*')        
       endif
     endif else if datatype eq 'Dst_index' or datatype eq 'AE_index' then begin
       if site_or_param eq 'WDC_kyoto' then begin
