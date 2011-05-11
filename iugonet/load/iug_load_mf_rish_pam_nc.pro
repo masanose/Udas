@@ -102,7 +102,7 @@ if ~size(fns,/type) then begin
     source = file_retrieve(/struct)
     source.verbose=verbose
     source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/nc/'
-    source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mf/pameungpeuk/nc/'
+   ; source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mf/pameungpeuk/nc/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -117,7 +117,7 @@ if(not keyword_set(downloadonly)) then downloadonly=0
 
 if(downloadonly eq 0) then begin
  ; Initialize data and time buffer
-  ear_time=0
+  pam_time=0
   zon_wind=0
   mer_wind=0
   ver_wind=0
@@ -200,7 +200,6 @@ if(downloadonly eq 0) then begin
     
      ;Append data of time and wind velocity:
      ;======================================
-      append_array, ear_time, time
       append_array, pam_time, time
       append_array, zon_wind, uwind_pam
       append_array, mer_wind, vwind_pam
@@ -215,13 +214,13 @@ if(downloadonly eq 0) then begin
 
 ;Store data of pameungpeuk wind data:
 ;====================================
-    if(ear_time[0] ne 0) then begin
+    if(pam_time[0] ne 0) then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-      store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:ear_time, y:zon_wind, v:height},dlimit=dlimit
+      store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
       options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
-      store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:ear_time, y:mer_wind, v:height},dlimit=dlimit
+      store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
       options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwind!C[m/s]'
-      store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:ear_time, y:ver_wind, v:height},dlimit=dlimit
+      store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
       options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='wwnd!C[m/s]'
   
 
@@ -233,21 +232,29 @@ if(downloadonly eq 0) then begin
     options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR-pam [km]'
     options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR-pam [km]'
 
- ; clear data and time buffer
-   ear_time=0
-   zon_wind=0
-   mer_wind=0
-   ver_wind=0
- ; add tclip  
-   tclip, 'iug_mf_'+site_code[0]+'_uwnd',-200,200,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_vwnd',-200,200,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_wwnd',-200,200,/overwrite   
+ ; add tclip
+ ;Definition of the upper and lower limit of wind data:
+   low_en=-100
+   high_en=100
+   low_v=-20
+   high_v=20
+   
+   tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
+   tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
+   tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite   
    
  ; add tdegap
-   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=600,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=600,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=600,/overwrite
+ ;Definition of time interval to enter NaN:
+   DT=1800
+   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
+   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
   endif 
+ ; clear data and time buffer
+  pam_time=0
+  zon_wind=0
+  mer_wind=0
+  ver_wind=0
 endif
 
 print,'******************************
