@@ -219,7 +219,7 @@ if(downloadonly eq 0) then begin
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
       options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwind!C[m/s]'
+      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwnd!C[m/s]'
       store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
       options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='wwnd!C[m/s]'
   
