@@ -375,15 +375,36 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                  'fb1p16j1','fb1p16j2','fb1p16j3','fb1p16j4','fb1p16j5','fb1p16j6','fb1p16j7','fb1p16j8','fb1p16j9',$
                                  'fb1p16j10','fb1p16j11','fb1p16k1','fb1p16k2','fb1p16k3','fb1p16k4','fb1p16k5','fb8p16','fb8p16k1',$
                                  'fb8p16k2','fb8p16k3','fb8p16k4','fb1p16m2','fb1p16m3','fb1p16m4','fb8p16m1','fb8p16m2'])
-  (*paramArray[2])[0] = ptr_new(['anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
+  (*paramArray[2])[0] = ptr_new(['*(all stations)','anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
                                  'hob','ilr','kuj','lkw','mcq','mgd','mlb','mnd','mut', $
                                  'onw','prp','ptk','roc','sma','tir','twv','wad','yap'])
-  (*paramArray[2])[1] = ptr_new(['adl','asa','bik','bji','bsw','can','cbi','chd','cst', $
+  (*paramArray[2])[1] = ptr_new(['*(all stations)','adl','asa','bik','bji','bsw','can','cbi','chd','cst', $
                                  'dal','daw','ewa','gua','irt','kag','kat','kor','kot', $
                                  'ktb','ktn','lmt','lnp','mgd','mcq','msr','mut','onw', $
                                  'ppi','ptk','ptn','rik','tik','wep','wew','wtk','yak', $
                                  'yap','ymk','zgn','zyk'])
-  (*paramArray[2])[2] = ptr_new(['kak'])
+  (*paramArray[2])[2] = ptr_new(['*(all stations)','aaa','aae','abg','abk','abn','agn','aia','ale','alm','aml','ams',$
+                                 'amt','amu','anc','ann','api','aqu','arc','are','ark','ars','art','asc','ash','aso','asp',$
+                                 'bag','bde','bdv','bel','bfe','bfo','bgy','bji','bjn','blc','blt','bmt','bng','bou',$
+                                 'box','brt','brw','bsl','byr','can','cao','cax','cbb','cbi','ccs','cdp','clf','clh',$
+                                 'cmo','cnb','cnh','coi','cpa','csy','cta','cto','ctx','cwe','czt','dal','dav','dbn',$
+                                 'dik','dlr','dnb','dob','dou','drv','dvs','ebr','egs','eic','elt','esa','esk','ett',$
+                                 'eyr','fan','fcc','fra','frd','frn','fsp','ftn','fuq','fur','gck','gdh','gll','glm',$
+                                 'gln','gna','grm','gua','gui','gwc','gzh','had','hba','hbk','her','his','hlp','hlw',$
+                                 'hna','hon','hrb','hrn','hty','hua','hvn','hyb','ibd','ilm','iqa','irt','isk','izn',$
+                                 'jai','jrv','kak','kdu','kgd','kgl','kir','kiv','kny','knz','kod','kom','kor','kou',$
+                                 'krc','ksh','kzn','laa','ldv','len','ler','lgr','liv','lmm','lnn','lnp','lov','lpb',$
+                                 'lpd','lqa','lrm','lrv','lua','lvv','lwi','lzh','mab','maw','mbc','mbo','mcp','mcq',$
+                                 'mea','mfp','mgd','mid','mir','miz','mlt','mmb','mmk','mnk','mol','mos','mrn','mub',$
+                                 'mut','mzl','nag','nai','naq','nck','new','ngk','ngp','nkk','nmp','nrd','nur','nvl',$
+                                 'nvs','nws','oas','ode','ott','pab','paf','pag','pbq','pcu','peg','pen','pet','phu',$
+                                 'pil','pio','piu','pmg','pnd','pod','pon','ppt','pru','psm','pst','ptu','qgz','qix','qsb',$
+                                 'que','qzh','rbd','rdj','res','rob','rsv','sab','sba','sco','sfs','sge','shl','shu',$
+                                 'sil','sit','sjg','skt','smg','sna','sod','spa','spt','ssh','sso','stj','sto','sua',$
+                                 'sud','svd','swi','syo','szt','tah','tal','tam','tan','teh','ten','teo','tfs','thj','thl',$
+                                 'thy','tik','tir','tkh','tkt','tmk','tnd','tng','tok','tol','too','trd','tro','trw',$
+                                 'tsu','ttb','tuc','tun','uba','ujj','ups','val','vic','vla','vlj','vna','vos','vqs',$
+                                 'vsk','vss','wat','whn','whs','wik','wil','wit','wmq','wng','yak','ycb','ykc','yss'])
   (*paramArray[2])[3] = ptr_new(['aed','hus','isa','syo','tjo'])
   (*paramArray[3])[0] = ptr_new(['WDC_kyoto'])
   (*paramArray[3])[1] = ptr_new(['WDC_kyoto'])

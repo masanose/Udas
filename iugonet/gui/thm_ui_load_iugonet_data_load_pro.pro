@@ -111,22 +111,29 @@ pro thm_ui_load_iugonet_data_load_pro,$
    ; endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
     if datatype eq 'magdas' then begin
-      par_names='magdas_mag_' + site_or_param 
+      if site_or_param[0] eq '*(all stations)' then site_or_param=['all']
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
+      par_names=tnames('magdas_mag_*',/all) 
     endif
     if datatype eq '210mm#' then begin
       vns=parameters
       if parameters[0] eq '*' then vns=['all']
+      if site_or_param[0] eq '*(all stations)' then site_or_param=['all']
       erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
-      par_names=tnames('mm210_mag_'+site_or_param+'_'+'*'+'_hdz')
+      par_names=tnames('mm210_mag_*'+'_hdz',/all)
     endif
     if datatype eq 'WDC_kyoto' then begin
       vns=parameters
       if parameters[0] eq '*' then vns=['min', 'hour']
+      if site_or_param[0] eq '*(all stations)' then site_or_param=['all']
       for i=0, n_elements(vns)-1 do begin
          iug_load_gmag_wdc, trange=timeRange, site = site_or_param, resolution=vns[i]
       end
-      par_names=tnames('wdc_mag_'+site_or_param+'_'+'*')
+      store_data, 'wdc_mag_asy',/delete
+      store_data, 'wdc_mag_dst*',/delete
+      store_data, 'wdc_mag_sym',/delete
+      store_data, 'wdc_mag_ae*',/delete
+      par_names=tnames('wdc_mag_*',/all)
     endif
     if datatype eq 'NIPR_mag#' then begin     
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
@@ -162,7 +169,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       endelse
     endif
   endif  
-  
+
   ;load data of SuperDARN
   if instrument eq 'SuperDARN#' then begin
     erg_load_sdfit, trange=timeRange, sites=site_or_param
