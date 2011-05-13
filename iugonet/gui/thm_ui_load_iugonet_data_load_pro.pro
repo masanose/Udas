@@ -111,13 +111,14 @@ pro thm_ui_load_iugonet_data_load_pro,$
    ; endif
   endif else if instrument eq 'geomagnetic_field_fluxgate' then begin
     if datatype eq 'magdas' then begin
+      par_names='magdas_mag_' + site_or_param 
       iug_load_gmag_serc, trange = timeRange, site = site_or_param
-      par_names=tnames('magdas_mag_*',/all) 
+    endif
     if datatype eq '210mm#' then begin
       vns=parameters
       if parameters[0] eq '*' then vns=['all']
       erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
-      par_names=tnames('mm210_mag_*'+'_hdz',/all)
+      par_names=tnames('mm210_mag_'+site_or_param+'_'+'*'+'_hdz')
     endif
     if datatype eq 'WDC_kyoto' then begin
       vns=parameters
@@ -125,7 +126,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       for i=0, n_elements(vns)-1 do begin
          iug_load_gmag_wdc, trange=timeRange, site = site_or_param, resolution=vns[i]
       end
-      par_names=tnames('wdc_mag_*',/all)
+      par_names=tnames('wdc_mag_'+site_or_param+'_'+'*')
     endif
     if datatype eq 'NIPR_mag#' then begin     
       iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
@@ -161,7 +162,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       endelse
     endif
   endif  
-
+  
   ;load data of SuperDARN
   if instrument eq 'SuperDARN#' then begin
     erg_load_sdfit, trange=timeRange, sites=site_or_param
