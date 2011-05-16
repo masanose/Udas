@@ -1,19 +1,25 @@
 ==================================================================
 ; UDAS plug-in software package for tdas_6_00
-; 					May 2, 2011
+; 					May 16, 2011
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
-suite). UDAS includes IDL procedures to read and visualize ground-based 
-observational data in the IUGONET project. For more information of the 
-IUGONET project, please see the IUGONET website: http://www.iugonet.org/en/.
-  TDAS can be downloaded from the following web page:
-http://themis.ssl.berkeley.edu/software.shtml.
-We acknowledge the cooperation and generosity of the Themis Science Support 
-Team in allowing us to use TDAS for our analysis software.
-  Our software development is conducted in collaboration with the ERG Science 
-Center. The detailed information of the ERG mission is described in the 
-website: http://gemsissc.stelab.nagoya-u.ac.jp/erg/.
+suite; http://themis.ssl.berkeley.edu/software.shtml). UDAS consists of IDL 
+procedures to download, visualize, and analyze observational data distributed 
+from the IUGONET institutions(*). For detailed information on IUGONET, please 
+see the project website at http://www.iugonet.org/en/.
+  Our software has been developed in collaboration with ERG Science Center. 
+The detailed information of the ERG mission is described in the website: 
+http://gemsissc.stelab.nagoya-u.ac.jp/erg/.
+
+(*) IUGONET institutions
+- Planetary Plasma and Atmospheric Research Center, Tohoku University
+- National Institute of Polar Research
+- Solar-Terrestrial Environment Laboratory, Nagoya University
+- Research Institute for Sustainable Humanosphere, Kyoto University
+- World Data Center for Geomagnetism, Kyoto University
+- Kwasan and Hida Observatories, Kyoto University
+- Space Environment Research Center, Kyushu University
 
 
 ++++++++++++++++++++++++++++++++
@@ -135,6 +141,17 @@ http://search.iugonet.org/iugonet/.
 
 5. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
+
+
+++++++++++++++++++++++++++++++++
++       Acknowledgements       +
+++++++++++++++++++++++++++++++++
+  We acknowledge the cooperation and generosity of the THEMIS Science Support 
+Team in allowing us to use TDAS for our analysis software. 
+  210MM magnetometer data and SuperDARN radar data were partly provided by the 
+National Institute of Information and Communications Technology (NICT) through 
+ERG-SC. The load programs for these data were developed in collaboration with 
+NICT. (NICT website: http://www.nict.go.jp/)
 
 
 ++++++++++++++++++++++++++++++++
