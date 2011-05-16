@@ -8,11 +8,10 @@ suite; http://themis.ssl.berkeley.edu/software.shtml). UDAS consists of IDL
 procedures to download, visualize, and analyze observational data distributed 
 from the IUGONET institutions(*). For detailed information on IUGONET, please 
 see the project website at http://www.iugonet.org/en/.
-  Our software has been developed in collaboration with ERG Science Center. 
-The detailed information of the ERG mission is described in the website: 
-http://gemsissc.stelab.nagoya-u.ac.jp/erg/.
+  Our software has been developed in collaboration with ERG Science Center 
+(ERG-SC website: http://gemsissc.stelab.nagoya-u.ac.jp/erg/).
 
-(*) IUGONET institutions
+(*) IUGONET institutions:
 - Planetary Plasma and Atmospheric Research Center, Tohoku University
 - National Institute of Polar Research
 - Solar-Terrestrial Environment Laboratory, Nagoya University
