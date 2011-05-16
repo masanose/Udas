@@ -150,7 +150,7 @@ Team in allowing us to use TDAS for our analysis software.
   210MM magnetometer data and SuperDARN radar data were partly provided by the 
 National Institute of Information and Communications Technology (NICT) through 
 ERG-SC. The load programs for these data were developed in collaboration with 
-NICT. (NICT website: http://www.nict.go.jp/)
+NICT (NICT website: http://www.nict.go.jp/index-e.html).
 
 
 ++++++++++++++++++++++++++++++++
