@@ -147,10 +147,10 @@ week by using GUI due to the memory problem.
 ++++++++++++++++++++++++++++++++
   We acknowledge the cooperation and generosity of the THEMIS Science Support 
 Team in allowing us to use TDAS for our analysis software. 
-  210MM magnetometer data and SuperDARN radar data were partly provided by the 
-National Institute of Information and Communications Technology (NICT) through 
-ERG-SC. The load programs for these data were developed in collaboration with 
-NICT (NICT website: http://www.nict.go.jp/index-e.html).
+  SuperDARN KSR radar data was provided by the National Institute of 
+Information and Communications Technology (NICT) through ERG-SC. The load 
+program for this data was developed in collaboration with NICT (NICT website: 
+http://www.nict.go.jp/index-e.html).
 
 
 ++++++++++++++++++++++++++++++++

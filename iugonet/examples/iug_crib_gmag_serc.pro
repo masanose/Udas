@@ -1,3 +1,4 @@
+;+
 ; PROGRAM: iug_crib_gmag_serc
 ;   This is an example crib sheet that will load the MAGDAS magnetometer data
 ;   released by Space Environment Research Center(SERC), Kyushu University, Japan. 
@@ -5,7 +6,6 @@
 ;   selected lines into an idl window. Or alternatively compile and run
 ;   using the command:
 ;     .RUN IUG_CRIB_GMAG_SERC
-;-
 ;
 ; NOTE: For more information about MAGDAS and its rules of the road, see:
 ;       http://magdas.serc.kyushu-u.ac.jp/
@@ -13,7 +13,8 @@
 ;             Space Environment Research Center, Kyushu University, Japan 
 ;             abeshu _at_ serc.kyushu-u.ac.jp
 ;
-;
+;-
+
 ; initialize
 thm_init
 
