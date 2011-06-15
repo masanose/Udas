@@ -5,17 +5,21 @@
 ; :EXAMPLE:
 ;    splitbeam, 'sd_hok_vlos_0'
 ;
-; :Author: hori
+; :Author:
+;    Tomoaki Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
 ; :HISTORY:
 ;    2010/03/02: Created
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-01-10 23:03:39 +0900 (Mon, 10 Jan 2011) $
-; $LastChangedRevision: 96 $
+; $LastChangedDate: 2011-06-10 04:24:38 +0900 (Fri, 10 Jun 2011) $
+; $LastChangedRevision: 131 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/splitbeam.pro $
 ;-
 PRO splitbeam, tvars
 
+  tvars = tnames(tvars)
+  if strlen(tvars[0]) lt 6 then return
+  
   FOR n = 0, N_ELEMENTS(tvars)-1 DO BEGIN
   
     ;Does tvar exist?

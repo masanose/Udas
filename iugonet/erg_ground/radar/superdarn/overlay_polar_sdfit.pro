@@ -15,6 +15,9 @@
 ;    geo_plot:  Set to plot in the geographical coordinates
 ;    nogscat: Set to prevent the ground scatter data from appearing on the plot
 ;    notimelabel: Set to prevent the time label from appearing on the plot
+;    nocolorscale: Set to surpress drawing the color scale 
+;    colorscalepos: Set the position of the color scale in the noraml 
+;                   coordinates. Default: [0.85, 0.1, 0.87, 0.45] 
 ;
 ; :AUTHOR:
 ; 	Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
@@ -23,14 +26,15 @@
 ; 	2011/01/11: Created
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-01-13 16:53:19 +0900 (Thu, 13 Jan 2011) $
-; $LastChangedRevision: 98 $
+; $LastChangedDate: 2011-06-10 04:23:19 +0900 (Fri, 10 Jun 2011) $
+; $LastChangedRevision: 130 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/overlay_polar_sdfit.pro $;
 ;-
 PRO overlay_polar_sdfit, datvn, time=time, position=position, $
     erase=erase, clip=clip, geo_plot=geo_plot, $
-    nogscat=nogscat, $
-    notimelabel=notimelabel
+    nogscat=nogscat, gscatmaskoff=gscatmaskoff, $
+    notimelabel=notimelabel, $
+    nocolorscale=nocolorscale, colorscalepos=colorscalepos
     
   ;Initialize SDARN system variable and get the default charsize
   sd_init
@@ -173,7 +177,8 @@ PRO overlay_polar_sdfit, datvn, time=time, position=position, $
           IF ~FINITE(val) THEN CONTINUE ;Skip drawing for NaN
           
           ;Color level for val
-          IF FIX(echflgarr[j]) EQ 1 THEN BEGIN
+          IF FIX(echflgarr[j]) EQ 1 OR strpos(datvn,'_pwr') ge 0 $
+            OR strpos(datvn,'spec_width') ge 0 THEN BEGIN
             ;ionospheric echo case
             clvl = clmin + cnum*(val-valrng[0])/(valrng[1]-valrng[0])
             clvl = (clvl > clmin)
@@ -181,7 +186,9 @@ PRO overlay_polar_sdfit, datvn, time=time, position=position, $
           ENDIF ELSE BEGIN
             ;ground echo case
             IF KEYWORD_SET(nogscat) THEN CONTINUE ;skip plotting if nogscat keyword i set
-            if fill_color ge 0 then clvl = fill_color else clvl = 5
+            if ~keyword_set(gscatmaskoff) then begin
+              if fill_color ge 0 then clvl = fill_color else clvl = 5
+            endif
           ENDELSE
           
           ;Lon and Lat for a square to be filled
@@ -202,11 +209,25 @@ PRO overlay_polar_sdfit, datvn, time=time, position=position, $
   
   ;Time label
   IF ~KEYWORD_SET(notimelabel) THEN BEGIN
-    t = !sdarn.sd_polar.plot_time
+    t = time
     tstr = time_string(t, tfor='hh:mm')+' UT'
     XYOUTS, !x.window[0]+0.02, !y.window[0]+0.02, tstr, /normal, $
       font=1, charsize=charsz*2.5
   ENDIF
+  
+  ;Color scale
+  if ~keyword_set(nocolorscale) then begin
+    str_element, lim, 'ztitle', val=ztitle, success=s
+    if s eq 0 then ztitle = ''
+    str_element, lim, 'zrange', val=zrange, success=s
+    if s eq 0 then zrange = [-1000,1000]
+    if keyword_set(colorscalepos) then cspos=colorscalepos $
+      else cspos = [0.85,0.1,0.87,0.45]
+    
+    draw_color_scale, range=zrange,$
+      pos=cspos,$
+      title=ztitle
+  endif
   
   
   ;Resotre the original plot position
