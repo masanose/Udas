@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Thu May 19 23:20:19 2011.<P>
+<STRONG>Last modified: </STRONG>Thu Jun 16 11:10:56 2011.<P>
  
 <HR>
  
@@ -25,6 +25,8 @@ This page was created by the IDL library routine
 <LI><A HREF="#LOADCT_SD">LOADCT_SD</A>
 <LI><A HREF="#OVERLAY_POLAR_COAST">OVERLAY_POLAR_COAST</A>
 <LI><A HREF="#OVERLAY_POLAR_SDFIT">OVERLAY_POLAR_SDFIT</A>
+<LI><A HREF="#PLOT_POLAR_SDFIT">PLOT_POLAR_SDFIT</A>
+<br>Draw a fan plot of SD data on the world map
 <LI><A HREF="#SD_AACGMLIB">SD_AACGMLIB</A>
 <LI><A HREF="#SD_INIT">SD_INIT</A>
 <LI><A HREF="#SD_MAP_SET">SD_MAP_SET</A>
@@ -180,7 +182,7 @@ This page was created by the IDL library routine
 <A NAME="OVERLAY_POLAR_SDFIT">
 <H2>OVERLAY_POLAR_SDFIT</H2></A>
 <A HREF="#OVERLAY_POLAR_COAST">[Previous Routine]</A>
-<A HREF="#SD_AACGMLIB">[Next Routine]</A>
+<A HREF="#PLOT_POLAR_SDFIT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 	PROCEDURE overlay_polar_sdfit
@@ -199,6 +201,9 @@ This page was created by the IDL library routine
     geo_plot:  Set to plot in the geographical coordinates
     nogscat: Set to prevent the ground scatter data from appearing on the plot
     notimelabel: Set to prevent the time label from appearing on the plot
+    nocolorscale: Set to surpress drawing the color scale 
+    colorscalepos: Set the position of the color scale in the noraml 
+                   coordinates. Default: [0.85, 0.1, 0.87, 0.45] 
 
  :AUTHOR:
  	Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
@@ -207,16 +212,59 @@ This page was created by the IDL library routine
  	2011/01/11: Created
 
  $LastChangedBy: horit $
- $LastChangedDate: 2011-01-13 16:53:19 +0900 (Thu, 13 Jan 2011) $
- $LastChangedRevision: 98 $
+ $LastChangedDate: 2011-06-10 04:23:19 +0900 (Fri, 10 Jun 2011) $
+ $LastChangedRevision: 130 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/overlay_polar_sdfit.pro $;
 </PRE><P>
 <STRONG>(See <A href="superdarn/overlay_polar_sdfit.pro">iugonet/erg_ground/radar/superdarn/overlay_polar_sdfit.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="PLOT_POLAR_SDFIT">
+<H2>PLOT_POLAR_SDFIT</H2></A>
+<A HREF="#OVERLAY_POLAR_SDFIT">[Previous Routine]</A>
+<A HREF="#SD_AACGMLIB">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE plot_polar_sdfit
+
+ PURPOSE:
+		Draw a fan plot of SD data on the world map
+
+	:Params:
+    var:   tplot variable to be plotted
+
+	:Keywords:
+    noerase:     Set to plot data without erasing the screen 
+    clip:        Set to scale in to get a magnified map
+    position:    Set the location of the plot frame in the plot window
+    center_glat: geographical latitude at which a plot region is centered
+    center_glon: geographical longitude at which a plot region is centered
+    mltlabel:    Set to draw the MLT labels every 2 hour
+    lonlab:      a latitude from which (toward the poles) the MLT labels are drawn
+    force_scale: Forcibly put a given value in "scale" of map_set
+    geo_plot:    Set to plot in the geographical coordinates
+    coast:      Set to superpose the world map on the plot
+    nocolorscale: Set to surpress drawing the color scale 
+    colorscalepos: Set the position of the color scale in the noraml 
+                   coordinates. Default: [0.85, 0.1, 0.87, 0.45] 
+
+ :EXAMPLES:
+   plot_polar_sdfit, 'sd_hok_vlos_bothscat'
+   plot_polar_sdfit, 'sd_hok_vlos_bothscat', center_glat=70., center_glon=180. 
+   
+ :Author:
+ 	Tomo Hori (E-mail: horit at stelab.nagoya-u.ac.jp)
+
+ :HISTORY:
+ 	2011/03/11: Created
+
+</PRE><P>
+<STRONG>(See <A href="superdarn/plot_polar_sdfit.pro">iugonet/erg_ground/radar/superdarn/plot_polar_sdfit.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="SD_AACGMLIB">
 <H2>SD_AACGMLIB</H2></A>
-<A HREF="#OVERLAY_POLAR_SDFIT">[Previous Routine]</A>
+<A HREF="#PLOT_POLAR_SDFIT">[Previous Routine]</A>
 <A HREF="#SD_INIT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -265,10 +313,10 @@ This page was created by the IDL library routine
  :HISTORY: 
    2010/03/10: Created
  
- $LastChangedBy: horit $
- $LastChangedDate: 2011-01-10 17:24:09 +0900 (Mon, 10 Jan 2011) $
- $LastChangedRevision: 94 $
- $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_init.pro $
+ $LastChangedBy: $
+ $LastChangedDate: $
+ $LastChangedRevision: $
+ $URL: $
 </PRE><P>
 <STRONG>(See <A href="superdarn/sd_init.pro">iugonet/erg_ground/radar/superdarn/sd_init.pro</A>)</STRONG><P>
 <HR>
@@ -288,17 +336,21 @@ This page was created by the IDL library routine
     time
 
 	:Keywords:
-    erase
-    clip
-    position
-    center_glat
-    center_glon
-    mltlabel
-    lonlab
-    force_scale
+    erase:   set to erase pre-existing graphics on the plot window.
+    clip:    set to zoom in roughly to a region encompassing a field of view of one radar. 
+             Actually 30e+6 (clip is on) or 50e+6 (off) is put is "scale" keyword of map_set. 
+    position:  gives the position of a plot panel on the plot window as the normal coordinates.
+    center_glat: geographical latitude at which a plot region is centered.  
+    center_glon: geographical longitude at which a plot region is centered. 
+                 (both center_glat and center_glon should be given, otherwise ignored)
+    mltlabel:    set to draw the MLT labels every 2 hour. 
+    lonlab:      a latitude from which (toward the poles) the MLT labels are drawn.
+    force_scale:   Forcibly put a given value in "scale" of map_set.
 
  :EXAMPLES:
-
+    sd_map_set 
+    sd_map_set, /clip, center_glat=70., center_glon=180., /mltlabel, lonlab=74. 
+    
  :Author:
  	Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
 
@@ -306,8 +358,8 @@ This page was created by the IDL library routine
  	2011/01/11: Created
 
  $LastChangedBy: horit $
- $LastChangedDate: 2011-01-13 16:53:19 +0900 (Thu, 13 Jan 2011) $
- $LastChangedRevision: 98 $
+ $LastChangedDate: 2011-03-07 19:27:27 +0900 (Mon, 07 Mar 2011) $
+ $LastChangedRevision: 122 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_map_set.pro $
 </PRE><P>
 <STRONG>(See <A href="superdarn/sd_map_set.pro">iugonet/erg_ground/radar/superdarn/sd_map_set.pro</A>)</STRONG><P>
@@ -468,13 +520,14 @@ Author:  Davin Larson,  Space Sciences Lab
  :EXAMPLE:
     splitbeam, 'sd_hok_vlos_0'
 
- :Author: hori
+ :Author:
+    Tomoaki Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
  :HISTORY:
     2010/03/02: Created
 
  $LastChangedBy: horit $
- $LastChangedDate: 2011-01-10 23:03:39 +0900 (Mon, 10 Jan 2011) $
- $LastChangedRevision: 96 $
+ $LastChangedDate: 2011-06-10 04:24:38 +0900 (Fri, 10 Jun 2011) $
+ $LastChangedRevision: 131 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/splitbeam.pro $
 </PRE><P>
 <STRONG>(See <A href="superdarn/splitbeam.pro">iugonet/erg_ground/radar/superdarn/splitbeam.pro</A>)</STRONG><P>
