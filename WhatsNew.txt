@@ -1,0 +1,11 @@
+------------------------------------------------------------
+; What's new in udas_1_00_b2	               June 16, 2011
+------------------------------------------------------------
+1) all-in-one command "plot_map_sdfit" for SD data added
+
+"plot_map_sdfit" calls internally "sd_map_set", "overlay_map_sdfit", 
+and "overlay_map_coast" to generate a SuperDARN 2-D plot by itself. 
+Please see the header document for details of the options. 
+
+
+2) 
