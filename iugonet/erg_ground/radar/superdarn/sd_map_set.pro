@@ -18,6 +18,7 @@
 ;    mltlabel:    set to draw the MLT labels every 2 hour. 
 ;    lonlab:      a latitude from which (toward the poles) the MLT labels are drawn.
 ;    force_scale:   Forcibly put a given value in "scale" of map_set.
+;    stereo: Use the stereographic mapping, instead of satellite mapping (default)
 ;
 ; :EXAMPLES:
 ;    sd_map_set 
@@ -30,15 +31,16 @@
 ; 	2011/01/11: Created
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-03-07 19:27:27 +0900 (Mon, 07 Mar 2011) $
-; $LastChangedRevision: 122 $
+; $LastChangedDate: 2011-06-23 16:33:01 +0900 (Thu, 23 Jun 2011) $
+; $LastChangedRevision: 136 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_map_set.pro $
 ;-
 PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
   center_glat=glatc, center_glon=glonc, $
   mltlabel=mltlabel, lonlab=lonlab, $
   force_scale=force_scale, $
-  geo_plot=geo_plot
+  geo_plot=geo_plot, $
+  stereo=stereo
 
   ;Initialize the SD plot environment
   sd_init
@@ -99,13 +101,25 @@ PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
   
   ;Set the lat-lon canvas and draw the continents
   if ~keyword_set(geo_plot) then begin
-  map_set, mlatc, mltc_lon, rot_angle, $
-    /satellite, sat_p=[6.6, 0., 0.], scale=scale, $
-    /isotropic, /horizon, noerase=~KEYWORD_SET(erase)
+    if ~keyword_set(stereo) then begin
+      map_set, mlatc, mltc_lon, rot_angle, $
+        /satellite, sat_p=[6.6, 0., 0.], scale=scale, $
+        /isotropic, /horizon, noerase=~KEYWORD_SET(erase)
+    endif else begin
+      map_set, mlatc, mltc_lon, rot_angle, $
+        /stereo, sat_p=[6.6, 0., 0.], scale=scale, $
+        /isotropic, /horizon, noerase=~KEYWORD_SET(erase)
+    endelse
   endif else begin
-  map_set, glatc, glonc,  $
-    /satellite, sat_p=[6.6, 0., 0.], scale=scale, $
-    /isotropic, /horizon, noerase=~KEYWORD_SET(erase)
+    if ~keyword_set(stereo) then begin
+      map_set, glatc, glonc, rot_angle, $
+        /satellite, sat_p=[6.6, 0., 0.], scale=scale, $
+        /isotropic, /horizon, noerase=~KEYWORD_SET(erase)
+    endif else begin
+      map_set, glatc, glonc, rot_angle, $
+        /stereo, sat_p=[6.6, 0., 0.], scale=scale, $
+        /isotropic, /horizon, noerase=~KEYWORD_SET(erase)
+    endelse
   endelse
 
   map_grid, latdel=10., londel=15.

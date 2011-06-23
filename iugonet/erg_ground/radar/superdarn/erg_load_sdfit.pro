@@ -40,8 +40,8 @@
 ;
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-04-28 20:32:20 +0900 (Thu, 28 Apr 2011) $
-; $LastChangedRevision: 129 $
+; $LastChangedDate: 2011-06-23 16:33:01 +0900 (Thu, 23 Jun 2011) $
+; $LastChangedRevision: 136 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/erg_load_sdfit.pro $
 ;-
 ;---------------------------------------------------
@@ -286,8 +286,17 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
     vstr = tnames(prefix+'pwr_?')
     if strlen(vstr[0]) gt 5 then begin
       get_data, vstr[0], data=d, dl=dl
+      ror = dl.cdf.gatt.rules_of_use
+      
+      print, ''
       print, '############## RULES OF THE ROAD ################'
-      print, dl.cdf.gatt.rules_of_use
+      line_length = 78
+      rorlen = strlen(ror)
+      
+      for i=0L, rorlen/line_length do begin
+        print, strmid( ror, i*line_length, line_length )
+      endfor
+      
       print, '############## RULES OF THE ROAD ################'
     endif
   endif

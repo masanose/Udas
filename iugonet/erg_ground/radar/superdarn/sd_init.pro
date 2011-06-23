@@ -14,10 +14,10 @@
 ; :HISTORY: 
 ;   2010/03/10: Created
 ; 
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
-; $URL: $
+; $LastChangedBy: horit $
+; $LastChangedDate: 2011-01-10 17:24:09 +0900 (Mon, 10 Jan 2011) $
+; $LastChangedRevision: 94 $
+; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_init.pro $
 ;-
 pro sd_init, reset=reset
 
