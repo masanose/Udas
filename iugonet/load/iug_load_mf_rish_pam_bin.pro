@@ -244,6 +244,7 @@ if(downloadonly eq 0) then begin
     ; Results Header:
     ;================
            n=0
+           fill_value=-9999
            for l = 1L, number_of_range_gates_sampled[0] do begin
                record_header_bytes10 = assoc(lun, lonarr(1), offset+0)
                height[n] =float(record_header_bytes10[0])/1000;Range [km]
@@ -252,128 +253,129 @@ if(downloadonly eq 0) then begin
               ; wbad = where(ba lt 0,nbad)
               ; if nbad gt 0 then ba[wbad] = !values.f_nan              
                analysis_status_data[m,n] =ba
-               if analysis_status_data[m,n] eq 0 then begin
+               if analysis_status_data[m,n] ge -12 then begin
                   record_header_bytes12 = assoc(lun, fltarr(1), offset+8)
                   a = record_header_bytes12[0];zonal_wind
-                  wbad = where(a eq -9999,nbad)
+                  print,a
+                  wbad = where(a eq fill_value,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
                   zon_wind_data[m,n]=a
                   record_header_bytes13 = assoc(lun, fltarr(1), offset+12)
                   b= record_header_bytes13[0];meridional_wind
-                  wbad = where(b eq -9999,nbad)
+                  wbad = where(b eq fill_value,nbad)
                   if nbad gt 0 then b[wbad] = !values.f_nan
                   mer_wind_data[m,n] = b
                   record_header_bytes14 = assoc(lun, fltarr(1), offset+16)
                   c= record_header_bytes14[0];vertical_wind
-                  wbad = where(c eq -9999,nbad)
+                  wbad = where(c eq fill_value,nbad)
                   if nbad gt 0 then c[wbad] = !values.f_nan
                   ver_wind_data[m,n] = c
                
                   record_header_bytes15 = assoc(lun, fltarr(1), offset+20)
                   d= record_header_bytes15[0];uncorrected zonal wind velocity
-                  wbad = where(d eq -9999,nbad)
+                  wbad = where(d eq fill_value,nbad)
                   if nbad gt 0 then d[wbad] = !values.f_nan
                   uncorrected_zon_wind_data[m,n] = d
                   record_header_bytes16 = assoc(lun, fltarr(1), offset+24)
                   e= record_header_bytes16[0];uncorrected meridional wind velocity
-                  wbad = where(e eq -9999,nbad)
+                  wbad = where(e eq fill_value,nbad)
                   if nbad gt 0 then e[wbad] = !values.f_nan
                   uncorrected_mer_wind_data[m,n] = e 
                
                   record_header_bytes17 = assoc(lun, fltarr(1), offset+28)
                   f = record_header_bytes17[0];uncorrected fading time
-                  wbad = where(f eq -9999,nbad)
+                  wbad = where(f eq fill_value,nbad)
                   if nbad gt 0 then f[wbad] = !values.f_nan
                   corrected_fading_time_data[m,n] = f                
                   record_header_bytes18 = assoc(lun, fltarr(1), offset+32)
                   g = record_header_bytes18[0];uncorrected fading time
-                  wbad = where(g eq -9999,nbad)
+                  wbad = where(g eq fill_value,nbad)
                   if nbad gt 0 then g[wbad] = !values.f_nan
                   uncorrected_fading_time_data[m,n] = g  
                              
                   record_header_bytes19 = assoc(lun, fltarr(1), offset+36)
                   h = record_header_bytes19[0];normalized time discrepacy
-                  wbad = where(h eq -9999,nbad)
+                  wbad = where(h eq fill_value,nbad)
                   if nbad gt 0 then h[wbad] = !values.f_nan
                   normalized_time_discrepacy_data[m,n] = h   
                               
                   record_header_bytes20 = assoc(lun, fltarr(1), offset+40)
                   aa = record_header_bytes20[0];ellipse major axis length 
-                  wbad = where(aa eq -9999,nbad)
+                  wbad = where(aa eq fill_value,nbad)
                   if nbad gt 0 then aa[wbad] = !values.f_nan
                   ellipse_major_axis_length_data[m,n] = aa                 
                   record_header_bytes21 = assoc(lun, fltarr(1), offset+44)
                   ab = record_header_bytes21[0];ellipse axial ratio
-                  wbad = where(ab eq -9999,nbad)
+                  wbad = where(ab eq fill_value,nbad)
                   if nbad gt 0 then ab[wbad] = !values.f_nan
                   ellipse_axial_ratio_data[m,n] = ab  
                   record_header_bytes22 = assoc(lun, fltarr(1), offset+48)
                   ac = record_header_bytes22[0];ellipse orientation 
-                  wbad = where(ac eq -9999,nbad)
+                  wbad = where(ac eq fill_value,nbad)
                   if nbad gt 0 then ac[wbad] = !values.f_nan    
                   ellipse_orientation_data[m,n]=ac 
                
                   record_header_bytes23 = assoc(lun, fltarr(1), offset+60+36)
                   ad = record_header_bytes23[0];Receiver SNR-1 
-                  wbad = where(ad eq -9999,nbad)
+                  wbad = where(ad eq fill_value,nbad)
                   if nbad gt 0 then ad[wbad] = !values.f_nan    
                   receiver_snr1_data[m,n]=ad 
                   record_header_bytes24 = assoc(lun, fltarr(1), offset+60+36+4)
                   ae = record_header_bytes24[0];Receiver SNR-2 
-                  wbad = where(ae eq -9999,nbad)
+                  wbad = where(ae eq fill_value,nbad)
                   if nbad gt 0 then ae[wbad] = !values.f_nan    
                   receiver_snr2_data[m,n]=ae 
                   record_header_bytes25 = assoc(lun, fltarr(1), offset+60+36+8)
                   af = record_header_bytes25[0];Receiver SNR-3 
-                  wbad = where(af eq -9999,nbad)
+                  wbad = where(af eq fill_value,nbad)
                   if nbad gt 0 then af[wbad] = !values.f_nan    
                   receiver_snr3_data[m,n]=af 
                  
                   record_header_bytes26 = assoc(lun, fltarr(1), offset+60+60)
                   ag = record_header_bytes26[0];Cross channel NSR-1
-                  wbad = where(ag eq -9999,nbad)
+                  wbad = where(ag eq fill_value,nbad)
                   if nbad gt 0 then ag[wbad] = !values.f_nan    
                   cross_channel_nsr1_data[m,n]=ag 
                   record_header_bytes27 = assoc(lun, fltarr(1), offset+60+60+4)
                   ah = record_header_bytes27[0];Cross channel NSR-2 
-                  wbad = where(ah eq -9999,nbad)
+                  wbad = where(ah eq fill_value,nbad)
                   if nbad gt 0 then ah[wbad] = !values.f_nan    
                   cross_channel_nsr2_data[m,n]=ah 
                   record_header_bytes28 = assoc(lun, fltarr(1), offset+60+60+8)
                   ai = record_header_bytes28[0];Cross channel NSR-3 
-                  wbad = where(ai eq -9999,nbad)
+                  wbad = where(ai eq fill_value,nbad)
                   if nbad gt 0 then ai[wbad] = !values.f_nan    
                   cross_channel_nsr3_data[m,n]=ai 
                   
                   record_header_bytes26 = assoc(lun, fltarr(1), offset+60+60)
                   ag = record_header_bytes26[0];Cross channel NSR-1
-                  wbad = where(ag eq -9999,nbad)
+                  wbad = where(ag eq fill_value,nbad)
                   if nbad gt 0 then ag[wbad] = !values.f_nan    
                   cross_channel_nsr1_data[m,n]=ag 
                   record_header_bytes27 = assoc(lun, fltarr(1), offset+60+60+4)
                   ah = record_header_bytes27[0];Cross channel NSR-2 
-                  wbad = where(ah eq -9999,nbad)
+                  wbad = where(ah eq fill_value,nbad)
                   if nbad gt 0 then ah[wbad] = !values.f_nan    
                   cross_channel_nsr2_data[m,n]=ah 
                   record_header_bytes28 = assoc(lun, fltarr(1), offset+60+60+8)
                   ai = record_header_bytes28[0];Cross channel NSR-3 
-                  wbad = where(ai eq -9999,nbad)
+                  wbad = where(ai eq fill_value,nbad)
                   if nbad gt 0 then ai[wbad] = !values.f_nan    
                   cross_channel_nsr3_data[m,n]=ai 
                   
                   record_header_bytes29 = assoc(lun, fltarr(1), offset+60+60+12)
                   aj = record_header_bytes29[0];Sea scatter relative power-1
-                  wbad = where(aj eq -9999,nbad)
+                  wbad = where(aj eq fill_value,nbad)
                   if nbad gt 0 then aj[wbad] = !values.f_nan    
                   sea_scatter_relative_power1_data[m,n]=aj
                   record_header_bytes30 = assoc(lun, fltarr(1), offset+60+60+12+4)
                   ak = record_header_bytes30[0];Sea scatter relative power-2
-                  wbad = where(ak eq -9999,nbad)
+                  wbad = where(ak eq fill_value,nbad)
                   if nbad gt 0 then ak[wbad] = !values.f_nan    
                   sea_scatter_relative_power2_data[m,n]=ak 
                   record_header_bytes31 = assoc(lun, fltarr(1), offset+60+60+12+8)
                   al = record_header_bytes31[0];Sea scatter relative power-3
-                  wbad = where(al eq -9999,nbad)
+                  wbad = where(al eq fill_value,nbad)
                   if nbad gt 0 then al[wbad] = !values.f_nan    
                   sea_scatter_relative_power3_data[m,n]=al 
                endif                                                             
@@ -501,7 +503,7 @@ if(downloadonly eq 0) then begin
     options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2', labels='MFR pam'
     options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3', labels='MFR pam'
    endif
-   
+
  ; clear data and time buffer
    pam_time=0
    zon_wind=0
@@ -527,10 +529,10 @@ if(downloadonly eq 0) then begin
    
   ;add tclip  
   ;Definition of the upper and lower limit of wind data:
-   low_en=-100
-   high_en=100
-   low_v=-20
-   high_v=20
+   low_en=-100000
+   high_en=100000
+   low_v=-20000
+   high_v=20000
    
    tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
    tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite

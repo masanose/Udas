@@ -31,10 +31,11 @@
 ;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 ;
 ;CODE:
-; A. Shinbori, 09/19/2010.
+; A. Shinbori, 19/09/2010.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 03/24/2011.
+; A. Shinbori, 24/03/2011.
+; A. Shinbori, 09/07/2011.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -184,6 +185,12 @@ for ii=0,n_elements(parameters)-1 do begin
     ncdf_varget, cdfid, 'lon', lon
     ncdf_varget, cdfid, 'sealvl', sealvl
     ncdf_varget, cdfid, 'bmwdh', bmwdh
+    ncdf_varget, cdfid, 'freq', freq
+    ncdf_varget, cdfid, 'ipp', ipp
+    ncdf_varget, cdfid, 'ndata', ndata
+    ncdf_varget, cdfid, 'nfft', nfft
+    ncdf_varget, cdfid, 'ncoh', ncoh
+    ncdf_varget, cdfid, 'nicoh', nicoh
     ncdf_varget, cdfid, 'beam', beam
     ncdf_varget, cdfid, 'range', range
     ncdf_varget, cdfid, 'az', az
