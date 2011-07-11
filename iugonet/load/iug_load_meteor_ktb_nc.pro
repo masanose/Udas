@@ -136,13 +136,13 @@ kk=0
         ;***************************       
          file_names = file_dailynames( $
                       file_format='YYYY/Wk'+$
-                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+site_data_lastmane[kk]
+                      'YYYYMMDD',trange=trange,times=times,/unique)+site_data_lastmane[kk]
       endif else if length eq '1_month' then begin
         ;Get files for ith component:
         ;***************************       
          file_names = file_dailynames( $
                       file_format='YYYY/Wk'+$
-                      'YYYYMM',trange=trange,times=times,/unique)+'.'+site_data_lastmane[kk]
+                      'YYYYMM',trange=trange,times=times,/unique)+site_data_lastmane[kk]
       endif
     ;        
     ;Define FILE_RETRIEVE structure:
@@ -334,8 +334,8 @@ kk=0
    tdegap, 'iug_meteor_ktb_mwnum_'+parameters[kk],dt=86400,/overwrite
    
    ; add tclip
-   tclip, 'iug_meteor_ktb_uwnd_'+parameters[kk],-400,400,/overwrite
-   tclip, 'iug_meteor_ktb_vwnd_'+parameters[kk],-400,400,/overwrite
+   tclip, 'iug_meteor_ktb_uwnd_'+parameters[kk],-200,200,/overwrite
+   tclip, 'iug_meteor_ktb_vwnd_'+parameters[kk],-200,200,/overwrite
    tclip, 'iug_meteor_ktb_uwndsig_'+parameters[kk],0,800,/overwrite
    tclip, 'iug_meteor_ktb_vwndsig_'+parameters[kk],0,800,/overwrite
    tclip, 'iug_meteor_ktb_mwnum_'+parameters[kk],0,1200,/overwrite   

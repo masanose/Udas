@@ -131,13 +131,13 @@ kk=0
         ;***************************       
          file_names = file_dailynames( $
                       file_format='YYYY/jkt'+$
-                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+site_data_lastmane[kk]
+                      'YYYYMMDD',trange=trange,times=times,/unique)+site_data_lastmane[kk]
       endif else if length eq '1_month' then begin
         ;Get files for ith component:
         ;***************************       
          file_names = file_dailynames( $
                       file_format='YYYY/jkt'+$
-                      'YYYYMM',trange=trange,times=times,/unique)+'.'+site_data_lastmane[kk]
+                      'YYYYMM',trange=trange,times=times,/unique)+site_data_lastmane[kk]
       endif
     ;        
     ;Define FILE_RETRIEVE structure:
@@ -145,7 +145,7 @@ kk=0
        source = file_retrieve(/struct)
        source.verbose=verbose
        source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/nc/'+length+'/'+site_data_dir[kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/'+site_data_dir[iii+kk]
+     ;  source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/'+site_data_dir[iii+kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -328,8 +328,8 @@ kk=0
    tdegap, 'iug_meteor_srp_mwnum_'+parameters[kk],dt=3600,/overwrite
    
    ; add tclip
-   tclip, 'iug_meteor_srp_uwnd_'+parameters[kk],-400,400,/overwrite
-   tclip, 'iug_meteor_srp_vwnd_'+parameters[kk],-400,400,/overwrite
+   tclip, 'iug_meteor_srp_uwnd_'+parameters[kk],-200,200,/overwrite
+   tclip, 'iug_meteor_srp_vwnd_'+parameters[kk],-200,200,/overwrite
    tclip, 'iug_meteor_srp_uwndsig_'+parameters[kk],0,800,/overwrite
    tclip, 'iug_meteor_srp_vwndsig_'+parameters[kk],0,800,/overwrite
    tclip, 'iug_meteor_srp_mwnum_'+parameters[kk],0,1200,/overwrite  
