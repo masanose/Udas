@@ -236,7 +236,7 @@ kk=0
           num_data=fltarr(n_elements(time),n_elements(range))
 
           for i=0, n_elements(time)-1 do begin
-        ;Change hourtime since 1992-10-27 17:00:00 (Local Time) into unixtime (1970-01-01 00:00:00)
+        ;Change hourtime since 1992-10-28 00:00:00 (Universal Time) into unixtime (1970-01-01 00:00:00)
               timeunix[i] = double(time[i])*3600$
                             +time_double(string(1992)+'-'+string(10)+'-'+string(28)+'/'+string(00)+':'+string(00)+':'+string(00))
                                
