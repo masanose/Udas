@@ -298,12 +298,12 @@ for ii=h_min,h_max-1 do begin
               ;
               ;Append data of time and wind data at the last time in each file:
               ;================================================================
-              append_array, site_time2, time_val2+3600
-              append_array, zon_wind2, zon_wind_data
-              append_array, mer_wind2, mer_wind_data
-              append_array, zon_thermal2, zon_thermal_data
-              append_array, mer_thermal2, mer_thermal_data
-              append_array, meteor_num2, meteor_num_data
+              append_array, site_time, time_val2+3600
+              append_array, zon_wind, zon_wind_data
+              append_array, mer_wind, mer_wind_data
+              append_array, zon_thermal, zon_thermal_data
+              append_array, mer_thermal, mer_thermal_data
+              append_array, meteor_num, meteor_num_data
               
        endfor
           
