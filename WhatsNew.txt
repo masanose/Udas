@@ -1,4 +1,84 @@
 ------------------------------------------------------------
+; What's new in udas_1_00_b2	               July 20, 2011
+------------------------------------------------------------
+1) "iug_load_mf_rish_pam_nc" for the MF radar data at Pameungpeuk revised
+
+Line 105 on "iug_load_mf_rish_pam_nc" was replaced by
+source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/
+data/mf/pameungpeuk/nc/ver1_0_1/' since the location of the radar
+data on the HP (http://database.rish.kyoto-u.ac.jp/arch/iugonet/index-idr.html)
+was changed due to the version up of the netCDF data. 
+
+2) "iug_load_meteor_srp_txt" for the meteor wind radar data at Serpon revised
+
+ "iug_load_meteor_srp_txt" was added to a new option command so that users
+can select two kinds of dawnload files since both the 1-day and 1-month files
+are avaiable now.
+Please see the header document for details of the options. 
+
+3) "iug_load_meteor_srp_nc" for the meteor wind radar data at Serpon revised
+
+Line 148 on  "iug_load_meteor_srp_nc" was replaced by
+source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data
+/mwr/serpong/nc/'+site_data_dir[kk].
+The load procedure was also added to a new option command so that users
+can select two kinds of dawnload files since both the 1-day and 1-month files
+are avaiable now.
+Please see the header document for details of the options. 
+
+4) "iug_load_meteor_ktb_txt" for the meteor wind radar data at Kototabang revised
+
+Line 250 on "iug_load_meteor_ktb_txt" was replaced by time = 
+time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+
+string(minute)) since we confused the local time and uniserval time of this data. 
+ "iug_load_meteor_ktb_txt" was also added to a new option command so that users
+can select two kinds of dawnload files since both the 1-day and 1-month files
+are avaiable now.
+Please see the header document for details of the options.
+
+5) "iug_load_meteor_ktb_nc" for the meteor wind radar data at Kototabang revised
+
+Lines 240-241 on "iug_load_meteor_ktb_nc" was replaced by timeunix[i] = 
+double(time[i])*3600$
++time_double(string(1992)+'-'+string(10)+'-'+string(28)+'/'+string(00)+':'+string(00)+
+':'+string(00)) since we confused the local time and uniserval time of this data. 
+ "iug_load_meteor_ktb_nc" was also added to a new option command so that users
+can select two kinds of dawnload files since both the 1-day and 1-month files
+are avaiable now.
+Please see the header document for details of the options.
+
+6) "iug_load_ear_iono_er_nc" for the EAR-FAI data at Kototabang revised
+
+Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
+and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
+parameters in a sentence of read file.
+
+7) "iug_load_ear_iono_efr_nc" for the EAR-FAI data at Kototabang revised
+
+Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
+and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
+parameters in a sentence of read file.
+
+8) "iug_load_ear_iono_er_nc" for the EAR-FAI data at Kototabang revised
+
+Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
+and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
+parameters in a sentence of read file.
+
+9) "iug_load_ear_iono_fr_nc" for the EAR-FAI data at Kototabang revised
+
+Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
+and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
+parameters in a sentence of read file.
+
+10) "iug_load_ear_iono_vr_nc" for the EAR-FAI data at Kototabang revised
+
+Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
+and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
+parameters in a sentence of read file.
+
+
+------------------------------------------------------------
 ; What's new in udas_1_00_b2	               June 16, 2011
 ------------------------------------------------------------
 1) all-in-one command "plot_map_sdfit" for SD data added
