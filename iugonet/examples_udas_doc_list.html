@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Tue Jul 26 01:50:31 2011.<P>
+<STRONG>Last modified: </STRONG>Tue Jul 26 02:28:07 2011.<P>
  
 <HR>
  
@@ -22,6 +22,7 @@ This page was created by the IDL library routine
 <LI><A HREF="#ERG_CRIB_SUPERDARN">ERG_CRIB_SUPERDARN</A>
 <LI><A HREF="#IUG_CRIB_BLR_RISH_TXT">IUG_CRIB_BLR_RISH_TXT</A>
 <LI><A HREF="#IUG_CRIB_EAR">IUG_CRIB_EAR</A>
+<LI><A HREF="#IUG_CRIB_EISCAT">IUG_CRIB_EISCAT</A>
 <LI><A HREF="#IUG_CRIB_GMAG_NIPR">IUG_CRIB_GMAG_NIPR</A>
 <LI><A HREF="#IUG_CRIB_GMAG_SERC">IUG_CRIB_GMAG_SERC</A>
 <LI><A HREF="#IUG_CRIB_LTR_RISH_TXT">IUG_CRIB_LTR_RISH_TXT</A>
@@ -87,7 +88,7 @@ Modifications:
 <A NAME="IUG_CRIB_EAR">
 <H2>IUG_CRIB_EAR</H2></A>
 <A HREF="#IUG_CRIB_BLR_RISH_TXT">[Previous Routine]</A>
-<A HREF="#IUG_CRIB_GMAG_NIPR">[Next Routine]</A>
+<A HREF="#IUG_CRIB_EISCAT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -107,9 +108,32 @@ Modifications:
 <STRONG>(See <A href="examples/iug_crib_ear.pro">iugonet/examples/iug_crib_ear.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_CRIB_EISCAT">
+<H2>IUG_CRIB_EISCAT</H2></A>
+<A HREF="#IUG_CRIB_EAR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_GMAG_NIPR">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROGRAM: iug_crib_eiscat
+   This is an example crib sheet that will load the EISCAT radar data 
+   distributed in CDF files by NIPR, Japan. Open this file in a text 
+   editor and then use copy and paste to copy selected lines into an 
+   idl window. Or alternatively compile and run using the command:
+     .run iug_crib_eiscat
+
+ NOTE: See the rules of the road.
+       For more information, see:
+           http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
+ Written by: Y.-M. Tanaka, July 26, 2011
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_eiscat.pro">iugonet/examples/iug_crib_eiscat.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_CRIB_GMAG_NIPR">
 <H2>IUG_CRIB_GMAG_NIPR</H2></A>
-<A HREF="#IUG_CRIB_EAR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_EISCAT">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_GMAG_SERC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
