@@ -1,6 +1,6 @@
 ==================================================================
 ; UDAS plug-in software package for tdas_6_00
-; 					May 16, 2011
+; 					July 26, 2011
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -44,6 +44,7 @@ Load procedures for ERG-related data:
 Load procedures for IUGONET data:
 - iug_load_blr_rish_txt	; Boundary layer radar data from RISH, Kyoto Univ
 - iug_load_ear		; Equatorial Atmospheric Radar (EAR) data from RISH
+- iug_load_eiscat	; EISCAT radar data from NIPR
 - iug_load_gmag_serc	; MAGDAS magnetometer data from SERC, Kyushu Univ
 - iug_load_gmag_wdc	; WDC geomagnetic indices and the magnetometer data
 - iug_load_iprt		; Iitate Planetary Ratio Telescope data from Tohoku Univ
@@ -73,6 +74,7 @@ CUI:
   timespan,'2007-06-21' & erg_load_sdfit, site='hok'
   timespan,'2006-12-01' & iug_load_blr_rish_txt, site='ktb'
   timespan,'2003-03-25' & iug_load_ear
+  timespan,'2011-02-03' & iug_load_eiscat
   timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
   timespan,'2006-12-01' & iug_load_gmag_nipr, site='syo'
   timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
