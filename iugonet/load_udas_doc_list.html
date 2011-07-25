@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Tue Jun 28 13:02:22 2011.<P>
+<STRONG>Last modified: </STRONG>Tue Jul 26 01:50:31 2011.<P>
  
 <HR>
  
@@ -47,6 +47,8 @@ This page was created by the IDL library routine
 <br>Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
 <LI><A HREF="#IUG_LOAD_EAR_TROP_TXT">IUG_LOAD_EAR_TROP_TXT</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
+<LI><A HREF="#IUG_LOAD_EISCAT">IUG_LOAD_EISCAT</A>
+<br>loads the EISCAT radar data.
 <LI><A HREF="#IUG_LOAD_GMAG_MM210">IUG_LOAD_GMAG_MM210</A>
 <LI><A HREF="#IUG_LOAD_GMAG_NIPR">IUG_LOAD_GMAG_NIPR</A>
 <br>Loads the fluxgate magnetometer data obtained by NIPR.
@@ -273,10 +275,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 09/07/2011.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -380,10 +383,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 09/07/2011.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -487,10 +491,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 09/07/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -594,10 +599,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 24/03/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -709,7 +715,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_EAR_TROP_TXT">
 <H2>IUG_LOAD_EAR_TROP_TXT</H2></A>
 <A HREF="#IUG_LOAD_EAR_TROP_NC">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_GMAG_MM210">[Next Routine]</A>
+<A HREF="#IUG_LOAD_EISCAT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -753,9 +759,57 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_ear_trop_txt.pro">iugonet/load/iug_load_ear_trop_txt.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_EISCAT">
+<H2>IUG_LOAD_EISCAT</H2></A>
+<A HREF="#IUG_LOAD_EAR_TROP_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_MM210">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: IUG_LOAD_EISCAT
+   iug_load_eiscat, site=site, $
+                    pulse_code=pulse_code, $
+                    int_time=int_time, $
+                    ydatatype=ydatatype, $
+                    get_support_data=get_support_data, $
+                    trange=trange, $
+                    verbose=verbose, $
+                    downloadonly=downloadonly, $
+                    no_download=no_download
+
+ PURPOSE:
+   loads the EISCAT radar data.
+
+ KEYWORDS:
+   site  = Combination of observatory and antenna, example, 
+           erg_load_eiscat, site='esr_42m',
+           the default is 'all', i.e., load all available sites.
+           This can be an array of strings, e.g., ['esr_32m', 'esr_42m']
+           or a single string delimited by spaces, e.g., 'esr_32m esr_42m'.
+   pulse_code = Pulse code
+   int_time = Integration time
+   ydatatype = data type of y-axis. Default is 'alt', i.e., altitude.
+   trange = (Optional) Time range of interest  (2 element array).
+   /get_support_data : turn this on to load the supporting data.
+   /verbose: set to output some useful info
+   /downloadonly: if set, then only download the data, do not load it 
+           into variables.
+   /no_download: use only files which are online locally.
+
+ EXAMPLE:
+   iug_load_eiscat, site='esr_42m', $
+                 trange=['2011-2-1/00:00:00','2011-2-3/00:00:00']
+
+   For more information, see http://www.iugonet.org/en/ 
+                         and http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
+
+ Written by Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_eiscat.pro">iugonet/load/iug_load_eiscat.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_GMAG_MM210">
 <H2>IUG_LOAD_GMAG_MM210</H2></A>
-<A HREF="#IUG_LOAD_EAR_TROP_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_EISCAT">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_GMAG_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1330,12 +1384,14 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_meteor_ktb_nc, datatype = datatype, parameters = parameters, downloadonly = downloadonly, $
-                         trange = trange, verbose=verbose
+ iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+                           trange = trange, verbose=verbose
 
 KEYWOARDS:
   datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
+            The default is 'thermosphere'.
+  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+           A kind of parameters is 2 types of '1_day', and '1_month'.  
  parameters = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
              The default is 'all'.
@@ -1347,10 +1403,11 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 11/07/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1377,10 +1434,14 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_meteor_ktb_txt, parameter = parameter, downloadonly = downloadonly, $
+ iug_load_meteor_ktb_txt, datatype=daatype, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
+  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
+            The default is 'thermosphere'.
+  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+           A kind of parameters is 2 types of '1_day', and '1_month'. 
   parameter = Data parameter. For example, iug_load_meteor_ktb_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
               The default is 'all'.
@@ -1392,10 +1453,11 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 11/07/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1521,12 +1583,14 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, downloadonly = downloadonly, $
+ iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
   datatype = Observation data type. For example, iug_load_meteor_srp_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
+            The default is 'thermosphere'.
+  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+           A kind of parameters is 2 types of '1_day', and '1_month'. 
   parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 2 types of 'h2t60min00', 'h4t60min00'.
              The default is 'all'.
@@ -1538,10 +1602,11 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 11/07/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1568,10 +1633,14 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_meteor_srp_txt, parameter = parameter, downloadonly = downloadonly, $
+ iug_load_meteor_srp_txt, datatype = datatype, parameter = parameter, length=length, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
 KEYWOARDS:
+  datatype = Observation data type. For example, iug_load_meteor_srp_txt, datatype = 'thermosphere'.
+            The default is 'thermosphere'. 
+  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_txt, length = '1_day'.
+           A kind of parameters is 2 types of '1_day', and '1_month'.
   parameter = Data parameter. For example, iug_load_meteor_srp_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
               The default is 'all'.
@@ -1583,10 +1652,11 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 11/07/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
