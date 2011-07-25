@@ -1,5 +1,5 @@
 ------------------------------------------------------------
-; What's new in udas_1_00_b2	               July 20, 2011
+; What's new in udas_1_00_b3	               July 26, 2011
 ------------------------------------------------------------
 1) "iug_load_mf_rish_pam_nc" for the MF radar data at Pameungpeuk revised
 
@@ -76,6 +76,10 @@ parameters in a sentence of read file.
 Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
 and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
 parameters in a sentence of read file.
+
+11) "iug_load_eiscat" for EISCAT radar data added
+
+This procedure loads EISCAT radar data distributed in CDF files by NIPR.
 
 
 ------------------------------------------------------------
