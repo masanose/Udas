@@ -77,9 +77,9 @@ Since the new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh",
 and "nicoh" in the netCDF data, lines 185-190 on this procedure added to the five
 parameters in a sentence of read file.
 
-11) "iug_load_eiscat" for EISCAT radar data added
+11) "iug_load_eiscat" and "iug_crib_eiscat" for EISCAT radar data added
 
-This procedure loads EISCAT radar data distributed in CDF files by NIPR.
+"iug_load_eiscat" loads EISCAT radar data distributed in CDF files by NIPR.
 
 
 ------------------------------------------------------------
