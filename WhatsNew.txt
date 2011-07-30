@@ -1,6 +1,17 @@
 ------------------------------------------------------------
 ; What's new in udas_1_00_b3	               July 26, 2011
 ------------------------------------------------------------
+1) "thm_ui_load_iugonet_data_load_pro" for GUI revised
+
+Line 220-226 on "thm_ui_load_iugonet_data_load_pro" was revised so that 
+the meteor wind radar data can be downloaded for several sites.
+
+2) "iug_load_blr_rish_txt.pro" for the BLR data revised
+ "iug_load_blr_rish_txt.pro" was revised so that the boundary layer radar data 
+can be downloaded for several sites.
+------------------------------------------------------------
+; What's new in udas_1_00_b3	               July 26, 2011
+------------------------------------------------------------
 1) "iug_load_mf_rish_pam_nc" for the MF radar data at Pameungpeuk revised
 
 Line 105 on "iug_load_mf_rish_pam_nc" was replaced by
