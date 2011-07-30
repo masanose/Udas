@@ -112,25 +112,42 @@ acknowledgstring = 'If you acquire the boundary layer radar (BLR) data, ' $
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
 ;
-
+h=0
 jj=0
-o=0
-for ii=0,n_elements(site_code)-1 do begin
-  for iii=0,n_elements(parameters)-1 do begin
+kkk=intarr(3)
+kk=0
+;In the case that the parameters are except for all.'
+  kk=0
+  if n_elements(site_code) le 3 then begin
+     h_min=0
+     h_max=n_elements(site_code)
+     for i=0,n_elements(site_code)-1 do begin
+       if site_code[i] eq 'ktb' then begin
+          kkk[i]=i 
+       endif
+       if site_code[i] eq 'sgk' then begin
+          kkk[i]=i 
+       endif
+       if site_code[i] eq 'srp' then begin
+          kkk[i]=i 
+       endif
+    endfor
+  endif
+
+for ii=h_min,h_max-1 do begin
+   kk=kkk[ii]
+   for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
-      ;Definition of blr site names:
-      if site_code[ii] eq 'ktb' then begin
-         h=0
-         site_code2='kototabang'
-      endif
-      if site_code[ii] eq 'sgk' then begin
-         h=1
-         site_code2='shigaraki'
-      endif
-      if site_code[ii] eq 'srp' then begin
-         h=2
-         site_code2='serpong'
-      endif
+       ;Definition of blr site names:
+         if site_code[ii] eq 'ktb' then begin
+            site_code2='kototabang'
+         endif
+         if site_code[ii] eq 'sgk' then begin
+            site_code2='shigaraki'
+         endif
+         if site_code[ii] eq 'srp' then begin
+            site_code2='serpong'
+         endif
       
     ;Get files for ith component:
     ;***************************
@@ -142,8 +159,8 @@ for ii=0,n_elements(site_code)-1 do begin
     ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[h]+'csv/'
-         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2[ii]+'/data/data/ver02.0212/'
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[kk]+'csv/'
+         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2+'/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
