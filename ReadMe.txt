@@ -95,7 +95,7 @@ GUI:
 			e_region	eb1p2a		*	2009-04-22
 			ef_region	efb1p16		*	2001-07-30
 			v_region	150p8c8b2a	*	2008-03-05
-			f_region	fb1p16a		*	2001-08-01
+			f_region	fb1p16a		*	2001-08-05
 - geomag._fluxgate	magdas		anc		*	2008-03-20
 			210mm		tik		*	2006-12-01
 			WDC_kyoto	kak		*	2006-12-01
