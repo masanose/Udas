@@ -1,56 +1,55 @@
-------------------------------------------------------------
-; What's new in udas_1_00_b3	               July 26, 2011
-------------------------------------------------------------
-1) "thm_ui_load_iugonet_data_load_pro" for GUI revised
-
-"thm_ui_load_iugonet_data_load_pro" was revised so that 
-the meteor wind radar data can be downloaded for several sites.
-
-2) "iug_load_blr_rish_txt.pro" for the BLR data revised
-
-"iug_load_blr_rish_txt.pro" was revised so that the boundary layer radar data 
-can be downloaded for several sites.
-
-3) "iug_load_mf_rish_pam_nc" for the MF radar data at Pameungpeuk revised
-
-The URL adress of the Pameungpeuk data location was changed.
-
-4) "iug_load_meteor_srp_txt" for the meteor wind radar data at Serpon revised
-
- "iug_load_meteor_srp_txt" was added to a new option command. Please see 
- the header document for details of the options. 
-
-5) "iug_load_meteor_srp_nc" for the meteor wind radar data at Serpon revised
-
-"iug_load_meteor_srp_nc" was revised so that the meteor wind radar data can 
-be downloaded for several sites and added to a new option command. 
-Please see the header document for details of the options. 
-
-6) "iug_load_meteor_ktb_txt" and "iug_load_meteor_ktb_nc" for the meteor wind 
-   radar data at Kototabang revised
-
-These load prcedures were revised for time calculation to UTand added to 
-a new option command. Please see the header document for details of the options.
-
-
-7) "iug_load_ear_iono_er_nc", "iug_load_ear_iono_efr_nc", "iug_load_ear_iono_er_nc",
-    "iug_load_ear_iono_fr_nc" and "iug_load_ear_iono_vr_nc" for the EAR-FAI data 
-    at Kototabang revised
-
-The new variables are added to the "freq", "ipp", "ndata", "nfft", "ncoh", 
-and "nicoh" in the netCDF. 
-
-13) "iug_load_eiscat" and "iug_crib_eiscat" for EISCAT radar data added
+-------------------------------------------------------
+; What's new in udas_1_00_b3		August 26, 2011
+-------------------------------------------------------
+1) Added "iug_load_eiscat" and "iug_crib_eiscat" for EISCAT radar data.
 
 "iug_load_eiscat" loads EISCAT radar data distributed in CDF files by NIPR.
 
+2) Modified "thm_ui_load_iugonet_data_load_pro" for GUI.
 
-------------------------------------------------------------
-; What's new in udas_1_00_b2	               June 16, 2011
-------------------------------------------------------------
-1) all-in-one command "plot_map_sdfit" for SD data added
+"thm_ui_load_iugonet_data_load_pro" was modified so that the meteor wind 
+radar data can be downloaded for several sites.
+
+3) Modified "iug_load_blr_rish_txt.pro" for the BLR data.
+
+"iug_load_blr_rish_txt.pro" was modified so that the boundary layer radar 
+data can be downloaded for several sites.
+
+4) Modified "iug_load_mf_rish_pam_nc" for the MF radar data at Pameungpeuk.
+
+The URL address of the Pameungpeuk data location was changed.
+
+5) Modified "iug_load_meteor_srp_txt" for the meteor wind radar data at Serpon.
+
+A new option argument was added to "iug_load_meteor_srp_txt". Please see 
+ the header document for details of the options
+
+6) Modified "iug_load_meteor_srp_nc" for the meteor wind radar data at Serpon.
+
+"iug_load_meteor_srp_nc" was revised so that the meteor wind radar data can 
+be downloaded for several sites and a new option argument was added. 
+Please see the header document for details of the options. 
+
+7) Modified "iug_load_meteor_ktb_txt" and "iug_load_meteor_ktb_nc" for the 
+meteor wind radar data at Kototabang.
+
+These load prcedures were revised for time calculation to UT and a new option 
+argument was added added. Please see the header document 
+for details of the options.
+
+8) Modified "iug_load_ear_iono_er_nc", "iug_load_ear_iono_efr_nc", 
+"iug_load_ear_iono_er_nc", "iug_load_ear_iono_fr_nc" and 
+"iug_load_ear_iono_vr_nc" for the EAR-FAI data at Kototabang.
+
+The new variables "freq", "ipp", "ndata", "nfft", "ncoh", 
+and "nicoh" were added in the netCDF data. 
+
+
+-----------------------------------------------------
+; What's new in udas_1_00_b2		June 16, 2011
+-----------------------------------------------------
+1) Added all-in-one command "plot_map_sdfit" for SD data.
 
 "plot_map_sdfit" calls internally "sd_map_set", "overlay_map_sdfit", 
 and "overlay_map_coast" to generate a SuperDARN 2-D plot by itself. 
 Please see the header document for details of the options. 
-
