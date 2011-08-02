@@ -1,6 +1,6 @@
--------------------------------------------------------
-; What's new in udas_1_00_b3		August 26, 2011
--------------------------------------------------------
+------------------------------------------------------
+; What's new in udas_1_00_b3		August 2, 2011
+------------------------------------------------------
 1) Added "iug_load_eiscat" and "iug_crib_eiscat" for EISCAT radar data.
 
 "iug_load_eiscat" loads EISCAT radar data distributed in CDF files by NIPR.
