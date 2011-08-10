@@ -22,10 +22,10 @@
 ; :HISTORY:
 ; 	2011/06/22: Created
 ;
-; $LastChangedBy: horit $
-; $LastChangedDate: 2011-06-23 16:33:01 +0900 (Thu, 23 Jun 2011) $
-; $LastChangedRevision: 136 $
-; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/get_fixed_pixel_graph.pro $
+; $LastChangedBy: $
+; $LastChangedDate: $
+; $LastChangedRevision: $
+; $URL: $
 ;-
 PRO get_fixed_pixel_graph, vn, beam=beam, range_gate=rgate, newvn=newvn
   
@@ -63,8 +63,11 @@ PRO get_fixed_pixel_graph, vn, beam=beam, range_gate=rgate, newvn=newvn
     newvn = vn +'_bm'+string(beam,'(I02)')+'rg'+string(rgate,'(I03)')
   store_data, newvn, $
     data={x:newtime, y:newvar, v:new_v}, $
-    lim={ytitle:'bm:'+string(beam,'(I02)')+',rg:'+string(rgate,'(I03)')+'!C'+var_lim.ztitle, $
-      yrange:var_lim.zrange}
+    lim={ytitle:'bm:'+string(beam,'(I02)')+',rg:'+string(rgate,'(I03)')+'!C'+var_lim.ztitle}
+  
+  ;Add the zrange as yrange if exists
+  str_element, var_lim, 'zrange', success=s
+  if s eq 1 then options, newvn, 'yrange', var_lim.zrange
    
   return
 end
