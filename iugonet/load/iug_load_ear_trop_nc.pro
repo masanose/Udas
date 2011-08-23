@@ -85,9 +85,9 @@ acknowledgstring = 'If you acquire the equatorial atmospheric radar (EAR) data, 
     endif else file_names=fns
 
     ;--- Load data into tplot variables
-    if(not keyword_set(downloadonly)) then downloadonly=0
+    if (not keyword_set(downloadonly)) then downloadonly=0
 
-    if(downloadonly eq 0) then begin
+    if (downloadonly eq 0) then begin
 
    ;===========================================================
    ;read data, and create tplot vars at each parameter:
@@ -95,8 +95,7 @@ acknowledgstring = 'If you acquire the equatorial atmospheric radar (EAR) data, 
    ;Read the files:
    ;===============
 
-      
-    ; Initialize data and time buffer
+    ;Definition of time and parameters:
       ear_time=0
       zon_wind=0
       mer_wind=0
@@ -104,16 +103,15 @@ acknowledgstring = 'If you acquire the equatorial atmospheric radar (EAR) data, 
       pwr1 = 0
       wdt1 = 0
       dpl1 = 0
-      pn1 = 0
-      
-    ;Loop on files (zonal component): 
-    ;================================
+      pn1 = 0      
+   ;Loop on files (zonal component): 
+   ;================================
     
 for j=0,n_elements(local_paths)-1 do begin
     file= local_paths[j]
-    if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading the troposphere and lower statrosphere observation data taken by the EAR: ',file $
     else begin
-         dprint,'EAR file ',file,' not found. Skipping'
+         dprint,'The troposphere and lower statrosphere observation data taken by the EAR ',file,' not found. Skipping'
          continue
     endelse
     
@@ -148,8 +146,16 @@ for j=0,n_elements(local_paths)-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
             print,' Attribute ', attname, '=', string(attvalue)
+            if (info.name eq 'time') and (attname eq 'units') then time_data=string(attvalue)
         endfor
     endfor
+
+     ;  Calculation the start time infomation from the attribute data:
+     time_info=strsplit(time_data,' ',/extract)
+     syymmdd=time_info[2]
+     shhmmss=time_info[3]
+     time_diff=strsplit(time_info[4],':',/extract)
+     time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
 
     ; Get the variable
     ncdf_varget, cdfid, 'lat', lat
@@ -187,7 +193,7 @@ for j=0,n_elements(local_paths)-1 do begin
     day = fix(strmid(date,10,2))
                            
     ; Definition of arrary names
-    time2 = dblarr(n_elements(time))
+    unix_time = dblarr(n_elements(time))
     height2 = fltarr(n_elements(range))
     uwind_ear=fltarr(n_elements(time),n_elements(range))
     vwind_ear=fltarr(n_elements(time),n_elements(range))
@@ -198,9 +204,8 @@ for j=0,n_elements(local_paths)-1 do begin
     pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
     for i=0, n_elements(time)-1 do begin
-    
-         time2[i] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(0)+':'+string(0)+':'+string(0))+double(time[i]) $
-                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
+        ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
+         unix_time[i] =  double(time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2
                                
         for k=0, n_elements(range)-1 do begin
 
@@ -252,7 +257,7 @@ for j=0,n_elements(local_paths)-1 do begin
    ; print, uwind, n_elements(uwind),n_elements(time)
    ;Append data of time and wind velocity:
    ;======================================
-    append_array, ear_time, time2
+    append_array, ear_time, unix_time
     append_array, zon_wind, uwind_ear
     append_array, mer_wind, vwind_ear
     append_array, ver_wind, wwind_ear
@@ -277,7 +282,7 @@ endfor
    ;******************************
    ;Store data in TPLOT variables:
    ;******************************
-      if time2[0] ne 0 then begin
+      if unix_time[0] ne 0 then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          
          ;Store data of wind velocity

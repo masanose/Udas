@@ -64,7 +64,7 @@ if (not keyword_set(length)) then length='1_day'
 ;***********
 
 ;--- all parameters (default)
-parameter_all = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30',' ', /extract)
+parameter_all = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30 h4t240min00',' ', /extract)
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
@@ -75,8 +75,8 @@ print, parameters
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60min30/',' ', /extract)
-site_data_lastmane = strsplit('.h2t60min00.nc .h2t60min30.nc .h4t60min00.nc .h4t60min30.nc',' ', /extract)
+site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60min30/ h4km_t240min00/',' ', /extract)
+site_data_lastmane = strsplit('.h2t60min00.nc .h2t60min30.nc .h4t60min00.nc .h4t60min30.nc .h4t240min00.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
@@ -105,31 +105,18 @@ acknowledgstring = 'Scientists who want to engage in collaboration with Research
 ;===============================================
 h=0
 jj=0
-kkk=intarr(4)
 kk=0
-  ;In the case that the parameters are except for all.'
-  kk=0
-  if n_elements(parameters) le 5 then begin
-     h_min=0
-     h_max=n_elements(parameters)
-     for i=0,n_elements(parameters)-1 do begin
-       if parameters[i] eq 'h2t60min00' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h2t60min30' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h4t60min00' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h4t60min30' then begin
-          kkk[i]=i 
-       endif
+  
+  for iii=0,n_elements(parameters)-1 do begin
+  ;The parameter search:'
+    for jjj=0, n_elements(site_data_lastmane)-1 do begin
+       if parameters[iii] eq 'h2t60min00' then kk=0
+       if parameters[iii] eq 'h2t60min30' then kk=1
+       if parameters[iii] eq 'h4t60min00' then kk=2
+       if parameters[iii] eq 'h4t60min30' then kk=3
+       if parameters[iii] eq 'h4t240min00' then kk=4
     endfor
-  endif
-
-  for iii=h_min,h_max-1 do begin
-    kk=kkk[iii]
+    
     if ~size(fns,/type) then begin
       if length eq '1_day' then begin 
         ;Get files for ith component:
@@ -149,7 +136,7 @@ kk=0
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/'+length+'/'+site_data_dir[kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/ver1_1/'+length+'/'+site_data_dir[kk]
        source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/'+site_data_dir[kk]
     
     ;Get files and local paths, and concatenate local paths:
@@ -161,26 +148,25 @@ kk=0
     endif else file_names=fns
 
     ;--- Load data into tplot variables
-    if(not keyword_set(downloadonly)) then downloadonly=0
+    if (not keyword_set(downloadonly)) then downloadonly=0
 
-    if(downloadonly eq 0) then begin
+    if (downloadonly eq 0) then begin
 
-     ; Initialize data and time buffer
-      site_time=0
-      zon_wind=0
-      mer_wind=0
-      zon_thermal=0
-      mer_thermal=0
-      meteor_num=0 
-      
+   ;Definition time and parameters:
+   site_time=0
+   zon_wind=0
+   mer_wind=0
+   zon_thermal=0
+   mer_thermal=0
+   meteor_num=0    
  
  ;Loop on files (read the NetCDF files): 
  ;======================================
       for j=jj,n_elements(local_paths)-1 do begin
           file= local_paths[j]
-          if file_test(/regular,file) then  dprint,'Loading meteor radar data file: ',file $
+          if file_test(/regular,file) then  dprint,'Loading the wind data estimated from the MWR at Kototabang: ',file $
           else begin
-             dprint,'Meteor radar data file',file,'not found. Skipping'
+             dprint,'The wind data estimated from the MWR at Kototabang',file,'not found. Skipping'
              continue
           endelse
     
@@ -215,8 +201,17 @@ kk=0
                   attname = ncdf_attname(cdfid,m,l)
                   ncdf_attget,cdfid,m,attname,attvalue
                   print,' Attribute ', attname, '=', string(attvalue)
+                  if (info.name eq 'time') and (attname eq 'units') then time_data=string(attvalue)
               endfor
           endfor
+          
+        ;  Enter the time infomation:
+          time_info=strsplit(time_data,' ',/extract)
+          syymmdd=time_info[2]
+          shhmmss=time_info[3]
+          time_diff=strsplit(time_info[4],':',/extract)
+          time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60   
+          
     ; Get the variable
           ncdf_varget, cdfid, 'time', time
           ncdf_varget, cdfid, 'range', range
@@ -225,9 +220,9 @@ kk=0
           ncdf_varget, cdfid, 'sig_uwind', sig_uwind
           ncdf_varget, cdfid, 'sig_vwind', sig_vwind
           ncdf_varget, cdfid, 'num', num
-    
+
     ; Definition of arrary names
-          timeunix = dblarr(n_elements(time))
+          unix_time = dblarr(n_elements(time))
           height=fltarr(n_elements(range))
           uwind_data=fltarr(n_elements(time),n_elements(range))
           vwind_data=fltarr(n_elements(time),n_elements(range))
@@ -236,11 +231,10 @@ kk=0
           num_data=fltarr(n_elements(time),n_elements(range))
 
           for i=0, n_elements(time)-1 do begin
-        ;Change hourtime since 1992-10-28 00:00:00 (Universal Time) into unixtime (1970-01-01 00:00:00)
-              timeunix[i] = double(time[i])*3600$
-                            +time_double(string(1992)+'-'+string(10)+'-'+string(28)+'/'+string(00)+':'+string(00)+':'+string(00))
-                               
-                      
+          
+             ; Change hours since midnight of the first day of every month (Universal Time) into unixtime (1970-01-01 00:00:00)
+              unix_time[i] = double(time[i])*3600 +time_double(syymmdd+'/'+shhmmss)-time_diff2
+ 
               for k=0, n_elements(range)-1 do begin
                   uwind_data[i,k]=uwind[0,k,i]
                   vwind_data[i,k]=vwind[0,k,i]
@@ -274,7 +268,7 @@ kk=0
     
    ;Append data of time and wind velocity:
    ;======================================
-      append_array, site_time, timeunix
+      append_array, site_time, unix_time
       append_array, zon_wind, uwind_data
       append_array, mer_wind, vwind_data
       append_array, zon_thermal, sig_uwind_data

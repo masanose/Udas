@@ -61,7 +61,7 @@ if (not keyword_set(datatype)) then datatype= 'troposphere'
 site_code_all = strsplit('ktb sgk srp',' ', /extract)
 
 ;--- check site codes
-if(not keyword_set(site)) then site='all'
+if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 
 print, site_code
@@ -70,7 +70,7 @@ print, site_code
 ;parameters:
 ;***********
 ;--- all parameters (default)
-parameter_all = strsplit('uwnd vwnd wwnd pwr1 pwr2 pwr3 wdt1 wdt2 wdt3',' ', /extract)
+parameter_all = strsplit('uwnd vwnd wwnd pwr1 pwr2 pwr3 pwr4 pwr5 wdt1 wdt2 wdt3 wdt4 wdt5',' ', /extract)
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
@@ -123,13 +123,13 @@ kk=0
      h_max=n_elements(site_code)
      for i=0,n_elements(site_code)-1 do begin
        if site_code[i] eq 'ktb' then begin
-          kkk[i]=i 
+          kkk[i]=0 
        endif
        if site_code[i] eq 'sgk' then begin
-          kkk[i]=i 
+          kkk[i]=1 
        endif
        if site_code[i] eq 'srp' then begin
-          kkk[i]=i 
+          kkk[i]=2 
        endif
     endfor
   endif
@@ -171,9 +171,9 @@ for ii=h_min,h_max-1 do begin
       endif else file_names=fns 
 
 ;--- Load data into tplot variables
-      if(not keyword_set(downloadonly)) then downloadonly=0
+      if (not keyword_set(downloadonly)) then downloadonly=0
 
-      if(downloadonly eq 0) then begin
+      if (downloadonly eq 0) then begin
   
   
       ;Read the files:
@@ -190,9 +190,9 @@ for ii=h_min,h_max-1 do begin
       ;================================
          for h=jj,n_elements(local_paths)-1 do begin
              file= local_paths[h]
-             if file_test(/regular,file) then  dprint,'Loading BLR-'+site_code2+' file:',file $
+             if file_test(/regular,file) then  dprint,'Loading the observation data of the troposphere taken by the BLR-'+site_code2+' :',file $
              else begin
-                dprint,'BLR-'+site_code2+' file',file,' not found. Skipping'
+                dprint,'The observation data of the troposphere taken by the BLR-'+site_code2+' ', file,' not found. Skipping'
                 continue
              endelse
              openr,lun,file,/get_lun    
@@ -203,9 +203,9 @@ for ii=h_min,h_max-1 do begin
              height = strsplit(s,',',/extract)
              
              ;Definition of altitude and data arraies:
-             altitude = fltarr(70)
-             data = strarr(70)
-             data2 = fltarr(1,70)
+             altitude = fltarr(n_elements(height)-1)
+             data = strarr(n_elements(height)-1)
+             data2 = fltarr(1,n_elements(height)-1)
              
              for j=0,n_elements(height)-2 do begin
                  altitude[j] = float(height[j+1])

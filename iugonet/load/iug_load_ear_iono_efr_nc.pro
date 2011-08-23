@@ -125,21 +125,21 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===========================================================
    ;Read the files:
    ;===============
-    ; Initialize data and time buffer
-      ear_time=0
-      pwr1 = 0
-      wdt1 = 0
-      dpl1 = 0
-      pn1 = 0
-
-    ;Loop on files (zonal component): 
-    ;================================
+   
+  ;Definition of time and parameters:
+  ear_time=0
+  pwr1 = 0
+  wdt1 = 0
+  dpl1 = 0
+  pn1 = 0
+   ;Loop on files (zonal component): 
+   ;================================
     
   for j=jj,n_elements(local_paths)-1 do begin
     file= local_paths[j]
-    if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+    if file_test(/regular,file) then  dprint,'Loading the FAI observation data taken by the EAR: ',file $
     else begin
-         dprint,'EAR file ',file,' not found. Skipping'
+         dprint,'The FAI observation data taken by the EAR ',file,' not found. Skipping'
          continue
     endelse
     
@@ -174,9 +174,17 @@ for ii=0,n_elements(parameters)-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
             print,' Attribute ', attname, '=', string(attvalue)
+            if (info.name eq 'time') and (attname eq 'units') then time_data=string(attvalue)
         endfor
     endfor
-
+    
+     ;  Calculation the start time infomation from the attribute data:
+     time_info=strsplit(time_data,' ',/extract)
+     syymmdd=time_info[2]
+     shhmmss=time_info[3]
+     time_diff=strsplit(time_info[4],':',/extract)
+     time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
+     
     ; Get the variable
     ncdf_varget, cdfid, 'lat', lat
     ncdf_varget, cdfid, 'lon', lon
@@ -207,16 +215,15 @@ for ii=0,n_elements(parameters)-1 do begin
                            
     ; Definition of arrary names
     height2 = fltarr(n_elements(range))
-    time2 = dblarr(n_elements(time))
+    unix_time = dblarr(n_elements(time))
     pwr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
     wdt1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
     dpl1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
     pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
     for i=0, n_elements(time)-1 do begin
-    
-         time2[i] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(0)+':'+string(0)+':'+string(0))+double(time[i]) $
-                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
+       ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
+        unix_time[i] = double(time[i])*3600 +time_double(syymmdd+'/'+shhmmss)-time_diff2
                                
         for k=0, n_elements(range)-1 do begin
             for l=0, n_elements(beam)-1 do begin
@@ -253,7 +260,7 @@ for ii=0,n_elements(parameters)-1 do begin
      ; print, uwind, n_elements(uwind),n_elements(time)
      ;Append data of time and wind velocity:
      ;======================================
-      append_array, ear_time, time2
+      append_array, ear_time, unix_time
       append_array, pwr1, pwr1_ear
       append_array, wdt1, wdt1_ear
       append_array, dpl1, dpl1_ear
@@ -271,7 +278,7 @@ endfor
       dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
       pnoise2_ear=fltarr(n_elements(ear_time)) 
     
-      if time2[0] ne 0 then begin
+      if unix_time[0] ne 0 then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))         
          ;Store data of wind velocity
          for l=0, n_elements(beam)-1 do begin
