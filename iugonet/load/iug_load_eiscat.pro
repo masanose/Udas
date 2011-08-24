@@ -36,47 +36,10 @@
 ;   For more information, see http://www.iugonet.org/en/ 
 ;                         and http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
 ;
-; Written by Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+; Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+; Modified by: Y.-M. Tanaka, August 24, 2011 (ytanaka at nipr.ac.jp)
+;   Separated "print_str_maxlet" to another file. 
 ;-
-
-;*****************************************************************
-;*** show_text_fixlet is procedure for showing acknowledgement ***
-;*****************************************************************
-pro show_text_fixlet, txt, maxlet
-
-if ~keyword_set(maxlet) then maxlet=100
-textlen=strlen(txt)
-remtext=txt
-for iline=0, textlen/maxlet+100 do begin
-  remtextlen=strlen(remtext)
-  if remtextlen gt maxlet then begin
-    line1=strmid(remtext, 0, maxlet)
-
-    ispace=strpos(line1, ' ')	; Check if space exists.
-    if ispace lt 0 then begin
-      line1=strmid(line1, 0, maxlet)
-      remtext=strmid(remtext, maxlet, remtextlen-maxlet+1)
-    endif else begin
-      ;--- Find space ---;
-      for istr=0, maxlet-1 do begin
-        str1=strmid(line1,maxlet-istr-1,1)
-        if str1 eq ' ' then begin
-          line1=strmid(line1, 0, maxlet-istr-1)
-          remtext=strmid(remtext, maxlet-istr, remtextlen-maxlet+istr+1)
-          break
-        endif
-      endfor
-    endelse
-    print, line1
-  endif else begin
-    line1=strmid(remtext, 0, remtextlen)
-    print, line1
-    break
-  endelse
-endfor
-
-end
-
 
 ;********************************************
 ;*** Load procedure for EISCAT radar data ***
@@ -166,7 +129,7 @@ for i=0,n_elements(site_code)-1 do begin
         print, ''
         print, 'Rules of the Road for EISCAT Radar Data:'
         print, ''
-	show_text_fixlet, gatt.Rules_of_use
+	print_str_maxlet, gatt.Rules_of_use
         print, gatt.LINK_TEXT, ' ', gatt.HTTP_LINK
         print, '**************************************************************************************'
       endif
