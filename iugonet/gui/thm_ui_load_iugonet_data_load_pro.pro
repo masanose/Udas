@@ -263,6 +263,18 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endelse
   endif
     
+  ;load data of EISCAT radar
+  if instrument eq 'EISCAT_radar' then begin
+     vns=strmid(datatype,0,3)
+     iug_load_eiscat, site=site_or_param, pulse_code=parameters, ydatatype=vns, $
+	trange = timeRange
+     if parameters[0] eq '*' then begin
+        par_names=tnames('eiscat_'+'*'+'_'+'*')
+     endif else begin
+        par_names=tnames('eiscat_'+'*'+'_'+parameters+'_'+'*')
+     endelse
+  endif
+
   ;load data of Radio sonde 
   ;if instrument eq 'Radio_sonde' then begin
   ;   iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange
@@ -300,13 +312,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
       for i = 0,n_elements(new_vars)-1 do begin
       
       ;======== Add the following programs in order to select more then two observatoies by Shinbori  =========
-        if instrument ne ( 'SuperDARN#') then begin
-           site_name=strsplit(new_vars[i],'_',/extract)
-           site_name2 = site_name[2]
-        end else if instrument eq 'SuperDARN#' then begin
+        if (instrument eq 'SuperDARN#') or (instrument eq 'EISCAT_radar') then begin
            site_name=strsplit(new_vars[i],'_',/extract)
            site_name2 = site_name[1]
-        endif
+        endif else begin
+           site_name=strsplit(new_vars[i],'_',/extract)
+           site_name2 = site_name[2]
+        endelse
       ;================================================================================
 
         result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)

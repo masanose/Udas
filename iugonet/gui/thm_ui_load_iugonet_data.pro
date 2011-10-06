@@ -308,7 +308,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
  ; instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
   ;                   'Lower_Troposphere_Radar','Middle_Upper_atomosphere_radar']
   instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
-                     'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar', 'SuperDARN#']
+                     'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar', 'SuperDARN#', 'EISCAT_radar']
   
   instrumentCombo = widget_combobox(instrumentBase,$
                                        value=instrumentArray,$
@@ -319,7 +319,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;================================
   ;=========== Data Type ==========
   ;================================
-  typeArray = ptrarr(10)
+  typeArray = ptrarr(11)
   
   typeArray[0] = ptr_new(['troposphere'])
   typeArray[1] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
@@ -332,6 +332,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[8] = ptr_new(['troposphere'])
   typeArray[9] = ptr_new(['ionosphere'])  
   ;typeArray[9] = ptr_new(['troposphere'])
+  typeArray[9] = ptr_new(['ionosphere'])  
+  typeArray[10] = ptr_new(['altitude_prof','latitude_prof','longitude_prof'])  
                                      
   dataBase = widget_base(selectionBase,/row)
   typeBase = widget_base(dataBase,/col)
@@ -353,7 +355,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;============================================
   ;========== Sites and Parameters-1 ==========
   ;============================================
-  paramArray = ptrarr(10)
+  paramArray = ptrarr(11)
   paramArray[0] = ptr_new(ptrarr(1))
   paramArray[1] = ptr_new(ptrarr(5))
   paramArray[2] = ptr_new(ptrarr(4))
@@ -364,7 +366,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[7] = ptr_new(ptrarr(1))
   paramArray[8] = ptr_new(ptrarr(4)) 
   paramArray[9] = ptr_new(ptrarr(1))
-  
+  paramArray[10] = ptr_new(ptrarr(1))
+
   (*paramArray[0])[0] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[1])[0] = ptr_new(['*(all)','ear_standard'])
   (*paramArray[1])[1] = ptr_new(['*(all)','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a','eb3p2b','eb3p4a','eb3p4b','eb3p4c',$
@@ -418,7 +421,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[8])[0] = ptr_new(['*(all)','mur_standard'])
 ;  (*paramArray[8])[1] = ptr_new(['mur_special'])  
   (*paramArray[9])[0] = ptr_new(['*(all)','hok','sye','sys'])
-                 
+  (*paramArray[10])[0] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
+
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Site or parameter(s)-1:')
   paramList = widget_list(paramBase,$
@@ -436,7 +440,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;========== Parameters-2 ==========
   ;============================================  
 
-  param2Array = ptrarr(10)
+  param2Array = ptrarr(11)
   param2Array[0] = ptr_new(ptrarr(1))
   param2Array[1] = ptr_new(ptrarr(5))
   param2Array[2] = ptr_new(ptrarr(4))
@@ -447,7 +451,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   param2Array[7] = ptr_new(ptrarr(1))
   param2Array[8] = ptr_new(ptrarr(1)) 
   param2Array[9] = ptr_new(ptrarr(1))
-  
+  param2Array[10] = ptr_new(ptrarr(1))
+
   (*param2Array[0])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
   (*param2Array[1])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
@@ -475,9 +480,14 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[9])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err','vlos','vlos_err',$
                                   'echo_flag','quality','quality_flag','vnorth','vnorth_iscat','vnorth_gscat','veast','veast_iscat','veast_gscat','vlos_iscat','vlos_gscat']);,'position_tbl'])
+  (*param2Array[10])[0] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
+                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
+                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
+                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
+                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
 ;  (*param2Array[8])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
 ;  (*param2Array[9])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
-                                   
+                   
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Parameter(s)-2:')
   paramList2 = widget_list(paramBase,$
