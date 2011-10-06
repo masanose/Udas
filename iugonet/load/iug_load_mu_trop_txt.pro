@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the standard observation data of the 
-;  troposphere and lower stratsphere in the CSV format taken by the Mille and 
+;  troposphere and lower stratsphere in the CSV format taken by the Middle and 
 ;  Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 ;
 ;SYNTAX:
@@ -84,7 +84,9 @@ acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar dat
 ;===============================================
 ;
 
+;Definition of parameter:
 jj=0
+
 for ii=0,n_elements(parameters)-1 do begin
     if ~size(fns,/type) then begin
 
@@ -119,6 +121,8 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===========================================================
    ;Read the files:
    ;===============
+   
+    ; Definition of parameters and array:
       s=''
       u=''
 
@@ -126,6 +130,7 @@ for ii=0,n_elements(parameters)-1 do begin
       mu_time=0
       mu_data=0
       time=0
+      
     ;Loop on files (zonal component): 
     ;================================
 
@@ -141,9 +146,14 @@ for ii=0,n_elements(parameters)-1 do begin
     ;
     ;Read information of altitude:
     ;=============================
+    
           readf, lun, s
+    
+          ;Definition of altitude and data arraies:
           h_data = strsplit(s,',',/extract)     
           altitude = fltarr(n_elements(h_data)-1)
+    
+          ;Enter the altitude information:
           for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])
           endfor
@@ -158,7 +168,8 @@ for ii=0,n_elements(parameters)-1 do begin
                 dprint,s ,dlevel=5
                 data = strsplit(s,',',/extract)
                 data2 = fltarr(1,n_elements(data)-1)
-            ;Calcurate time:
+                
+            ;Calculate time:
             ;==============
                 u=data(0)
                 year = strmid(u,0,4)
@@ -166,10 +177,12 @@ for ii=0,n_elements(parameters)-1 do begin
                 day = strmid(u,8,2)
                 hour = strmid(u,11,2)
                 minute = strmid(u,14,2)  
-            ;====convert time from LT to UT      
+                
+            ;====Convert time from local time to unix time      
                 time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
             ;
+            ;Enter the missing value:
                 for j=0,n_elements(h_data)-2 do begin
                     a = float(data[j+1])
                     wbad = where(a eq 999,nbad)
@@ -201,14 +214,15 @@ for ii=0,n_elements(parameters)-1 do begin
           options,'iug_mu_'+parameters[ii], labels='MU-trop [km]'
        endif   
 
-       ; add options
+       ; Add options
        options, 'iug_mu_'+parameters[ii], 'spec', 1
     
-       ;Clear time and data buffer:
+      ;Clear time and data buffer:
        mu_time=0
        mu_data=0
-       ; add tdegap
-      tdegap, 'iug_mu_'+parameters[ii],/overwrite
+       
+      ;Add tdegap
+       tdegap, 'iug_mu_'+parameters[ii],/overwrite
    endif
   jj=n_elements(local_paths)
 endfor

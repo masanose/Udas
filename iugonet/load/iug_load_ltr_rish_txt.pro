@@ -108,8 +108,9 @@ acknowledgstring = 'If you acquire the lower troposphere radar (LTR) data, ' $
 ;===============================================
 ;
 
+;Definition of parameter
 jj=0
-o=0
+
 for iii=0,n_elements(parameters)-1 do begin
     if ~size(fns,/type) then begin
 
@@ -142,11 +143,13 @@ for iii=0,n_elements(parameters)-1 do begin
   
       ;Read the files:
       ;===============
+      
+      ; Definition of parameters and array:
          s=''
          u=''
          time = dblarr(1)
 
-      ; Initialize data and time buffer
+      ; Initialize data and time buffer:
          ltr_data = 0
          ltr_time = 0
 
@@ -171,10 +174,12 @@ for iii=0,n_elements(parameters)-1 do begin
              data = strarr(70)
              data2 = fltarr(1,70)
              
+             ;Enter the altitude information:
              for j=0,n_elements(height)-2 do begin
                  altitude[j] = float(height[j+1])
              endfor
 
+             ;Enter the missing value:
              for j=0, n_elements(altitude)-1 do begin
                  b = float(altitude[j])
                  wbad = where(b eq 0,nbad)
@@ -204,11 +209,13 @@ for iii=0,n_elements(parameters)-1 do begin
                   day = strmid(u,8,2)
                   hour = strmid(u,11,2)
                   minute = strmid(u,14,2)  
+                  
             ;====convert time from LT to UT 
                  time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                                -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                  if time[k] lt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
             ;
+            ;Enter the missing value:
                   for j=0,n_elements(height)-2 do begin
                       a = float(data[j+1])
                       wbad = where(a eq 999, nbad)

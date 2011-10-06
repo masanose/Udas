@@ -15,7 +15,7 @@
 ;KEYWOARDS:
 ;  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'.
-;  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+;  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_nc, length = '1_day'.
 ;           A kind of parameters is 2 types of '1_day', and '1_month'.  
 ; parameters = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
 ;             A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
@@ -33,6 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 11/07/2011.
+; A. Shinbori, 06/10/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -103,6 +104,8 @@ acknowledgstring = 'Scientists who want to engage in collaboration with Research
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+
+;Definition of parameters:
 h=0
 jj=0
 kk=0
@@ -136,8 +139,8 @@ kk=0
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/ver1_1/'+length+'/'+site_data_dir[kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/'+site_data_dir[kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/ver1_1_1/'+length+'/'+site_data_dir[kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/ver1_1_1/'+site_data_dir[kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================

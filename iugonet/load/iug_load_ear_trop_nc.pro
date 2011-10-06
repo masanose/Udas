@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
-;  in the NetCDF format taken by the equatorial atmosphere radar (EAR)and loads data into
+;  in the netCDF format taken by the equatorial atmosphere radar (EAR) and loads data into
 ;  tplot format.
 ;
 ;SYNTAX:

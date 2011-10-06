@@ -33,6 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 11/07/2011.
+; A. Shinbori, 06/10/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -75,7 +76,7 @@ print, site_code
 ;parameters:
 ;***********
 ;--- all parameters (default)
-parameter_all = strsplit('h2t60min00 h4t240min00',' ', /extract)
+parameter_all = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30 h4t240min00',' ', /extract)
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
@@ -86,8 +87,9 @@ print, parameters
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('h2km_t60min00/ h4km_t240min00/ ',' ', /extract)
-site_data_lastmane = strsplit('h2t60min00 h4t240min00',' ', /extract)
+site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60min30/ h4km_t240min00/',' ', /extract)
+site_data_lastmane = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30 h4t240min00',' ', /extract)
+
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
 + 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' $
@@ -112,27 +114,22 @@ acknowledgstring = 'Scientists who want to engage in collaboration with Research
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+
+;Definition of parameters:
 h=0
 jj=0
-kkk=intarr(2)
 kk=0
-  ;In the case that the parameters are except for all.'
-  kk=0
-  if n_elements(parameters) le 5 then begin
-     h_min=0
-     h_max=n_elements(parameters)
-     for i=0,n_elements(parameters)-1 do begin
-       if parameters[i] eq 'h2t60min00' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h4t60min00' then begin
-          kkk[i]=i 
-       endif
-    endfor
-  endif
   
-for ii=h_min,h_max-1 do begin
-    kk=kkk[iii]
+  for iii=0,n_elements(parameters)-1 do begin
+  ;The parameter search:'
+    for jjj=0, n_elements(site_data_lastmane)-1 do begin
+       if parameters[iii] eq 'h2t60min00' then kk=0
+       if parameters[iii] eq 'h2t60min30' then kk=1
+       if parameters[iii] eq 'h4t60min00' then kk=2
+       if parameters[iii] eq 'h4t60min30' then kk=3
+       if parameters[iii] eq 'h4t240min00' then kk=4
+    endfor
+ 
     if ~size(fns,/type) then begin
       if length eq '1_day' then begin 
         ;Get files for ith component:
@@ -152,9 +149,9 @@ for ii=h_min,h_max-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/text/'+length+'/'+site_data_dir[kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/text/'+site_data_dir[kk]
-    
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/text/ver1_0/'+length+'/'+site_data_dir[kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/text/ver1_0/'+site_data_dir[kk]
+
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
        local_paths=file_retrieve(file_names,_extra=source, /last_version)
@@ -170,7 +167,11 @@ for ii=h_min,h_max-1 do begin
 
     ;Read the files:
     ;===============
+       
+       ;Definition of parameter:
        s=''
+       
+       ;Determination of array number, height and time invervals:
        if site_data_lastmane[kk] eq 'h4t240min00' then begin
           arr_num=11
           dh=4
@@ -181,6 +182,7 @@ for ii=h_min,h_max-1 do begin
           dh=2
           dt=3600
        endif
+       
        ;Definition of array and its number:
        height = fltarr(arr_num)
        zon_wind_data = fltarr(1,arr_num)
@@ -189,6 +191,7 @@ for ii=h_min,h_max-1 do begin
        mer_thermal_data = fltarr(1,arr_num)
        meteor_num_data = fltarr(1,arr_num)
        data= fltarr(5)
+       
        time = 0
        time_val = 0
        site_time=0
@@ -202,9 +205,9 @@ for ii=h_min,h_max-1 do begin
       ;==============
        for j=jj,n_elements(local_paths)-1 do begin
            file= local_paths[j] 
-           if file_test(/regular,file) then  dprint,'Loading meteor radar data file: ',file $
+           if file_test(/regular,file) then  dprint,'Loading meteor wind radar data file: ',file $
            else begin
-              dprint,'Meteor radar data file',file,' not found. Skipping'
+              dprint,'Meteor wind radar data file',file,' not found. Skipping'
               continue
            endelse
            openr,lun,file,/get_lun    
@@ -219,7 +222,7 @@ for ii=h_min,h_max-1 do begin
              if ok && keyword_set(s) then begin
                 dprint,s ,dlevel=5
               
-             ;calcurate time:
+             ;Calculate time:
              ;===============
                 if fix(strmid(s,0,2)) gt 70 then year = fix(strmid(s,0,2))+1900
                 if fix(strmid(s,0,2)) lt 70 then year = fix(strmid(s,0,2))+2000
@@ -228,11 +231,12 @@ for ii=h_min,h_max-1 do begin
                 hour = strmid(s,5,2)
                 minute = strmid(s,7,2)
            
-              ;get altitude data:
+              ;Get altitude data:
               ;=================
                 alt = fix(strmid(s,9,3))
                 idx = (alt-70)/dh
-              ;get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
+                
+              ;Get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
               ;=======================================================
                 data1 = strmid(s,12,55)
                 data2 = strsplit(data1, ' ', /extract)
@@ -241,11 +245,12 @@ for ii=h_min,h_max-1 do begin
                 data(2) = float(data2[2])
                 data(3) = float(data2[3])
                 data(4) = float(data2[4])
-              ;====convert time from LT to Unix Time  
+                
+              ;====Convert time from local time to unix time  
                 time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                        -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))                                
                 
-              ;insert data of zonal and meridional winds etc.
+              ;Insert data of zonal and meridional winds etc.
                 if n eq 0 then begin
                    time_val3 = time
                    zon_wind_data(0,idx)= data(0)
@@ -256,7 +261,8 @@ for ii=h_min,h_max-1 do begin
                 endif
                 time_diff=time-time_val
                 if n eq 0 then time_diff=dt
-                ;appned time and data if time_val is not equal to time
+                
+                ;Appned time and data if time_val is not equal to time:
                 if time_val ne time then begin
                    time_val=time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                             -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))          

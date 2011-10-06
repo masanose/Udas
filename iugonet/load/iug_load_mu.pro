@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for all the observation data taken by 
-;  the Mille and Upper atmosphere (MU) radar at Shigaraki and loads data into
+;  the Middle and Upper atmosphere (MU) radar at Shigaraki and loads data into
 ;  tplot format.
 ;
 ;SYNTAX:

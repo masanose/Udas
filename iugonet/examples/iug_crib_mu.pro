@@ -1,19 +1,18 @@
 ;+
+;PROCEDURE: IUG_CRIB_MU.PRO
+;    A sample crib sheet that explains how to use the "iug_load_mu.pro" 
+;    procedure. You can run this crib sheet by copying & pasting each 
+;    command below (except for stop and end) into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_mu
 ;
-;Name:
-;iug_load_crib_mu.pro
-;
-;Purpose:
-;Demonstrate the RISH MU radar data loader.
-;
-;Code:
-;A. Shinbori, 02/01/2011.
-;
-;Modifications:
-; 
-;
+;Written by: A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  Feb 18, 2011
 ;-
 
+;Initializes system variables for themis:
+;=========================================
+thm_init
 
 ;Specify timespan:
 ;=================

@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
-;  taken by the equatorial atmosphere radar (EAR)and loads data into
+;  taken by the equatorial atmosphere radar (EAR) and loads data into
 ;  tplot format.
 ;
 ;SYNTAX:
@@ -34,10 +34,11 @@
 ;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 ;
 ;CODE:
-; A. Shinbori, 09/19/2010.
+; A. Shinbori, 19/09/2010.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 03/24/2011.
+; A. Shinbori, 24/03/2011.
+; A. Shinbori, 06/10/2011.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -105,7 +106,9 @@ acknowledgstring = 'If you acquire the equatorial atmospheric radar (EAR) data, 
 ;===============================================
 ;
 
+;Definition of parameter:
 jj=0
+
 for ii=0,n_elements(parameters)-1 do begin
   for iii=0,n_elements(parameters2)-1 do begin
     if ~size(fns,/type) then begin
@@ -141,6 +144,8 @@ for ii=0,n_elements(parameters)-1 do begin
    ;===========================================================
    ;Read the files:
    ;===============
+   
+   ; Definition of parameters:
       s=''
       u=''
 
@@ -148,6 +153,7 @@ for ii=0,n_elements(parameters)-1 do begin
       ear_time=0
       ear_data=0
       time=0
+      
     ;Loop on files (zonal component): 
     ;================================
 
@@ -165,13 +171,17 @@ for ii=0,n_elements(parameters)-1 do begin
     ;=============================
           
           readf, lun, s
+          
+          ;Definition of altitude and data arraies:
           h_data = strsplit(s,',',/extract)
           altitude = fltarr(n_elements(h_data)-1)
           
+          ;Enter the altitude information:
           for j=0,n_elements(h_data)-2 do begin
               altitude[j] = float(h_data[j+1])
           endfor
           
+          ;Enter the missing value:
           for j=0,n_elements(altitude)-1 do begin
               b = altitude[j]
               wbad = where(b eq 0,nbad)
@@ -201,6 +211,7 @@ for ii=0,n_elements(parameters)-1 do begin
                 time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
             ;
+            ;Enter the missing value:
                 for j=0,n_elements(data)-2 do begin
                     a = float(data[j+1])
                     wbad = where(a eq -999,nbad)

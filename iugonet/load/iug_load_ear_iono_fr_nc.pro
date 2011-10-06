@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the FAI observation data in the NetCDF format 
-;  taken by the equatorial atmosphere radar (EAR)and loads data into
+;  taken by the equatorial atmosphere radar (EAR) and loads data into
 ;  tplot format.
 ;
 ;SYNTAX:

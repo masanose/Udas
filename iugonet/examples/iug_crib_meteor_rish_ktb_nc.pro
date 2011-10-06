@@ -1,19 +1,18 @@
 ;+
+;PROCEDURE: IUG_CRIB_METEOR_RISH_KTB_NC.PRO
+;    A sample crib sheet that explains how to use the "iug_crib_meteor_rish_ktb_nc.pro" 
+;    procedure. You can run this crib sheet by copying & pasting each 
+;    command below (except for stop and end) into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_meteor_rish_ktb_nc
 ;
-;Name:
-;iug_crib_meteor_rish_ktb_nc.pro
-;
-;Purpose:
-;Demonstrate the Kototabang meteor wind radar data loader.
-;
-;Code:
-;A. Shinbori, 02/04/2011.
-;
-;Modifications:
-; 
-;
+;Written by: A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  Feb 18, 2011
 ;-
 
+;Initializes system variables for themis:
+;=========================================
+thm_init
 
 ;Specify timespan:
 ;=================
@@ -50,13 +49,13 @@ zlim, 'iug_meteor_ktb_vwnd_h2t60min00', -100, 100
 
 tplot
 
-;stop
+stop
 
 
 ; Set up the plot time range of zonal and meridional winds in the thermosphere:
 ;===============================================================================
-;tlimit, '2008-03-01 00:00:00', '2008-03-05 00:00:00'
-;tplot
+tlimit, '2008-03-01 00:00:00', '2008-03-05 00:00:00'
+tplot
 
 end
 

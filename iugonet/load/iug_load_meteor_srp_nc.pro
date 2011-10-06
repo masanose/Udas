@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
-;  in the NetCDF format taken by the meteor wind radar (MWR) at Serpong and loads data into
+;  in the netCDF format taken by the meteor wind radar (MWR) at Serpong and loads data into
 ;  tplot format.
 ;
 ;SYNTAX:
@@ -33,6 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 11/07/2011.
+; A. Shinbori, 06/10/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -103,6 +104,8 @@ acknowledgstring = 'Scientists who want to engage in collaboration with Research
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+
+;Definition of parameters:
 h=0
 jj=0
 kk=0
@@ -135,8 +138,8 @@ kk=0
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/nc/'+length+'/'+site_data_dir[kk]
-     ;  source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/'+site_data_dir[kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/nc/ver1_0_1/'+length+'/'+site_data_dir[kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/ver1_0_1/'+site_data_dir[kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -288,15 +291,15 @@ kk=0
   if site_time[0] ne 0 then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
      store_data,'iug_meteor_srp_uwnd_'+parameters[kk],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_uwnd_'+parameters[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+     options,'iug_meteor_srp_uwnd_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
      store_data,'iug_meteor_srp_vwnd_'+parameters[kk],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_vwnd_'+parameters[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+     options,'iug_meteor_srp_vwnd_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
      store_data,'iug_meteor_srp_uwndsig_'+parameters[kk],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_uwndsig_'+parameters[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+     options,'iug_meteor_srp_uwndsig_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
      store_data,'iug_meteor_srp_vwndsig_'+parameters[kk],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_vwndsig_'+parameters[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
+     options,'iug_meteor_srp_vwndsig_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
      store_data,'iug_meteor_srp_mwnum_'+parameters[kk],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_mwnum_'+parameters[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='mwnum'
+     options,'iug_meteor_srp_mwnum_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='mwnum'
 
 
      ; add options

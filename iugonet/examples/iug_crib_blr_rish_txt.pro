@@ -1,19 +1,18 @@
 ;+
+;PROCEDURE: IUG_CRIB_BLR_RISH_TXT.PRO
+;    A sample crib sheet that explains how to use the "iug_load_blr_rish_txt.pro" 
+;    procedure. You can run this crib sheet by copying & pasting each 
+;    command below (except for stop and end) into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_blr_rish_txt
 ;
-;Name:
-;iug_crib_blr_rish_txt.pro
-;
-;Purpose:
-;Demonstrate the RISH BLR data loader.
-;
-;Code:
-;A. Shinbori, 02/18/2011.
-;
-;Modifications:
-; 
-;
+;Written by: A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  Feb 18, 2011
 ;-
 
+;Initializes system variables for themis:
+;=========================================
+thm_init
 
 ;Specify timespan:
 ;=================

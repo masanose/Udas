@@ -112,14 +112,15 @@ acknowledgstring = 'If you acquire the boundary layer radar (BLR) data, ' $
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
 ;
+
+;Definition of parameter and array:
 h=0
 jj=0
-kkk=intarr(3)
 kk=0
+kkk=intarr(3)
+
 ;In the case that the parameters are except for all.'
-  kk=0
-  if n_elements(site_code) le 3 then begin
-     h_min=0
+  if n_elements(site_code) lt 3 then begin
      h_max=n_elements(site_code)
      for i=0,n_elements(site_code)-1 do begin
        if site_code[i] eq 'ktb' then begin
@@ -134,7 +135,7 @@ kk=0
     endfor
   endif
 
-for ii=h_min,h_max-1 do begin
+for ii=0,h_max-1 do begin
    kk=kkk[ii]
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
@@ -174,10 +175,11 @@ for ii=h_min,h_max-1 do begin
       if (not keyword_set(downloadonly)) then downloadonly=0
 
       if (downloadonly eq 0) then begin
-  
-  
+    
       ;Read the files:
       ;===============
+      
+      ; Definition of parameters and array:
          s=''
          u=''
          time = dblarr(1)
@@ -207,10 +209,12 @@ for ii=h_min,h_max-1 do begin
              data = strarr(n_elements(height)-1)
              data2 = fltarr(1,n_elements(height)-1)
              
+             ;Enter the altitude information:
              for j=0,n_elements(height)-2 do begin
                  altitude[j] = float(height[j+1])
              endfor
-
+             
+             ;Enter the missing value:
              for j=0, n_elements(altitude)-1 do begin
                  b = float(altitude[j])
                  wbad = where(b eq 0,nbad)
@@ -239,7 +243,8 @@ for ii=h_min,h_max-1 do begin
                   month = strmid(u,5,2)
                   day = strmid(u,8,2)
                   hour = strmid(u,11,2)
-                  minute = strmid(u,14,2)  
+                  minute = strmid(u,14,2) 
+                   
             ;====convert time from LT to UT 
                   if site_code[ii] ne 'sgk' then begin    
                      time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
@@ -249,7 +254,7 @@ for ii=h_min,h_max-1 do begin
                                -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                      if time[k] gt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
                   endif
-            ;
+            ;Enter the missing value:
                   for j=0,n_elements(height)-2 do begin
                       a = float(data[j+1])
                       wbad = where(a eq 999,nbad)

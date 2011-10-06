@@ -1,19 +1,18 @@
 ;+
+;PROCEDURE: IUG_CRIB_EAR.PRO
+;    A sample crib sheet that explains how to use the "iug_load_ear.pro" 
+;    procedure. You can run this crib sheet by copying & pasting each 
+;    command below (except for stop and end) into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_ear
 ;
-;Name:
-;iug_crib_ear.pro
-;
-;Purpose:
-;Demonstrate the RISH EAR data loader.
-;
-;Code:
-;A. Shinbori, 02/01/2011.
-;
-;Modifications:
-; 
-;
+;Written by: A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  Feb 18, 2011
 ;-
 
+;Initializes system variables for themis:
+;=========================================
+thm_init
 
 ;Specify timespan:
 ;=================

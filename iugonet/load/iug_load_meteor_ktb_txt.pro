@@ -9,13 +9,13 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_meteor_ktb_txt, datatype=daatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+; iug_load_meteor_ktb_txt, datatype=datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
 ;                           trange = trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
+;  datatype = Observation data type. For example, iug_load_meteor_ktb_txt, datatype = 'thermosphere'.
 ;            The default is 'thermosphere'.
-;  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+;  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_txt, length = '1_day'.
 ;           A kind of parameters is 2 types of '1_day', and '1_month'. 
 ;  parameter = Data parameter. For example, iug_load_meteor_ktb_txt, parameter = 'h2t60min00'. 
 ;              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
@@ -33,6 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 11/07/2011.
+; A. Shinbori, 06/10/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -41,7 +42,7 @@
 ; $URL $
 ;-
 
-pro iug_load_meteor_ktb_txt, datatype = datatype, parameter = parameter, $
+pro iug_load_meteor_ktb_txt, datatype = datatype, length = length,parameter = parameter, $
                               downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
@@ -75,7 +76,7 @@ print, site_code
 ;parameters:
 ;***********
 ;--- all parameters (default)
-parameter_all = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30',' ', /extract)
+parameter_all = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30 h4t240min00',' ', /extract)
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
@@ -86,8 +87,9 @@ print, parameters
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60min30/',' ', /extract)
-site_data_lastmane = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30',' ', /extract)
+site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60min30/ h4km_t240min00/',' ', /extract)
+site_data_lastmane = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30 h4t240min00',' ', /extract)
+
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
 + 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' $
@@ -102,7 +104,7 @@ acknowledgstring = 'Scientists who want to engage in collaboration with Research
 + '    Director of Research Institute for Sustainable Humanosphere,' $
 + '    Kyoto University' $
 + '    Gokasyo, Uji Kyoto 611-0011, Japan' $
-+ '    e-mail: tsuda@rish.kyoto-u.ac.jp' 
++ '    e-mail: tsuda@rish.kyoto-u.ac.jp'  
 
 ;==================================================================
 ;Download files, read data, and create tplot vars at each component
@@ -114,32 +116,18 @@ acknowledgstring = 'Scientists who want to engage in collaboration with Research
 ;===============================================
 h=0
 jj=0
-kkk=intarr(4)
 kk=0
-  ;In the case that the parameters are except for all.'
-  kk=0
-  if n_elements(parameters) le 5 then begin
-     h_min=0
-     h_max=n_elements(parameters)
-     for i=0,n_elements(parameters)-1 do begin
-       if parameters[i] eq 'h2t60min00' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h2t60min30' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h4t60min00' then begin
-          kkk[i]=i 
-       endif
-       if parameters[i] eq 'h4t60min30' then begin
-          kkk[i]=i 
-       endif
+  
+  for iii=0,n_elements(parameters)-1 do begin
+  ;The parameter search:'
+    for jjj=0, n_elements(site_data_lastmane)-1 do begin
+       if parameters[iii] eq 'h2t60min00' then kk=0
+       if parameters[iii] eq 'h2t60min30' then kk=1
+       if parameters[iii] eq 'h4t60min00' then kk=2
+       if parameters[iii] eq 'h4t60min30' then kk=3
+       if parameters[iii] eq 'h4t240min00' then kk=4
     endfor
-  endif
-
-
-for ii=h_min,h_max-1 do begin
-    kk=kkk[ii]
+ 
     if ~size(fns,/type) then begin
       if length eq '1_day' then begin 
         ;Get files for ith component:
@@ -159,8 +147,8 @@ for ii=h_min,h_max-1 do begin
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/text/'+length+'/'+site_data_dir[kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/text/'+site_data_dir[kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/text/ver1_1_1/'+length+'/'+site_data_dir[kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/text/ver1_1_1/'+site_data_dir[kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -177,7 +165,11 @@ for ii=h_min,h_max-1 do begin
 
     ;Read the files:
     ;===============
+       
+       ;Definition of parameter:
        s=''
+       
+       ;Determination of array number, height and time invervals:
        if site_data_lastmane[kk] eq 'h4t60min00' or 'h4t60min30' then begin
           arr_num=11
           dh=4
@@ -186,6 +178,7 @@ for ii=h_min,h_max-1 do begin
           arr_num=21
           dh=2
        endif
+       
        ;Definition of array and its number:
        height = fltarr(arr_num)
        zon_wind_data = fltarr(1,arr_num)
@@ -194,6 +187,7 @@ for ii=h_min,h_max-1 do begin
        mer_thermal_data = fltarr(1,arr_num)
        meteor_num_data = fltarr(1,arr_num)
        data= fltarr(5)
+       
        time = 0
        time_val = 0
        site_time=0
@@ -224,7 +218,7 @@ for ii=h_min,h_max-1 do begin
              if ok && keyword_set(s) then begin
                 dprint,s ,dlevel=5
               
-             ;calcurate time:
+             ;Calculate time:
              ;===============
                 if fix(strmid(s,0,2)) gt 70 then year = fix(strmid(s,0,2))+1900
                 if fix(strmid(s,0,2)) lt 70 then year = fix(strmid(s,0,2))+2000
@@ -233,11 +227,12 @@ for ii=h_min,h_max-1 do begin
                 hour = strmid(s,5,2)
                 minute = strmid(s,7,2)
            
-              ;get altitude data:
+              ;Get altitude data:
               ;=================
                 alt = fix(strmid(s,9,3))
                 idx = (alt-70)/dh
-              ;get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
+                
+              ;Get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
               ;=======================================================
                 data1 = strmid(s,12,55)
                 data2 = strsplit(data1, ' ', /extract)
@@ -246,10 +241,10 @@ for ii=h_min,h_max-1 do begin
                 data(2) = float(data2[2])
                 data(3) = float(data2[3])
                 data(4) = float(data2[4])
-              ;====convert time from UT to Unix Time   
+              ;====Convert time from universal time to unix time   
                 time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute))                                
                 
-              ;insert data of zonal and meridional winds etc.
+              ;Insert data of zonal and meridional winds etc.
                 if n eq 0 then begin
                    time_val3 = time
                    zon_wind_data(0,idx)= data(0)
@@ -260,7 +255,8 @@ for ii=h_min,h_max-1 do begin
                 endif
                 time_diff=time-time_val
                 if n eq 0 then time_diff=3600
-                ;appned time and data if time_val is not equal to time
+                
+                ;Appned time and data if time_val is not equal to time
                 if time_val ne time then begin
                    time_val=time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                             -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0))          

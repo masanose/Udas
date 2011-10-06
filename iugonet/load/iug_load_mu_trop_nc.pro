@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the standard observation data of the 
-;  troposphere and lower stratsphere in the NetCDF format taken by the Mille
+;  troposphere and lower stratsphere in the netCDF format taken by the Middle
 ;  and Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 ;
 ;SYNTAX:
