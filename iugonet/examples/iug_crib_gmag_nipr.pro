@@ -1,10 +1,10 @@
 ;+
-; PROGRAM: iug_crib_gmag_nipr
-;   This is an example crib sheet that will load the magnetometer data 
-;   obtained by NIPR, Japan. Open this file in a text editor and then 
-;   use copy and paste to copy selected lines into an idl window.
-;   Or alternatively compile and run using the command:
-;     .run iug_crib_gmag_nipr
+; PROCEDURE: IUG_CRIB_GMAG_NIPR
+;    A sample crib sheet that explains how to use the "iug_load_gmag_nipr" 
+;    procedure. You can run this crib sheet by copying & pasting each 
+;    command below (except for stop and end) into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_gmag_nipr
 ;
 ; NOTE: See the rules of the road.
 ;       For more information, see:
@@ -15,30 +15,35 @@
 ;             ytanaka at nipr.ac.jp
 ;-
 
-; initialize
+; Initialize
 thm_init
 
-; set the date and duration (in days)
+; Set the date and duration (in days)
 timespan, '2003-10-29'
 
-; load NIPR data
+; Load NIPR data
 erg_load_gmag_nipr,site=['syo','hus','tjo']
 
-; view the loaded data names
+; View the loaded data names
 tplot_names
 
-; plot the loaded data
+; Plot the loaded data
 tplot,'nipr_mag_*'
 
+; Stop
+print,'Enter ".c" to continue.'
 stop
 
-; set new timespan
+; Set new timespan
 timespan,'2003-10-29/06:00:00',4,/hours
 
-; set y-axis
+; Set y-axis
 ylim,'nipr_mag_*',-4000,2000
 
-; plot
+; Set title
+tplot_options, 'title', 'Sample plot of NIPR magnetometer data'
+
+; Plot
 tplot
 
 end
