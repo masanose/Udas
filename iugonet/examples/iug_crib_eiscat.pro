@@ -14,27 +14,32 @@
 ;             ytanaka at nipr.ac.jp
 ;-
 
-; initialize
+; Initialize
 thm_init
 
-; set the date and duration (in days)
+; Set the date and duration (in days)
 timespan, '2000-11-27'
 
-; load the ESR-42m data
+; Load the ESR-42m data
 iug_load_eiscat, site='esr_42m'
 
-; view the loaded data names
+; View the loaded data
 tplot_names
 
-; plot the loaded data
+; Plot the loaded data
 tplot,['eiscat_esr42m_tau0_ne','eiscat_esr42m_tau0_te','eiscat_esr42m_tau0_ti','eiscat_esr42m_tau0_vi']
 
+; Stop
+print,'Enter ".c" to continue.'
 stop
 
-; load all EISCAT radar data
+; Load all EISCAT radar data
 iug_load_eiscat
 
-; plot Ne data from all sites and pulse codes
+; Set title
+tplot_options, 'title', 'Sample plot of EISCAT radar data'
+
+; Plot Ne data from all sites and pulse codes
 tplot, 'eiscat_*_ne'
 
 end
