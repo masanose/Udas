@@ -10,18 +10,14 @@
 ;
 ;SYNTAX:
 ;  iug_load_mu [ ,DATATYPE = string ]
-;                [ ,PARAMETERS = string]
 ;                [ ,TRANGE = [min,max] ]
 ;                [ ,FILENAMES = string scalar or array ]
 ;                [ ,<and data keywords below> ]
 ;
 ;KEYWOARDS:
 ;  DATATYPE = The type of data to be loaded. In this load program,
-;             DATATYPEs are 'troposphere', 'meteor_wind' etc.
-;
-;  PARAMETERS (I/O):
-;    Set to wind parameters.  If not set, 'uwnd' is
-;      assumed.  Returns cleaned input, or shows default.  
+;             DATATYPEs are 'troposphere' etc.
+; 
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
 ;  FILENAMES (In):
@@ -42,49 +38,42 @@
 ; $URL $
 ;-
   
-pro iug_load_mu, datatype = datatype, parameter = parameter2, trange = trange, verbose = verbose
+pro iug_load_mu, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;******************
 ;keyword check:
 ;******************
 ;verbose
-if ~keyword_set(verbose) then verbose=2
+if (not keyword_set(verbose)) then verbose=2
  
-;**************************
-;Load 'troposphere_wind' data by default:
-;**************************
-if ~keyword_set(datatype) then datatype='troposphere'
+;****************
+;Datatype check:
+;****************
 
-;**************************
-;Load 'parameters' data by default:
-;**************************
-if ~keyword_set(parameters) then parameters='uwnd'
+;--- all datatypes (default)
+datatype_all = strsplit('troposphere mesosphere ionosphere meteor rass fai',' ', /extract)
 
-;*****************
-;Validate datatypes:
-;*****************
-vns = datatype
-if size(datatype,/type) eq 7 then begin
-  datatype=thm_check_valid_name(datatype,vns,/ignore_case,/include_all,/no_warning)
-  if datatype[0] eq '' then return
-endif else begin
-  message,'DATATYPE must be of string type.',/info
-  return
-endelse
+;--- check datatypes
+if(not keyword_set(datatype)) then datatype='all'
+datatypes = thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
+
+print, datatypes
+
                  
   ;===============================
   ;======Load data of MU=========
   ;===============================
+  for i=0, n_elements(datatypes)-1 do begin
   ;load of MU tropsphere data
-   if datatype eq 'troposphere' then begin
-      iug_load_mu_trop_nc, datatype = datatype, trange = trange
+   if datatypes[i] eq 'troposphere' then begin
+      iug_load_mu_trop_nc, datatype = datatypes[i], downloadonly=downloadonly, trange=trange, verbose=verbose
    endif 
    
    ;load of MU meteor wind data
-   if datatype eq 'meteor_wind' then begin
-      iug_load_mu_meteor_txt, datatype = datatype, parameter = parameter2, trange = trange
-   endif
-      
+   ;if datatype eq 'meteor_wind' then begin
+    ;  iug_load_mu_meteor_txt, datatype = datatype, parameter = parameter2, trange = trange
+  ; endif
+   endfor  
    
 end
 

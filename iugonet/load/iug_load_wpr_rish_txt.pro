@@ -5,7 +5,7 @@
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
-;  in the CSV format taken by the wind profiler radar (LQ-7) and loads data into
+;  in the CSV format taken by the Luneberg lens wind profiler radar (LL-WPR) and loads data into
 ;  tplot format.
 ;
 ;SYNTAX:
@@ -85,9 +85,9 @@ print, parameters
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire the wind profiler radar (LQ-7) data, ' $
+acknowledgstring = 'If you acquire the Luneberg lens wind profiler radar (LL-WPR) data, ' $
 + 'we ask that you acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as the LQ-7 data provided by Research Institute' $
++ 'including text such as the LL-WPR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
 + 'appreciate receiving a copy of the relevant publications.'
 
@@ -170,9 +170,9 @@ for iii=0,n_elements(parameters)-1 do begin
              height = strsplit(s,',',/extract)
              
              ;Definition of altitude and data arraies:
-             altitude = fltarr(70)
-             data = strarr(70)
-             data2 = fltarr(1,70)
+             altitude = fltarr(n_elements(height)-1)
+             data = strarr(n_elements(height)-1)
+             data2 = fltarr(1,n_elements(height)-1)
              
              ;Enter the altitude information:
              for j=0,n_elements(height)-2 do begin
@@ -277,11 +277,11 @@ print,'*****************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire wind profiler (LQ-7) data, we ask that you '
-print, 'acknowledge us in your use of the data. This may be done by ' 
-print, 'including text such as LQ-7 data provided by Research Institute ' 
-print, 'for Sustainable Humanosphere of Kyoto University. We would also ' 
-print, 'appreciate receiving a copy of the relevant publications.'
+print, 'If you acquire Luneberg lens wind profiler radar (LL-WPR) data, '
+print, 'we ask that you acknowledge us in your use of the data. This may ' 
+print, 'be done by including text such as LQ-7 data provided by Research ' 
+print, 'Institute for Sustainable Humanosphere of Kyoto University. We would ' 
+print, 'also appreciate receiving a copy of the relevant publications.'
 
 end
 

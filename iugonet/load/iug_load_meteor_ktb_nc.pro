@@ -141,7 +141,7 @@ kk=0
        source.verbose=verbose
        source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/ver1_1_1/'+length+'/'+site_data_dir[kk]
        source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/ver1_1_1/'+site_data_dir[kk]
-    
+
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
        local_paths=file_retrieve(file_names,_extra=source, /last_version)
@@ -324,11 +324,11 @@ kk=0
    meteor_num=0
    
    ; add tdegap
-   tdegap, 'iug_meteor_ktb_uwnd_'+parameters[kk],dt=86400,/overwrite
-   tdegap, 'iug_meteor_ktb_vwnd_'+parameters[kk],dt=86400,/overwrite
-   tdegap, 'iug_meteor_ktb_uwndsig_'+parameters[kk],dt=86400,/overwrite
-   tdegap, 'iug_meteor_ktb_vwndsig_'+parameters[kk],dt=86400,/overwrite
-   tdegap, 'iug_meteor_ktb_mwnum_'+parameters[kk],dt=86400,/overwrite
+   tdegap, 'iug_meteor_ktb_uwnd_'+parameters[kk],dt=3600,/overwrite
+   tdegap, 'iug_meteor_ktb_vwnd_'+parameters[kk],dt=3600,/overwrite
+   tdegap, 'iug_meteor_ktb_uwndsig_'+parameters[kk],dt=3600,/overwrite
+   tdegap, 'iug_meteor_ktb_vwndsig_'+parameters[kk],dt=3600,/overwrite
+   tdegap, 'iug_meteor_ktb_mwnum_'+parameters[kk],dt=3600,/overwrite
    
    ; add tclip
    tclip, 'iug_meteor_ktb_uwnd_'+parameters[kk],-200,200,/overwrite

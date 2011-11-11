@@ -60,17 +60,16 @@ if (not keyword_set(datatype)) then datatype='thermosphere'
 ;****************
 ;Parameter check:
 ;****************
-if (not keyword_set(parameter)) then parameter='h2t60min00'
-  j=0
-  k=0
-  for j=0, n_elements(parameter)-1 do begin
-      if parameter[j] eq 'h4t240min00' then begin
-         break
-         k=k+1
-      endif
-  endfor
 
-print, parameter
+;--- all parameters (default)
+parameter_all = strsplit('h2t60min00 h2t60min30 h4t60min00 h4t60min30 h4t240min00',' ', /extract)
+
+;--- check parameters
+if(not keyword_set(parameter)) then parameter='all'
+parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+
+print, parameters
+
 ;***********
 ;site codes:
 ;***********
@@ -84,7 +83,7 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 for i=0, n_elements(site_code)-1 do begin
-  if (site_code[i] eq 'ktb') && (parameter[k] ne 'h4t240min00') then iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, $
+  if site_code[i] eq 'ktb' then iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose
   if site_code[i] eq 'srp' then iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose

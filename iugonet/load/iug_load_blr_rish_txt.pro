@@ -120,7 +120,7 @@ kk=0
 kkk=intarr(3)
 
 ;In the case that the parameters are except for all.'
-  if n_elements(site_code) lt 3 then begin
+  if n_elements(site_code) le 3 then begin
      h_max=n_elements(site_code)
      for i=0,n_elements(site_code)-1 do begin
        if site_code[i] eq 'ktb' then begin

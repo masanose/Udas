@@ -211,12 +211,12 @@ for ii=0,n_elements(parameters)-1 do begin
     ncdf_varget, cdfid, 'width', width
     ncdf_varget, cdfid, 'dpl', dpl
     ncdf_varget, cdfid, 'pnoise', pnoise
-    
+
     ; Calculation of unix time:
-    year = fix(strmid(date,4,4))
-    month = fix(strmid(date,8,2))
-    day = fix(strmid(date,10,2))
-                           
+    year = fix(strmid(strtrim(string(date),1),0,4))
+    month = fix(strmid(strtrim(string(date),1),4,2))
+    day = fix(strmid(strtrim(string(date),1),6,2))
+                         
     ; Definition of arrary names
     height2 = fltarr(n_elements(range))
     unix_time = dblarr(n_elements(time))
@@ -227,8 +227,8 @@ for ii=0,n_elements(parameters)-1 do begin
     
     for i=0, n_elements(time)-1 do begin
        ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)      
-        unix_time[i] = double(time[i])*3600 +time_double(syymmdd+'/'+shhmmss)-time_diff2
-                               
+        unix_time[i] = double(time[i]) +time_double(string(syymmdd)+'/'+string(shhmmss))-double(time_diff2)
+                   
         for k=0, n_elements(range)-1 do begin
             for l=0, n_elements(beam)-1 do begin
             
