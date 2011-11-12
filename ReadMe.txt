@@ -55,6 +55,7 @@ Load procedures for IUGONET data:
 - iug_load_gmag_mm210	; Alias for "erg_load_gmag_mm210"
 - iug_load_gmag_nipr	; Alias for "erg_load_gmag_nipr"
 - iug_load_sdfit	; Alias for "erg_load_sdfit"
+- iug_load_wpr_rish_txt	; Wind profiler radar (LQ7) from RISH
 
 <examples>
 Example crib sheets for IUGONET/ERG data
@@ -84,6 +85,7 @@ CUI:
   timespan,'2005-03-20' & iug_load_meteor_rish, site = 'ktb'
   timespan,'2005-03-20' & iug_load_mf_rish, site = 'pam'
   timespan,'2003-03-10' & iug_load_mu
+  timespan,'2006-04-01' & iug_load_wpr_rish_txt, site='sgk'
 ------------------------------------------------------------------------
 
 GUI:
@@ -109,6 +111,7 @@ GUI:
 - Meteor_wind_radar	thermosphere	ktb		*	2002-12-01
 - MUpper_atom._radar 	troposphere	mur_standard	*	2003-03-10
 - SuperDARN 		ionosphere	hok		*	2006-12-15
+- Wind_Profiler_Radar_(LQ7) 		troposphere	sgk		*	2006-04-01
 --------------------------------------------------------------------------
 
 
