@@ -1,4 +1,16 @@
 ------------------------------------------------------
+; What's new in udas_1_00_b4		December 2, 2011
+------------------------------------------------------
+1) Added "iug_load_wpr_rish_txt.pro" and "iug_crib_wpr_rish_txt" for LQ7 data.
+
+"iug_load_wpr_rish_txt" loads LQ7 radar data distributed in CSV files by RISH.
+
+2) Modified "thm_ui_calendar.pro" for GUI.
+
+"thm_ui_calendar.pro" was modified so that the time range can be selected 
+for the period before 1957 in the GUI main pannel.
+
+------------------------------------------------------
 ; What's new in udas_1_00_b3		August 2, 2011
 ------------------------------------------------------
 1) Added "iug_load_eiscat" and "iug_crib_eiscat" for EISCAT radar data.
