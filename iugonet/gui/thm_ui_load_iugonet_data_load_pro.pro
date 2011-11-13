@@ -52,7 +52,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;load data of geomagnetic field index
     if instrument eq 'geomagnetic_field_index' then begin
        if datatype eq 'ASY_index' then begin
-          if site_or_param eq 'WDC_kyoto' then begin
+          if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
              if parameters[0] eq '*' then vns=['asy','sym']
                 for i=0, n_elements(vns)-1 do begin
                     iug_load_gmag_wdc, site = vns[i], trange=timeRange 
@@ -60,18 +60,20 @@ pro thm_ui_load_iugonet_data_load_pro,$
                 par_names=tnames('wdc_mag_'+'*')        
              endif
           endif else if datatype eq 'Dst_index' or datatype eq 'AE_index' then begin
-             if site_or_param eq 'WDC_kyoto' then begin
+             if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
                 case datatype of
                    'Dst_index': vns='dst'
                    'AE_index':  vns='ae'
                 endcase
              if vns eq 'dst' then begin 
                 if parameters[0] eq 'prov' then begin
+                  ; par_names='wdc_mag_'+vns+'_prov'
+                   iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
                    par_names='wdc_mag_'+vns+'_prov'
-                   iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
                 endif else if parameters[0] eq 'final' then begin
-                   par_names='wdc_mag_'+vns
+                  ; par_names='wdc_mag_'+vns
                    iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+                   par_names=tnames('wdc_mag_'+vns+'*')
                 endif else begin
                    iug_load_gmag_wdc, site=vns, trange=timeRange
                    par_names=tnames('wdc_mag_'+vns+'*')
@@ -187,9 +189,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if instrument eq 'Equatorial_Atomosphere_Radar' then begin
      if parameters[0] eq '*' then begin
         vns=['all']
-        iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = vns, trange = timeRange
+        iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
         case datatype of
-             'troposphere': par_names=tnames('iug_ear_'+'*')
+             'troposphere': par_names=tnames('iug_ear_trop'+'*')
              'e_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
              'ef_region': par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
              'v_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
@@ -197,9 +199,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endcase
      endif else begin
         vns=parameters
-        iug_load_ear, datatype = datatype, parameter1 = site_or_param, parameter2 = vns, trange = timeRange
+        iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
         case datatype of
-             'troposphere': par_names=tnames('iug_ear_'+vns)
+             'troposphere': par_names=tnames('iug_ear_trop_'+vns)
              'e_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
              'ef_region': par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
              'v_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
@@ -232,12 +234,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
      iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
      if parameters[0] eq '*' then begin
         case datatype of
-          'troposphere': par_names=tnames('iug_mu_'+'*')
+          'troposphere': par_names=tnames('iug_mu_trop_'+'*')
 ;          'meteor_win':  par_names=tnames('iug_mu_meteor_'+'*')
         endcase
      endif else begin
         case datatype of
-          'troposphere': par_names=tnames('iug_mu_'+parameters)
+          'troposphere': par_names=tnames('iug_mu_trop_'+parameters)
 ;          'meteor_win':  par_names='iug_mu_meteor_'+parameters
         endcase
      endelse
@@ -272,6 +274,16 @@ pro thm_ui_load_iugonet_data_load_pro,$
         par_names=tnames('eiscat_'+'*'+'_'+'*')
      endif else begin
         par_names=tnames('eiscat_'+'*'+'_'+parameters+'_'+'*')
+     endelse
+  endif
+
+  ;load data of Wind Profiler Radar (LQ-7)
+  if instrument eq 'Wind_Profiler_Radar_(LQ-7)' then begin       
+     iug_load_wpr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+     if parameters[0] eq '*' then begin
+        par_names=tnames('iug_wpr_'+'*'+'_'+'*')
+     endif else begin
+        par_names=tnames('iug_wpr_'+'*'+'_'+parameters)
      endelse
   endif
 
@@ -319,6 +331,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
            site_name=strsplit(new_vars[i],'_',/extract)
            site_name2 = site_name[2]
         endelse
+      ;================================================================================
+      ;======== Add the time clip of tplot variable between start and end times by Shinbori  =========   
+        trange = timeRange
+        time_clip, par_names,trange[0],trange[1],/replace 
       ;================================================================================
 
         result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)

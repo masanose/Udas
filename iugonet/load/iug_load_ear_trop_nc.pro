@@ -22,11 +22,12 @@
 ;                 into variables.
 ;
 ;CODE:
-; A. Shinbori, 09/19/2010.
+; A. Shinbori, 19/09/2010.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 03/24/2011.
-;
+; A. Shinbori, 24/03/2011.
+; A. Shinbori, 13/11/2011.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -188,9 +189,9 @@ for j=0,n_elements(local_paths)-1 do begin
     ncdf_varget, cdfid, 'pnoise', pnoise
 
     ; Calculation of unix time:
-    year = fix(strmid(date,4,4))
-    month = fix(strmid(date,8,2))
-    day = fix(strmid(date,10,2))
+    year = fix(strmid(strtrim(string(date),1),0,4))
+    month = fix(strmid(strtrim(string(date),1),4,2))
+    day = fix(strmid(strtrim(string(date),1),6,2))
                            
     ; Definition of arrary names
     unix_time = dblarr(n_elements(time))
@@ -286,23 +287,23 @@ endfor
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          
          ;Store data of wind velocity
-         store_data,'iug_ear_uwnd',data={x:ear_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_ear_uwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-         options,'iug_ear_uwnd', labels='EAR-trop [km]'
-         options, 'iug_ear_uwnd','spec',1
-         tdegap, 'iug_ear_uwnd',/overwrite
+         store_data,'iug_ear_trop_uwnd',data={x:ear_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
+         options,'iug_ear_trop_uwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+         options,'iug_ear_trop_uwnd', labels='EAR-trop [km]'
+         options, 'iug_ear_trop_uwnd','spec',1
+         tdegap, 'iug_ear_trop_uwnd',/overwrite
          
-         store_data,'iug_ear_vwnd',data={x:ear_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_ear_vwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-         options,'iug_ear_vwnd', labels='EAR-trop [km]'
-         options, 'iug_ear_vwnd','spec',1
-         tdegap, 'iug_ear_vwnd',/overwrite
+         store_data,'iug_ear_trop_vwnd',data={x:ear_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
+         options,'iug_ear_trop_vwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+         options,'iug_ear_trop_vwnd', labels='EAR-trop [km]'
+         options, 'iug_ear_trop_vwnd','spec',1
+         tdegap, 'iug_ear_trop_vwnd',/overwrite
          
-         store_data,'iug_ear_wwnd',data={x:ear_time, y:ver_wind, v:height_vw},dlimit=dlimit
-         options,'iug_ear_wwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
-         options,'iug_ear_wwnd', labels='EAR-trop [km]'
-         options, 'iug_ear_wwnd','spec',1
-         tdegap, 'iug_ear_wwnd',/overwrite
+         store_data,'iug_ear_trop_wwnd',data={x:ear_time, y:ver_wind, v:height_vw},dlimit=dlimit
+         options,'iug_ear_trop_wwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
+         options,'iug_ear_trop_wwnd', labels='EAR-trop [km]'
+         options, 'iug_ear_trop_wwnd','spec',1
+         tdegap, 'iug_ear_trop_wwnd',/overwrite
                  
          ;Store data of echo intensity, spectral width, and niose level:
          for l=0, n_elements(beam)-1 do begin
@@ -316,40 +317,40 @@ endfor
                      pwr2_ear[i,k]=pwr1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_pwr'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-             options,'iug_ear_pwr'+bname[l], labels='EAR-trop [km]'
-             options, 'iug_ear_pwr'+bname[l],'spec',1
-             tdegap, 'iug_ear_pwr'+bname[l],/overwrite
+             store_data,'iug_ear_trop_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
+             options,'iug_ear_trop_pwr'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+             options,'iug_ear_trop_pwr'+bname[l], labels='EAR-trop [km]'
+             options, 'iug_ear_trop_pwr'+bname[l],'spec',1
+             tdegap, 'iug_ear_trop_pwr'+bname[l],/overwrite
              
              for i=0, n_elements(ear_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      wdt2_ear[i,k]=wdt1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_ear_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_wdt'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-             options,'iug_ear_wdt'+bname[l], labels='EAR-trop [km]'
-             options, 'iug_ear_wdt'+bname[l],'spec',1
-             tdegap, 'iug_ear_wdt'+bname[l],/overwrite 
+             store_data,'iug_ear_trop_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
+             options,'iug_ear_trop_wdt'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+             options,'iug_ear_trop_wdt'+bname[l], labels='EAR-trop [km]'
+             options, 'iug_ear_trop_wdt'+bname[l],'spec',1
+             tdegap, 'iug_ear_trop_wdt'+bname[l],/overwrite 
              for i=0, n_elements(ear_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      dpl2_ear[i,k]=dpl1[i,k,l]
                  endfor
              endfor             
-             store_data,'iug_ear_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
-             options,'iug_ear_dpl'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[dB]'
-             options,'iug_ear_dpl'+bname[l], labels='EAR-trop [km]'
-             options, 'iug_ear_dpl'+bname[l],'spec',1
-             tdegap, 'iug_ear_dpl'+bname[l],/overwrite 
+             store_data,'iug_ear_trop_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
+             options,'iug_ear_trop_dpl'+bname[l],ytitle='EAR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[dB]'
+             options,'iug_ear_trop_dpl'+bname[l], labels='EAR-trop [km]'
+             options, 'iug_ear_trop_dpl'+bname[l],'spec',1
+             tdegap, 'iug_ear_trop_dpl'+bname[l],/overwrite 
              
              for i=0, n_elements(ear_time)-1 do begin
                  pnoise2_ear[i]=pn1[i,l]
              endfor
-             store_data,'iug_ear_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
-             options,'iug_ear_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]'
-             options,'iug_ear_pn'+bname[l], labels='EAR-trop [km]'
-             tdegap, 'iug_ear_pn'+bname[l],/overwrite                    
+             store_data,'iug_ear_trop_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
+             options,'iug_ear_trop_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]'
+             options,'iug_ear_trop_pn'+bname[l], labels='EAR-trop [km]'
+             tdegap, 'iug_ear_trop_pn'+bname[l],/overwrite                    
          endfor    
       endif
     

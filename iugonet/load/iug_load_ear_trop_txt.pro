@@ -26,11 +26,12 @@
 ;                 into variables.
 ;
 ;CODE:
-; A. Shinbori, 09/19/2010.
+; A. Shinbori, 19/09/2010.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 03/24/2011.
-;
+; A. Shinbori, 24/03/2011.
+; A. Shinbori, 13/11/2011.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -208,12 +209,12 @@ for ii=0,n_elements(parameters)-1 do begin
       if time ne 0 then begin
          if strmid(parameters[ii],0,2) eq 'pw' then o=1
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
-         store_data,'iug_ear_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-         options,'iug_ear_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
-         options,'iug_ear_'+parameters[ii], labels='EAR-trop [km]'
+         store_data,'iug_ear_trop_'+parameters[ii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         options,'iug_ear_trop_'+parameters[ii],ytitle='EAR-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
+         options,'iug_ear_trop_'+parameters[ii], labels='EAR-trop [km]'
          
        ;Add options
-         options, 'iug_ear_'+parameters[ii], 'spec', 1
+         options, 'iug_ear_trop_'+parameters[ii], 'spec', 1
       endif   
     
     ;Clear time and data buffer:
@@ -221,7 +222,7 @@ for ii=0,n_elements(parameters)-1 do begin
       ear_data=0
       
     ;Add tdegap
-      tdegap, 'iug_ear_'+parameters[ii],/overwrite
+      tdegap, 'iug_ear_trop_'+parameters[ii],/overwrite
    endif
    jj=n_elements(local_paths)
 endfor

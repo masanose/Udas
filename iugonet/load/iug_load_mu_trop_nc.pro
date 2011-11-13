@@ -22,11 +22,12 @@
 ;                 into variables.
 ;
 ;CODE:
-; A. Shinbori, 09/19/2010.
+; A. Shinbori, 19/09/2010.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 03/24/2011.
-;
+; A. Shinbori, 24/03/2011.
+; A. Shinbori, 13/11/2011.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -189,9 +190,9 @@ for j=0,n_elements(local_paths)-1 do begin
     ncdf_varget, cdfid, 'pnoise', pnoise
 
     ; Calculation of unix time:
-    year = fix(strmid(date,4,4))
-    month = fix(strmid(date,8,2))
-    day = fix(strmid(date,10,2))
+    year = fix(strmid(strtrim(string(date),1),0,4))
+    month = fix(strmid(strtrim(string(date),1),4,2))
+    day = fix(strmid(strtrim(string(date),1),6,2))
                            
     ; Definition of arrary names
     unix_time = dblarr(n_elements(time))
@@ -287,23 +288,23 @@ endfor
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          
          ;Store data of wind velocity
-         store_data,'iug_mu_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_mu_uwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-         options,'iug_mu_uwnd', labels='MUR-trop [km]'
-         options, 'iug_mu_uwnd','spec',1
-         tdegap, 'iug_mu_uwnd',/overwrite
+         store_data,'iug_mu_trop_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
+         options,'iug_mu_trop_uwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+         options,'iug_mu_trop_uwnd', labels='MUR-trop [km]'
+         options, 'iug_mu_trop_uwnd','spec',1
+         tdegap, 'iug_mu_trop_uwnd',/overwrite
          
-         store_data,'iug_mu_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_mu_vwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-         options,'iug_mu_vwnd', labels='MUR-trop [km]'
-         options, 'iug_mu_vwnd','spec',1
-         tdegap, 'iug_mu_vwnd',/overwrite
+         store_data,'iug_mu_trop_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
+         options,'iug_mu_trop_vwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+         options,'iug_mu_trop_vwnd', labels='MUR-trop [km]'
+         options, 'iug_mu_trop_vwnd','spec',1
+         tdegap, 'iug_mu_trop_vwnd',/overwrite
          
-         store_data,'iug_mu_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
-         options,'iug_mu_wwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
-         options,'iug_mu_wwnd', labels='MUR-trop [km]'
-         options, 'iug_mu_wwnd','spec',1
-         tdegap, 'iug_mu_wwnd',/overwrite
+         store_data,'iug_mu_trop_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
+         options,'iug_mu_trop_wwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
+         options,'iug_mu_trop_wwnd', labels='MUR-trop [km]'
+         options, 'iug_mu_trop_wwnd','spec',1
+         tdegap, 'iug_mu_trop_wwnd',/overwrite
                  
          ;Store data of echo intensity, spectral width, and niose level:
          for l=0, n_elements(beam)-1 do begin
@@ -317,40 +318,40 @@ endfor
                      pwr2_mu[i,k]=pwr1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_mu_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
-             options,'iug_mu_pwr'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-             options,'iug_mu_pwr'+bname[l], labels='MUR-trop [km]'
-             options, 'iug_mu_pwr'+bname[l],'spec',1
-             tdegap, 'iug_mu_pwr'+bname[l],/overwrite
+             store_data,'iug_mu_trop_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
+             options,'iug_mu_trop_pwr'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+             options,'iug_mu_trop_pwr'+bname[l], labels='MUR-trop [km]'
+             options, 'iug_mu_trop_pwr'+bname[l],'spec',1
+             tdegap, 'iug_mu_trop_pwr'+bname[l],/overwrite
              
              for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      wdt2_mu[i,k]=wdt1[i,k,l]
                  endfor
              endfor
-             store_data,'iug_mu_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
-             options,'iug_mu_wdt'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-             options,'iug_mu_wdt'+bname[l], labels='MUR-trop [km]'
-             options, 'iug_mu_wdt'+bname[l],'spec',1
-             tdegap, 'iug_mu_wdt'+bname[l],/overwrite 
+             store_data,'iug_mu_trop_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
+             options,'iug_mu_trop_wdt'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+             options,'iug_mu_trop_wdt'+bname[l], labels='MUR-trop [km]'
+             options, 'iug_mu_trop_wdt'+bname[l],'spec',1
+             tdegap, 'iug_mu_trop_wdt'+bname[l],/overwrite 
              for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      dpl2_mu[i,k]=dpl1[i,k,l]
                  endfor
              endfor             
-             store_data,'iug_mu_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
-             options,'iug_mu_dpl'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
-             options,'iug_mu_dpl'+bname[l], labels='MUR-trop [km]'
-             options, 'iug_mu_dpl'+bname[l],'spec',1
-             tdegap, 'iug_mu_dpl'+bname[l],/overwrite 
+             store_data,'iug_mu_trop_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
+             options,'iug_mu_trop_dpl'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
+             options,'iug_mu_trop_dpl'+bname[l], labels='MUR-trop [km]'
+             options, 'iug_mu_trop_dpl'+bname[l],'spec',1
+             tdegap, 'iug_mu_trop_dpl'+bname[l],/overwrite 
              
              for i=0, n_elements(mu_time)-1 do begin
                  pnoise2_mu[i]=pn1[i,l]
              endfor
-             store_data,'iug_mu_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
-             options,'iug_mu_pn'+bname[l],ytitle='MUR-trop!Cpn'+bname[l]+'!C[dB]'
-             options,'iug_mu_pn'+bname[l], labels='MUR-trop [km]'
-             tdegap, 'iug_mu_pn'+bname[l],/overwrite                    
+             store_data,'iug_mu_trop_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
+             options,'iug_mu_trop_pn'+bname[l],ytitle='MUR-trop!Cpn'+bname[l]+'!C[dB]'
+             options,'iug_mu_trop_pn'+bname[l], labels='MUR-trop [km]'
+             tdegap, 'iug_mu_trop_pn'+bname[l],/overwrite                    
          endfor    
       endif
     

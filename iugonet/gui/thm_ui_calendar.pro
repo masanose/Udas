@@ -200,7 +200,7 @@ PRO thm_ui_calendar, title, otime, gui_id
   calBase = widget_base(wBase, /col, /align_center)
   
 ;List of years created by adding the starting year to an integer array
-  years = strtrim((indgen(70)+1957),2) ; modfied by Shinbori 2010-10-13
+  years = strtrim((indgen(150)+1880),2) ; modfied by Shinbori 2010-10-13
 
   months = ['January','February','March','April','May','June','July','August','September','October','November','December']
   numDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]

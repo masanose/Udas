@@ -92,26 +92,27 @@ GUI:
 --------------------------------------------------------------------------
   Instrument Type	datatype	param1		param2	Date
 --------------------------------------------------------------------------
-- Boundary_Layer_Radar	troposphere	ktb		*	2006-12-01
-- Eq._Atom._Radar	troposphere	ear_std 	*	2003-03-25
+- Boundary_Layer_Radar	troposphere	ktb	*	2006-12-01
+- Eq._Atom._Radar	troposphere	*(all)		*	2003-03-25
 			e_region	eb1p2a		*	2009-04-22
-			ef_region	efb1p16		*	2001-07-30
+			ef_region	efb1p16	*	2001-07-30
 			v_region	150p8c8b2a	*	2008-03-05
-			f_region	fb1p16a		*	2001-08-05
+			f_region	fb1p16a	*	2001-08-05
 - geomag._fluxgate	magdas		anc		*	2008-03-20
 			210mm		tik		*	2006-12-01
 			WDC_kyoto	kak		*	2006-12-01
 			NIPR_mag	syo		*	2003-03-25
-- geomag._index		Dst_index	WDC_kyoto	*	2006-12-01
+- geomag._index	Dst_index	WDC_kyoto	*	2006-12-01
 			AE_index	WDC_kyoto	*	2006-12-01
 			ASY_index	WDC_kyoto	*	2006-12-01
-- IPRT 			Sun		iit		*	2010-11-01
-- Lower_Tropos._Radar	troposphere	sgk		*	2004-10-01
-- Medium_Freq._radar	thermosphere	pam		*       2004-03-25
+- IPRT			Sun		iit		*	2010-11-01
+- Lower_Tropos._Radar	troposphere	sgk	*	2004-10-01
+- Medium_Freq._radar	thermosphere	pam		*	2004-03-25
 - Meteor_wind_radar	thermosphere	ktb		*	2002-12-01
-- MUpper_atom._radar 	troposphere	mur_standard	*	2003-03-10
+- MUpper_atom._radar 	troposphere	*(all)		*	2003-03-10
 - SuperDARN 		ionosphere	hok		*	2006-12-15
-- Wind_Profiler_Radar_(LQ7) 		troposphere	sgk		*	2006-04-01
+- EISCAT_radar	altitude_prof	esr_32m	*	2011-02-03
+- Wind_Profiler_Radar_(LQ7)	troposphere	sgk	*	2006-04-01
 --------------------------------------------------------------------------
 
 

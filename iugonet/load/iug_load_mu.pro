@@ -38,7 +38,8 @@
 ; $URL $
 ;-
   
-pro iug_load_mu, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_mu, datatype = datatype,parameter = site_or_param,$
+                 downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;******************
 ;keyword check:
