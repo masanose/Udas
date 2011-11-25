@@ -15,8 +15,8 @@
 ;   2010/03/10: Created
 ; 
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-01-10 17:24:09 +0900 (Mon, 10 Jan 2011) $
-; $LastChangedRevision: 94 $
+; $LastChangedDate: 2011-10-06 19:21:38 +0900 (Thu, 06 Oct 2011) $
+; $LastChangedRevision: 155 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_init.pro $
 ;-
 pro sd_init, reset=reset
@@ -51,9 +51,6 @@ if strmid(out[0],0,8) eq '** AACGM' then begin
 endif else begin
   aacgmidl
 endelse
-
-;Just compile the AACGM wrapper pro/fun
-sd_aacgmlib
 
 return
 end

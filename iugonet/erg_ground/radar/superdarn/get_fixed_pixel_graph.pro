@@ -22,10 +22,10 @@
 ; :HISTORY:
 ; 	2011/06/22: Created
 ;
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
-; $URL: $
+; $LastChangedBy: horit $
+; $LastChangedDate: 2011-08-20 11:23:18 +0900 (Sat, 20 Aug 2011) $
+; $LastChangedRevision: 146 $
+; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/get_fixed_pixel_graph.pro $
 ;-
 PRO get_fixed_pixel_graph, vn, beam=beam, range_gate=rgate, newvn=newvn
   
@@ -59,15 +59,19 @@ PRO get_fixed_pixel_graph, vn, beam=beam, range_gate=rgate, newvn=newvn
   newvar = var[idx_bm,rgate]
   if (size(var_v))[0] eq 2 then new_v=var_v[idx_bm,*] else new_v=var_v
   
-  if ~keyword_set(newvn) then $
-    newvn = vn +'_bm'+string(beam,'(I02)')+'rg'+string(rgate,'(I03)')
-  store_data, newvn, $
-    data={x:newtime, y:newvar, v:new_v}, $
-    lim={ytitle:'bm:'+string(beam,'(I02)')+',rg:'+string(rgate,'(I03)')+'!C'+var_lim.ztitle}
+  if keyword_set(newvn) then begin
+    
+    if (size(newvn))[1] ne 7 then $
+      newvn = vn +'_bm'+string(beam,'(I02)')+'rg'+string(rgate,'(I03)')
+    store_data, newvn[0], $
+      data={x:newtime, y:newvar, v:new_v}, $
+      lim={ytitle:'bm:'+string(beam,'(I02)')+',rg:'+string(rgate,'(I03)')+'!C'+var_lim.ztitle}
   
-  ;Add the zrange as yrange if exists
-  str_element, var_lim, 'zrange', success=s
-  if s eq 1 then options, newvn, 'yrange', var_lim.zrange
+    ;Add the zrange as yrange if exists
+    str_element, var_lim, 'zrange', success=s
+    if s eq 1 then options, newvn, 'yrange', var_lim.zrange
+
+  endif
    
   return
 end
