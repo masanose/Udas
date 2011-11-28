@@ -166,6 +166,7 @@ pro thm_ui_load_iugonet_data_event,event
         endif else begin
           paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])[paramSelect]
         endelse
+;        print, paramSelect
 
 ;=======================================================================================;
 ;       Added to the following sentences of handling the parameter 2 by A. Shinbori.
@@ -423,7 +424,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[7])[0] = ptr_new(['*(all)','ktb','srp'])
   (*paramArray[8])[0] = ptr_new(['*(all)'])
 ;  (*paramArray[8])[1] = ptr_new(['mur_special'])  
-  (*paramArray[9])[0] = ptr_new(['*(all)','hok','sye','sys'])
+  (*paramArray[9])[0] = ptr_new(['hok','sye','sys'])
   (*paramArray[10])[0] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
   (*paramArray[11])[0] = ptr_new(['*(all)','sgk'])
 

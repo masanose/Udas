@@ -331,6 +331,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
            site_name=strsplit(new_vars[i],'_',/extract)
            site_name2 = site_name[2]
         endelse
+
       ;================================================================================
       ;======== Add the time clip of tplot variable between start and end times by Shinbori  =========   
         trange = timeRange
