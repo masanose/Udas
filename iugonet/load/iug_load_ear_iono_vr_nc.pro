@@ -79,11 +79,13 @@ print, parameters
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire the equatorial atmospheric radar (EAR) data, ' $
-+ 'we ask that you acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as EAR data provided by Research Institute' $
-+ 'for Sustainable Humanosphere of Kyoto University. We would also' $
-+ 'appreciate receiving a copy of the relevant publications.'
+acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for '+$
+                   'Sustainable Humanosphere (RISH), Kyoto University and is operated by '+$
+                   'RISH and National Institute of Aeronautics and Space (LAPAN)Indonesia. '+$
+                   'Distribution of the data has been partly supported by the IUGONET '+$
+                   '(Inter-university Upper atmosphere Global Observation NETwork) project '+$
+                   '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '+$
+                   'Sports, Science and Technology (MEXT), Japan.'
 
 ;******************************************************************
 ;Loop on downloading files
@@ -351,15 +353,17 @@ endfor
 ;******************************
 ;print of acknowledgement:
 ;******************************
+
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire the equatorial atmospheric radar (EAR) data, '
-print, 'we ask that you acknowledge us in your use of the data. ' 
-print, 'This may be done by including text such as EAR data provided ' 
-print, 'by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
-print, 'We would also appreciate receiving a copy of the relevant publications.' 
-
+print, 'The Equatorial Atmosphere Radar belongs to Research Institute for '
+print, 'Sustainable Humanosphere (RISH), Kyoto University and is operated by '
+print, 'RISH and National Institute of Aeronautics and Space (LAPAN)Indonesia. '
+print, 'Distribution of the data has been partly supported by the IUGONET '
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project '
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '
+print, 'Sports, Science and Technology (MEXT), Japan.'
 
 end
 
