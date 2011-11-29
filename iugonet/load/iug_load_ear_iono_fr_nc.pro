@@ -83,7 +83,7 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for '+$
                    'Sustainable Humanosphere (RISH), Kyoto University and is operated by '+$
-                   'RISH and National Institute of Aeronautics and Space (LAPAN)Indonesia. '+$
+                   'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. '+$
                    'Distribution of the data has been partly supported by the IUGONET '+$
                    '(Inter-university Upper atmosphere Global Observation NETwork) project '+$
                    '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '+$
@@ -359,7 +359,7 @@ print, 'Acknowledgement'
 print, '****************************************************************
 print, 'The Equatorial Atmosphere Radar belongs to Research Institute for '
 print, 'Sustainable Humanosphere (RISH), Kyoto University and is operated by '
-print, 'RISH and National Institute of Aeronautics and Space (LAPAN)Indonesia. '
+print, 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. '
 print, 'Distribution of the data has been partly supported by the IUGONET '
 print, '(Inter-university Upper atmosphere Global Observation NETwork) project '
 print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '
