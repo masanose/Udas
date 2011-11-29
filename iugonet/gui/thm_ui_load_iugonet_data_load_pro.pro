@@ -169,20 +169,22 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of SuperDARN
   if instrument eq 'SuperDARN#' then begin
-     erg_load_sdfit, trange=timeRange, sites=site_or_param
+     if site_or_param[0] ne '*(all)' then begin
+        erg_load_sdfit, trange=timeRange, sites=site_or_param
+
+        ;Delete the tplot variables not allowed on the GUI:
+        store_data, 'sd_' + '*' + '_position_tbl_*',/delete
+        store_data, 'sd_' + '*' + '_positioncnt_tbl_*',/delete
+        store_data, 'sd_' + '*' + '_veast_bothscat_*',/delete
+        store_data, 'sd_' + '*' + '_vnorth_bothscat_*',/delete
+        store_data, 'sd_' + '*' + '_vlos_bothscat_*',/delete
     
-    ;Delete the tplot variables not allowed on the GUI:
-     store_data, 'sd_' + '*' + '_position_tbl_*',/delete
-     store_data, 'sd_' + '*' + '_positioncnt_tbl_*',/delete
-     store_data, 'sd_' + '*' + '_veast_bothscat_*',/delete
-     store_data, 'sd_' + '*' + '_vnorth_bothscat_*',/delete
-     store_data, 'sd_' + '*' + '_vlos_bothscat_*',/delete
-    
-     if parameters[0] eq '*' then begin
-        par_names=tnames('sd_' + '*' + '_' +'*')
-     endif else begin
-        par_names=tnames('sd_' + '*' + '_' + parameters +'_*')
-     endelse    
+        if parameters[0] eq '*' then begin
+           par_names=tnames('sd_' + '*' + '_' + '*'+ '_*')
+        endif else begin
+           par_names=tnames('sd_' + '*' + '_' + parameters +'_*')
+        endelse
+     endif    
   endif
   
   ;load data of Equatorial Atomosphere Radar
@@ -335,7 +337,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       ;================================================================================
       ;======== Add the time clip of tplot variable between start and end times by Shinbori  =========   
         trange = timeRange
-        time_clip, par_names,trange[0],trange[1],/replace 
+        time_clip, par_names[i],trange[0],trange[1],/replace 
       ;================================================================================
 
         result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)
@@ -360,8 +362,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
      statusBar->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
      historyWin->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
   endif else begin
-     statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
-     historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
+     if (instrument eq 'SuperDARN#') and (site_or_param[0] eq '*(all)') then begin
+        statusBar->update,'SuperDARN does not support *(all) as a site or parameter(s)-1. Please select others.'
+        historyWin->update,'SuperDARN does not support *(all) as a site or parameter(s)-1. Please select others.'      
+     endif else begin
+        statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
+        historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
+     endelse
   endelse
 
 end
