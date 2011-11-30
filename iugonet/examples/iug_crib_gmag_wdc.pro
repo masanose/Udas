@@ -26,6 +26,6 @@ tplot_names
 tplot_options, 'title', 'Sample plot of iug_crib_gmag_wdc'
 
 ;Plot data
-tplot,1
+tplot,'wdc_mag_kak_1min'
 
 end
