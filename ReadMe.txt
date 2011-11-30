@@ -42,20 +42,20 @@ Load procedures for ERG-related data:
 
 <load>
 Load procedures for IUGONET data:
-- iug_load_blr_rish_txt	; Boundary layer radar data from RISH, Kyoto Univ
-- iug_load_ear		; Equatorial Atmospheric Radar (EAR) data from RISH
-- iug_load_eiscat	; EISCAT radar data
-- iug_load_gmag_serc	; MAGDAS magnetometer data from SERC, Kyushu Univ
-- iug_load_gmag_wdc	; WDC geomagnetic indices and the magnetometer data
-- iug_load_iprt		; Iitate Planetary Ratio Telescope data from Tohoku Univ
-- iug_load_ltr_rish_txt	; Lower troposphere radar from RISH
-- iug_load_meteor_rish	; Meteor wind radar data from RISH
-- iug_load_mf_rish	; MF radar data from RISH
-- iug_load_mu		; Middle Upper (MU) atmosphere radar data from RISH
-- iug_load_gmag_mm210	; Alias for "erg_load_gmag_mm210"
-- iug_load_gmag_nipr	; Alias for "erg_load_gmag_nipr"
-- iug_load_sdfit	; Alias for "erg_load_sdfit"
-- iug_load_wpr_rish_txt	; Wind profiler radar (LQ7) from RISH
+- iug_load_blr_rish_txt ; Boundary layer radar data from RISH, Kyoto Univ
+- iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
+- iug_load_eiscat       ; EISCAT radar data
+- iug_load_gmag_serc    ; MAGDAS magnetometer data from SERC, Kyushu Univ
+- iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
+- iug_load_iprt	        ; Iitate Planetary Ratio Telescope data from Tohoku Univ
+- iug_load_ltr_rish_txt ; Lower troposphere radar from RISH
+- iug_load_meteor_rish  ; Meteor wind radar data from RISH
+- iug_load_mf_rish      ; MF radar data from RISH
+- iug_load_mu           ; Middle Upper (MU) atmosphere radar data from RISH
+- iug_load_wpr_rish_txt ; Wind profiler radar (LQ7) from RISH
+- iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
+- iug_load_gmag_nipr    ; Alias for "erg_load_gmag_nipr"
+- iug_load_sdfit        ; Alias for "erg_load_sdfit"
 
 <examples>
 Example crib sheets for IUGONET/ERG data
@@ -90,29 +90,29 @@ CUI:
 
 GUI:
 --------------------------------------------------------------------------
-  Instrument Type	datatype	param1		param2	Date
+  Instrument Type       datatype        param1          param2  Date
 --------------------------------------------------------------------------
-- Boundary_Layer_Radar	troposphere	ktb	*	2006-12-01
-- Eq._Atom._Radar	troposphere	*(all)		*	2003-03-25
-			e_region	eb1p2a		*	2009-04-22
-			ef_region	efb1p16	*	2001-07-30
-			v_region	150p8c8b2a	*	2008-03-05
-			f_region	fb1p16a	*	2001-08-05
-- geomag._fluxgate	magdas		anc		*	2008-03-20
-			210mm		tik		*	2006-12-01
-			WDC_kyoto	kak		*	2006-12-01
-			NIPR_mag	syo		*	2003-03-25
-- geomag._index	Dst_index	WDC_kyoto	*	2006-12-01
-			AE_index	WDC_kyoto	*	2006-12-01
-			ASY_index	WDC_kyoto	*	2006-12-01
-- IPRT			Sun		iit		*	2010-11-01
-- Lower_Tropos._Radar	troposphere	sgk	*	2004-10-01
-- Medium_Freq._radar	thermosphere	pam		*	2004-03-25
-- Meteor_wind_radar	thermosphere	ktb		*	2002-12-01
-- MUpper_atom._radar 	troposphere	*(all)		*	2003-03-10
-- SuperDARN 		ionosphere	hok		*	2006-12-15
-- EISCAT_radar	altitude_prof	esr_32m	*	2011-02-03
-- Wind_Profiler_Radar_(LQ7)	troposphere	sgk	*	2006-04-01
+- Boundary_Layer_Radar  troposphere     ktb             *       2006-12-01
+- Eq._Atom._Radar       troposphere     *(all)          *       2003-03-25
+                        e_region        eb1p2a          *       2009-04-22
+                        ef_region       efb1p16         *       2001-07-30
+                        v_region        150p8c8b2a      *       2008-03-05
+                        f_region        fb1p16a         *       2001-08-05
+- geomag._fluxgate      magdas          anc             *       2008-03-20
+                        210mm           tik             *       2006-12-01
+                        WDC_kyoto       kak             *       2006-12-01
+                        NIPR_mag        syo             *       2003-03-25
+- geomag._index         Dst_index       WDC_kyoto       *       2006-12-01
+                        AE_index        WDC_kyoto       *       2006-12-01
+                        ASY_index       WDC_kyoto       *       2006-12-01
+- IPRT                  Sun             iit             *       2010-11-01
+- Lower_Tropos._Radar   troposphere     sgk             *       2004-10-01
+- Medium_Freq._radar    thermosphere    pam             *       2004-03-25
+- Meteor_wind_radar     thermosphere    ktb             *       2002-12-01
+- MUpper_atom._radar    troposphere     *(all)          *       2003-03-10
+- SuperDARN             ionosphere      hok             *       2006-12-15
+- EISCAT_radar          altitude_prof   esr_32m         *       2011-02-03
+- Wind_Prof._Radar      troposphere     sgk             *       2006-04-01
 --------------------------------------------------------------------------
 
 
@@ -124,8 +124,8 @@ by Energization and Radiation in Geospace Science Center (ERG-SC) at
 Solar-Terrestrial Environment Laboratory, Nagoya University, in
 collaboration with Japanese SuperDARN PI groups.
   Access to these data are currently restricted to only users in Japan.
-The data will be open to foreign researchers in future upon
-confirmation by the SuperDARN PI committee.
+The data will be open to foreign researchers in future upon confirmation 
+by the SuperDARN PI committee.
   As for questions and request for the data, please feel free to contact
 the ERG-SC office (E-mail: erg-sc-core at st4a.stelab.nagoya-u.ac.jp).
 
