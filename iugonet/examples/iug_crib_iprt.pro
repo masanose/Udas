@@ -1,4 +1,4 @@
-;-
+;+
 ; :DESCRIPTION:
 ;    A crib sheet to demonstrate how to deal with data from Iitate planetary radio observatory using udas.
 ;
@@ -10,16 +10,19 @@
 ;   
 ; :HISTORY:
 ;    2011/11/21: Created
-
+;
 ;;;;;;;;;;;;;CAUTION;;;;;;;;;;;;;;
-
+;
 ; To plot data from Iitate planetary radio observatory, libraries for fits 
 ; files must be installed into your computer (fits_read, sxpar, fits_open, 
 ; fits_close, gettok, sxdelpar, sxaddpar, and valid_num) in addition to  the 
 ; udas and tdas.  They are available at http://idlastro.gsfc.nasa.gov/fitsio.html.
 ;
-;
-;Initialize 
+;-
+
+
+;Initialize
+ 
 thm_init 
 
 ;Specify the time span.
