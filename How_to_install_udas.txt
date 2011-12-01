@@ -55,7 +55,8 @@ setenv IDL_PATH '<IDL_DEFAULT>:+/path/to/udas:+/path/to/tdas'
 b) Replace /path/to/udas and /path/to/tdas with your actual installation 
 directories. Please note that /path/to/udas must be located prior to 
 /path/to/tdas.
-c) Restart your shell/terminal or source your .cshrc/ to be sure that changes took effect.
+c) Restart your shell/terminal or source your .cshrc/ to be sure that changes 
+took effect.
 d) Restart IDL.
 ------------------------------------------------
 
