@@ -12,6 +12,7 @@
 ; Written by: Y.-M. Tanaka, July 26, 2011
 ;             National Institute of Polar Research, Japan.
 ;             ytanaka at nipr.ac.jp
+; Modified by: Y.-M. Tanaka, December 1, 2011
 ;-
 
 ; Initialize
