@@ -1,10 +1,10 @@
 ;+
-; PROGRAM: iug_crib_eiscat
-;   This is an example crib sheet that will load the EISCAT radar data 
-;   distributed in CDF files by NIPR, Japan. Open this file in a text 
-;   editor and then use copy and paste to copy selected lines into an 
-;   idl window. Or alternatively compile and run using the command:
-;     .run iug_crib_eiscat
+; PROCEDURE: IUG_CRIB_EISCAT
+;    A sample crib sheet that explains how to use the "iug_load_eiscat" 
+;    procedure. You can run this crib sheet by copying & pasting each 
+;    command below (except for stop and end) into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_eiscat
 ;
 ; NOTE: See the rules of the road.
 ;       For more information, see:
