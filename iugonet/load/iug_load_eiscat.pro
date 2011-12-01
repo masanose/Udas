@@ -37,8 +37,10 @@
 ;                         and http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
 ;
 ; Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
-; Modified by: Y.-M. Tanaka, August 24, 2011 (ytanaka at nipr.ac.jp)
+; Modified by: Y.-M. Tanaka, August 24, 2011
 ;   Separated "print_str_maxlet" to another file. 
+; Modified by: Y.-M. Tanaka, December 1, 2011
+;   to load data with various int_times separately to different tplot vars.
 ;-
 
 ;********************************************
@@ -47,9 +49,6 @@
 pro iug_load_eiscat, site=site, pulse_code=pulse_code, int_time=int_time, $
         ydatatype=ydatatype, trange=trange, get_support_data=get_support_data, $
 	verbose=verbose, downloadonly=downloadonly, no_download=no_download
-
-;===== Delete eiscat_*_all_* =====
-store_data, 'eiscat_*_all_*', /delete
 
 ;===== Keyword check =====
 ;----- all codes -----;
@@ -102,6 +101,12 @@ for i=0,n_elements(site_code)-1 do begin
   ant=site1(1)
   for j=0,n_elements(pc)-1 do begin
     pc1=pc(j)
+    ;----- Delete 'eiscat_'+stn+ant+'_'+pc1+'_all_*' -----
+    len=strlen(tnames('eiscat_'+stn+ant+'_'+pc1+'_all_ne'))
+    if len gt 0 then begin
+      store_data, 'eiscat_'+stn+ant+'_'+pc1+'_all_*', /delete
+    endif
+
     for k=0,n_elements(intt)-1 do begin
       intt1=intt(k)
     
@@ -303,7 +308,7 @@ for i=0,n_elements(site_code)-1 do begin
             endcase
           endfor
 
-          ;----- Combine the same int_time modes -----;
+          ;----- Incorporate different int_time modes -----;
           tplot_name_all=tnames('eiscat_'+stn+ant+'_'+pc1+'_'+intt1+'_*')
           for itname=0, n_elements(tplot_name_all)-1 do begin
             tplot_name_tmp=tplot_name_all(itname)
