@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Aug  1 23:14:36 2011.<P>
+<STRONG>Last modified: </STRONG>Thu Dec  1 14:14:50 2011.<P>
  
 <HR>
  
@@ -28,7 +28,6 @@ This page was created by the IDL library routine
 <LI><A HREF="#OVERLAY_MAP_SDFIT">OVERLAY_MAP_SDFIT</A>
 <LI><A HREF="#PLOT_MAP_SDFIT">PLOT_MAP_SDFIT</A>
 <br>Draw a fan plot of SD data on the world map
-<LI><A HREF="#SD_AACGMLIB">SD_AACGMLIB</A>
 <LI><A HREF="#SD_INIT">SD_INIT</A>
 <LI><A HREF="#SD_MAP_SET">SD_MAP_SET</A>
 <LI><A HREF="#SD_TIME">SD_TIME</A>
@@ -103,8 +102,8 @@ This page was created by the IDL library routine
  	2011/06/22: Created
 
  $LastChangedBy: horit $
- $LastChangedDate: 2011-06-23 16:33:01 +0900 (Thu, 23 Jun 2011) $
- $LastChangedRevision: 136 $
+ $LastChangedDate: 2011-08-20 11:23:18 +0900 (Sat, 20 Aug 2011) $
+ $LastChangedRevision: 146 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/get_fixed_pixel_graph.pro $
 </PRE><P>
 <STRONG>(See <A href="superdarn/get_fixed_pixel_graph.pro">iugonet/erg_ground/radar/superdarn/get_fixed_pixel_graph.pro</A>)</STRONG><P>
@@ -170,8 +169,8 @@ This page was created by the IDL library routine
    2010/11/20: created 
  
  $LastChangedBy: horit $
- $LastChangedDate: 2011-01-13 16:53:19 +0900 (Thu, 13 Jan 2011) $
- $LastChangedRevision: 98 $
+ $LastChangedDate: 2011-11-17 20:42:32 +0900 (Thu, 17 Nov 2011) $
+ $LastChangedRevision: 160 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/loadct_sd.pro $
 </PRE><P>
 <STRONG>(See <A href="superdarn/loadct_sd.pro">iugonet/erg_ground/radar/superdarn/loadct_sd.pro</A>)</STRONG><P>
@@ -262,7 +261,7 @@ This page was created by the IDL library routine
 <A NAME="PLOT_MAP_SDFIT">
 <H2>PLOT_MAP_SDFIT</H2></A>
 <A HREF="#OVERLAY_MAP_SDFIT">[Previous Routine]</A>
-<A HREF="#SD_AACGMLIB">[Next Routine]</A>
+<A HREF="#SD_INIT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE plot_map_sdfit
@@ -303,39 +302,9 @@ This page was created by the IDL library routine
 <STRONG>(See <A href="superdarn/plot_map_sdfit.pro">iugonet/erg_ground/radar/superdarn/plot_map_sdfit.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="SD_AACGMLIB">
-<H2>SD_AACGMLIB</H2></A>
-<A HREF="#PLOT_MAP_SDFIT">[Previous Routine]</A>
-<A HREF="#SD_INIT">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- PROCEDURE sd_aacgmlib 
- 
- :DESCRIPTION:
- A dummy procedure to compile the AACGM wrapper procedure/function 
- defined below by just type "sd_aacgmlib" 
- 
- The wrapper procedures/functions check !sdarn.aacgm_dlm_exists 
- (if not defined, then define it by sd_init) to select appropriate 
- AACGM routines (DLM, or IDL native ones attached to TDAS). 
- 
- :AUTHOR: 
-   Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
-   
- :HISTORY:
-   2010/12/02: created and got through the initial bug fixes
-
- $LastChangedBy: horit $
- $LastChangedDate: 2011-01-13 16:53:19 +0900 (Thu, 13 Jan 2011) $
- $LastChangedRevision: 98 $
- $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_aacgmlib.pro $
-</PRE><P>
-<STRONG>(See <A href="superdarn/sd_aacgmlib.pro">iugonet/erg_ground/radar/superdarn/sd_aacgmlib.pro</A>)</STRONG><P>
-<HR>
- 
 <A NAME="SD_INIT">
 <H2>SD_INIT</H2></A>
-<A HREF="#SD_AACGMLIB">[Previous Routine]</A>
+<A HREF="#PLOT_MAP_SDFIT">[Previous Routine]</A>
 <A HREF="#SD_MAP_SET">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -355,8 +324,8 @@ This page was created by the IDL library routine
    2010/03/10: Created
  
  $LastChangedBy: horit $
- $LastChangedDate: 2011-01-10 17:24:09 +0900 (Mon, 10 Jan 2011) $
- $LastChangedRevision: 94 $
+ $LastChangedDate: 2011-10-06 19:21:38 +0900 (Thu, 06 Oct 2011) $
+ $LastChangedRevision: 155 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_init.pro $
 </PRE><P>
 <STRONG>(See <A href="superdarn/sd_init.pro">iugonet/erg_ground/radar/superdarn/sd_init.pro</A>)</STRONG><P>
@@ -370,38 +339,41 @@ This page was created by the IDL library routine
 <PRE>
  PROCEDURE/FUNCTION sd_map_set
 
- :Description:
-		Describe the procedure/function.
+ :DESCRIPTION:
+		A wrapper routine for the IDL original "map_set" enabling some
+		annotations regarding the visualization of SD data.
 
-	:Params:
-    time
+	:PARAMS:
+    time:   time (in double Unix time) for which the magnetic local time for the
+            world map is calculated. In AACGM plots, the magnetic local noon comes
+            on top in plot.
 
-	:Keywords:
+	:KEYWORDS:
     erase:   set to erase pre-existing graphics on the plot window.
-    clip:    set to zoom in roughly to a region encompassing a field of view of one radar. 
-             Actually 30e+6 (clip is on) or 50e+6 (off) is put is "scale" keyword of map_set. 
+    clip:    set to zoom in roughly to a region encompassing a field of view of one radar.
+             Actually 30e+6 (clip is on) or 50e+6 (off) is put is "scale" keyword of map_set.
     position:  gives the position of a plot panel on the plot window as the normal coordinates.
-    center_glat: geographical latitude at which a plot region is centered.  
-    center_glon: geographical longitude at which a plot region is centered. 
+    center_glat: geographical latitude at which a plot region is centered.
+    center_glon: geographical longitude at which a plot region is centered.
                  (both center_glat and center_glon should be given, otherwise ignored)
-    mltlabel:    set to draw the MLT labels every 2 hour. 
+    mltlabel:    set to draw the MLT labels every 2 hour.
     lonlab:      a latitude from which (toward the poles) the MLT labels are drawn.
     force_scale:   Forcibly put a given value in "scale" of map_set.
     stereo: Use the stereographic mapping, instead of satellite mapping (default)
 
  :EXAMPLES:
-    sd_map_set 
-    sd_map_set, /clip, center_glat=70., center_glon=180., /mltlabel, lonlab=74. 
-    
- :Author:
+    sd_map_set
+    sd_map_set, /clip, center_glat=70., center_glon=180., /mltlabel, lonlab=74.
+
+ :AUTHOR:
  	Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
 
  :HISTORY:
  	2011/01/11: Created
 
  $LastChangedBy: horit $
- $LastChangedDate: 2011-06-23 16:33:01 +0900 (Thu, 23 Jun 2011) $
- $LastChangedRevision: 136 $
+ $LastChangedDate: 2011-11-17 20:42:32 +0900 (Thu, 17 Nov 2011) $
+ $LastChangedRevision: 160 $
  $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_map_set.pro $
 </PRE><P>
 <STRONG>(See <A href="superdarn/sd_map_set.pro">iugonet/erg_ground/radar/superdarn/sd_map_set.pro</A>)</STRONG><P>

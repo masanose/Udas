@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Aug  1 23:14:36 2011.<P>
+<STRONG>Last modified: </STRONG>Thu Dec  1 14:14:50 2011.<P>
  
 <HR>
  
@@ -93,6 +93,8 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <LI><A HREF="#IUG_LOAD_MU_TROP_TXT">IUG_LOAD_MU_TROP_TXT</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of the
 <LI><A HREF="#IUG_LOAD_SDFIT">IUG_LOAD_SDFIT</A>
+<LI><A HREF="#IUG_LOAD_WPR_RISH_TXT">IUG_LOAD_WPR_RISH_TXT</A>
+<br>Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
 <br>
 </UL><P>
 <HR>
@@ -227,6 +229,7 @@ A. Shinbori, 13/05/2010.
 
 MODIFICATIONS:
 A. Shinbori, 25/11/2010.
+A. Shinbori, 08/11/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -249,7 +252,7 @@ iug_load_ear_iono_efr_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the NetCDF format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -302,7 +305,7 @@ iug_load_ear_iono_efr_txt
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -331,10 +334,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 06/10/2011.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -357,7 +361,7 @@ iug_load_ear_iono_er_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the NetCDF format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -410,7 +414,7 @@ iug_load_ear_iono_er_txt
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -439,10 +443,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -465,7 +470,7 @@ iug_load_ear_iono_fr_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the NetCDF format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -518,7 +523,7 @@ iug_load_ear_iono_fr_txt
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -547,10 +552,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -573,7 +579,7 @@ iug_load_ear_iono_vr_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the NetCDF format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -603,7 +609,7 @@ CODE:
 
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
- A. Shinbori, 24/03/2011.
+ A. Shinbori, 09/07/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -626,7 +632,7 @@ iug_load_ear_iono_vr_txt
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
-  taken by the equatorial atmosphere radar (EAR)and loads data into
+  taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -655,10 +661,11 @@ DATA AVAILABILITY:
   http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -681,7 +688,7 @@ iug_load_ear_trop_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
-  in the NetCDF format taken by the equatorial atmosphere radar (EAR)and loads data into
+  in the netCDF format taken by the equatorial atmosphere radar (EAR) and loads data into
   tplot format.
 
 SYNTAX:
@@ -698,11 +705,12 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
-
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 13/11/2011.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -745,11 +753,12 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
-
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 13/11/2011.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -802,7 +811,11 @@ ACKNOWLEDGEMENT:
    For more information, see http://www.iugonet.org/en/ 
                          and http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
 
- Written by Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+ Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+ Modified by: Y.-M. Tanaka, August 24, 2011
+   Separated "<A href="iugonet/tools_udas_doc_list.html#PRINT_STR_MAXLET">PRINT_STR_MAXLET</A>" to another file. 
+ Modified by: Y.-M. Tanaka, December 1, 2011
+   to load data with various int_times separately to different tplot vars.
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_eiscat.pro">iugonet/load/iug_load_eiscat.pro</A>)</STRONG><P>
 <HR>
@@ -1390,7 +1403,7 @@ SYNTAX:
 KEYWOARDS:
   datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
             The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_nc, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.  
  parameters = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
@@ -1408,6 +1421,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1434,13 +1448,13 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_meteor_ktb_txt, datatype=daatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+ iug_load_meteor_ktb_txt, datatype=datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
+  datatype = Observation data type. For example, iug_load_meteor_ktb_txt, datatype = 'thermosphere'.
             The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_txt, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'. 
   parameter = Data parameter. For example, iug_load_meteor_ktb_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
@@ -1458,6 +1472,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1579,7 +1594,7 @@ iug_load_meteor_srp_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
-  in the NetCDF format taken by the meteor wind radar (MWR) at Serpong and loads data into
+  in the netCDF format taken by the meteor wind radar (MWR) at Serpong and loads data into
   tplot format.
 
 SYNTAX:
@@ -1607,6 +1622,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1657,6 +1673,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
+ A. Shinbori, 06/10/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1812,23 +1829,19 @@ iug_load_mu
 
 PURPOSE:
   Queries the Kyoto_RISH servers for all the observation data taken by 
-  the Mille and Upper atmosphere (MU) radar at Shigaraki and loads data into
+  the Middle and Upper atmosphere (MU) radar at Shigaraki and loads data into
   tplot format.
 
 SYNTAX:
   iug_load_mu [ ,DATATYPE = string ]
-                [ ,PARAMETERS = string]
                 [ ,TRANGE = [min,max] ]
                 [ ,FILENAMES = string scalar or array ]
                 [ ,<and data keywords below> ]
 
 KEYWOARDS:
   DATATYPE = The type of data to be loaded. In this load program,
-             DATATYPEs are 'troposphere', 'meteor_wind' etc.
-
-  PARAMETERS (I/O):
-    Set to wind parameters.  If not set, 'uwnd' is
-      assumed.  Returns cleaned input, or shows default.  
+             DATATYPEs are 'troposphere' etc.
+ 
   TRANGE (In):
     Pass a time range a la TIME_STRING.PRO.
   FILENAMES (In):
@@ -1863,7 +1876,7 @@ iug_load_mu_trop_nc
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the standard observation data of the 
-  troposphere and lower stratsphere in the NetCDF format taken by the Mille
+  troposphere and lower stratsphere in the netCDF format taken by the Middle
   and Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 
 SYNTAX:
@@ -1880,11 +1893,12 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
-
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 13/11/2011.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -1906,7 +1920,7 @@ iug_load_mu_trop_txt
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the standard observation data of the 
-  troposphere and lower stratsphere in the CSV format taken by the Mille and 
+  troposphere and lower stratsphere in the CSV format taken by the Middle and 
   Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 
 SYNTAX:
@@ -1927,11 +1941,12 @@ KEYWOARDS:
                  into variables.
 
 CODE:
- A. Shinbori, 09/19/2010.
+ A. Shinbori, 19/09/2010.
 
 MODIFICATIONS:
- A. Shinbori, 03/24/2011.
-
+ A. Shinbori, 24/03/2011.
+ A. Shinbori, 13/11/2011.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -1944,6 +1959,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_SDFIT">
 <H2>IUG_LOAD_SDFIT</H2></A>
 <A HREF="#IUG_LOAD_MU_TROP_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_WPR_RISH_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: iug_load_sdfit
@@ -1977,5 +1993,54 @@ ACKNOWLEDGEMENT:
 
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_sdfit.pro">iugonet/load/iug_load_sdfit.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_WPR_RISH_TXT">
+<H2>IUG_LOAD_WPR_RISH_TXT</H2></A>
+<A HREF="#IUG_LOAD_SDFIT">[Previous Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_wpr_rish_txt
+
+PURPOSE:
+  Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
+  in the CSV format taken by the Luneberg lens wind profiler radar (LL-WPR) and loads data into
+  tplot format.
+
+SYNTAX:
+ iug_load_wpr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+                        downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  datatype = Observation data type. For example, iug_load_wpr_rish_txt, datatype = 'troposphere'.
+            The default is 'troposphere'. 
+   site = LTR observation site.  
+          For example, iug_load_wpr_rish_txt, site = 'sgk'.
+          The default is 'all', i.e., load all available observation points.
+  parameter = parameter name of WPR obervation data.  
+          For example, iug_load_wpr_rish_txt, parameter = 'uwnd'.
+          The default is 'all', i.e., load all available parameters.
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+
+CODE:
+ A. Shinbori, 06/10/2011.
+
+MODIFICATIONS:
+ 
+
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_wpr_rish_txt.pro">iugonet/load/iug_load_wpr_rish_txt.pro</A>)</STRONG><P>
 <HR>
  

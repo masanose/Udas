@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Aug  1 23:14:36 2011.<P>
+<STRONG>Last modified: </STRONG>Thu Dec  1 14:14:50 2011.<P>
  
 <HR>
  
@@ -25,11 +25,14 @@ This page was created by the IDL library routine
 <LI><A HREF="#IUG_CRIB_EISCAT">IUG_CRIB_EISCAT</A>
 <LI><A HREF="#IUG_CRIB_GMAG_NIPR">IUG_CRIB_GMAG_NIPR</A>
 <LI><A HREF="#IUG_CRIB_GMAG_SERC">IUG_CRIB_GMAG_SERC</A>
+<LI><A HREF="#IUG_CRIB_GMAG_WDC">IUG_CRIB_GMAG_WDC</A>
+<LI><A HREF="#IUG_CRIB_IPRT">IUG_CRIB_IPRT</A>
 <LI><A HREF="#IUG_CRIB_LTR_RISH_TXT">IUG_CRIB_LTR_RISH_TXT</A>
 <LI><A HREF="#IUG_CRIB_METEOR_RISH_KTB_NC">IUG_CRIB_METEOR_RISH_KTB_NC</A>
 <LI><A HREF="#IUG_CRIB_METEOR_RISH_SRP_NC">IUG_CRIB_METEOR_RISH_SRP_NC</A>
 <LI><A HREF="#IUG_CRIB_MF_RISH_PAM_NC">IUG_CRIB_MF_RISH_PAM_NC</A>
 <LI><A HREF="#IUG_CRIB_MU">IUG_CRIB_MU</A>
+<LI><A HREF="#IUG_CRIB_WPR_RISH_TXT">IUG_CRIB_WPR_RISH_TXT</A>
 <br>
 </UL><P>
 <HR>
@@ -68,19 +71,15 @@ This page was created by the IDL library routine
 <A HREF="#IUG_CRIB_EAR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_BLR_RISH_TXT.PRO
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_BLR_RISH_TXT">IUG_LOAD_BLR_RISH_TXT</A>.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_blr_rish_txt
 
-Name:
-iug_crib_blr_rish_txt.pro
-
-Purpose:
-Demonstrate the RISH BLR data loader.
-
-Code:
-A. Shinbori, 02/18/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_blr_rish_txt.pro">iugonet/examples/iug_crib_blr_rish_txt.pro</A>)</STRONG><P>
 <HR>
@@ -91,19 +90,15 @@ Modifications:
 <A HREF="#IUG_CRIB_EISCAT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_EAR.PRO
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_EAR">IUG_LOAD_EAR</A>.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_ear
 
-Name:
-iug_crib_ear.pro
-
-Purpose:
-Demonstrate the RISH EAR data loader.
-
-Code:
-A. Shinbori, 02/01/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_ear.pro">iugonet/examples/iug_crib_ear.pro</A>)</STRONG><P>
 <HR>
@@ -114,12 +109,12 @@ Modifications:
 <A HREF="#IUG_CRIB_GMAG_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
- PROGRAM: iug_crib_eiscat
-   This is an example crib sheet that will load the EISCAT radar data 
-   distributed in CDF files by NIPR, Japan. Open this file in a text 
-   editor and then use copy and paste to copy selected lines into an 
-   idl window. Or alternatively compile and run using the command:
-     .run iug_crib_eiscat
+ PROCEDURE: IUG_CRIB_EISCAT
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_EISCAT">IUG_LOAD_EISCAT</A>" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_eiscat
 
  NOTE: See the rules of the road.
        For more information, see:
@@ -127,6 +122,7 @@ Modifications:
  Written by: Y.-M. Tanaka, July 26, 2011
              National Institute of Polar Research, Japan.
              ytanaka at nipr.ac.jp
+ Modified by: Y.-M. Tanaka, December 1, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_eiscat.pro">iugonet/examples/iug_crib_eiscat.pro</A>)</STRONG><P>
 <HR>
@@ -137,12 +133,12 @@ Modifications:
 <A HREF="#IUG_CRIB_GMAG_SERC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
- PROGRAM: iug_crib_gmag_nipr
-   This is an example crib sheet that will load the magnetometer data 
-   obtained by NIPR, Japan. Open this file in a text editor and then 
-   use copy and paste to copy selected lines into an idl window.
-   Or alternatively compile and run using the command:
-     .run iug_crib_gmag_nipr
+ PROCEDURE: IUG_CRIB_GMAG_NIPR
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_GMAG_NIPR">IUG_LOAD_GMAG_NIPR</A>" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_gmag_nipr
 
  NOTE: See the rules of the road.
        For more information, see:
@@ -158,7 +154,7 @@ Modifications:
 <A NAME="IUG_CRIB_GMAG_SERC">
 <H2>IUG_CRIB_GMAG_SERC</H2></A>
 <A HREF="#IUG_CRIB_GMAG_NIPR">[Previous Routine]</A>
-<A HREF="#IUG_CRIB_LTR_RISH_TXT">[Next Routine]</A>
+<A HREF="#IUG_CRIB_GMAG_WDC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROGRAM: iug_crib_gmag_serc
@@ -179,25 +175,69 @@ Modifications:
 <STRONG>(See <A href="examples/iug_crib_gmag_serc.pro">iugonet/examples/iug_crib_gmag_serc.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_CRIB_GMAG_WDC">
+<H2>IUG_CRIB_GMAG_WDC</H2></A>
+<A HREF="#IUG_CRIB_GMAG_SERC">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_IPRT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+PROCEDURE: IUG_CRIB_GMAG_WDC
+    A sample crib sheet that explains how to use the "iug_cirb_gmag_wdc"
+    procedure. You can run this crib sheet by copying & pasting each
+    command below (except for stop and end) into the IDL command line.
+    Or alternatively compile and run using the command:
+        .run iug_crib_gmag_wdc
+
+Written by: Y. KOYAMA, Aug 9,2011
+Last Updated: Y. KOYAMA, Oct 6,2011
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_gmag_wdc.pro">iugonet/examples/iug_crib_gmag_wdc.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_CRIB_IPRT">
+<H2>IUG_CRIB_IPRT</H2></A>
+<A HREF="#IUG_CRIB_GMAG_WDC">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_LTR_RISH_TXT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ :DESCRIPTION:
+    A crib sheet to demonstrate how to deal with data from Iitate planetary radio observatory using udas.
+
+    You can run this crib sheet by copying&pasting each command 
+    below into the IDL command line. 
+
+ AUTHOR: 
+   Mizuki YONEDA (E-mail: yoneda@pparc.gp.tohoku.ac.jp)
+   
+ :HISTORY:
+    2011/11/21: Created
+
+;;;;;;;;;;;;CAUTION;;;;;;;;;;;;;;
+
+ To plot data from Iitate planetary radio observatory, libraries for fits 
+ files must be installed into your computer (fits_read, sxpar, fits_open, 
+ fits_close, gettok, sxdelpar, sxaddpar, and valid_num) in addition to  the 
+ udas and tdas.  They are available at http://idlastro.gsfc.nasa.gov/fitsio.html.
+
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_iprt.pro">iugonet/examples/iug_crib_iprt.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_CRIB_LTR_RISH_TXT">
 <H2>IUG_CRIB_LTR_RISH_TXT</H2></A>
-<A HREF="#IUG_CRIB_GMAG_SERC">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_IPRT">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_METEOR_RISH_KTB_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_LTR_RISH_TXT.PRO
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_LTR_RISH_TXT">IUG_LOAD_LTR_RISH_TXT</A>.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_ltr_rish_txt
 
-Name:
-iug_crib_ltr_rish_txt.pro
-
-Purpose:
-Demonstrate the RISH LTR data loader.
-
-Code:
-A. Shinbori, 02/01/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_ltr_rish_txt.pro">iugonet/examples/iug_crib_ltr_rish_txt.pro</A>)</STRONG><P>
 <HR>
@@ -208,19 +248,15 @@ Modifications:
 <A HREF="#IUG_CRIB_METEOR_RISH_SRP_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_METEOR_RISH_KTB_NC.PRO
+    A sample crib sheet that explains how to use the "iug_crib_meteor_rish_ktb_nc.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_meteor_rish_ktb_nc
 
-Name:
-iug_crib_meteor_rish_ktb_nc.pro
-
-Purpose:
-Demonstrate the Kototabang meteor wind radar data loader.
-
-Code:
-A. Shinbori, 02/04/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_meteor_rish_ktb_nc.pro">iugonet/examples/iug_crib_meteor_rish_ktb_nc.pro</A>)</STRONG><P>
 <HR>
@@ -231,19 +267,15 @@ Modifications:
 <A HREF="#IUG_CRIB_MF_RISH_PAM_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_METEOR_RISH_SRP_NC.PRO
+    A sample crib sheet that explains how to use the "iug_crib_meteor_rish_srp_nc.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_meteor_rish_srp_nc
 
-Name:
-iug_crib_meteor_rish_srp_nc.pro
-
-Purpose:
-Demonstrate the Serpong meteor wind radar data loader.
-
-Code:
-A. Shinbori, 03/07/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_meteor_rish_srp_nc.pro">iugonet/examples/iug_crib_meteor_rish_srp_nc.pro</A>)</STRONG><P>
 <HR>
@@ -254,19 +286,15 @@ Modifications:
 <A HREF="#IUG_CRIB_MU">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_MF_RISH_PAM_NC.PRO
+    A sample crib sheet that explains how to use the "iug_crib_mf_rish_pam_nc.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_mf_rish_pam_nc
 
-Name:
-iug_crib_mf_rish_pam_nc.pro
-
-Purpose:
-Demonstrate the Pameungpeuk MF radar data loader.
-
-Code:
-A. Shinbori, 03/07/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_mf_rish_pam_nc.pro">iugonet/examples/iug_crib_mf_rish_pam_nc.pro</A>)</STRONG><P>
 <HR>
@@ -274,22 +302,37 @@ Modifications:
 <A NAME="IUG_CRIB_MU">
 <H2>IUG_CRIB_MU</H2></A>
 <A HREF="#IUG_CRIB_MF_RISH_PAM_NC">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_WPR_RISH_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
+PROCEDURE: IUG_CRIB_MU.PRO
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_MU">IUG_LOAD_MU</A>.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_mu
 
-Name:
-iug_load_crib_mu.pro
-
-Purpose:
-Demonstrate the RISH MU radar data loader.
-
-Code:
-A. Shinbori, 02/01/2011.
-
-Modifications:
- 
-
+Written by: A. Shinbori,  Feb 18, 2011
+Last Updated:  A. Shinbori,  Feb 18, 2011
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_mu.pro">iugonet/examples/iug_crib_mu.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_CRIB_WPR_RISH_TXT">
+<H2>IUG_CRIB_WPR_RISH_TXT</H2></A>
+<A HREF="#IUG_CRIB_MU">[Previous Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+PROCEDURE: IUG_CRIB_WPR_RISH_TXT.PRO
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_WPR_RISH_TXT">IUG_LOAD_WPR_RISH_TXT</A>.pro" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_ltr_rish_txt
+
+Written by: A. Shinbori,  Nov 12, 2011
+Last Updated:  A. Shinbori,  Nov 12, 2011
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_wpr_rish_txt.pro">iugonet/examples/iug_crib_wpr_rish_txt.pro</A>)</STRONG><P>
 <HR>
  
