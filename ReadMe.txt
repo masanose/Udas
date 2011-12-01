@@ -1,6 +1,6 @@
 ==================================================================
 ; UDAS plug-in software package for tdas_6_00
-; 					August 1, 2011
+;                                             December 1, 2011
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -123,10 +123,7 @@ GUI:
 by Energization and Radiation in Geospace Science Center (ERG-SC) at
 Solar-Terrestrial Environment Laboratory, Nagoya University, in
 collaboration with Japanese SuperDARN PI groups.
-  Access to these data are currently restricted to only users in Japan.
-The data will be open to foreign researchers in future upon confirmation 
-by the SuperDARN PI committee.
-  As for questions and request for the data, please feel free to contact
+   As for questions and request for the data, please feel free to contact
 the ERG-SC office (E-mail: erg-sc-core at st4a.stelab.nagoya-u.ac.jp).
 
 2. Load procedure of MAGDAS data (iug_load_gmag_serc) is currently applicable 
