@@ -1,4 +1,6 @@
 ;+
+;PROCEDURE: erg_crib_superdarn
+; 
 ; :DESCRIPTION:
 ;    A crib sheet to demonstrate how procedures/functions for 
 ;    SuperDARN data work.
@@ -14,22 +16,11 @@
 ;    2010/06/24: Created
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-01-13 22:09:59 +0900 (Thu, 13 Jan 2011) $
-; $LastChangedRevision: 101 $
+; $LastChangedDate: 2011-10-07 16:20:42 +0900 (Fri, 07 Oct 2011) $
+; $LastChangedRevision: 159 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/examples/erg_crib_superdarn.pro $
 ;-
 
-
-;;;;;;;;;;;;;CAUTION;;;;;;;;;;;;;;
-;Please compile the attached "specplot.pro" first by typing:
-;
-; IDL> .r specplot.pro [ENTER]
-; 
-; in the directory where the plug-in was installed, 
-;then run the following commands. 
-;This is the slightly modified version of the original 
-;one included in TDAS.  
-;;;;;;;;;;;;;CAUTION;;;;;;;;;;;;;;
 
 ;Initialize 
 thm_init 
@@ -95,16 +86,16 @@ sd_map_set, /mltlabel, $
 center_glat=70,center_glon=170
 
 ;Superpose a 2-D fan plot of SD on the AACGM grid
-overlay_polar_sdfit,'sd_hok_vlos_bothscat_1'
+overlay_map_sdfit,'sd_hok_vlos_bothscat_1'
 
 ;Plot only the ionospheric echoes. Please note that sd_map_set 
 ;is run with "erase" keyword to clear the plot window. 
 sd_map_set, /erase, /clip, /mltlabel, $
 center_glat=70,center_glon=170
-overlay_polar_sdfit,'sd_hok_vlos_iscat_1'
+overlay_map_sdfit,'sd_hok_vlos_iscat_1'
 
 ;Superpose the world map in AACGM
-overlay_polar_coast
+overlay_map_coast
 
 ;An exmaple of plotting THM ASI and SD on the same map
 ;CAUTION!!!
@@ -122,8 +113,8 @@ central_lat=70,central_lon=170,/thumb
 ;the Cutlass color table
 loadct_sd, 44
 sd_time, 1151
-overlay_polar_sdfit,'sd_hok_vlos_iscat_1', /geo_plot
-overlay_polar_coast, /geo_plot  ;redraw the coast lines
+overlay_map_sdfit,'sd_hok_vlos_iscat_1', /geo_plot
+overlay_map_coast, /geo_plot  ;redraw the coast lines
 
 
 end
