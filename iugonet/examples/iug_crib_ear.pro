@@ -7,7 +7,7 @@
 ;        .run iug_crib_ear
 ;
 ;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  Dec 02, 2011
 ;-
 
 ;Initializes system variables for themis:
@@ -26,7 +26,7 @@ timespan,'2005-08-24',3,/day
 ;V-region ----> datatype = 'v_region'
 ;F-region ----> datatype = 'F_region'
 ;===============================================================================
-iug_load_ear, datatype = 'e_region',  parameter1 = 'eb3p4b', parameter2 = ['dpl1','pwr1','wdt1','pn1']
+iug_load_ear, datatype = 'e_region',  parameter = 'eb3p4b'
 
 
 ;Plot time-height distribution of radial Doppler velocity and echo intensity for beam 1:
@@ -74,7 +74,7 @@ iug_load_ear, datatype = 'troposphere'
 
 ;Plot time-height distribution of zonal, meridional and vertical winds in the troposphere:
 ;========================================================================================
-tplot,['iug_ear_uwnd','iug_ear_vwnd','iug_ear_wwnd']
+tplot,['iug_ear_trop_uwnd','iug_ear_trop_vwnd','iug_ear_trop_wwnd']
 
 stop
 
