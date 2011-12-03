@@ -7,7 +7,7 @@
 ;        .run iug_crib_meteor_rish_ktb_nc
 ;
 ;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  DEC 03, 2011
 ;-
 
 ;Initializes system variables for themis:
@@ -16,7 +16,7 @@ thm_init
 
 ;Specify timespan:
 ;=================
-timespan,'2001-01-01',3650,/day
+timespan,'2008-01-01',365,/day
 
 
 ;Load all the data of zonal and meridional wind velocities
@@ -30,7 +30,7 @@ timespan,'2001-01-01',3650,/day
 ;  vwnd = meridional wind
 ;  
 ;===============================================================================
-iug_load_meteor_ktb_nc, parameter = 'h2t60min00'
+iug_load_meteor_ktb_nc, parameter = 'h2t60min00', length = '1_month'
 
 
 ;Plot time-height distribution of zonal and merdional wind:

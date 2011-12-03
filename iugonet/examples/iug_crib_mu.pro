@@ -7,7 +7,7 @@
 ;        .run iug_crib_mu
 ;
 ;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  Feb 18, 2011
+;Last Updated:  A. Shinbori,  DEC 03, 2011
 ;-
 
 ;Initializes system variables for themis:
@@ -36,7 +36,7 @@ iug_load_mu, datatype = 'troposphere'
 ;Plot time-height distribution of zonal wind, and echo intensity, spectral width,
 ;radial Doppler velocity, and noise level for beam number 1 in the troposphere:
 ;===============================================================================
-tplot,['iug_mu_uwnd','iug_mu_pwr1','iug_mu_wdt1','iug_mu_dpl1', 'iug_mu_pn1']
+tplot,['iug_mu_trop_uwnd','iug_mu_trop_pwr1','iug_mu_trop_wdt1','iug_mu_trop_dpl1', 'iug_mu_trop_pn1']
 
 stop
 

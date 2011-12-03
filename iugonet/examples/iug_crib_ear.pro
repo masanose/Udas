@@ -7,7 +7,7 @@
 ;        .run iug_crib_ear
 ;
 ;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  Dec 02, 2011
+;Last Updated:  A. Shinbori,  Decq 02, 2011
 ;-
 
 ;Initializes system variables for themis:
