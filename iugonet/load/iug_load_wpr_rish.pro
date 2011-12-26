@@ -1,7 +1,7 @@
 ;+
 ;
 ;NAME:
-;iug_load_wpr_rish_txt
+;iug_load_wpr_rish
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
@@ -9,17 +9,17 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_wpr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+; iug_load_wpr_rish, datatype = datatype, site=site, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_wpr_rish_txt, datatype = 'troposphere'.
+;  datatype = Observation data type. For example, iug_load_wpr_rish, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
 ;   site = LTR observation site.  
-;          For example, iug_load_wpr_rish_txt, site = 'sgk'.
+;          For example, iug_load_wpr_rish, site = 'sgk'.
 ;          The default is 'all', i.e., load all available observation points.
 ;  parameter = parameter name of WPR obervation data.  
-;          For example, iug_load_wpr_rish_txt, parameter = 'uwnd'.
+;          For example, iug_load_wpr_rish, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -32,7 +32,7 @@
 ; A. Shinbori, 06/10/2011.
 ;
 ;MODIFICATIONS:
-; 
+; A. Shinbori, 26/12/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -41,7 +41,7 @@
 ; $URL $
 ;-
 
-pro iug_load_wpr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+pro iug_load_wpr_rish, datatype = datatype, site=site, parameter=parameter, $
                            downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
@@ -89,7 +89,10 @@ acknowledgstring = 'If you acquire the Luneberg lens wind profiler radar (LL-WPR
 + 'we ask that you acknowledge us in your use of the data. This may be done by' $
 + 'including text such as the LL-WPR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
-+ 'appreciate receiving a copy of the relevant publications.'
++ 'appreciate receiving a copy of the relevant publications. The distribution of '$
++ 'LL-WPR data has been partly supported by the IUGONET (Inter-university Upper '$
++ 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
++ 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
 
 ;******************************************************************
@@ -274,14 +277,18 @@ print,'*****************************
 ;******************************
 ;print of acknowledgement:
 ;******************************
+
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire Luneberg lens wind profiler radar (LL-WPR) data, '
-print, 'we ask that you acknowledge us in your use of the data. This may ' 
-print, 'be done by including text such as LQ-7 data provided by Research ' 
-print, 'Institute for Sustainable Humanosphere of Kyoto University. We would ' 
-print, 'also appreciate receiving a copy of the relevant publications.'
+print, 'we ask that you acknowledge us in your use of the data. This may' 
+print, 'be done by including text such as LQ-7 data provided by Research' 
+print, 'Institute for Sustainable Humanosphere of Kyoto University. We would' 
+print, 'also appreciate receiving a copy of the relevant publications.' 
+print, 'The distribution of LTR data has been partly supported by the IUGONET'
+print, '(Inter-university Upper atmosphere Global Observation NETwork)'
+print, 'project (http://www.iugonet.org/) funded by the Ministry of Education,'
+print, 'Culture, Sports, Science and Technology (MEXT), Japan.'
 
 end
 

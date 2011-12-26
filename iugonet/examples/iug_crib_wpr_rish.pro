@@ -1,13 +1,13 @@
 ;+
-;PROCEDURE: IUG_CRIB_BLR_RISH_TXT.PRO
-;    A sample crib sheet that explains how to use the "iug_load_blr_rish_txt.pro" 
+;PROCEDURE: IUG_CRIB_WPR_RISH.PRO
+;    A sample crib sheet that explains how to use the "iug_load_wpr_rish.pro" 
 ;    procedure. You can run this crib sheet by copying & pasting each 
 ;    command below (except for stop and end) into the IDL command line. 
 ;    Or alternatively compile and run using the command:
-;        .run iug_crib_blr_rish_txt
+;        .run iug_crib_ltr_rish
 ;
-;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  Feb 18, 2011
+;Written by: A. Shinbori,  Nov 12, 2011
+;Last Updated:  A. Shinbori,  Dec 26, 2011
 ;-
 
 ;Initializes system variables for themis:
@@ -16,49 +16,47 @@ thm_init
 
 ;Specify timespan:
 ;=================
-timespan,'2007-08-01',5,/day
+timespan,'2006-04-01',7,/day
 
 
-;Load zonal, meridional and vertical winds at Kototabang in timespan:
+;Load zonal, meridional and vertical winds at Shigaraki in timespan:
 ;We can select the parameters as 'uwnd', 'vwnd', 'wwnd', 'pwr1', 'pwr2', 'pwr3',
 ;  'pwr4', 'pwr5', 'wdt1', 'wdt2', 'wdt3', 'wdt4', 'wdt5':
 ;  uwnd = zonal wind:
 ;  vwnd = meridional wind
 ;  wwnd = vertical wind
 ;===============================================================================
-iug_load_blr_rish_txt, site = 'ktb', parameter = ['uwnd','vwnd','wwnd']
+iug_load_wpr_rish, site = 'sgk', parameter = ['uwnd','vwnd','wwnd']
 
 
 ;Plot time-height distribution of zonal wind:
 ;============================================
-tplot,['iug_blr_ktb_uwnd','iug_blr_ktb_vwnd','iug_blr_ktb_wwnd']
+tplot,['iug_wpr_sgk_uwnd','iug_wpr_sgk_vwnd','iug_wpr_sgk_wwnd']
 
 stop
 
 ;Substract the average data of zonal, meridional and vertical winds:
 ;===================================================================
-tsub_average, 'iug_blr_ktb_uwnd'
-tsub_average, 'iug_blr_ktb_vwnd'
-tsub_average, 'iug_blr_ktb_wwnd'
-tplot,['iug_blr_ktb_uwnd-d','iug_blr_ktb_vwnd-d','iug_blr_ktb_wwnd-d']
+tsub_average, 'iug_wpr_sgk_uwnd'
+tsub_average, 'iug_wpr_sgk_vwnd'
+tsub_average, 'iug_wpr_sgk_wwnd'
+tplot, ['iug_wpr_sgk_uwnd-d','iug_wpr_sgk_vwnd-d','iug_wpr_sgk_wwnd-d']
 
 stop
 
 ;1-hour running average of zonal, meridional and vertical winds:
 ;==============================================================
-tsmooth_in_time, 'iug_blr_ktb_uwnd', 3600
-tsmooth_in_time, 'iug_blr_ktb_vwnd', 3600
-tsmooth_in_time, 'iug_blr_ktb_wwnd', 3600
+tsmooth_in_time, 'iug_wpr_sgk_uwnd', 3600
+tsmooth_in_time, 'iug_wpr_sgk_vwnd', 3600
+tsmooth_in_time, 'iug_wpr_sgk_wwnd', 3600
 
-tplot, ['iug_blr_ktb_uwnd_smoothed','iug_blr_ktb_vwnd_smoothed','iug_blr_ktb_wwnd_smoothed']
+tplot, ['iug_wpr_sgk_uwnd_smoothed','iug_wpr_sgk_vwnd_smoothed','iug_wpr_sgk_wwnd_smoothed']
 
 stop
 
 ; Set up the plot time range of zonal, meridional and vertical winds in the troposphere:
 ;=======================================================================================
-tlimit, '2007-08-01 00:00:00', '2007-08-02 00:00:00'
+tlimit, '2006-04-05 00:00:00', '2006-04-06 00:00:00'
 tplot
 
 end
-
-

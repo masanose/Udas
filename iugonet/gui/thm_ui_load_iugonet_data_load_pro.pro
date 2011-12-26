@@ -249,7 +249,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
   ;load data of Bandary Layer Radar
   if instrument eq 'Boundary_Layer_Radar' then begin          
-     iug_load_blr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+     iug_load_blr_rish, site =site_or_param, parameter=parameters, trange = timeRange
      if parameters[0] eq '*' then begin
         par_names=tnames('iug_blr_'+'*'+'_'+'*')
      endif else begin
@@ -259,7 +259,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
   ;load data of Lower Troposphere Radar
   if instrument eq 'Lower_Troposphere_Radar' then begin       
-     iug_load_ltr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+     iug_load_ltr_rish, site =site_or_param, parameter=parameters, trange = timeRange
      if parameters[0] eq '*' then begin
         par_names=tnames('iug_ltr_'+'*'+'_'+'*')
      endif else begin
@@ -281,7 +281,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
   ;load data of Wind Profiler Radar (LQ-7)
   if instrument eq 'Wind_Profiler_Radar_(LQ-7)' then begin       
-     iug_load_wpr_rish_txt, site =site_or_param, parameter=parameters, trange = timeRange
+     iug_load_wpr_rish, site =site_or_param, parameter=parameters, trange = timeRange
      if parameters[0] eq '*' then begin
         par_names=tnames('iug_wpr_'+'*'+'_'+'*')
      endif else begin
@@ -318,7 +318,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      new_vars = ssl_set_intersection([par_names],[new_vars])
     loaded = 1
     ;output of the acknowledgement message:
-   ; Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+  ;  Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
     if Answer ne 'Cancel' then begin
     
     ;loop over loaded data

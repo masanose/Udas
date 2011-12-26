@@ -1,25 +1,25 @@
 ;+
 ;
 ;NAME:
-;iug_load_blr_rish_txt
+;iug_load_ltr_rish
 ;
 ;PURPOSE:
-;  Queries the Kyoto_RISH server for the CSV data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5) 
-;  of the troposphere taken by the boundary layer radar (BLR) at Kototabang, Shigaraki and Serpong
-;  and loads data into tplot format.
+;  Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
+;  in the CSV format taken by the L-band lower troposphere radar (LTR) and loads data into
+;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_blr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+; iug_load_ltr_rish, datatype = datatype, site=site, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_blr_rish_txt, datatype = 'troposphere'.
+;  datatype = Observation data type. For example, iug_load_ltr_rish, datatype = 'troposphere'.
 ;            The default is 'troposphere'. 
-;   site = BLR observation site.  
-;          For example, iug_load_blr_rish_txt, site = 'ktb'.
+;   site = LTR observation site.  
+;          For example, iug_load_ltr_rish, site = 'sgk'.
 ;          The default is 'all', i.e., load all available observation points.
-;  parameter = parameter name of BLR obervation data.  
-;          For example, iug_load_blr_rish_txt, parameter = 'uwnd'.
+;  parameter = parameter name of LTR obervation data.  
+;          For example, iug_load_ltr_rish, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -29,11 +29,12 @@
 ;                 into variables.
 ;
 ;CODE:
-;  A. Shinbori, 09/09/2010.
-;  
+; A. Shinbori, 09/19/2010.
+;
 ;MODIFICATIONS:
-;  A. Shinbori, 03/23/2011.
-;  
+; A. Shinbori, 03/24/2011.
+; A. Shinbori, 12/26/2011.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -41,7 +42,7 @@
 ; $URL $
 ;-
 
-pro iug_load_blr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+pro iug_load_ltr_rish, datatype = datatype, site=site, parameter=parameter, $
                            downloadonly=downloadonly, trange=trange, verbose=verbose
 
 ;**************
@@ -58,10 +59,10 @@ if (not keyword_set(datatype)) then datatype= 'troposphere'
 ;site codes:
 ;***********
 ;--- all sites (default)
-site_code_all = strsplit('ktb sgk srp',' ', /extract)
+site_code_all = strsplit('sgk',' ', /extract)
 
 ;--- check site codes
-if (not keyword_set(site)) then site='all'
+if(not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 
 print, site_code
@@ -78,11 +79,6 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
-;***************
-;data directory:
-;***************
-site_data_dir = strsplit('ktb/blr/ sgk/blr/ srp/blr/ ',' ', /extract)
-
 ;*****************
 ;defition of unit:
 ;*****************
@@ -90,11 +86,14 @@ site_data_dir = strsplit('ktb/blr/ sgk/blr/ srp/blr/ ',' ', /extract)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'If you acquire the boundary layer radar (BLR) data, ' $
+acknowledgstring = 'If you acquire the lower troposphere radar (LTR) data, ' $
 + 'we ask that you acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as the BLR data provided by Research Institute' $
++ 'including text such as the LTR data provided by Research Institute' $
 + 'for Sustainable Humanosphere of Kyoto University. We would also' $
-+ 'appreciate receiving a copy of the relevant publications.'
++ 'appreciate receiving a copy of the relevant publications. The distribution of '$
++ 'BLR data has been partly supported by the IUGONET (Inter-university Upper '$
++ 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
++ 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
 
 ;******************************************************************
@@ -113,43 +112,12 @@ acknowledgstring = 'If you acquire the boundary layer radar (BLR) data, ' $
 ;===============================================
 ;
 
-;Definition of parameter and array:
-h=0
+;Definition of parameter
 jj=0
-kk=0
-kkk=intarr(3)
 
-;In the case that the parameters are except for all.'
-  if n_elements(site_code) le 3 then begin
-     h_max=n_elements(site_code)
-     for i=0,n_elements(site_code)-1 do begin
-       if site_code[i] eq 'ktb' then begin
-          kkk[i]=0 
-       endif
-       if site_code[i] eq 'sgk' then begin
-          kkk[i]=1 
-       endif
-       if site_code[i] eq 'srp' then begin
-          kkk[i]=2 
-       endif
-    endfor
-  endif
+for iii=0,n_elements(parameters)-1 do begin
+    if ~size(fns,/type) then begin
 
-for ii=0,h_max-1 do begin
-   kk=kkk[ii]
-   for iii=0,n_elements(parameters)-1 do begin
-      if ~size(fns,/type) then begin
-       ;Definition of blr site names:
-         if site_code[ii] eq 'ktb' then begin
-            site_code2='kototabang'
-         endif
-         if site_code[ii] eq 'sgk' then begin
-            site_code2='shigaraki'
-         endif
-         if site_code[ii] eq 'srp' then begin
-            site_code2='serpong'
-         endif
-      
     ;Get files for ith component:
     ;***************************
          file_names = file_dailynames( $
@@ -160,8 +128,8 @@ for ii=0,h_max-1 do begin
     ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[kk]+'csv/'
-         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2+'/data/data/ver02.0212/'
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/ltr/csv/'
+         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/shigaraki/data/data/ver02.0212/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -172,10 +140,11 @@ for ii=0,h_max-1 do begin
       endif else file_names=fns 
 
 ;--- Load data into tplot variables
-      if (not keyword_set(downloadonly)) then downloadonly=0
+      if(not keyword_set(downloadonly)) then downloadonly=0
 
-      if (downloadonly eq 0) then begin
-    
+      if(downloadonly eq 0) then begin
+  
+  
       ;Read the files:
       ;===============
       
@@ -184,17 +153,17 @@ for ii=0,h_max-1 do begin
          u=''
          time = dblarr(1)
 
-      ; Initialize data and time buffer
-         blr_data = 0
-         blr_time = 0
+      ; Initialize data and time buffer:
+         ltr_data = 0
+         ltr_time = 0
 
       ;Loop on files (zonal component): 
       ;================================
          for h=jj,n_elements(local_paths)-1 do begin
              file= local_paths[h]
-             if file_test(/regular,file) then  dprint,'Loading the observation data of the troposphere taken by the BLR-'+site_code2+' :',file $
+             if file_test(/regular,file) then  dprint,'Loading LTR-shigaraki file: ',file $
              else begin
-                dprint,'The observation data of the troposphere taken by the BLR-'+site_code2+' ', file,' not found. Skipping'
+                dprint,'LTR-shigaraki file ',file,' not found. Skipping'
                 continue
              endelse
              openr,lun,file,/get_lun    
@@ -205,15 +174,15 @@ for ii=0,h_max-1 do begin
              height = strsplit(s,',',/extract)
              
              ;Definition of altitude and data arraies:
-             altitude = fltarr(n_elements(height)-1)
-             data = strarr(n_elements(height)-1)
-             data2 = fltarr(1,n_elements(height)-1)
+             altitude = fltarr(70)
+             data = strarr(70)
+             data2 = fltarr(1,70)
              
              ;Enter the altitude information:
              for j=0,n_elements(height)-2 do begin
                  altitude[j] = float(height[j+1])
              endfor
-             
+
              ;Enter the missing value:
              for j=0, n_elements(altitude)-1 do begin
                  b = float(altitude[j])
@@ -243,32 +212,28 @@ for ii=0,h_max-1 do begin
                   month = strmid(u,5,2)
                   day = strmid(u,8,2)
                   hour = strmid(u,11,2)
-                  minute = strmid(u,14,2) 
-                   
+                  minute = strmid(u,14,2)  
+                  
             ;====convert time from LT to UT 
-                  if site_code[ii] ne 'sgk' then begin    
-                     time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
-                  endif else if site_code[ii] eq 'sgk' then begin
-                     time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
+                 time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                                -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
-                     if time[k] gt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
-                  endif
+                 if time[k] lt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
+            ;
             ;Enter the missing value:
                   for j=0,n_elements(height)-2 do begin
                       a = float(data[j+1])
-                      wbad = where(a eq 999,nbad)
+                      wbad = where(a eq 999, nbad)
                       if nbad gt 0 then a[wbad] = !values.f_nan
                       data2[k,j]=a
                   endfor
             ;
             ;Append data of time:
             ;====================
-                  append_array, blr_time, time
+                  append_array, ltr_time, time
             ;
             ;Append data of wind velocity:
             ;=============================
-                  append_array, blr_data, data2
+                  append_array, ltr_data, data2
     
                endif
              endwhile 
@@ -279,7 +244,7 @@ for ii=0,h_max-1 do begin
   ;Store data in TPLOT variables:
   ;******************************
 
-          if blr_time[0] ne 0 then begin 
+          if ltr_time[0] ne 0 then begin 
              o=0 
              if parameters[iii] eq 'pwr1' then o=1  
              if parameters[iii] eq 'pwr2' then o=1
@@ -288,24 +253,22 @@ for ii=0,h_max-1 do begin
              if parameters[iii] eq 'pwr5' then o=1
  
              dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
-             store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
-             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$
+             store_data,'iug_ltr_'+site_code[0]+'_'+parameters[iii],data={x:ltr_time, y:ltr_data, v:altitude},dlimit=dlimit
+             options,'iug_ltr_'+site_code[0]+'_'+parameters[iii],ytitle='LTR-'+site_code[0]+'!CHeight!C[km]',$
                      ztitle=parameters[iii]+'!C['+unit_all[o]+']'
-             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii], labels='BLR-'+site_code[ii]+' [km]'
+             options,'iug_ltr_'+site_code[0]+'_'+parameters[iii], labels='LTR-'+site_code[0]+' [km]'
              ; add options
-             options, 'iug_blr_'+site_code[ii]+'_'+parameters[iii], 'spec', 1    
+             options, 'iug_ltr_'+site_code[0]+'_'+parameters[iii], 'spec', 1    
           endif
 
           ;Clear time and data buffer:
-          blr_data = 0
-          blr_time = 0
+          ltr_data = 0
+          ltr_time = 0
           
           ; add tdegap
-         tdegap, 'iug_blr_'+site_code[ii]+'_'+parameters[iii],/overwrite
-       endif
-       jj=n_elements(local_paths)
-   endfor
-       jj=n_elements(local_paths)
+         tdegap, 'iug_ltr_'+site_code[0]+'_'+parameters[iii],/overwrite
+   endif
+   jj=n_elements(local_paths)
 endfor 
    
 print,'*****************************
@@ -318,11 +281,14 @@ print,'*****************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire BLR data, we ask that you acknowledge us'
-print, 'in your use of the data. This may be done by including text' 
-print, 'such as BLR data provided by Research Institute for Sustainable' 
-print, 'Humanosphere of Kyoto University. We would also appreciate receiving' 
-print, 'a copy of the relevant publications.'
+print, 'If you acquire LTR data, we ask that you acknowledge us in your use'
+print, 'of the data. This may be done by including text such as LTR data' 
+print, 'provided by Research Institute for Sustainable Humanosphere of' 
+print, 'Kyoto University. We would also appreciate receiving a copy of the' 
+print, 'relevant publications. The distribution of LTR data has been partly'
+print, 'supported by the IUGONET (Inter-university Upper atmosphere Global'
+print, 'Observation NETwork) project (http://www.iugonet.org/) funded by the'
+print, 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
 end
 

@@ -1,7 +1,4 @@
-;+
-;
-;NAME:
-;iug_load_mu_trop_nc
+
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the standard observation data of the 
@@ -27,6 +24,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 13/11/2011.
+; A. Shinbori, 26/12/2011.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -50,11 +48,14 @@ if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
-+ 'we ask that you acknowledge us in your use of the data. This may be done by' $
-+ 'including text such as the MU data provided by Research Institute' $
-+ 'for Sustainable Humanosphere of Kyoto University. We would also' $
-+ 'appreciate receiving a copy of the relevant publications.'
-
++ 'we ask that you acknowledge us in your use of the data. This may be done by ' $
++ 'including text such as the MU data provided by Research Institute ' $
++ 'for Sustainable Humanosphere of Kyoto University. We would also ' $
++ 'appreciate receiving a copy of the relevant publications. '$
++ 'The distribution of MU radar data has been partly supported by the IUGONET '$
++ '(Inter-university Upper atmosphere Global Observation NETwork) project '$
++ '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '$
++ 'Sports, Science and Technology (MEXT), Japan.'
 
 ;******************************************************************
 ;Loop on downloading files
@@ -75,7 +76,7 @@ acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar dat
        source = file_retrieve(/struct)
        source.verbose=verbose
        source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/nc/'
-       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807/'
+       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807_1.01/'
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -378,11 +379,14 @@ endfor
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire the middle and upper atmosphere (MU) radar data, '
-print, 'we ask that you acknowledge us in your use of the data. ' 
-print, 'This may be done by including text such as MU data provided ' 
-print, 'by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
+print, 'If you acquire the middle and upper atmosphere (MU) radar data,'
+print, 'we ask that you acknowledge us in your use of the data.' 
+print, 'This may be done by including text such as MU data provided' 
+print, 'by Research Institute for Sustainable Humanosphere of Kyoto University.' 
 print, 'We would also appreciate receiving a copy of the relevant publications.'
-      
+print, 'The distribution of MU radar data has been partly supported by the IUGONET'
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
+print, 'Sports, Science and Technology (MEXT), Japan.'      
 end
 
