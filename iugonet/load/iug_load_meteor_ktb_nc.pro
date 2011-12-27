@@ -34,7 +34,8 @@
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 11/07/2011.
 ; A. Shinbori, 06/10/2011.
-;
+; A. Shinbori, 27/12/2011.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -80,20 +81,11 @@ site_data_dir = strsplit('h2km_t60min00/ h2km_t60min30/ h4km_t60min00/ h4km_t60m
 site_data_lastmane = strsplit('.h2t60min00.nc .h2t60min30.nc .h4t60min00.nc .h4t60min30.nc .h4t240min00.nc',' ', /extract)
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' $
-+ 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' $
-+ 'Prof. Toshitaka Tsuda, Kyoto University, who will organize such collaborations. ' $
-+ 'There is a possibility that the PI of the MW radar will arrange offers so that there is less overlapping of themes between our research groups' $
-+ 'Before you use the MW radar data for your papers, you must agree to the following points;' $
-+ '  1. Before you submit your paper, you must contact the PI (Prof. Toshitaka Tsuda: tsuda@rish.kyoto-u.ac.jp) and discuss authorship.' $
-+ '  2. When you submit your paper after doing the above item 1, you must mention the source of the data in the acknowledgment section of your paper.' $
-+ '  3. In all circumstances, if anything is published you must send a hardcopy to the following address:' $
-+ '    Prof. Toshitaka Tsuda' $
-+ '    PI of the MW radar in Indonesia' $
-+ '    Director of Research Institute for Sustainable Humanosphere,' $
-+ '    Kyoto University' $
-+ '    Gokasyo, Uji Kyoto 611-0011, Japan' $
-+ '    e-mail: tsuda@rish.kyoto-u.ac.jp' 
+acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and keep the DATA USE POLICY '$
++'(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html '$ 
++'The distribution of meteor wind radar data has been partly supported by the IUGONET (Inter-university Upper '$
++ 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
++ 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
 
 ;==================================================================
@@ -352,20 +344,13 @@ print,'******************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'Scientists who want to engage in collaboration with Research Institute for Sustainable Humanosphere (RISH) ' 
-print, 'should contact the principal investigator of the meteor wind (MW) radar in Indonesia ' 
-print, 'Prof. Toshitaka Tsuda, Kyoto University, who will organize such collaborations. ' 
-print, 'There is a possibility that the PI of the MW radar will arrange offers so that there is less overlapping of themes between our research groups' 
-print, 'Before you use the MW radar data for your papers, you must agree to the following points;' 
-print, '  1. Before you submit your paper, you must contact the PI (Prof. Toshitaka Tsuda: tsuda@rish.kyoto-u.ac.jp) and discuss authorship.' 
-print, '  2. When you submit your paper after doing the above item 1, you must mention the source of the data in the acknowledgment section of your paper.' 
-print, '  3. In all circumstances, if anything is published you must send a hardcopy to the following address:' 
-print, '    Prof. Toshitaka Tsuda' 
-print, '    PI of the MW radar in Indonesia' 
-print, '    Director of Research Institute for Sustainable Humanosphere,' 
-print, '    Kyoto University' 
-print, '    Gokasyo, Uji Kyoto 611-0011, Japan' 
-print, '    e-mail: tsuda@rish.kyoto-u.ac.jp'  
+print, 'Note: If you would like to use following data for scientific purpose,
+print, 'please read and keep the DATA USE POLICY'
+print, '(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html' 
+print, 'The distribution of meteor wind radar data has been partly supported by the IUGONET'
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, Sports, Science'
+print, 'and Technology (MEXT), Japan.'  
 
 end
 
