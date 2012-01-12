@@ -38,6 +38,7 @@
 ;  08-March-2011, abeshu, update.
 ;  01-May-2011, abeshu, modify title and ylabel on tdas plot.
 ;  09-May-2011, abeshu, modify the rules of the road.
+;  12-Jan-2012, abeshu, add default colors.
 ;
 ;ACKNOWLEDGMENT:
 ;
@@ -187,7 +188,7 @@ for i=0, nsites-1 do begin
     store_data, tplot_name, data={x:timebuf, y:databuf}, dlimit=dlimit
 
     ; add options
-    options, tplot_name, labels=['H','D','Z','F'] , $
+    options, tplot_name, labels=['H','D','Z','F'] , colors=[2,4,6,8],$
                          ytitle = 'MAGDAS ' + strupcase(strmid(magdas_sites[i],0,3)), $
                          ysubtitle = '[nT]'
                          ;title = 'SERC MAGDAS magnetometer'
