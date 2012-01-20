@@ -109,7 +109,7 @@ for i=0,n_elements(site_code)-1 do begin
 
     for k=0,n_elements(intt)-1 do begin
       intt1=intt(k)
-    
+   
       ;----- Set parameters for file_retrieve and download data files -----;
       source = file_retrieve(/struct)
       source.verbose = verbose
@@ -192,9 +192,12 @@ for i=0,n_elements(site_code)-1 do begin
               'composition'  : paramstr='comp'
               'quality'      : paramstr='q'
               'quality_flag' : paramstr='qflag'
+              'collision_freq'  : paramstr='colf'
+              'colision_freq'  : paramstr='colf'
               'int_time'     : paramstr='int'
               'elev_angle'   : paramstr='elev'
               'number_gate'  : paramstr='ngate'
+              'txpower'     : paramstr='txpow'
               'txpopwer'     : paramstr='txpow'
               'mconst'       : paramstr='mcnst'
               'heating'      : paramstr='heat'
@@ -259,10 +262,6 @@ for i=0,n_elements(site_code)-1 do begin
 		    ytitle=titlehead+'Vi err.', ysubtitle = '[m/s]', spec=1
 		  zlim, tplot_name_new, -200, 200, 0
 		end
-	      'collision_freq' : begin
-		  options, tplot_name_new, labels='col.freq.', $
-		    ytitle=titlehead+'Col.freq.', ysubtitle = '[s-1]', spec=1
-		end
 	      'composition' : begin
 		  options, tplot_name_new, labels='comp', $
 		    ytitle=titlehead+'Composition', ysubtitle = '[%]', spec=1
@@ -274,6 +273,14 @@ for i=0,n_elements(site_code)-1 do begin
 	      'quality_flag' : begin
 		  options, tplot_name_new, labels='qual.flag', $
 		    ytitle=titlehead+'Quality flag', spec=1
+		end
+	      'collision_freq' : begin
+		  options, tplot_name_new, labels='col.freq.', $
+		    ytitle=titlehead+'Col.freq.', ysubtitle = '[s-1]', spec=1
+		end
+	      'colision_freq' : begin
+		  options, tplot_name_new, labels='col.freq.', $
+		    ytitle=titlehead+'Col.freq.', ysubtitle = '[s-1]', spec=1
 		end
 	      'int_time' : begin
 		  options, tplot_name_new, labels='int.time', $
@@ -293,6 +300,10 @@ for i=0,n_elements(site_code)-1 do begin
 		    ytitle=titlehead+'Nrange max'
 		end
 	      'txpopwer' : begin
+		  options, tplot_name_new, labels='txpower', $
+		    ytitle=titlehead+'Tx power'
+		end
+	      'txpower' : begin
 		  options, tplot_name_new, labels='txpower', $
 		    ytitle=titlehead+'Tx power'
 		end
