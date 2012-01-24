@@ -25,6 +25,7 @@
 ;Updated by:  Daiki Yoshida,  Nov 12, 2010
 ;Updated by:  Daiki Yoshida,  Jan 11, 2011
 ;Updated by:  Daiki Yoshida,  Mar 1, 2011
+;Updated by:  Yukinobu KOYAMA, Jan 21, 2011
 ;
 ;-
 
@@ -283,7 +284,8 @@ pro iug_load_gmag_wdc_wdcmin, $
         sname = wdc_sites[i], $
         element = elemlist, $
         res = 'min', level = level, $
-        tplot_name, tplot_ytitle, tplot_ysubtitle, tplot_labels, dlimit
+        tplot_name, tplot_ytitle, tplot_ysubtitle, tplot_labels, $
+        tplot_colors, dlimit
         
       store_data, $
         tplot_name, $
@@ -291,7 +293,8 @@ pro iug_load_gmag_wdc_wdcmin, $
         dlimit = dlimit
       options, $
         tplot_name, $
-        ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle, labels = tplot_labels
+        ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle, $
+        labels = tplot_labels, colors = tplot_colors
         
     
     print, '**************************************************'

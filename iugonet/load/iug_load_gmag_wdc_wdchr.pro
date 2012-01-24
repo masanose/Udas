@@ -266,32 +266,43 @@ pro iug_load_gmag_wdc_wdchr, $
         wbad = where(variations eq missing_value, nbad)
         if nbad gt 0 then value[wbad] = !values.f_nan
         
-        
         idx = long((time_double(basetime) - basetime_start) / data_resolution)
         if (idx lt 0 or idx gt buf_size) then begin
           dprint, 'error: out of timerange?'
           continue
         endif
         databuf[idx, elemnum] = value
-        
       endwhile
       free_lun,lun
-    endfor
-    
+   endfor
+
+    ; exchange elements and elemlist
+;    temp = databuf
+;    order = sort(elemlist)
+;    order = order[sort(elemlist)] ; this is key sentence
+;    for j = 0l, n_elements(databuf)/n_elements(elemlist)-1 do begin
+;      for k = 0l, n_elements(elemlist)-1 do begin
+;         databuf(j,order(k))=temp(j,k)
+;      endfor
+;   endfor
+
+;    elemlist = elemlist[sort(elemlist)]
 
     ; store data to tplot variables
     iug_load_gmag_wdc_create_tplot_vars, $
       sname = wdc_sites[i], $
       element = elemlist, $
       res = 'hour', level = level, $
-      tplot_name, tplot_ytitle, tplot_ysubtitle, tplot_labels, dlimit
+      tplot_name, tplot_ytitle, tplot_ysubtitle, tplot_labels, $
+      tplot_colors, dlimit
     store_data, $
       tplot_name, $
       data = {x:timebuf, y:databuf}, $
       dlimit = dlimit
     options, $
       tplot_name, $
-      ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle, labels = tplot_labels
+      ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle, $
+      labels = tplot_labels, colors = tplot_colors
 
 
     print, '**************************************************'

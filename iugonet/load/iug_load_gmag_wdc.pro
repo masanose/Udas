@@ -32,15 +32,15 @@
 ;  no_download: use only files which are online locally.
 ;
 ;EXAMPLE:
-;   iug_load_gmag_wdc, site = 'kak', resolution = 'min', trange =
-;   ['2007-01-22/00:00:00','2007-01-24/00:00:00']
+;   timespan, '2007-01-22',1,/days
+;   iug_load_gmag_wdc, site = 'ae', resolution = 'min'
 ;
 ;NOTES:
 ;  At WDC Kyoto, data service for TDAS clients is beta testing.
 ;  Please check the data catalog at http://wdc-data.iugonet.org/.
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
-;Last Updated:  Daiki Yoshida,  Mar 8, 2011
+;Last Updated:  Yukinobu KOYAMA,  Oct 21, 2011
 ; 
 ;-
 

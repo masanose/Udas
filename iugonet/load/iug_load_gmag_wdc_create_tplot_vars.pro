@@ -7,7 +7,7 @@
 ;    level = level, $
 ;    tplot_name, $
 ;    tplot_ytitle, tplot_ysubtitle, tplot_labels, $
-;    tplot_dlimit
+;    tplot_colors, tplot_dlimit
 ;
 ;Notes:
 ;  This procedure is called from load procedures for WDC format data,
@@ -17,6 +17,7 @@
 ;Updated by:  Daiki Yoshida,  Sep 14, 2010
 ;Updated by:  Daiki Yoshida,  Nov 12, 2010
 ;Updated by:  Daiki Yoshida,  Jan 11, 2011
+;Updated by:  Yukinobu KOYAMA, Jan 21, 2012
 ;
 ;-
 
@@ -27,7 +28,7 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     level = level, $
     tplot_name, $
     tplot_ytitle, tplot_ysubtitle, tplot_labels, $
-    tplot_dlimit
+    tplot_colors, tplot_dlimit
     
   ; for acknowledgment
   acknowledg_str_dst = $
@@ -178,7 +179,17 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     endelse
     
   endelse
-  
-  
+
+  ; setup tplot_colors
+  tplot_colors=intarr(n_elements(element))
+  for i = 0l, n_elements(element)-1 do begin
+     if element[i] eq 'H' then tplot_colors[i]=2
+     if element[i] eq 'D' then tplot_colors[i]=4
+     if element[i] eq 'Z' then tplot_colors[i]=6
+     if element[i] eq 'X' then tplot_colors[i]=3
+     if element[i] eq 'Y' then tplot_colors[i]=5
+     if element[i] eq 'F' then tplot_colors[i]=0
+     if element[i] eq 'I' then tplot_colors[i]=1
+  endfor
   
 end
