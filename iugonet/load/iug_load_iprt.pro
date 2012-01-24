@@ -117,7 +117,8 @@ acknowledgstring = '"We would like to present the following two guidelines.' $
 + 'developed and operated by Tohoku University."' $
 + '4. Entry to publication list:'$
 + 'When your publication is accepted, or when you make a presentation at a '$
-+ 'conference on your result, please let us know by sending email to PIs.'
++ 'conference on your result, please let us know by sending email to PI.'$
++ 'Contact person & PI: Dr. Hiroaki Misawa (misawa@pparc.gp.tohoku.ac.jp)'$
 
 
 
@@ -273,5 +274,31 @@ for i=0, nsites-1 do begin
 
 ; go to next site
 endfor
+
+;******************************
+;print of acknowledgement:
+;******************************
+print, 'We would like to present the following two guidelines.' 
+print, 'The 1st one concerns what we would like you to do when you use the data.' 
+print, '1. Tell us what you are working on.' 
+print, 'This is partly because to protect potential Ph.D. thesis projects.' 
+print, 'Also, if your project coincides with one that team members are working on,' 
+print, 'that can lead to a fruitful collaboration. The 2nd one concerns what you do '
+print, 'when you make any presentations and publications using the data.' 
+print, '2. Co-authorship:' 
+print, 'When the data forms an important part of your work, we would like you to '
+print, 'offer us co-authorship.' 
+print, '3. Acknowledgements:' 
+print, 'All presentations and publications should carry the following sentence:' 
+print, ' "IPRT(Iitate Planetary Radio Telescope) is a Japanese radio telescope '
+print, 'developed and operated by Tohoku University."' 
+print, '4. Entry to publication list:'
+print, 'When your publication is accepted, or when you make a presentation at a '
+print, 'conference on your result, please let us know by sending email to PI.'
+print, 'Contact person & PI: Dr. Hiroaki Misawa (misawa@pparc.gp.tohoku.ac.jp)'
+
+
+
+
 
 end
