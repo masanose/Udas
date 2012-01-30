@@ -20,6 +20,10 @@
 ;Initialize
  
 thm_init 
+;-----------------
+;    Program
+;-----------------
+
 
 ;Specify the time span.
 timespan, '2010-11-01',10,/min
