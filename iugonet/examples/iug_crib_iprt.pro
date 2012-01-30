@@ -1,8 +1,10 @@
 ;+
 ;PROCEDURE: IUG_CRIB_IPRT
 ;    A crib sheet to demonstrate how to deal with data from Iitate 
-;　　 planetary radio observatory using udas. You can run this crib 
+;    planetary radio observatory using udas. You can run this crib 
 ;    sheet by copying&pasting each command below into the IDL command line. 
+;    Or alternatively compile and run using the command:
+;        .run iug_crib_iprt
 ;
 ; Written by: M. Yoneda, Nov 11, 2011 
 ; Last Update: M. Yoneda, Jan 30, 2012
@@ -37,5 +39,7 @@ tplot,['iprt_sun_L','iprt_sun_R']
 ; Title
 tplot_options, 'title', 'Sample plot of IPRT solar radio data' 
 
+; Plot
+tplot
 
 end
