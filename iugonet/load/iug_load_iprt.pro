@@ -118,7 +118,7 @@ acknowledgstring = '"We would like to present the following two guidelines.' $
 + '4. Entry to publication list:'$
 + 'When your publication is accepted, or when you make a presentation at a '$
 + 'conference on your result, please let us know by sending email to PI.'$
-+ 'Contact person & PI: Dr. Hiroaki Misawa (misawa@pparc.gp.tohoku.ac.jp)'$
++ 'Contact person & PI: Dr. Hiroaki Misawa (misawa@pparc.gp.tohoku.ac.jp)'
 
 
 
