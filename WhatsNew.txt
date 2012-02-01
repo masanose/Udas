@@ -1,4 +1,23 @@
 ------------------------------------------------------
+; What's new in udas_1_00            February 10, 2012
+------------------------------------------------------
+1) Added "iug_crib_iprt.pro" for IPRT data.
+
+"iug_crib_iprt.pro" is a sample crib sheet that explains how to use "iug_load_iprt".
+
+2) Renamed some load procedures for the radar data.
+
+"iug_load_blr_rish_txt" --> "iug_load_blr_rish"
+"iug_load_ltr_rish_txt" --> "iug_load_ltr_rish"
+"iug_load_wpr_rish_txt" --> "iug_load_wpr_rish"
+
+3) Modified "iug_load_gmag_???" for the magnetometer data.
+
+The default colors for the plot of the fluxgate magnetometer data 
+were changed to Red, Green, Blue.
+
+
+------------------------------------------------------
 ; What's new in udas_1_00_b4          December 2, 2011
 ------------------------------------------------------
 1) Added "iug_load_wpr_rish_txt.pro" and "iug_crib_wpr_rish_txt" for LQ7 data.

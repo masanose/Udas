@@ -1,6 +1,6 @@
 ==================================================================
 ; UDAS plug-in software package for tdas_6_00
-;                                             December 1, 2011
+;                                                February 10, 2012
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -42,17 +42,17 @@ Load procedures for ERG-related data:
 
 <load>
 Load procedures for IUGONET data:
-- iug_load_blr_rish_txt ; Boundary layer radar data from RISH, Kyoto Univ
+- iug_load_blr_rish     ; Boundary layer radar data from RISH, Kyoto Univ
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
 - iug_load_gmag_serc    ; MAGDAS magnetometer data from SERC, Kyushu Univ
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
 - iug_load_iprt	        ; Iitate Planetary Ratio Telescope data from Tohoku Univ
-- iug_load_ltr_rish_txt ; Lower troposphere radar from RISH
+- iug_load_ltr_rish     ; Lower troposphere radar from RISH
 - iug_load_meteor_rish  ; Meteor wind radar data from RISH
 - iug_load_mf_rish      ; MF radar data from RISH
 - iug_load_mu           ; Middle Upper (MU) atmosphere radar data from RISH
-- iug_load_wpr_rish_txt ; Wind profiler radar (LQ7) from RISH
+- iug_load_wpr_rish     ; Wind profiler radar (LQ7) from RISH
 - iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
 - iug_load_gmag_nipr    ; Alias for "erg_load_gmag_nipr"
 - iug_load_sdfit        ; Alias for "erg_load_sdfit"
@@ -63,6 +63,10 @@ Example crib sheets for IUGONET/ERG data
 <gui>
 Procudures in this directory are used to customize TDAS-GUI for 
 IUGONET/ERG data
+
+<tools>
+Convenient tools.
+
 ------------------------------------------------------------
 
 
