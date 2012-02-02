@@ -14,7 +14,7 @@
 3) Modified "iug_load_gmag_???" for the magnetometer data.
 
 The default colors for the plot of the fluxgate magnetometer data 
-were changed to Red, Green, Blue.
+were changed from Black, Green, Brown to Blue, Green, Red.
 
 
 ------------------------------------------------------
