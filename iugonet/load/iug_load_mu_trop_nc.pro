@@ -25,6 +25,7 @@
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 13/11/2011.
 ; A. Shinbori, 26/12/2011.
+; A. Shinbori, 31/01/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -290,22 +291,31 @@ endfor
          
          ;Store data of wind velocity
          store_data,'iug_mu_trop_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_mu_trop_uwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-         options,'iug_mu_trop_uwnd', labels='MUR-trop [km]'
-         options, 'iug_mu_trop_uwnd','spec',1
-         tdegap, 'iug_mu_trop_uwnd',/overwrite
+         new_vars=tnames('iug_mu_trop_uwnd')
+         if new_vars[0] ne '' then begin         
+            options,'iug_mu_trop_uwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+            options,'iug_mu_trop_uwnd', labels='MUR-trop [km]'
+            options, 'iug_mu_trop_uwnd','spec',1
+            tdegap, 'iug_mu_trop_uwnd',/overwrite
+         endif
          
          store_data,'iug_mu_trop_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
-         options,'iug_mu_trop_vwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-         options,'iug_mu_trop_vwnd', labels='MUR-trop [km]'
-         options, 'iug_mu_trop_vwnd','spec',1
-         tdegap, 'iug_mu_trop_vwnd',/overwrite
+         new_vars=tnames('iug_mu_trop_vwnd')
+         if new_vars[0] ne '' then begin           
+            options,'iug_mu_trop_vwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+            options,'iug_mu_trop_vwnd', labels='MUR-trop [km]'
+            options, 'iug_mu_trop_vwnd','spec',1
+            tdegap, 'iug_mu_trop_vwnd',/overwrite
+         endif
          
          store_data,'iug_mu_trop_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
-         options,'iug_mu_trop_wwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
-         options,'iug_mu_trop_wwnd', labels='MUR-trop [km]'
-         options, 'iug_mu_trop_wwnd','spec',1
-         tdegap, 'iug_mu_trop_wwnd',/overwrite
+         new_vars=tnames('iug_mu_trop_wwnd')
+         if new_vars[0] ne '' then begin         
+            options,'iug_mu_trop_wwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
+            options,'iug_mu_trop_wwnd', labels='MUR-trop [km]'
+            options, 'iug_mu_trop_wwnd','spec',1
+            tdegap, 'iug_mu_trop_wwnd',/overwrite
+         endif
                  
          ;Store data of echo intensity, spectral width, and niose level:
          for l=0, n_elements(beam)-1 do begin
@@ -320,10 +330,13 @@ endfor
                  endfor
              endfor
              store_data,'iug_mu_trop_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
-             options,'iug_mu_trop_pwr'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-             options,'iug_mu_trop_pwr'+bname[l], labels='MUR-trop [km]'
-             options, 'iug_mu_trop_pwr'+bname[l],'spec',1
-             tdegap, 'iug_mu_trop_pwr'+bname[l],/overwrite
+             new_vars=tnames('iug_mu_trop_pwr*')
+             if new_vars[0] ne '' then begin
+                options,'iug_mu_trop_pwr'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+                options,'iug_mu_trop_pwr'+bname[l], labels='MUR-trop [km]'
+                options, 'iug_mu_trop_pwr'+bname[l],'spec',1
+                tdegap, 'iug_mu_trop_pwr'+bname[l],/overwrite
+             endif
              
              for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
@@ -331,35 +344,44 @@ endfor
                  endfor
              endfor
              store_data,'iug_mu_trop_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
-             options,'iug_mu_trop_wdt'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-             options,'iug_mu_trop_wdt'+bname[l], labels='MUR-trop [km]'
-             options, 'iug_mu_trop_wdt'+bname[l],'spec',1
-             tdegap, 'iug_mu_trop_wdt'+bname[l],/overwrite 
+             new_vars=tnames('iug_mu_trop_wdt*')
+             if new_vars[0] ne '' then begin
+                options,'iug_mu_trop_wdt'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+                options,'iug_mu_trop_wdt'+bname[l], labels='MUR-trop [km]'
+                options, 'iug_mu_trop_wdt'+bname[l],'spec',1
+                tdegap, 'iug_mu_trop_wdt'+bname[l],/overwrite 
+             endif
              for i=0, n_elements(mu_time)-1 do begin
                  for k=0, n_elements(range)-1 do begin
                      dpl2_mu[i,k]=dpl1[i,k,l]
                  endfor
              endfor             
              store_data,'iug_mu_trop_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
-             options,'iug_mu_trop_dpl'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
-             options,'iug_mu_trop_dpl'+bname[l], labels='MUR-trop [km]'
-             options, 'iug_mu_trop_dpl'+bname[l],'spec',1
-             tdegap, 'iug_mu_trop_dpl'+bname[l],/overwrite 
-             
+             new_vars=tnames('iug_mu_trop_dpl*')
+             if new_vars[0] ne '' then begin
+                options,'iug_mu_trop_dpl'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
+                options,'iug_mu_trop_dpl'+bname[l], labels='MUR-trop [km]'
+                options, 'iug_mu_trop_dpl'+bname[l],'spec',1
+                tdegap, 'iug_mu_trop_dpl'+bname[l],/overwrite 
+             endif
              for i=0, n_elements(mu_time)-1 do begin
                  pnoise2_mu[i]=pn1[i,l]
              endfor
              store_data,'iug_mu_trop_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
-             options,'iug_mu_trop_pn'+bname[l],ytitle='MUR-trop!Cpn'+bname[l]+'!C[dB]'
-             options,'iug_mu_trop_pn'+bname[l], labels='MUR-trop [km]'
-             tdegap, 'iug_mu_trop_pn'+bname[l],/overwrite                    
+             new_vars=tnames('iug_mu_trop_pn*')
+             if new_vars[0] ne '' then begin
+                options,'iug_mu_trop_pn'+bname[l],ytitle='MUR-trop!Cpn'+bname[l]+'!C[dB]'
+                options,'iug_mu_trop_pn'+bname[l], labels='MUR-trop [km]'
+                tdegap, 'iug_mu_trop_pn'+bname[l],/overwrite   
+             endif                 
          endfor    
       endif
-    
-   print,'**********************************************************************************
-   print,'Data loading is successful!!'
-   print,'**********************************************************************************
-   
+      new_vars=tnames('iug_mu_trop_*')
+      if new_vars[0] ne '' then begin    
+         print,'**********************************************************************************
+         print,'Data loading is successful!!'
+         print,'**********************************************************************************
+      endif
    endif
  endif
 

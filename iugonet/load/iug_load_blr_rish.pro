@@ -34,6 +34,7 @@
 ;MODIFICATIONS:
 ;  A. Shinbori, 03/23/2011.
 ;  A. Shinbori, 12/26/2011.
+;  A. Shinbori, 31/01/2012.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -290,30 +291,39 @@ for ii=0,h_max-1 do begin
              if parameters[iii] eq 'pwr4' then o=1
              if parameters[iii] eq 'pwr5' then o=1
  
-             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
+             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))            
              store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
-             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$
-                     ztitle=parameters[iii]+'!C['+unit_all[o]+']'
-             options,'iug_blr_'+site_code[ii]+'_'+parameters[iii], labels='BLR-'+site_code[ii]+' [km]'
-             ; add options
-             options, 'iug_blr_'+site_code[ii]+'_'+parameters[iii], 'spec', 1    
+             new_vars=tnames('iug_blr_'+site_code[ii]+'_'+parameters[iii])
+             if new_vars[0] ne '' then begin 
+                options,'iug_blr_'+site_code[ii]+'_'+parameters[iii],ytitle='BLR-'+site_code[ii]+'!CHeight!C[km]',$
+                        ztitle=parameters[iii]+'!C['+unit_all[o]+']'
+                options,'iug_blr_'+site_code[ii]+'_'+parameters[iii], labels='BLR-'+site_code[ii]+' [km]'
+                ; add options
+                options, 'iug_blr_'+site_code[ii]+'_'+parameters[iii], 'spec', 1   
+             endif 
           endif
 
           ;Clear time and data buffer:
           blr_data = 0
           blr_time = 0
-          
-          ; add tdegap
-         tdegap, 'iug_blr_'+site_code[ii]+'_'+parameters[iii],/overwrite
+
+          new_vars=tnames('iug_blr_'+site_code[ii]+'_'+parameters[iii])
+          if new_vars[0] ne '' then begin          
+            ;add tdegap
+             tdegap, 'iug_blr_'+site_code[ii]+'_'+parameters[iii],/overwrite
+          endif
        endif
        jj=n_elements(local_paths)
    endfor
        jj=n_elements(local_paths)
 endfor 
-   
-print,'*****************************
-print,'Data loading is successful!!'
-print,'*****************************
+
+new_vars=tnames('iug_blr_*')
+if new_vars[0] ne '' then begin    
+   print,'*****************************
+   print,'Data loading is successful!!'
+   print,'*****************************
+endif
 
 ;******************************
 ;print of acknowledgement:

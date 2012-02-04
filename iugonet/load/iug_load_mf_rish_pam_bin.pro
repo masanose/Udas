@@ -416,84 +416,147 @@ if(downloadonly eq 0) then begin
 ;******************************
 ;Store data in TPLOT variables:
 ;******************************
-   if epoch_time ne 0 then begin
+   if pam_time[0] ne 0 then begin
    
 ;Store data of pameungpeuk wind data:
 ;====================================
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))     
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_uwnd')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uwnd!C[m/s]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_uwnd')
+      if new_vars[0] ne '' then begin      
+         options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='vwnd!C[m/s]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='wwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_wwnd')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='wwnd!C[m/s]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_uncorrected_uwnd',data={x:pam_time, y:uncorrected_zon_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uncorrected_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uncorrected uwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_uncorrected_uwnd')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_uncorrected_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected uwnd!C[m/s]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_uncorrected_vwnd',data={x:pam_time, y:uncorrected_mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uncorrected_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uncorrected vwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_uncorrected_vwnd')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_uncorrected_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected vwnd!C[m/s]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_fading_time',data={x:pam_time, y:corrected_fading_time, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_fading_time',ytitle='MF-pam!Cheight!C[m]',ztitle='fading time!C[sec]' 
+      new_vars=tnames('iug_mf_'+site_code[0]+'_fading_time')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_fading_time',ytitle='MF-pam!Cheight!C[km]',ztitle='fading time!C[sec]' 
+      endif
       store_data,'iug_mf_'+site_code[0]+'_uncorrected_fading_time',data={x:pam_time, y:uncorrected_fading_time, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uncorrected_fading_time',ytitle='MF-pam!Cheight!C[m]',ztitle='uncorrected fading time!C[sec]' 
+      new_vars=tnames('iug_mf_'+site_code[0]+'_uncorrected_fading_time')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_uncorrected_fading_time',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected fading time!C[sec]' 
+      endif
       store_data,'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',data={x:pam_time, y:normalized_time_discrepacy, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',ytitle='MF-pam!Cheight!C[m]',ztitle='normalized time discrepacy!C[%]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_normalized_time_discrepacy')
+      if new_vars[0] ne '' then begin      
+         options,'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',ytitle='MF-pam!Cheight!C[km]',ztitle='normalized time discrepacy!C[%]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',data={x:pam_time, y:ellipse_major_axis_length, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',ytitle='MF-pam!Cheight!C[m]',ztitle='ellipse major axis length'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_ellipse_major_axis_length')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse major axis length'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',data={x:pam_time, y:ellipse_axial_ratio, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',ytitle='MF-pam!Cheight!C[m]',ztitle='ellipse axial ratio'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_ellipse_axial_ratio')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse axial ratio'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_ellipse_orientation',data={x:pam_time, y:ellipse_orientation, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_ellipse_orientation',ytitle='MF-pam!Cheight!C[m]',ztitle='ellipse orientation!C[deg]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_ellipse_orientation')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_ellipse_orientation',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse orientation!C[deg]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_receiver_snr1',data={x:pam_time, y:receiver_snr1, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_receiver_snr1',ytitle='MF-pam!Cheight!C[m]',ztitle='receiver snr1!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_receiver_snr1')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_receiver_snr1',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr1!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_receiver_snr2',data={x:pam_time, y:receiver_snr2, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_receiver_snr2',ytitle='MF-pam!Cheight!C[m]',ztitle='receiver snr2!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_receiver_snr2')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_receiver_snr2',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr2!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_receiver_snr3',data={x:pam_time, y:receiver_snr3, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_receiver_snr3',ytitle='MF-pam!Cheight!C[m]',ztitle='receiver snr3!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_receiver_snr3')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_receiver_snr3',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr3!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_cross_channel_nsr1',data={x:pam_time, y:cross_channel_nsr1, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_cross_channel_nsr1',ytitle='MF-pam!Cheight!C[m]',ztitle='cross channel nsr1!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_cross_channel_nsr1')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_cross_channel_nsr1',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr1!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_cross_channel_nsr2',data={x:pam_time, y:cross_channel_nsr2, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_cross_channel_nsr2',ytitle='MF-pam!Cheight!C[m]',ztitle='cross channel nsr2!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_cross_channel_nsr2')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_cross_channel_nsr2',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr2!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_cross_channel_nsr3',data={x:pam_time, y:cross_channel_nsr3, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_cross_channel_nsr3',ytitle='MF-pam!Cheight!C[m]',ztitle='cross channel nsr3!C[dB]' 
+      new_vars=tnames('iug_mf_'+site_code[0]+'_cross_channel_nsr3')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_cross_channel_nsr3',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr3!C[dB]' 
+      endif
       store_data,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',data={x:pam_time, y:sea_scatter_relative_power1, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',ytitle='MF-pam!Cheight!C[m]',ztitle='sea scatter relative power1!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_sea_scatter_relative_power1')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power1!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',data={x:pam_time, y:sea_scatter_relative_power2, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',ytitle='MF-pam!Cheight!C[m]',ztitle='sea scatter relative power2!C[dB]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_sea_scatter_relative_power2')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power2!C[dB]'
+      endif
       store_data,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',data={x:pam_time, y:sea_scatter_relative_power3, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',ytitle='MF-pam!Cheight!C[m]',ztitle='sea scatter relative power3!C[dB]'  
-                 
+      new_vars=tnames('iug_mf_'+site_code[0]+'_sea_scatter_relative_power3')
+      if new_vars[0] ne '' then begin
+         options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power3!C[dB]'  
+      endif     
+            
    ; add options
-    options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd',$
-              'iug_mf_'+site_code[0]+'_uncorrected_uwnd','iug_mf_'+site_code[0]+'_uncorrected_vwnd', $
-              'iug_mf_'+site_code[0]+'_fading_time','iug_mf_'+site_code[0]+'_uncorrected_fading_time', $
-              'iug_mf_'+site_code[0]+'_normalized_time_discrepacy','iug_mf_'+site_code[0]+'_ellipse_major_axis_length',$
-              'iug_mf_'+site_code[0]+'_ellipse_axial_ratio','iug_mf_'+site_code[0]+'_ellipse_orientation',$
-              'iug_mf_'+site_code[0]+'_receiver_snr1','iug_mf_'+site_code[0]+'_receiver_snr2',$
-              'iug_mf_'+site_code[0]+'_receiver_snr3','iug_mf_'+site_code[0]+'_cross_channel_nsr1',$
-              'iug_mf_'+site_code[0]+'_cross_channel_nsr2','iug_mf_'+site_code[0]+'_cross_channel_nsr3',$
-              'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1','iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',$
-              'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3'], 'spec', 1
+    new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+    if new_vars[0] ne '' then begin
+       options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd',$
+                 'iug_mf_'+site_code[0]+'_uncorrected_uwnd','iug_mf_'+site_code[0]+'_uncorrected_vwnd', $
+                 'iug_mf_'+site_code[0]+'_fading_time','iug_mf_'+site_code[0]+'_uncorrected_fading_time', $
+                 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy','iug_mf_'+site_code[0]+'_ellipse_major_axis_length',$
+                 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio','iug_mf_'+site_code[0]+'_ellipse_orientation',$
+                 'iug_mf_'+site_code[0]+'_receiver_snr1','iug_mf_'+site_code[0]+'_receiver_snr2',$
+                  'iug_mf_'+site_code[0]+'_receiver_snr3','iug_mf_'+site_code[0]+'_cross_channel_nsr1',$
+                 'iug_mf_'+site_code[0]+'_cross_channel_nsr2','iug_mf_'+site_code[0]+'_cross_channel_nsr3',$
+                 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1','iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',$
+                 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3'], 'spec', 1
   
     ; add options of setting lanels
-    options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_fading_time', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_uncorrected_fading_time', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_ellipse_major_axis_length', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_receiver_snr1', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_receiver_snr2', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_receiver_snr3', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_cross_channel_nsr1', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_cross_channel_nsr2', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_cross_channel_nsr3', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2', labels='MFR pam'
-    options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_fading_time', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_uncorrected_fading_time', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_ellipse_major_axis_length', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_receiver_snr1', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_receiver_snr2', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_receiver_snr3', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_cross_channel_nsr1', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_cross_channel_nsr2', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_cross_channel_nsr3', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2', labels='MFR pam'
+       options, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3', labels='MFR pam'
+   endif
    endif
 
  ; clear data and time buffer
@@ -526,43 +589,47 @@ if(downloadonly eq 0) then begin
    low_v=-20000
    high_v=20000
    
-   tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite  
-   tclip, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd',low_en,high_en,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd',low_en,high_en,/overwrite
-  ; tclip, 'iug_mf_'+site_code[0]+'_fading_time',-200,200,/overwrite 
-  ; tclip, 'iug_mf_'+site_code[0]+'_uncorrected_fading_time',-200,200,/overwrite  
-  ; tclip, 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',-200,200,/overwrite
-  ; tclip, 'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',-200,1200,/overwrite  
- ;  tclip, 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',0,10,/overwrite  
-  ; tclip, 'iug_mf_'+site_code[0]+'_ellipse_orientation',-90,90,/overwrite  
+   new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+   if new_vars[0] ne '' then begin
+      tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
+      tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
+      tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite  
+      tclip, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd',low_en,high_en,/overwrite
+      tclip, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd',low_en,high_en,/overwrite
+   endif
               
    ;add tdegap
    ;Definition of time interval to enter NaN:
    DT=1800
-   
-   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_fading_time',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_fading_time',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_ellipse_orientation',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr1',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr2',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr3',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr1',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr2',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr3',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',dt=DT,/overwrite
-   
+   if new_vars[0] ne '' then begin   
+      tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_fading_time',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_fading_time',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_ellipse_orientation',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr1',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr2',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr3',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr1',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr2',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr3',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',dt=DT,/overwrite
+      tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',dt=DT,/overwrite
+   endif
+endif
+
+new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+if new_vars[0] ne '' then begin 
+   print,'**********************************************************************************
+   print,'Data loading is successful!!'
+   print,'**********************************************************************************
 endif
 
 ;******************************

@@ -33,6 +33,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 26/12/2011.
+; A. Shinbori. 31/01/2012.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -253,26 +254,35 @@ for iii=0,n_elements(parameters)-1 do begin
  
              dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
              store_data,'iug_wpr_'+site_code[0]+'_'+parameters[iii],data={x:wpr_time, y:wpr_data, v:altitude},dlimit=dlimit
-             options,'iug_wpr_'+site_code[0]+'_'+parameters[iii],ytitle='WPR-'+site_code[0]+'!CHeight!C[km]',$
-                     ztitle=parameters[iii]+'!C['+unit_all[o]+']'
-             options,'iug_wpr_'+site_code[0]+'_'+parameters[iii], labels='WPR-'+site_code[0]+' [km]'
-             ; add options
-             options, 'iug_wpr_'+site_code[0]+'_'+parameters[iii], 'spec', 1    
+             new_vars=tnames('iug_wpr_'+site_code[0]+'_'+parameters[iii])
+             if new_vars[0] ne '' then begin                
+                options,'iug_wpr_'+site_code[0]+'_'+parameters[iii],ytitle='WPR-'+site_code[0]+'!CHeight!C[km]',$
+                        ztitle=parameters[iii]+'!C['+unit_all[o]+']'
+                options,'iug_wpr_'+site_code[0]+'_'+parameters[iii], labels='WPR-'+site_code[0]+' [km]'
+               ; add options
+                options, 'iug_wpr_'+site_code[0]+'_'+parameters[iii], 'spec', 1    
+             endif
           endif
 
           ;Clear time and data buffer:
           wpr_data = 0
           wpr_time = 0
-          
-          ; add tdegap
-         tdegap, 'iug_wpr_'+site_code[0]+'_'+parameters[iii],/overwrite
+
+          new_vars=tnames('iug_wpr_'+site_code[0]+'_'+parameters[iii])
+          if new_vars[0] ne '' then begin             
+             ; add tdegap
+             tdegap, 'iug_wpr_'+site_code[0]+'_'+parameters[iii],/overwrite
+          endif
    endif
    jj=n_elements(local_paths)
 endfor 
-   
-print,'*****************************
-print,'Data loading is successful!!'
-print,'*****************************
+
+new_vars=tnames('iug_wpr_*')
+if new_vars[0] ne '' then begin     
+   print,'*****************************
+   print,'Data loading is successful!!'
+   print,'*****************************
+endif
 
 ;******************************
 ;print of acknowledgement:
