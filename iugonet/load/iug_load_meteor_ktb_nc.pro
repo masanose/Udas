@@ -132,8 +132,8 @@ kk=0
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/ver1_1_1/'+length+'/'+site_data_dir[kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/ver1_1_1/'+site_data_dir[kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/ktb/meteor/nc/ver1_1_2/'+length+'/'+site_data_dir[kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/kototabang/nc/ver1_1_2/'+site_data_dir[kk]
 
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
