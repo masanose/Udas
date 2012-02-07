@@ -36,18 +36,19 @@ function gui_load_acknowledgement, datatype = datatype, par_names = par_names
   if (not keyword_set(par_names)) then par_names='iug_mf_pam_uwnd'
 
 ;Output of the data acknowledgement window for each instrument:
-  if (datatype eq '210mm*') or (datatype eq 'NIPR_mag*') then begin
+  if (datatype eq '210mm#') or (datatype eq 'NIPR_mag#') then begin
 
      get_data, par_names[0], dlimit=str
-     Result=acknowledgement_message(str.cdf.gatt.text, /noname, /center, title='Rules of the Road for IUGONET Data Use:')
+
+     Result=acknowledgement_message(str.cdf.gatt.text, /noname, /center, title='Acknowledgement of IUGONET Data Use:')
 
   endif else if datatype eq 'ionosphere' then begin
      get_data, par_names[0], dlimit=str
-     Result=acknowledgement_message(str.cdf.gatt.rules_of_use, /noname, /center, title='Rules of the Road for IUGONET Data Use:')
+     Result=acknowledgement_message(str.cdf.gatt.rules_of_use, /noname, /center, title='Acknowledgement of IUGONET Data Use:')
   endif else begin  
 
      get_data, par_names[0], dlimit=str
-     Result=acknowledgement_message(str.data_att.acknowledgment, /noname, title='Rules of the Road for IUGONET Data Use:') 
+     Result=acknowledgement_message(str.data_att.acknowledgment, /noname, title='Acknowledgement of IUGONET Data Use:') 
      
   endelse
   
