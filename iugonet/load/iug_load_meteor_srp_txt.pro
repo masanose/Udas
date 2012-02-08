@@ -35,7 +35,9 @@
 ; A. Shinbori, 11/07/2011.
 ; A. Shinbori, 06/10/2011.
 ; A. Shinbori, 27/12/2011.
-;
+; A. Shinbori, 31/01/2012.
+; A. Shinbori, 07/02/2012.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -182,16 +184,9 @@ kk=0
        zon_thermal_data = fltarr(1,arr_num)
        mer_thermal_data = fltarr(1,arr_num)
        meteor_num_data = fltarr(1,arr_num)
-       data= fltarr(5)
        
        time = 0
-       time_val = 0
-       site_time=0
-       zon_wind=0
-       mer_wind=0
-       zon_thermal=0
-       mer_thermal=0
-       meteor_num=0 
+       time_val = -10
 
       ;Loop on files: 
       ;==============
@@ -230,13 +225,7 @@ kk=0
                 
               ;Get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
               ;=======================================================
-                data1 = strmid(s,12,55)
-                data2 = strsplit(data1, ' ', /extract)
-                data(0) = float(data2[0])
-                data(1) = float(data2[1])
-                data(2) = float(data2[2])
-                data(3) = float(data2[3])
-                data(4) = float(data2[4])
+                data =  float(strsplit(strmid(s,12,55), ' ', /extract))
                 
               ;====Convert time from local time to unix time  
                 time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
@@ -299,6 +288,26 @@ kk=0
               append_array, mer_thermal, mer_thermal_data
               append_array, meteor_num, meteor_num_data
 
+              ;
+              ;Append data of time and wind data of each file:
+              ;===============================================
+              append_array, srp_time, site_time
+              append_array, zon_wind2, zon_wind
+              append_array, mer_wind2, mer_wind
+              append_array, zon_thermal2, zon_thermal
+              append_array, mer_thermal2, mer_thermal
+              append_array, meteor_num2, meteor_num
+
+              ;
+              ;Initiarizatin of old parameters (time and wind data):
+              ;=====================================================                            
+               site_time=0
+               zon_wind=0
+               mer_wind=0
+               zon_thermal=0
+               mer_thermal=0
+               meteor_num=0
+
        endfor
           
        for g=0,arr_num-1 do begin         
@@ -311,61 +320,86 @@ kk=0
  ;Store data of meteor wind data:
  ;===============================
 
-       if site_time[0] ne 0 then begin
+       if srp_time[0] ne 0 then begin
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-          store_data,'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
-          options,'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-          store_data,'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
-          options,'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-          store_data,'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
-          options,'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
-          store_data,'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
-          options,'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
-          store_data,'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
-          options,'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='mwnum'
-
-          ; add options
-          options, ['iug_meteor_srp_uwnd_'+site_data_lastmane[kk],'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],$
-                    'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],$
-                    'iug_meteor_srp_mwnum_'+site_data_lastmane[kk]], 'spec', 1
+          store_data,'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],data={x:srp_time, y:zon_wind2, v:height},dlimit=dlimit
+          new_vars=tnames('iug_meteor_srp_uwnd_'+site_data_lastmane[kk])
+          if new_vars[0] ne '' then begin           
+             options,'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+          endif
+          store_data,'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],data={x:srp_time, y:mer_wind2, v:height},dlimit=dlimit
+          new_vars=tnames('iug_meteor_srp_vwnd_'+site_data_lastmane[kk])
+          if new_vars[0] ne '' then begin
+             options,'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+          endif
+          
+          store_data,'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],data={x:srp_time, y:zon_thermal2, v:height},dlimit=dlimit
+          new_vars=tnames('iug_meteor_srp_uwndsig_'+site_data_lastmane[kk])
+          if new_vars[0] ne '' then begin
+             options,'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+          endif
+          
+          store_data,'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],data={x:srp_time, y:mer_thermal2, v:height},dlimit=dlimit
+          new_vars=tnames('iug_meteor_srp_vwndsig_'+site_data_lastmane[kk])
+          if new_vars[0] ne '' then begin
+             options,'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
+          endif
+          
+          store_data,'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],data={x:srp_time, y:meteor_num2, v:height},dlimit=dlimit
+          new_vars=tnames('iug_meteor_srp_mwnum_'+site_data_lastmane[kk])
+          if new_vars[0] ne '' then begin
+             options,'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],ytitle='MW-srp!CHeight!C[km]',ztitle='mwnum'
+          endif
+          
+          new_vars=tnames('iug_meteor_srp_*')
+          if new_vars[0] ne '' then begin
+           ; add options
+             options, ['iug_meteor_srp_uwnd_'+site_data_lastmane[kk],'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],$
+                       'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],$
+                       'iug_meteor_srp_mwnum_'+site_data_lastmane[kk]], 'spec', 1
 
           ; add options of setting labels
-          options,'iug_meteor_srp_uwnd_'+site_data_lastmane[kk], labels='MW srp'
-          options,'iug_meteor_srp_vwnd_'+site_data_lastmane[kk], labels='MW srp'
-          options,'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk], labels='MW srp'
-          options,'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk], labels='MW srp'
-          options,'iug_meteor_srp_mwnum_'+site_data_lastmane[kk], labels='MW srp'
- 
+             options,'iug_meteor_srp_uwnd_'+site_data_lastmane[kk], labels='MW srp'
+             options,'iug_meteor_srp_vwnd_'+site_data_lastmane[kk], labels='MW srp'
+             options,'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk], labels='MW srp'
+             options,'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk], labels='MW srp'
+             options,'iug_meteor_srp_mwnum_'+site_data_lastmane[kk], labels='MW srp'
+          endif
        endif 
        ;Clear time and data buffer:
-       site_time=0
-       zon_wind=0
-       mer_wind=0
-       zon_thermal=0
-       mer_thermal=0
-       meteor_num=0
+       srp_time=0
+       zon_wind2=0
+       mer_wind2=0
+       zon_thermal2=0
+       mer_thermal2=0
+       meteor_num2=0
+
+       new_vars=tnames('iug_meteor_srp_*')
+       if new_vars[0] ne '' then begin       
+        ; add tdegap
+          tdegap, 'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],/overwrite
+          tdegap, 'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],/overwrite
+          tdegap, 'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],/overwrite
+          tdegap, 'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],/overwrite
+          tdegap, 'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],/overwrite
        
-       ; add tdegap
-       tdegap, 'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],/overwrite
-       tdegap, 'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],/overwrite
-       tdegap, 'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],/overwrite
-       tdegap, 'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],/overwrite
-       tdegap, 'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],/overwrite
-       
-       ; add tclip
-       tclip, 'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],-200,200,/overwrite
-       tclip, 'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],-200,200,/overwrite
-       tclip, 'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],0,400,/overwrite
-       tclip, 'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],0,400,/overwrite
-      ; tclip, 'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],,0,800,/overwrite
-       
+        ; add tclip
+          tclip, 'iug_meteor_srp_uwnd_'+site_data_lastmane[kk],-200,200,/overwrite
+          tclip, 'iug_meteor_srp_vwnd_'+site_data_lastmane[kk],-200,200,/overwrite
+          tclip, 'iug_meteor_srp_uwndsig_'+site_data_lastmane[kk],0,400,/overwrite
+          tclip, 'iug_meteor_srp_vwndsig_'+site_data_lastmane[kk],0,400,/overwrite
+        ; tclip, 'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],,0,800,/overwrite
+       endif 
    endif 
    jj=n_elements(local_paths)
 endfor 
 
-print,'******************************
-print, 'Data loading is successful!!'
-print,'******************************
+new_vars=tnames('iug_meteor_srp_*')
+if new_vars[0] ne '' then begin  
+   print,'******************************
+   print, 'Data loading is successful!!'
+   print,'******************************
+endif
 
 ;******************************
 ;print of acknowledgement:

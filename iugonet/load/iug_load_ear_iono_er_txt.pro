@@ -39,6 +39,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 06/10/2011.
+; A. Shinbori, 31/01/2012.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -249,29 +250,38 @@ for ii=0,n_elements(parameters)-1 do begin
          if strmid(parameters2[iii],0,2) eq 'pw' then o=1
          if strmid(parameters2[iii],0,2) eq 'pn' then o=1
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
-         store_data,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-         options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
-         options,'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI E-region [km]'
+         store_data,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+         new_vars=tnames('iug_ear_fai'+parameters[ii]+'_'+parameters2[iii])
+         if new_vars[0] ne '' then begin
+            options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
+            options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI E-region [km]'
          
-         ;Add options
-         if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
+           ; Add options
+            if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
+         endif       
       endif 
      
      ;Clear time and data buffer:
       ear_time=0
       ear_data=0
      
-     ;Add tdegap
-      tdegap, 'iug_ear_fai_'+parameters[ii]+'_'+parameters2[iii],/overwrite
+      new_vars=tnames('iug_ear_fai*')
+      if new_vars[0] ne '' then begin    
+       ; Add tdegap
+         tdegap, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],/overwrite
+      endif
    endif
    jj=n_elements(local_paths)
   endfor
    jj=n_elements(local_paths)
 endfor
   
-print,'*****************************
-print,'Data loading is successful!!'
-print,'*****************************
+new_vars=tnames('iug_ear_fai*')
+if new_vars[0] ne '' then begin  
+   print,'*****************************
+   print,'Data loading is successful!!'
+   print,'*****************************
+endif
 
 ;******************************
 ;print of acknowledgement:

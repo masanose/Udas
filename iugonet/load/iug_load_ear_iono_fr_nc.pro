@@ -37,6 +37,7 @@
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 09/07/2011.
 ; A. Shinbori, 01/12/2011.
+; A. Shinbori, 31/01/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -304,45 +305,60 @@ for ii=0,n_elements(parameters)-1 do begin
                endfor
               ;print, pwr2_ear
                store_data,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
-               options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-               options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], labels='EAR-iono [km]'
-               options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],'spec',1
-               tdegap, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], /overwrite
-             
+               new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pwr'+bname[l])
+               if new_vars[0] ne '' then begin                 
+                  options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+                  options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], labels='EAR-iono [km]'
+                  options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],'spec',1
+                  tdegap, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], /overwrite
+               endif
+               
                for i=0, n_elements(ear_time)-1 do begin
                    for k=0, n_elements(range)-1 do begin
                        wdt2_ear[i,k]=wdt1[i,k,l]
                    endfor
                endfor
                store_data,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
-               options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-               options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], labels='EAR-iono [km]'
-               options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],'spec',1
-               tdegap, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], /overwrite
-             
+               new_vars=tnames('iug_ear_fai'+parameters[ii]+'_wdt'+bname[l])
+               if new_vars[0] ne '' then begin 
+                  options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+                  options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], labels='EAR-iono [km]'
+                  options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],'spec',1
+                  tdegap, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], /overwrite
+               endif
+               
                for i=0, n_elements(ear_time)-1 do begin
                    for k=0, n_elements(range)-1 do begin
                        dpl2_ear[i,k]=dpl1[i,k,l]
                    endfor
                endfor
                store_data,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
-               options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
-               options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], labels='EAR-iono [km]'
-               options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
-               tdegap, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
+               new_vars=tnames('iug_ear_fai'+parameters[ii]+'_dpl'+bname[l])
+               if new_vars[0] ne '' then begin 
+                  options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
+                  options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], labels='EAR-iono [km]'
+                  options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
+                  tdegap, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
+               endif
+               
                for i=0, n_elements(time)-1 do begin
                    pnoise2_ear[i]=pn1[i,l]
                end
                store_data,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
-               options,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
-               tdegap, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], /overwrite          
+               new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pn'+bname[l])
+               if new_vars[0] ne '' then begin 
+                  options,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
+                  tdegap, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], /overwrite    
+               endif      
            endfor
         endif
-   
-        print,'*****************************
-        print,'Data loading is successful!!'
-        print,'*****************************
-   
+
+        new_vars=tnames('iug_ear_fai*')
+        if new_vars[0] ne '' then begin    
+           print,'*****************************
+           print,'Data loading is successful!!'
+           print,'*****************************
+        endif
      endif
   endif
  ;Clear time and data buffer:

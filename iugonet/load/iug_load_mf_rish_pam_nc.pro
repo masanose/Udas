@@ -29,6 +29,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 03/24/2011.
 ; A. Shinbori, 27/12/2011.
+; A. Shinbori, 31/10/2012.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -65,7 +66,7 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 ;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and keep the DATA USE POLICY '$
+acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and follow the DATA USE POLICY '$
 +'(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html '$ 
 +'The distribution of MF radar data has been partly supported by the IUGONET (Inter-university Upper '$
 + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
@@ -208,50 +209,67 @@ if(downloadonly eq 0) then begin
 ;====================================
     if(pam_time[0] ne 0) then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
+      
       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='uwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_uwnd')
+      if new_vars[0] ne '' then begin       
+         options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uwnd!C[m/s]'
+      endif
+
       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='vwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_vwnd')
+      if new_vars[0] ne '' then begin 
+      options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='vwnd!C[m/s]'
+      endif
+      
       store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
-      options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[m]',ztitle='wwnd!C[m/s]'
+      new_vars=tnames('iug_mf_'+site_code[0]+'_wwnd')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='wwnd!C[m/s]'
+      endif
+      
+      new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+      if new_vars[0] ne '' then begin 
+        ;add options
+         options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd'], 'spec', 1
   
+       ;add options of setting lanels
+         options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR-pam [km]'
+         options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR-pam [km]'
+         options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR-pam [km]'
 
-    ; add options
-    options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd'], 'spec', 1
-  
-    ; add options of setting lanels
-    options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR-pam [km]'
-    options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR-pam [km]'
-    options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR-pam [km]'
-
- ; add tclip
- ;Definition of the upper and lower limit of wind data:
-   low_en=-100
-   high_en=100
-   low_v=-20
-   high_v=20
+        ;add tclip
+        ;Definition of the upper and lower limit of wind data:
+         low_en=-100
+         high_en=100
+         low_v=-20
+         high_v=20
    
-   tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
-   tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite   
+         tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
+         tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
+         tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite   
    
- ; add tdegap
- ;Definition of time interval to enter NaN:
-   DT=1800
-   tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
-   tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
-  endif 
- ; clear data and time buffer
-  pam_time=0
-  zon_wind=0
-  mer_wind=0
-  ver_wind=0
+        ;add tdegap
+        ;Definition of time interval to enter NaN:
+         DT=1800
+         tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
+         tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
+         tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
+      endif
+   endif 
+  ;clear data and time buffer
+   pam_time=0
+   zon_wind=0
+   mer_wind=0
+   ver_wind=0
 endif
 
-print,'******************************
-print, 'Data loading is successful!!'
-print,'******************************
+new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+if new_vars[0] ne '' then begin 
+   print,'******************************
+   print, 'Data loading is successful!!'
+   print,'******************************
+endif
 
 ;******************************
 ;print of acknowledgement:
@@ -260,7 +278,7 @@ print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
 print, 'Note: If you would like to use following data for scientific purpose,
-print, 'please read and keep the DATA USE POLICY'
+print, 'please read and follow the DATA USE POLICY'
 print, '(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html' 
 print, 'The distribution of MF radar data has been partly supported by the IUGONET'
 print, '(Inter-university Upper atmosphere Global Observation NETwork) project'

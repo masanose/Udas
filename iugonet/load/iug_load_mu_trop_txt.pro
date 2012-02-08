@@ -32,6 +32,7 @@
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 13/11/2011.
 ; A. Shinbori, 26/12/2011.
+; A. Shinbori, 31/01/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -216,26 +217,33 @@ for ii=0,n_elements(parameters)-1 do begin
           if strmid(parameters[ii],0,2) eq 'pw' then o=1
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
           store_data,'iug_mu_trop_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-          options,'iug_mu_trop_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
-          options,'iug_mu_trop_'+parameters[ii], labels='MU-trop [km]'
+          new_vars=tnames('iug_mu_trop_*')
+          if new_vars[0] ne '' then begin          
+             options,'iug_mu_trop_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
+             options,'iug_mu_trop_'+parameters[ii], labels='MU-trop [km]'
+          endif
        endif   
-
+   
+       new_vars=tnames('iug_mu_trop_*')
        ; Add options
-       options, 'iug_mu_trop_'+parameters[ii], 'spec', 1
+       if new_vars[0] ne '' then options, 'iug_mu_trop_'+parameters[ii], 'spec', 1
     
       ;Clear time and data buffer:
        mu_time=0
        mu_data=0
        
       ;Add tdegap
-       tdegap, 'iug_mu_trop_'+parameters[ii],/overwrite
+       if new_vars[0] ne '' then tdegap, 'iug_mu_trop_'+parameters[ii],/overwrite
    endif
   jj=n_elements(local_paths)
 endfor
 
-print,'*****************************
-print,'Data loading is successful!!'
-print,'*****************************
+new_vars=tnames('iug_mu_trop_*')
+if new_vars[0] ne '' then begin
+   print,'*****************************
+   print,'Data loading is successful!!'
+   print,'*****************************
+endif
 ;******************************
 ;print of acknowledgement:
 ;******************************

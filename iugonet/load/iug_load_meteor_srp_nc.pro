@@ -35,6 +35,7 @@
 ; A. Shinbori, 11/07/2011.
 ; A. Shinbori, 06/10/2011.
 ; A. Shinbori, 27/12/2011.
+; A. Shinbori, 31/01/2012.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -129,8 +130,8 @@ kk=0
     ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
-       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/nc/ver1_0_1/'+length+'/'+site_data_dir[kk]
-       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/ver1_0_1/'+site_data_dir[kk]
+       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/nc/ver1_0_2/'+length+'/'+site_data_dir[kk]
+       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/ver1_0_2/'+site_data_dir[kk]
     
     ;Get files and local paths, and concatenate local paths:
     ;=======================================================
@@ -282,28 +283,48 @@ kk=0
   if site_time[0] ne 0 then begin
      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
      store_data,'iug_meteor_srp_uwnd_'+parameters[kk],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_uwnd_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+     new_vars=tnames('iug_meteor_srp_uwnd_'+parameters[kk])
+     if new_vars[0] ne '' then begin   
+        options,'iug_meteor_srp_uwnd_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+     endif
      store_data,'iug_meteor_srp_vwnd_'+parameters[kk],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_vwnd_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+     new_vars=tnames('iug_meteor_srp_vwnd_'+parameters[kk])
+     if new_vars[0] ne '' then begin   
+        options,'iug_meteor_srp_vwnd_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+     endif
+     
      store_data,'iug_meteor_srp_uwndsig_'+parameters[kk],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_uwndsig_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+     new_vars=tnames('iug_meteor_srp_uwndsig_'+parameters[kk])
+     if new_vars[0] ne '' then begin   
+        options,'iug_meteor_srp_uwndsig_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+     endif
+     
      store_data,'iug_meteor_srp_vwndsig_'+parameters[kk],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_vwndsig_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
+     new_vars=tnames('iug_meteor_srp_vwndsig_'+parameters[kk])
+     if new_vars[0] ne '' then begin   
+        options,'iug_meteor_srp_vwndsig_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
+     endif
+     
      store_data,'iug_meteor_srp_mwnum_'+parameters[kk],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
-     options,'iug_meteor_srp_mwnum_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='mwnum'
+     new_vars=tnames('iug_meteor_srp_mwnum_'+parameters[kk])
+     if new_vars[0] ne '' then begin   
+        options,'iug_meteor_srp_mwnum_'+parameters[kk],ytitle='MWR-srp!CHeight!C[km]',ztitle='mwnum'
+     endif
 
+     new_vars=tnames('iug_meteor_srp_*')
+     if new_vars[0] ne '' then begin   
+     ;add options
+        options, ['iug_meteor_srp_uwnd_'+parameters[kk],'iug_meteor_srp_vwnd_'+parameters[kk],$
+                  'iug_meteor_srp_uwndsig_'+parameters[kk],'iug_meteor_srp_vwndsig_'+parameters[kk],$
+                  'iug_meteor_srp_mwnum_'+parameters[kk]], 'spec', 1
 
-     ; add options
-     options, ['iug_meteor_srp_uwnd_'+parameters[kk],'iug_meteor_srp_vwnd_'+parameters[kk],$
-               'iug_meteor_srp_uwndsig_'+parameters[kk],'iug_meteor_srp_vwndsig_'+parameters[kk],$
-               'iug_meteor_srp_mwnum_'+parameters[kk]], 'spec', 1
-
-     ; add options of setting labels
-     options,'iug_meteor_srp_uwnd_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
-     options,'iug_meteor_srp_vwnd_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
-     options,'iug_meteor_srp_uwndsig_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
-     options,'iug_meteor_srp_vwndsig_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
-     options,'iug_meteor_srp_mwnum_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
+      ;add options of setting labels
+        options,'iug_meteor_srp_uwnd_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
+        options,'iug_meteor_srp_vwnd_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
+        options,'iug_meteor_srp_uwndsig_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
+        options,'iug_meteor_srp_vwndsig_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
+        options,'iug_meteor_srp_mwnum_'+parameters[kk], labels='MW srp'+parameters[kk]+' [km]'
+     endif
    endif
   
   ;Clear time and data buffer:
@@ -313,35 +334,39 @@ kk=0
    zon_thermal=0
    mer_thermal=0
    meteor_num=0
+
+   new_vars=tnames('iug_meteor_srp_*')
+   if new_vars[0] ne '' then begin   
+    ; add tdegap
+      if parameters[kk] eq 'h4t240min00' then dt2=14400
+      if parameters[kk] eq 'h2t60min00' then dt2=3600
+      tdegap, 'iug_meteor_srp_uwnd_'+parameters[kk],dt=dt2,/overwrite
+      tdegap, 'iug_meteor_srp_vwnd_'+parameters[kk],dt=dt2,/overwrite
+      tdegap, 'iug_meteor_srp_uwndsig_'+parameters[kk],dt=dt2,/overwrite
+      tdegap, 'iug_meteor_srp_vwndsig_'+parameters[kk],dt=dt2,/overwrite
+      tdegap, 'iug_meteor_srp_mwnum_'+parameters[kk],dt=dt2,/overwrite
    
-   ; add tdegap
-   if parameters[kk] eq 'h4t240min00' then dt2=14400
-   if parameters[kk] eq 'h2t60min00' then dt2=3600
-   tdegap, 'iug_meteor_srp_uwnd_'+parameters[kk],dt=dt2,/overwrite
-   tdegap, 'iug_meteor_srp_vwnd_'+parameters[kk],dt=dt2,/overwrite
-   tdegap, 'iug_meteor_srp_uwndsig_'+parameters[kk],dt=dt2,/overwrite
-   tdegap, 'iug_meteor_srp_vwndsig_'+parameters[kk],dt=dt2,/overwrite
-   tdegap, 'iug_meteor_srp_mwnum_'+parameters[kk],dt=dt2,/overwrite
+    ; add tclip
+      tclip, 'iug_meteor_srp_uwnd_'+parameters[kk],-200,200,/overwrite
+      tclip, 'iug_meteor_srp_vwnd_'+parameters[kk],-200,200,/overwrite
+      tclip, 'iug_meteor_srp_uwndsig_'+parameters[kk],0,800,/overwrite
+      tclip, 'iug_meteor_srp_vwndsig_'+parameters[kk],0,800,/overwrite
+      tclip, 'iug_meteor_srp_mwnum_'+parameters[kk],0,1200,/overwrite  
    
-   ; add tclip
-   tclip, 'iug_meteor_srp_uwnd_'+parameters[kk],-200,200,/overwrite
-   tclip, 'iug_meteor_srp_vwnd_'+parameters[kk],-200,200,/overwrite
-   tclip, 'iug_meteor_srp_uwndsig_'+parameters[kk],0,800,/overwrite
-   tclip, 'iug_meteor_srp_vwndsig_'+parameters[kk],0,800,/overwrite
-   tclip, 'iug_meteor_srp_mwnum_'+parameters[kk],0,1200,/overwrite  
-   
-   ;add ylim
-   zlim, 'iug_meteor_srp_uwnd_*',-100,100
-   zlim, 'iug_meteor_srp_vwnd_*',-100,100
-   
+     ;add ylim
+      zlim, 'iug_meteor_srp_uwnd_*',-100,100
+      zlim, 'iug_meteor_srp_vwnd_*',-100,100
+    endif
   endif
   jj=n_elements(local_paths)
 endfor
 
-
-print,'******************************
-print, 'Data loading is successful!!'
-print,'******************************
+new_vars=tnames('iug_meteor_srp_*')
+if new_vars[0] ne '' then begin  
+   print,'******************************
+   print, 'Data loading is successful!!'
+   print,'******************************
+endif
 
 ;******************************
 ;print of acknowledgement:
