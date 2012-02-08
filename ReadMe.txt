@@ -77,7 +77,7 @@ Convenient tools.
 CUI:
 ------------------------------------------------------------------------
   timespan,'2007-06-21' & erg_load_sdfit, site='hok'
-  timespan,'2006-12-01' & iug_load_blr_rish_txt, site='ktb'
+  timespan,'2006-12-01' & iug_load_blr_rish, site='ktb'
   timespan,'2003-03-25' & iug_load_ear
   timespan,'2011-02-03' & iug_load_eiscat
   timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
@@ -85,11 +85,11 @@ CUI:
   timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
   timespan,'2006-12-01',31 & iug_load_gmag_wdc, site='sym'
   timespan,'2010-11-01',/hours,5 & iug_load_iprt
-  timespan,'2004-10-01' & iug_load_ltr_rish_txt, site='sgk'
+  timespan,'2004-10-01' & iug_load_ltr_rish, site='sgk'
   timespan,'2005-03-20' & iug_load_meteor_rish, site = 'ktb'
   timespan,'2005-03-20' & iug_load_mf_rish, site = 'pam'
   timespan,'2003-03-10' & iug_load_mu
-  timespan,'2006-04-01' & iug_load_wpr_rish_txt, site='sgk'
+  timespan,'2006-04-01' & iug_load_wpr_rish, site='sgk'
 ------------------------------------------------------------------------
 
 GUI:
@@ -113,7 +113,7 @@ GUI:
 - Lower_Tropos._Radar   troposphere     sgk             *       2004-10-01
 - Medium_Freq._radar    thermosphere    pam             *       2004-03-25
 - Meteor_wind_radar     thermosphere    ktb             *       2002-12-01
-- MUpper_atom._radar    troposphere     *(all)          *       2003-03-10
+- MUpper_atm._radar     troposphere     *(all)          *       2003-03-10
 - SuperDARN             ionosphere      hok             *       2006-12-15
 - EISCAT_radar          altitude_prof   esr_32m         *       2011-02-03
 - Wind_Prof._Radar      troposphere     sgk             *       2006-04-01
@@ -165,3 +165,4 @@ http://www.nict.go.jp/index-e.html).
 ++++++++++++++++++++++++++++++++
   For questions, comments, and requests about UDAS, please contact 
 the UDAS development team (udas at iugonet.org).
+
