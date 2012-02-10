@@ -35,6 +35,7 @@
 ; A. Shinbori, 03/24/2011.
 ; A. Shinbori, 12/26/2011.
 ; A. Shinbori, 31/01/2012.
+; A. Shinbori, 10/02/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -115,7 +116,8 @@ acknowledgstring = 'If you acquire the lower troposphere radar (LTR) data, ' $
 
 ;Definition of parameter
 jj=0
-
+start_time=time_double('1999-7-7')
+end_time=time_double('2006-3-29')
 for iii=0,n_elements(parameters)-1 do begin
     if ~size(fns,/type) then begin
 
@@ -124,6 +126,11 @@ for iii=0,n_elements(parameters)-1 do begin
          file_names = file_dailynames( $
          file_format='YYYYMM/YYYYMMDD/'+$
                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[iii]+'.csv'
+                     
+         ;Set up the start time of the LQ-7 data period:
+         in_time =  file_dailynames(file_format='YYYYMMDD',trange=trange,times=times,/unique)
+         data_time = time_double(strmid(in_time,0,4)+'-'+strmid(in_time,4,2)+'-'+strmid(in_time,6,2))   
+         if (data_time lt start_time) or (data_time gt end_time) then break
     ;
     ;Define FILE_RETRIEVE structure:
     ;===============================
