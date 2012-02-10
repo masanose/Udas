@@ -35,6 +35,7 @@
 ;  A. Shinbori, 03/23/2011.
 ;  A. Shinbori, 12/26/2011.
 ;  A. Shinbori, 31/01/2012.
+;  A. Shinbori, 10/02/2012.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -122,6 +123,8 @@ h=0
 jj=0
 kk=0
 kkk=intarr(3)
+start_time=time_double('1992-4-13')
+end_time=time_double('1992-8-29')
 
 ;In the case that the parameters are except for all.'
   if n_elements(site_code) le 3 then begin
@@ -159,6 +162,14 @@ for ii=0,h_max-1 do begin
          file_names = file_dailynames( $
          file_format='YYYYMM/YYYYMMDD/'+$
                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[iii]+'.csv'
+                     
+         ;Set up the start time of the BLR data period at Shigaraki:
+         in_time =  file_dailynames(file_format='YYYYMMDD',trange=trange,times=times,/unique)
+         data_time = time_double(strmid(in_time,0,4)+'-'+strmid(in_time,4,2)+'-'+strmid(in_time,6,2)) 
+         if site_code[ii] eq 'sgk' then begin  
+            if (data_time lt start_time) or (data_time gt end_time) then break
+         endif
+                     
     ;
     ;Define FILE_RETRIEVE structure:
     ;===============================
