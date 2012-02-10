@@ -180,7 +180,7 @@ kk=0
        zon_thermal_data = fltarr(1,arr_num)
        mer_thermal_data = fltarr(1,arr_num)
        meteor_num_data = fltarr(1,arr_num)
-       
+       ktb_time = 0
        time = 0
        time_val = 0
 
