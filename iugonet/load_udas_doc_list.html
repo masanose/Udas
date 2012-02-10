@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Dec  5 16:32:43 2011.<P>
+<STRONG>Last modified: </STRONG>Fri Feb 10 22:18:00 2012.<P>
  
 <HR>
  
@@ -23,7 +23,7 @@ This page was created by the IDL library routine
 <br>This procedure is the modified version of file_http_copy in tdas_6_00 for IUGONET data.
 <LI><A HREF="#FILE_RETRIEVE_IUG">FILE_RETRIEVE_IUG</A>
 <br>This procedure is the modified version of file_retrieve in tdas_6_00 for IUGONET data.
-<LI><A HREF="#IUG_LOAD_BLR_RISH_TXT">IUG_LOAD_BLR_RISH_TXT</A>
+<LI><A HREF="#IUG_LOAD_BLR_RISH">IUG_LOAD_BLR_RISH</A>
 <br>Queries the Kyoto_RISH server for the CSV data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
 <LI><A HREF="#IUG_LOAD_EAR">IUG_LOAD_EAR</A>
 <br>Queries the Kyoto_RISH servers for all the observation data (troposphere and FAI)
@@ -66,7 +66,7 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <LI><A HREF="#IUG_LOAD_GMAG_WDC_WDCHR">IUG_LOAD_GMAG_WDC_WDCHR</A>
 <LI><A HREF="#IUG_LOAD_GMAG_WDC_WDCMIN">IUG_LOAD_GMAG_WDC_WDCMIN</A>
 <LI><A HREF="#IUG_LOAD_IPRT">IUG_LOAD_IPRT</A>
-<LI><A HREF="#IUG_LOAD_LTR_RISH_TXT">IUG_LOAD_LTR_RISH_TXT</A>
+<LI><A HREF="#IUG_LOAD_LTR_RISH">IUG_LOAD_LTR_RISH</A>
 <br>Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
 <LI><A HREF="#IUG_LOAD_METEOR_KTB_NC">IUG_LOAD_METEOR_KTB_NC</A>
 <br>Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
@@ -88,12 +88,10 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <br>Queries the Kyoto_RISH servers for the observation data (uwind, vwind, wwind)
 <LI><A HREF="#IUG_LOAD_MU">IUG_LOAD_MU</A>
 <br>Queries the Kyoto_RISH servers for all the observation data taken by
-<LI><A HREF="#IUG_LOAD_MU_TROP_NC">IUG_LOAD_MU_TROP_NC</A>
-<br>Queries the Kyoto_RISH servers for the standard observation data of the
 <LI><A HREF="#IUG_LOAD_MU_TROP_TXT">IUG_LOAD_MU_TROP_TXT</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of the
 <LI><A HREF="#IUG_LOAD_SDFIT">IUG_LOAD_SDFIT</A>
-<LI><A HREF="#IUG_LOAD_WPR_RISH_TXT">IUG_LOAD_WPR_RISH_TXT</A>
+<LI><A HREF="#IUG_LOAD_WPR_RISH">IUG_LOAD_WPR_RISH</A>
 <br>Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
 <br>
 </UL><P>
@@ -120,7 +118,7 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <A NAME="FILE_RETRIEVE_IUG">
 <H2>FILE_RETRIEVE_IUG</H2></A>
 <A HREF="#FILE_HTTP_COPY_IUG">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_BLR_RISH_TXT">[Next Routine]</A>
+<A HREF="#IUG_LOAD_BLR_RISH">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  FUNCTION file_retrieve_iug(pathnames,local_data_dir=local_data_dir)
@@ -134,15 +132,15 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <STRONG>(See <A href="load/file_retrieve_iug.pro">iugonet/load/file_retrieve_iug.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_LOAD_BLR_RISH_TXT">
-<H2>IUG_LOAD_BLR_RISH_TXT</H2></A>
+<A NAME="IUG_LOAD_BLR_RISH">
+<H2>IUG_LOAD_BLR_RISH</H2></A>
 <A HREF="#FILE_RETRIEVE_IUG">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_EAR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
 NAME:
-iug_load_blr_rish_txt
+iug_load_blr_rish
 
 PURPOSE:
   Queries the Kyoto_RISH server for the CSV data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5) 
@@ -150,17 +148,17 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_blr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+ iug_load_blr_rish, datatype = datatype, site=site, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_blr_rish_txt, datatype = 'troposphere'.
+  datatype = Observation data type. For example, iug_load_blr_rish, datatype = 'troposphere'.
             The default is 'troposphere'. 
    site = BLR observation site.  
-          For example, iug_load_blr_rish_txt, site = 'ktb'.
+          For example, iug_load_blr_rish, site = 'ktb'.
           The default is 'all', i.e., load all available observation points.
   parameter = parameter name of BLR obervation data.  
-          For example, iug_load_blr_rish_txt, parameter = 'uwnd'.
+          For example, iug_load_blr_rish, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
@@ -174,6 +172,9 @@ CODE:
   
 MODIFICATIONS:
   A. Shinbori, 03/23/2011.
+  A. Shinbori, 12/26/2011.
+  A. Shinbori, 31/01/2012.
+  A. Shinbori, 10/02/2012.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -181,12 +182,12 @@ ACKNOWLEDGEMENT:
  $LastChangedRevision:  $
  $URL $
 </PRE><P>
-<STRONG>(See <A href="load/iug_load_blr_rish_txt.pro">iugonet/load/iug_load_blr_rish_txt.pro</A>)</STRONG><P>
+<STRONG>(See <A href="load/iug_load_blr_rish.pro">iugonet/load/iug_load_blr_rish.pro</A>)</STRONG><P>
 <HR>
  
 <A NAME="IUG_LOAD_EAR">
 <H2>IUG_LOAD_EAR</H2></A>
-<A HREF="#IUG_LOAD_BLR_RISH_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_BLR_RISH">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_EAR_IONO_EFR_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -283,6 +284,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 09/07/2011.
+ A. Shinbori, 31/01/2012.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -339,6 +341,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 06/10/2011.
+ A. Shinbori, 31/01/2012.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -392,6 +395,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 09/07/2011.
+ A. Shinbori, 31/01/2012.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -448,6 +452,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 06/10/2011.
+ A. Shinbori, 31/01/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -502,6 +507,7 @@ MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 09/07/2011.
  A. Shinbori, 01/12/2011.
+ A. Shinbori, 31/01/2012.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -558,6 +564,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 06/10/2011.
+ A. Shinbori, 31/01/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -611,6 +618,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 09/07/2011.
+ A. Shinbori, 31/01/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -667,6 +675,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 06/10/2011.
+ A. Shinbori, 31/01/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -711,6 +720,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 13/11/2011.
+ A. Shinbori, 31/01/2012.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -759,7 +769,9 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 13/11/2011.
- 
+ A. Shinbori, 26/12/2011.
+ A. Shinbori, 31/01/2011.
+  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -977,6 +989,8 @@ CHANGELOG:
   08-March-2011, abeshu, update.
   01-May-2011, abeshu, modify title and ylabel on tdas plot.
   09-May-2011, abeshu, modify the rules of the road.
+  12-Jan-2012, abeshu, add default colors.
+  21-Jan-2012, abeshu, change default color of total magnetic field.
 
 ACKNOWLEDGMENT:
 
@@ -1028,15 +1042,15 @@ KEYWORDS:
   no_download: use only files which are online locally.
 
 EXAMPLE:
-   iug_load_gmag_wdc, site = 'kak', resolution = 'min', trange =
-   ['2007-01-22/00:00:00','2007-01-24/00:00:00']
+   timespan, '2007-01-22',1,/days
+   iug_load_gmag_wdc, site = 'ae', resolution = 'min'
 
 NOTES:
   At WDC Kyoto, data service for TDAS clients is beta testing.
   Please check the data catalog at http://wdc-data.iugonet.org/.
 
 Written by:  Daiki Yoshida,  Aug 2010
-Last Updated:  Daiki Yoshida,  Mar 8, 2011
+Last Updated:  Yukinobu KOYAMA,  Oct 21, 2011
  
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_gmag_wdc.pro">iugonet/load/iug_load_gmag_wdc.pro</A>)</STRONG><P>
@@ -1056,7 +1070,7 @@ Procedure: IUG_LOAD_GMAG_WDC_CREATE_TPLOT_VARS
     level = level, $
     tplot_name, $
     tplot_ytitle, tplot_ysubtitle, tplot_labels, $
-    tplot_dlimit
+    tplot_colors, tplot_dlimit
 
 Notes:
   This procedure is called from load procedures for WDC format data,
@@ -1066,6 +1080,7 @@ Written by:  Daiki Yoshida,  Aug 2010
 Updated by:  Daiki Yoshida,  Sep 14, 2010
 Updated by:  Daiki Yoshida,  Nov 12, 2010
 Updated by:  Daiki Yoshida,  Jan 11, 2011
+Updated by:  Yukinobu KOYAMA, Jan 21, 2012
 
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_gmag_wdc_create_tplot_vars.pro">iugonet/load/iug_load_gmag_wdc_create_tplot_vars.pro</A>)</STRONG><P>
@@ -1268,6 +1283,7 @@ Updated by:  Daiki Yoshida,  Sep 28, 2010
 Updated by:  Daiki Yoshida,  Nov 12, 2010
 Updated by:  Daiki Yoshida,  Jan 11, 2011
 Updated by:  Daiki Yoshida,  Mar 1, 2011
+Updated by:  Yukinobu KOYAMA, Jan 21, 2011
 
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_gmag_wdc_wdcmin.pro">iugonet/load/iug_load_gmag_wdc_wdcmin.pro</A>)</STRONG><P>
@@ -1276,7 +1292,7 @@ Updated by:  Daiki Yoshida,  Mar 1, 2011
 <A NAME="IUG_LOAD_IPRT">
 <H2>IUG_LOAD_IPRT</H2></A>
 <A HREF="#IUG_LOAD_GMAG_WDC_WDCMIN">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_LTR_RISH_TXT">[Next Routine]</A>
+<A HREF="#IUG_LOAD_LTR_RISH">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 Procedure: iug_load_iprt,
@@ -1332,33 +1348,33 @@ Acknowledgment:
 <STRONG>(See <A href="load/iug_load_iprt.pro">iugonet/load/iug_load_iprt.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_LOAD_LTR_RISH_TXT">
-<H2>IUG_LOAD_LTR_RISH_TXT</H2></A>
+<A NAME="IUG_LOAD_LTR_RISH">
+<H2>IUG_LOAD_LTR_RISH</H2></A>
 <A HREF="#IUG_LOAD_IPRT">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_METEOR_KTB_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
 NAME:
-iug_load_ltr_rish_txt
+iug_load_ltr_rish
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
-  in the CSV format taken by the L-band lower troposphere radar (LTR)and loads data into
+  in the CSV format taken by the L-band lower troposphere radar (LTR) and loads data into
   tplot format.
 
 SYNTAX:
- iug_load_ltr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+ iug_load_ltr_rish, datatype = datatype, site=site, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ltr_rish_txt, datatype = 'troposphere'.
+  datatype = Observation data type. For example, iug_load_ltr_rish, datatype = 'troposphere'.
             The default is 'troposphere'. 
    site = LTR observation site.  
-          For example, iug_load_ltr_rish_txt, site = 'sgk'.
+          For example, iug_load_ltr_rish, site = 'sgk'.
           The default is 'all', i.e., load all available observation points.
   parameter = parameter name of LTR obervation data.  
-          For example, iug_load_ltr_rish_txt, parameter = 'uwnd'.
+          For example, iug_load_ltr_rish, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
@@ -1372,19 +1388,22 @@ CODE:
 
 MODIFICATIONS:
  A. Shinbori, 03/24/2011.
-
+ A. Shinbori, 12/26/2011.
+ A. Shinbori, 31/01/2012.
+ A. Shinbori, 10/02/2012.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
  $LastChangedRevision:  $
  $URL $
 </PRE><P>
-<STRONG>(See <A href="load/iug_load_ltr_rish_txt.pro">iugonet/load/iug_load_ltr_rish_txt.pro</A>)</STRONG><P>
+<STRONG>(See <A href="load/iug_load_ltr_rish.pro">iugonet/load/iug_load_ltr_rish.pro</A>)</STRONG><P>
 <HR>
  
 <A NAME="IUG_LOAD_METEOR_KTB_NC">
 <H2>IUG_LOAD_METEOR_KTB_NC</H2></A>
-<A HREF="#IUG_LOAD_LTR_RISH_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_LTR_RISH">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_METEOR_KTB_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1423,7 +1442,9 @@ MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
  A. Shinbori, 06/10/2011.
-
+ A. Shinbori, 27/12/2011.
+ A. Shinbori, 31/01/2012.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -1474,7 +1495,10 @@ MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
  A. Shinbori, 06/10/2011.
-
+ A. Shinbori, 27/12/2011.
+ A. Shinbori, 31/01/2012.
+ A. Shinbori, 07/02/2012.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -1624,6 +1648,8 @@ MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
  A. Shinbori, 06/10/2011.
+ A. Shinbori, 27/12/2011.
+ A. Shinbori, 31/01/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1675,7 +1701,10 @@ MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 11/07/2011.
  A. Shinbori, 06/10/2011.
-
+ A. Shinbori, 27/12/2011.
+ A. Shinbori, 31/01/2012.
+ A. Shinbori, 07/02/2012.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -1763,6 +1792,7 @@ CODE:
 
 MODIFICATIONS:
  A. Shinbori, 03/24/2011.
+ A. Shinbori, 27/12/2011.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1808,6 +1838,8 @@ CODE:
 
 MODIFICATIONS:
  A. Shinbori, 03/24/2011.
+ A. Shinbori, 27/12/2011.
+ A. Shinbori, 31/10/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1821,7 +1853,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_MU">
 <H2>IUG_LOAD_MU</H2></A>
 <A HREF="#IUG_LOAD_MF_RISH_PAM_NC">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_MU_TROP_NC">[Next Routine]</A>
+<A HREF="#IUG_LOAD_MU_TROP_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -1865,53 +1897,9 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_mu.pro">iugonet/load/iug_load_mu.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_LOAD_MU_TROP_NC">
-<H2>IUG_LOAD_MU_TROP_NC</H2></A>
-<A HREF="#IUG_LOAD_MU">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_MU_TROP_TXT">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
-NAME:
-iug_load_mu_trop_nc
-
-PURPOSE:
-  Queries the Kyoto_RISH servers for the standard observation data of the 
-  troposphere and lower stratsphere in the netCDF format taken by the Middle
-  and Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
-
-SYNTAX:
- iug_load_mu_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
-
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_trop_nc, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  trange = (Optional) Time range of interest  (2 element array), if
-          this is not set, the default is to prompt the user. Note
-          that if the input time range is not a full day, a full
-          day's data is loaded.
-  /downloadonly, if set, then only download the data, do not load it
-                 into variables.
-
-CODE:
- A. Shinbori, 19/09/2010.
-
-MODIFICATIONS:
- A. Shinbori, 24/03/2011.
- A. Shinbori, 13/11/2011.
- 
-ACKNOWLEDGEMENT:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
-</PRE><P>
-<STRONG>(See <A href="load/iug_load_mu_trop_nc.pro">iugonet/load/iug_load_mu_trop_nc.pro</A>)</STRONG><P>
-<HR>
- 
 <A NAME="IUG_LOAD_MU_TROP_TXT">
 <H2>IUG_LOAD_MU_TROP_TXT</H2></A>
-<A HREF="#IUG_LOAD_MU_TROP_NC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_SDFIT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1947,6 +1935,8 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 13/11/2011.
+ A. Shinbori, 26/12/2011.
+ A. Shinbori, 31/01/2012.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1960,7 +1950,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_SDFIT">
 <H2>IUG_LOAD_SDFIT</H2></A>
 <A HREF="#IUG_LOAD_MU_TROP_TXT">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_WPR_RISH_TXT">[Next Routine]</A>
+<A HREF="#IUG_LOAD_WPR_RISH">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: iug_load_sdfit
@@ -1996,14 +1986,14 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_sdfit.pro">iugonet/load/iug_load_sdfit.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_LOAD_WPR_RISH_TXT">
-<H2>IUG_LOAD_WPR_RISH_TXT</H2></A>
+<A NAME="IUG_LOAD_WPR_RISH">
+<H2>IUG_LOAD_WPR_RISH</H2></A>
 <A HREF="#IUG_LOAD_SDFIT">[Previous Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
 NAME:
-iug_load_wpr_rish_txt
+iug_load_wpr_rish
 
 PURPOSE:
   Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
@@ -2011,17 +2001,17 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_wpr_rish_txt, datatype = datatype, site=site, parameter=parameter, $
+ iug_load_wpr_rish, datatype = datatype, site=site, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_wpr_rish_txt, datatype = 'troposphere'.
+  datatype = Observation data type. For example, iug_load_wpr_rish, datatype = 'troposphere'.
             The default is 'troposphere'. 
    site = LTR observation site.  
-          For example, iug_load_wpr_rish_txt, site = 'sgk'.
+          For example, iug_load_wpr_rish, site = 'sgk'.
           The default is 'all', i.e., load all available observation points.
   parameter = parameter name of WPR obervation data.  
-          For example, iug_load_wpr_rish_txt, parameter = 'uwnd'.
+          For example, iug_load_wpr_rish, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
@@ -2034,7 +2024,9 @@ CODE:
  A. Shinbori, 06/10/2011.
 
 MODIFICATIONS:
- 
+ A. Shinbori, 26/12/2011.
+ A. Shinbori. 31/01/2012.
+ A. Shinbori, 10/02/2012.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2042,6 +2034,6 @@ ACKNOWLEDGEMENT:
  $LastChangedRevision:  $
  $URL $
 </PRE><P>
-<STRONG>(See <A href="load/iug_load_wpr_rish_txt.pro">iugonet/load/iug_load_wpr_rish_txt.pro</A>)</STRONG><P>
+<STRONG>(See <A href="load/iug_load_wpr_rish.pro">iugonet/load/iug_load_wpr_rish.pro</A>)</STRONG><P>
 <HR>
  
