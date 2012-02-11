@@ -167,7 +167,7 @@ for ii=0,h_max-1 do begin
          in_time =  file_dailynames(file_format='YYYYMMDD',trange=trange,times=times,/unique)
          data_time = time_double(strmid(in_time,0,4)+'-'+strmid(in_time,4,2)+'-'+strmid(in_time,6,2)) 
          if site_code[ii] eq 'sgk' then begin  
-            if (data_time lt start_time) or (data_time gt end_time) then break
+            if (data_time[0] lt start_time) or (data_time[0] gt end_time) then break
          endif
                      
     ;

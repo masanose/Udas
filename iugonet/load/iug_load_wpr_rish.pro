@@ -128,7 +128,7 @@ for iii=0,n_elements(parameters)-1 do begin
          ;Set up the start time of the LQ-7 data period:
          in_time =  file_dailynames(file_format='YYYYMMDD',trange=trange,times=times,/unique)
          data_time = time_double(strmid(in_time,0,4)+'-'+strmid(in_time,4,2)+'-'+strmid(in_time,6,2))    
-         if data_time lt start_time then break      
+         if data_time[0] lt start_time then break      
     ;
     ;Define FILE_RETRIEVE structure:
     ;===============================
