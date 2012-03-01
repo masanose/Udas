@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Dec  5 16:32:43 2011.<P>
+<STRONG>Last modified: </STRONG>Fri Feb 10 22:18:00 2012.<P>
  
 <HR>
  
@@ -19,8 +19,6 @@ This page was created by the IDL library routine
 <H1>Directory Listing of Routines</H1></A>
 <UL>
 <H1>iugonet/gui</H1>
-<LI><A HREF="#ACKNOWLEDGEMENT_MESSAGE">ACKNOWLEDGEMENT_MESSAGE</A>
-<LI><A HREF="#GUI_LOAD_ACKNOWLEDGEMENT">GUI_LOAD_ACKNOWLEDGEMENT</A>
 <LI><A HREF="#THM_UI_CALL_SEQUENCE__DEFINE">THM_UI_CALL_SEQUENCE__DEFINE</A>
 <br>Stores the sequence of procedure calls that was used to load data.
 <LI><A HREF="#THM_UI_INIT_LOAD_WINDOW">THM_UI_INIT_LOAD_WINDOW</A>
@@ -30,106 +28,45 @@ This page was created by the IDL library routine
 <LI><A HREF="#THM_UI_LOAD_IUGONET_DATA_LOAD_PRO">
 THM_UI_LOAD_IUGONET_DATA_LOAD_PRO</A>
 <br>Modularized gui iugonet data loader
+<LI><A HREF="#TEST_LEAP_YR">TEST_LEAP_YR</A>
+<br>Determines whether a given year is a leap year, and
+<LI><A HREF="#THM_UI_TIMEFIX">THM_UI_TIMEFIX</A>
+<br>Will fix an input time string of yyyy-mm-dd hh:mm:ss.xxxx if there
 <br>
 </UL><P>
 <HR>
  
 <H1>Routine Descriptions</H1>
-<A NAME="ACKNOWLEDGEMENT_MESSAGE">
-<H2>ACKNOWLEDGEMENT_MESSAGE</H2></A>
-<A HREF="#GUI_LOAD_ACKNOWLEDGEMENT">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- NAME:
-    acknowledgement_message
-
- PURPOSE:
-
-    The purpose of this function is to show the acknowledgement
-    message for each IUGONET data set when you have downloaded the observation data
-    using the graphical user interface (GUI). The acknowledgement message is reported
-    to the user by using dialog_message if widgets are supported and MESSAGE otherwise.
-    
- CALLING SEQUENCE:
-
-    ok = acknowledgement(the_acknowledgement_message)
-
- INPUTS:
-
-    the_acknowledgement_message: This is a string argument containing 
-                                 the acknowledgement message you want reported. 
-
- KEYWORDS:
-
-    acknowledgement: Set this keyword to cause dialog_message to use the acknowledgement
-                     reporting dialog.
-
-    informatinal: Set this keyword to cause dialog_message to use the
-                  information dialog instead of the warning dialog. 
-
-    title: Set this keyword to the title of the dialog_message window.
-
-     
-
- OUTPUTS:
-
-    Currently the only output from the function is the string "OK".
-    
-Code:
-  A. Shinbori, 16/01/2011.
-  
-Modifications:
-
-  
-Acknowledgment:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
-</PRE><P>
-<STRONG>(See <A href="gui/acknowledgement_message.pro">iugonet/gui/acknowledgement_message.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="GUI_LOAD_ACKNOWLEDGEMENT">
-<H2>GUI_LOAD_ACKNOWLEDGEMENT</H2></A>
-<A HREF="#ACKNOWLEDGEMENT_MESSAGE">[Previous Routine]</A>
+<A NAME="TEST_LEAP_YR">
+<H2>TEST_LEAP_YR</H2></A>
 <A HREF="#THM_UI_CALL_SEQUENCE__DEFINE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
-
-Name:
- gui_load_acknowledgement
-
-Purpose:
- Output of the data acknowledgement message for each observation data.
-
-Syntax:
- gui_load_acknowledgement, datatype = datatype, par_names = par_names
-
-Keywords:
-  par_names = tplot names. For example, iug_load_acknowledgement, par_names = 'iug_mf_pam_vwnd'.
-               The default is 'iug_mf_pam_uwnd'.
-  datatype = Observation data type. For example, iug_load_acknowledgement, datatype = '210mm*'.
-             The default is 'thermosphere'. 
-
-Code:
-  A. Shinbori, 13/01/2011.
-  
-Modifications:
- 
-  
-Acknowledgment:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
+ NAME:
+       test_leap_yr
+ CALLING SEQUENCE:
+       lyr=test_leap_yr(iyr,modays=modays)
+ PURPOSE:
+       Determines whether a given year is a leap year, and
+       returns the number of days in every month
+ INPUT:
+       iyr = The year, as an integer
+ OUTPUT:
+       lyr= 1 if iyr is a leap year and 0 if not
+ KEYWORDS:
+       modays= the number of days in each month
+       modays= [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] for
+       a leap yr, [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] otherwise
+ HISTORY:
+       Written 19-OCt-93 by JM
+       Rewritten, 9-jul-2007, jmm
 </PRE><P>
-<STRONG>(See <A href="gui/gui_load_acknowledgement.pro">iugonet/gui/gui_load_acknowledgement.pro</A>)</STRONG><P>
+<STRONG>(See <A href="gui/thm_ui_timefix.pro">iugonet/gui/thm_ui_timefix.pro</A>)</STRONG><P>
 <HR>
  
 <A NAME="THM_UI_CALL_SEQUENCE__DEFINE">
 <H2>THM_UI_CALL_SEQUENCE__DEFINE</H2></A>
-<A HREF="#GUI_LOAD_ACKNOWLEDGEMENT">[Previous Routine]</A>
+<A HREF="#TEST_LEAP_YR">[Previous Routine]</A>
 <A HREF="#THM_UI_INIT_LOAD_WINDOW">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -242,6 +179,7 @@ A. Shinbori, 02/05/2011
 <A NAME="THM_UI_LOAD_IUGONET_DATA_LOAD_PRO">
 <H2>THM_UI_LOAD_IUGONET_DATA_LOAD_PRO</H2></A>
 <A HREF="#THM_UI_LOAD_IUGONET_DATA">[Previous Routine]</A>
+<A HREF="#THM_UI_TIMEFIX">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 NAME:
@@ -263,5 +201,26 @@ A. Shinbori, 01/02/2011
 
 </PRE><P>
 <STRONG>(See <A href="gui/thm_ui_load_iugonet_data_load_pro.pro">iugonet/gui/thm_ui_load_iugonet_data_load_pro.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="THM_UI_TIMEFIX">
+<H2>THM_UI_TIMEFIX</H2></A>
+<A HREF="#THM_UI_LOAD_IUGONET_DATA_LOAD_PRO">[Previous Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+NAME:
+ thm_ui_timefix
+PURPOSE:
+ Will fix an input time string of yyyy-mm-dd hh:mm:ss.xxxx if there
+ is only 1 digit in the day or hour or second, etc.
+ Will also return an error message, if the months, days, hours,
+ seconds are not valid
+$LastChangedBy: aaflores $
+$LastChangedDate: 2010-01-28 15:17:35 -0800 (Thu, 28 Jan 2010) $
+$LastChangedRevision: 7174 $
+$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_6_00/idl/themis/thm_ui/thm_ui_timefix.pro $
+unction thm_ui_timefix, time_in, progobj = progobj, _extra = _extra
+</PRE><P>
+<STRONG>(See <A href="gui/thm_ui_timefix.pro">iugonet/gui/thm_ui_timefix.pro</A>)</STRONG><P>
 <HR>
  
