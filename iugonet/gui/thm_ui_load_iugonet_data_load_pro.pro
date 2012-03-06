@@ -16,6 +16,7 @@
 ;A. Shinbori, 01/11/2011
 ;A. Shinbori, 01/02/2012
 ;A. Shinbori, 04/02/2012
+;A. Shinbori, 06/03/2012
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -46,16 +47,19 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
      iug_load_iprt, site =site_or_param, datatype=datatype, trange = timeRange
      if parameters[0] eq '*' then begin
-        par_names=tnames('*')
+        par_names=tnames('iprt_*')
      endif else begin
         par_names=parameters
      endelse
-     ;Output of the acknowledgement message for the iprt load data:
-     if !iugonet.data_policy.iprt eq 0 then begin
-         Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
-         if Answer ne 'Cancel' then !iugonet.data_policy.iprt=1
-     endif
-     if !iugonet.data_policy.iprt eq 1 then Answer = 'OK'
+  ;====Output of the acknowledgement message for the iprt data load =====
+      if par_names[0] ne '' then begin 
+         if !iugonet.data_policy.iprt eq 0 then begin
+            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
+            if Answer ne 'Cancel' then !iugonet.data_policy.iprt=1
+         endif
+         if !iugonet.data_policy.iprt eq 1 then Answer = 'OK'
+      endif
+  ;======================================================================
   endif
   
   ;load data of geomagnetic index
@@ -68,13 +72,16 @@ pro thm_ui_load_iugonet_data_load_pro,$
                 end
                 par_names=tnames('wdc_mag_'+'*')        
              endif
-             ;Output of the acknowledgement message for the gmag_magdas load data:
+             ;====Output of the acknowledgement message for the ASY index load=====
              par_names2=tnames('wdc_mag_'+'*')
-             if !iugonet.data_policy.gmag_wdc_ae_asy eq 0 then begin
-                Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names2)
-                if Answer ne 'Cancel' then !iugonet.data_policy.gmag_wdc_ae_asy=1
+             if par_names2[0] ne '' then begin 
+                if !iugonet.data_policy.gmag_wdc_ae_asy eq 0 then begin
+                   Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names2)
+                   if Answer ne 'Cancel' then !iugonet.data_policy.gmag_wdc_ae_asy=1
+                endif
+                if !iugonet.data_policy.gmag_wdc_ae_asy eq 1 then Answer = 'OK'
              endif
-             if !iugonet.data_policy.gmag_wdc_ae_asy eq 1 then Answer = 'OK'
+             ;======================================================================
           endif else if datatype eq 'Dst_index' or datatype eq 'AE_index' then begin
              if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
                 case datatype of
@@ -94,13 +101,16 @@ pro thm_ui_load_iugonet_data_load_pro,$
                    iug_load_gmag_wdc, site=vns, trange=timeRange
                    par_names=tnames('wdc_mag_'+vns+'*')
                 endelse
-               ;Output of the acknowledgement message for the gmag_magdas load data:
+               ;====Output of the acknowledgement message for the AE index load======
                 par_names2=tnames('wdc_mag_dst'+'*')
-                if !iugonet.data_policy.gmag_wdc_dst eq 0 then begin
-                   Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names2)
-                   if Answer ne 'Cancel' then !iugonet.data_policy.gmag_wdc_dst=1
+                if par_names2[0] ne '' then begin 
+                   if !iugonet.data_policy.gmag_wdc_dst eq 0 then begin
+                      Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names2)
+                      if Answer ne 'Cancel' then !iugonet.data_policy.gmag_wdc_dst=1
+                   endif
+                   if !iugonet.data_policy.gmag_wdc_dst eq 1 then Answer = 'OK'
                 endif
-                if !iugonet.data_policy.gmag_wdc_dst eq 1 then Answer = 'OK'
+               ;======================================================================
              endif
              if vns eq 'ae' then begin 
                 if parameters[0] eq '*' then begin
@@ -125,7 +135,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
                 par_names='wdc_mag_'+vns+'_1hr'
                 iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='hour'
              endif 
-             ;Output of the acknowledgement message for the gmag_magdas load data:
+             ;====Output of the acknowledgement message for the Dst index load=====
              par_names2=tnames('wdc_mag_ae'+'*')
              if par_names2[0] ne '' then begin
                 if !iugonet.data_policy.gmag_wdc_ae_asy eq 0 then begin
@@ -134,6 +144,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
                 endif
                 if !iugonet.data_policy.gmag_wdc_ae_asy eq 1 then Answer = 'OK'
              endif
+             ;======================================================================
           endif
        endif
     endif
@@ -147,7 +158,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
        if datatype eq 'magdas' then begin
           iug_load_gmag_serc, trange = timeRange, site = site_or_param
           par_names=tnames('magdas_mag_' + '*') 
-         ;Output of the acknowledgement message for the gmag_magdas load data:
+         ;====Output of the acknowledgement message for the magdas data load=====
           if par_names[0] ne '' then begin
              if !iugonet.data_policy.gmag_magdas eq 0 then begin
                 Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -155,13 +166,14 @@ pro thm_ui_load_iugonet_data_load_pro,$
              endif
              if !iugonet.data_policy.gmag_magdas eq 1 then Answer = 'OK'
           endif
+         ;=======================================================================
        endif
        if datatype eq '210mm#' then begin
           vns=parameters
           if parameters[0] eq '*' then vns=['all']
           erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
           par_names=tnames('mm210_mag_'+'*'+'_'+'*'+'_hdz')
-         ;Output of the acknowledgement message for the gmag_210mm load data:
+         ;====Output of the acknowledgement message for the gmag_210mm data load=====
           if par_names[0] ne '' then begin
              if !iugonet.data_policy.gmag_mm210 eq 0 then begin
                 Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -169,6 +181,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
              endif
              if !iugonet.data_policy.gmag_mm210 eq 1 then Answer = 'OK'
           endif
+         ;===========================================================================
        endif
        if datatype eq 'WDC_kyoto' then begin
           vns=parameters
@@ -177,7 +190,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
                  iug_load_gmag_wdc, trange=timeRange, site = site_or_param, resolution=vns[i]
              endfor
              par_names=tnames('wdc_mag_'+'*'+'_'+'*')
-             ;Output of the acknowledgement message for the gmag_wdc load data:
+             ;====Output of the acknowledgement message for the gmag_wdc data load=======
              if par_names[0] ne '' then begin
                 if !iugonet.data_policy.gmag_wdc eq 0 then begin
                    Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -185,6 +198,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
                 endif
                 if !iugonet.data_policy.gmag_wdc eq 1 then Answer = 'OK'
              endif
+             ;===========================================================================
            endif
        if datatype eq 'NIPR_mag#' then begin     
           iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
@@ -220,7 +234,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
              endelse
              par_names=tnames('nipr_mag_'+'*'+'_'+'*')
          endelse
-         ;Output of the acknowledgement message for the gmag_nipr load data:
+         ;====Output of the acknowledgement message for the gmag_nipr data load========
          if par_names[0] ne '' then begin
             if !iugonet.data_policy.gmag_nipr eq 0 then begin
                 Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -228,6 +242,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
             endif
             if !iugonet.data_policy.gmag_nipr eq 1 then Answer = 'OK'
          endif
+         ;=============================================================================
        endif
   endif  
   
@@ -249,7 +264,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
            par_names=tnames('sd_' + '*' + '_' + parameters +'_*')
         endelse
      endif
-     ;Output of the acknowledgement message for the sd load data:
+     ;====Output of the acknowledgement message for the sd data load=============
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.sdfit eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -257,6 +272,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.sdfit eq 1 then Answer = 'OK'    
      endif
+     ;===========================================================================
   endif
   
   ;load data of Equatorial Atomosphere Radar
@@ -282,7 +298,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
              'f_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
         endcase
      endelse
-     ;Output of the acknowledgement message for the ear load data:
+     ;======Output of the acknowledgement message for the ear data load==========
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.ear eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -290,6 +306,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.ear eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif 
   
   ;load data of Medium Frequency radar
@@ -300,7 +317,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endif else begin
         par_names=tnames('iug_mf_'+'*'+'_'+parameters)
      endelse
-     ;Output of the acknowledgement message for the mf load data:
+     ;========Output of the acknowledgement message for the mf data load=========
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.mf_rish eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -308,6 +325,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.mf_rish eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
    
   ;load data of Meteor Wind radar
@@ -317,7 +335,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endif else if parameters[0] eq '*' then vns=['all']
      iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameter = vns, trange = timeRange
      par_names=tnames('iug_meteor_'+'*'+'_'+'*')
-     ;Output of the acknowledgement message for the meteor load data:
+     ;========Output of the acknowledgement message for the meteor data load=====
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.meteor_rish eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -325,6 +343,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.meteor_rish eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
   
   ;load data of Middle Upper atomosphere radar
@@ -341,7 +360,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
 ;          'meteor_win':  par_names='iug_mu_meteor_'+parameters
         endcase
      endelse
-     ;Output of the acknowledgement message for the mu load data:
+     ;=====Output of the acknowledgement message for the mu data load============
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.mu eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -349,6 +368,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.mu eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
   
   ;load data of Bandary Layer Radar
@@ -359,7 +379,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endif else begin
         par_names=tnames('iug_blr_'+'*'+'_'+parameters)
      endelse
-     ;Output of the acknowledgement message for the blr load data:
+     ;======Output of the acknowledgement message for the blr data load==========
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.blr_rish eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -367,6 +387,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.blr_rish eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
 
   ;load data of Lower Troposphere Radar
@@ -377,7 +398,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endif else begin
         par_names=tnames('iug_ltr_'+'*'+'_'+parameters)
      endelse
-     ;Output of the acknowledgement message for the ltr load data:
+     ;======Output of the acknowledgement message for the ltr data load==========
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.ltr_rish eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -385,6 +406,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.ltr_rish eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
     
   ;load data of EISCAT radar
@@ -397,7 +419,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endif else begin
         par_names=tnames('eiscat_'+'*'+'_'+parameters+'_'+'*')
      endelse
-     ;Output of the acknowledgement message for the eiscat load data:
+     ;======Output of the acknowledgement message for the eiscat data load=======
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.eiscat eq 0 then begin
            Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -405,6 +427,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.eiscat eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
 
   ;load data of Wind Profiler Radar (LQ-7)
@@ -415,7 +438,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
      endif else begin
         par_names=tnames('iug_wpr_'+'*'+'_'+parameters)
      endelse
-     ;Output of the acknowledgement message for the wpr load data:
+     ;======Output of the acknowledgement message for the wpr data load==========
      if par_names[0] ne '' then begin
         if !iugonet.data_policy.wpr_rish eq 0 then begin
             Answer=gui_load_acknowledgement(datatype = datatype, par_names = par_names)
@@ -423,6 +446,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
         endif
         if !iugonet.data_policy.wpr_rish eq 1 then Answer = 'OK'
      endif
+     ;===========================================================================
   endif
 
   ;load data of Radio sonde 

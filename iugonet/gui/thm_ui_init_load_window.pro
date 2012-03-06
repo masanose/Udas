@@ -155,7 +155,7 @@ pro thm_ui_init_load_window_event, event
 
 
     exit_sequence:
-    Print, 'Load Themis Data widget killed.' 
+    dprint,  'Load Themis Data widget killed.' ;<========= Changed from tdas 6.00 to 7.00
     state.historyWin->Update,'THM_UI_INIT_LOAD_WINDOW: Widget closed' 
     ;update central tree to reflect last expansion of current tree 
     thm_ui_init_load_update_tree_copy,state
@@ -333,7 +333,16 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   Widget_Control, tlb, get_UValue = state, /No_Copy
   thm_ui_load_data_set_user_select,state
   Widget_Control, tlb, set_UValue = state, /No_Copy
-  XManager, 'thm_ui_init_load_window', tlb, /No_Block
 
+;==============Changed from tdas 6.00 to 7.00=============
+  ;keep windows in X11 from snaping back to 
+  ;center during tree widget events 
+  if !d.NAME eq 'X' then begin
+    widget_control, tlb, xoffset=0, yoffset=0
+  endif
+  
+  XManager, 'thm_ui_init_load_window', tlb, /No_Block
+;=========================================================
+ 
   RETURN
 end

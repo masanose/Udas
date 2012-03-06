@@ -36,9 +36,9 @@
 ; 
 ;HISTORY:
 ;$LastChangedBy: pcruce $
-;$LastChangedDate: 2011-02-10 13:01:17 -0800 (Thu, 10 Feb 2011) $
-;$LastChangedRevision: 8138 $
-;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_6_00/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
+;$LastChangedDate: 2011-05-26 15:14:36 -0700 (Thu, 26 May 2011) $
+;$LastChangedRevision: 8707 $
+;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_00/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
 ;
 ;--------------------------------------------------------------------------------
 
@@ -49,7 +49,10 @@ pro thm_ui_call_sequence::addloadcall,st_time0, $
                                       dtype, $
                                       observ, $
                                       outcoord,$
-                                      raw
+   ;================Changed from tdas 6.00 to 7.00 ============
+                                      raw,$
+                                      overwrite_selections
+   ;===========================================================
    
    compile_opt idl2
   
@@ -59,8 +62,11 @@ pro thm_ui_call_sequence::addloadcall,st_time0, $
            dtype:dtype,$
            observ:observ,$
            outcoord:outcoord,$
-           raw:raw}
-           
+   ;================Changed from tdas 6.00 to 7.00 ============
+           raw:raw,$
+           overwrite_selections:overwrite_selections}
+   ;===========================================================
+              
   self->addSt,in_st 
                      
                      
@@ -391,9 +397,11 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
                                loadedData=self.loadedData,$
                                historywin=historywin,$
                                statustext=statustext,$
-                               state_gui_id=guiID
-                               
-    
+                               state_gui_id=guiID,$
+     ;===============Changed from tdas 6.00 to 7.00=============================
+                               overwrite_selections=st.overwrite_selections,$
+                               /replay                               
+     ;==========================================================================
     endif else if st.type eq 'loadgoesdata' then begin
       thm_ui_load_goes_data_load_pro,$
                          st.probes,$
