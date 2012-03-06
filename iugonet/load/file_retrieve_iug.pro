@@ -19,6 +19,8 @@ function file_retrieve_iug,pathnames, newpathnames, structure_format=structure_f
     ascii_mode=ascii_mode,   $
     no_download=no_download,no_server=no_server, $
     no_update=no_update, $
+    ;Add to force_download by Shinbori (2012/03/07)
+    force_download=force_download,$
     no_clobber=no_clobber, ignore_filesize=ignore_filesize, $
     verbose=verbose,progress=progress,progobj=progobj
 
@@ -44,9 +46,11 @@ if keyword_set(structure_format) then begin
       ignore_filesize:0 ,    $    ; Set to 1 to ignore the remote/local file sizes when determining if updates are needed.
       ignore_filedate:0 ,    $    ; Not yet operational.
       downloadonly:0  ,      $    ; Set to 1 to only download files but not load files into memory.
-      use_wget:0          ,   $   ; Experimental option (uses the routine WGET instead of file_http_copy_iug)
+      use_wget:0         ,   $   ; Experimental option (uses the routine WGET instead of file_http_copy_iug)
       nowait:0        ,      $    ; Used with wget to download files in the background.
-      verbose:2              $
+      verbose:2       ,      $
+      ;Add to force_download by Shinbori (2012/03/07)
+      force_download: 0      $   ;Allows download to be forced no matter modification time.  Useful when moving between different repositories(e.g. QA and production data)
    }
    return, str
 endif
@@ -91,7 +95,9 @@ if keyword_set(remote_data_dir) and  not (keyword_set(no_server) or keyword_set(
                ascii_mode=ascii_mode, $
                user_agent=user_agent, $
                preserve_mtime = preserve_mtime, $
-               file_mode=file_mode,dir_mode=dir_mode,last_version=last_version,min_age_limit=min_age_limit
+               file_mode=file_mode,dir_mode=dir_mode,last_version=last_version,min_age_limit=min_age_limit, $
+               ;Add to force_download by Shinbori (2012/03/07)
+               force_download=force_download
              if url_info.io_error ne 0 then begin
                dprint, "File or URL i/o error detected.  See !error_state for more info"
                printdat,!error_state

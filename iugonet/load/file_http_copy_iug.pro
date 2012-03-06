@@ -5,8 +5,17 @@
 ; PURPOSE:
 ;    This procedure is the modified version of file_http_copy in tdas_6_00 for IUGONET data.
 ;    New input parameter "host" was added.
+;    
+;MODIFICATIONS:
+; Y. Koyama, April 28, 2011.
+; A. Shinbori, March 06, 2012
+; 
 ;
-; Modified by Y. Koyama, April 28, 2011.
+;ACKNOWLEDGEMENT:
+; $LastChangedBy:  $
+; $LastChangedDate:  $
+; $LastChangedRevision:  $
+; $URL $
 ;-
 
 
@@ -141,14 +150,15 @@ PRO file_http_copy_iug, pathnames, newpathnames, $
      url_info=url_info_s,  $         ; output:  structure containing URL info obtained from the HTTP Header.
      progobj=progobj, $            ; This keyword is experimental - please don't count on it
      links=links2, $               ; Output: links are returned in this variable if the file is an html file
+     ;Add to force_download by Shinbori (2012/03/06)
+     force_download=force_download, $  ;Allows download to be forced no matter modification time.  Useful when moving between different repositories(e.g. QA and production data)
      error = error
-  ;;
   ;;
   ;; sockets supported in unix & windows since V5.4, Macintosh since V5.6
 tstart = systime(1)
 ;  if n_elements(verbose) eq 1 then dprint,setdebug=verbose,getdebug=last_dbg
 
-dprint,dlevel=4,verbose=verbose,'Start; $Id: file_http_copy_iug.pro 8150 2011-02-11 16:47:41Z davin-win $'
+dprint,dlevel=4,verbose=verbose,'Start; $Id: file_http_copy.pro 9483 2012-01-05 01:45:31Z davin-win $'
 url_info_s = 0
 if not keyword_set(localdir) then localdir = ''
 if not keyword_set(serverdir) then serverdir = ''
@@ -277,8 +287,9 @@ for pni=0L,n_elements(pathnames)-1 do begin
 
 ;Warning: The file times (mtime,ctime,atime) can be incorrect (with Windows) if the user has (recently) changed the time zone the computer resides in.
 ;This can lead to unexpected results.
-  if tstart-lcl.mtime lt (keyword_set(min_age_limit) ? min_age_limit : 0) then begin
-      dprint,dlevel=3,verbose=verbose,'Found recent file: "'+localname+'" (assumed valid)'
+  file_age = tstart-lcl.mtime ; Add to this sentence by Shinbori (2012/03/06)
+  if file_age lt (keyword_set(min_age_limit) ? min_age_limit : 0) then begin ; Modified this sentence by Shinbori (2012/03/06)
+      dprint,dlevel=3,verbose=verbose,'Found recent file (',strtrim(long(file_age),2),' secs): "'+localname+'" (assumed valid)'; Modified this sentence by Shinbori (2012/03/06)
       ;url_info.ltime = systime(1)
       url_info.localname = localname
       url_info.exists = 1
@@ -332,8 +343,8 @@ for pni=0L,n_elements(pathnames)-1 do begin
          server = strmid(server,0,lastcolon)
       endif else port = 80
 
-      dprint,dlevel=4,verbose=verbose,'Opening server: ',server, ' on Port: ',port
-      if not keyword_set(server) then dprint,dlevel=0,verbose=verbose,'Bad server'
+      dprint,dlevel=4,verbose=verbose,'Opening server: "',server, '" on Port: ',port ;Modified this sentence by Shinbori (2012/03/06)
+      if not keyword_set(server) then dprint,dlevel=0,verbose=verbose,'Bad server: "'+server+'"' ;Modified this sentence by Shinbori (2012/03/06)
       socket, unit, Server,  Port, /get_lun,/swap_if_little_endian,error=error,$
                  read_timeout=read_timeout,connect_timeout=connect_timeout
       if error ne 0 then begin
@@ -453,7 +464,9 @@ DONE: On_IOERROR, NULL
          endelse
 
          if keyword_set(no_download) then  download_file = 0
-
+         if keyword_set(force_download) then download_file = 1;Add to this sentence by Shinbori (2012/03/06)
+         
+         
          if download_file then begin    ;  begin file download
              dirname = file_dirname(localname)
              file_mkdir2,dirname,mode = dir_mode,dlevel=2,verbose=verbose
