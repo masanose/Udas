@@ -331,12 +331,12 @@ for i=0,n_elements(site_code)-1 do begin
             len=strlen(tplot_name_tmp)
             pos=strpos(tplot_name_tmp, '_', /reverse_search)
             param=strmid(tplot_name_tmp, pos+1, len-pos)
-            tplot_name_ttl='eiscat_'+stn+ant+'_'+pc1+'_all_'+param
+            tplot_name_ttl='eiscat_'+stn+ant+'_all_'+param
 
             ;----- Store eiscat_*_all_* -----;
             pos=strpos(lim.ytitle, '!C')
             len=strlen(lim.ytitle)
-            lim.ytitle=strmid(lim.ytitle, 0, pos-4)+'all!C'+strmid(lim.ytitle, pos+2, len-pos-1)
+            lim.ytitle=stn+'_'+ant+'_all!C'+strmid(lim.ytitle, pos+2, len-pos-1)
             if ((intt1 eq '0000') and (strlen(tnames(tplot_name_ttl)) ne 0))  then begin
               get_data, tplot_name_ttl, data=dttl
               str_element, d, 'v', success=s
