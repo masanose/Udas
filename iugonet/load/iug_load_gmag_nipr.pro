@@ -47,11 +47,11 @@
 ; Written by Y.-M. Tanaka, December 24, 2010 (ytanaka at nipr.ac.jp)
 ;-
 
-pro iug_load_gmag_nipr, site=site, datatype=datatype, $
+pro iug_load_gmag_nipr, site=site, datatype=datatype, fproton=fproton, $
   trange=trange, verbose=verbose, downloadonly=downloadonly, $
   no_download=no_download
 
-erg_load_gmag_nipr, site=site, datatype=datatype, $
+erg_load_gmag_nipr, site=site, datatype=datatype, fproton=fproton, $
   trange=trange, verbose=verbose, downloadonly=downloadonly, $
   no_download=no_download
 
