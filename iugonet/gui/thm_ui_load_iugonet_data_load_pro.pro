@@ -17,6 +17,7 @@
 ;A. Shinbori, 01/02/2012
 ;A. Shinbori, 04/02/2012
 ;A. Shinbori, 06/03/2012
+;A. Shinbori, 12/04/2012
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -496,7 +497,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       ;================================================================================
       ;======== Add the time clip of tplot variable between start and end times by Shinbori  =========   
         trange = timeRange
-        time_clip, par_names[i],trange[0],trange[1],/replace 
+        time_clip, new_vars[i],trange[0],trange[1],/replace 
       ;================================================================================
 
         result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)
