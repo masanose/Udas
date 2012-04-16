@@ -320,7 +320,6 @@ for i=0,n_elements(site_code)-1 do begin
           endfor
 
 
-;          goto, jp1
           ;----- Incorporate different int_time and pulse_modes -----;
           tplot_name_all=tnames('eiscat_'+stn+ant+'_'+pc1+'_'+intt1+'_*')
           for itname=0, n_elements(tplot_name_all)-1 do begin
@@ -353,8 +352,6 @@ for i=0,n_elements(site_code)-1 do begin
               store_data, tplot_name_ttl, data=d, dl=dl, lim=lim
             endelse
           endfor
-
-;          jp1: print, 'Do this'
 
         endelse
       endif
