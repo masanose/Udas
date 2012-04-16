@@ -28,22 +28,37 @@ iug_load_gmag_serc,site=['ONW','CMD','ANC']
 tplot_names
 stop
 
+; change view region
+tplot_options, 'region', [0.05, 0, 1, 1]
+
 ; plot the loaded data
 tplot,'magdas_mag_*'
 stop
 
 ; subtract mean value and replot data
+; following example show tplot variables operations using low level commands
 get_data, 'magdas_mag_onw', data=d
 for i=0,3 do d.y(*,i)=d.y(*,i)-mean(d.y(*,i),/NaN)
 store_data, "magdas_mag_onw_new", data=d
+options, "magdas_mag_onw_new", labels=['H','D','Z','F'] , colors=[2,4,6,0],$
+                               ytitle = 'MAGDAS ONW', $
+                               ysubtitle = '[nT]'
 
 get_data, 'magdas_mag_cmd', data=d
 for i=0,3 do d.y(*,i)=d.y(*,i)-mean(d.y(*,i),/NaN)
 store_data, "magdas_mag_cmd_new", data=d
+store_data, "magdas_mag_cmd_new", data=d
+options, "magdas_mag_cmd_new", labels=['H','D','Z','F'] , colors=[2,4,6,0],$
+                               ytitle = 'MAGDAS CMD', $
+                               ysubtitle = '[nT]'
 
 get_data, 'magdas_mag_anc', data=d
 for i=0,3 do d.y(*,i)=d.y(*,i)-mean(d.y(*,i),/NaN)
 store_data, "magdas_mag_anc_new", data=d
+store_data, "magdas_mag_anc_new", data=d
+options, "magdas_mag_anc_new", labels=['H','D','Z','F'] , colors=[2,4,6,0],$
+                               ytitle = 'MAGDAS ANC', $
+                               ysubtitle = '[nT]'
 
 tplot, 'magdas_mag_*_new'
 stop
