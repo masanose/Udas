@@ -23,7 +23,7 @@ iug_load_gmag_wdc, site='kak', resolution='min'
 tplot_names
 
 ;Set the title of the plot 
-tplot_options, 'title', 'Sample plot of iug_crib_gmag_wdc'
+;tplot_options, 'title', 'Sample plot of iug_crib_gmag_wdc'
 
 ;Plot data
 tplot,'wdc_mag_kak_1min'

@@ -49,7 +49,7 @@ print,'Enter ".c" to continue.'
 stop
 
 ; Set title
-tplot_options, 'title', 'Sample plot of EISCAT radar data'
+; tplot_options, 'title', 'Sample plot of EISCAT radar data'
 
 ; Plot Ne, Te, Ti, Vi for ESR-42m radar
 tplot,['eiscat_esr42m_ipy0_all_ne','eiscat_esr42m_ipy0_all_te',$

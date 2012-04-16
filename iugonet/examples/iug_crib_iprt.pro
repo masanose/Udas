@@ -37,7 +37,7 @@ zlim,'iprt_sun_R',20,100
 tplot,['iprt_sun_L','iprt_sun_R']
 
 ; Title
-tplot_options, 'title', 'Sample plot of IPRT solar radio data' 
+; tplot_options, 'title', 'Sample plot of IPRT solar radio data' 
 
 ; Plot
 tplot
