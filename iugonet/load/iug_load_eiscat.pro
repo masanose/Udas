@@ -319,7 +319,9 @@ for i=0,n_elements(site_code)-1 do begin
             endcase
           endfor
 
-          ;----- Incorporate different int_time modes -----;
+
+;          goto, jp1
+          ;----- Incorporate different int_time and pulse_modes -----;
           tplot_name_all=tnames('eiscat_'+stn+ant+'_'+pc1+'_'+intt1+'_*')
           for itname=0, n_elements(tplot_name_all)-1 do begin
             tplot_name_tmp=tplot_name_all(itname)
@@ -337,7 +339,7 @@ for i=0,n_elements(site_code)-1 do begin
             pos=strpos(lim.ytitle, '!C')
             len=strlen(lim.ytitle)
             lim.ytitle=stn+'_'+ant+'_all!C'+strmid(lim.ytitle, pos+2, len-pos-1)
-            if ((intt1 eq '0000') and (strlen(tnames(tplot_name_ttl)) ne 0))  then begin
+            if strlen(tnames(tplot_name_ttl)) ne 0 then begin
               get_data, tplot_name_ttl, data=dttl
               str_element, d, 'v', success=s
               if s eq 0 then begin
@@ -351,6 +353,8 @@ for i=0,n_elements(site_code)-1 do begin
               store_data, tplot_name_ttl, data=d, dl=dl, lim=lim
             endelse
           endfor
+
+;          jp1: print, 'Do this'
 
         endelse
       endif
