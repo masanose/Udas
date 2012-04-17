@@ -130,10 +130,10 @@ only to MAGDAS 1-minute averaged data observed during recent WHI campaign
 http://magdas.serc.kyushu-u.ac.jp/whi/index.php
 Future data release is a work in progress.
 
-3. Procedure "iug_load_iprt" calls fits_read, sxpar, fits_open, 
-fits_close, gettok, sxdelpar. For the use of this procedure,
-get FITS I/O procedures from the IDL Astronomy Library   
-(http://idlastro.gsfc.nasa.gov/fitsio.html).
+3. Procedure "iug_load_iprt" (accordingly, loading the IPRT data by GUI) needs 
+the additional FITS library, such as fits_read, sxpar, fits_open, fits_close, 
+gettok, sxdelpar. For the use of this procedure, get FITS I/O procedures from 
+the IDL Astronomy Library (http://idlastro.gsfc.nasa.gov/fitsio.html).
 
 4. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database:
