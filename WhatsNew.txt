@@ -10,8 +10,8 @@ for the superposed data of some different pulse-codes.
 
 3) Removed the procedures for SuperDARN radar data.
 
-The procedures for the SuperDARN radar data were have been included in 
-(the original) TDAS7.00 and removed from UDAS2.00.1.
+The procedures for the SuperDARN radar data have been included in (the 
+original) TDAS7.00 and removed from UDAS2.00.1.
 
 
 ------------------------------------------------------
