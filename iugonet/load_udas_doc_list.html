@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Fri Feb 10 22:18:00 2012.<P>
+<STRONG>Last modified: </STRONG>Tue Apr 17 14:27:28 2012.<P>
  
 <HR>
  
@@ -109,8 +109,17 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
  PURPOSE:
     This procedure is the modified version of file_http_copy in tdas_6_00 for IUGONET data.
     New input parameter "host" was added.
+    
+MODIFICATIONS:
+ Y. Koyama, April 28, 2011.
+ A. Shinbori, March 06, 2012
+ 
 
- Modified by Y. Koyama, April 28, 2011.
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
 </PRE><P>
 <STRONG>(See <A href="load/file_http_copy_iug.pro">iugonet/load/file_http_copy_iug.pro</A>)</STRONG><P>
 <HR>
@@ -826,7 +835,7 @@ ACKNOWLEDGEMENT:
 
  Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
  Modified by: Y.-M. Tanaka, August 24, 2011
-   Separated "<A href="iugonet/tools_udas_doc_list.html#PRINT_STR_MAXLET">PRINT_STR_MAXLET</A>" to another file. 
+   Separated "print_str_maxlet" to another file. 
  Modified by: Y.-M. Tanaka, December 1, 2011
    to load data with various int_times separately to different tplot vars.
 </PRE><P>
@@ -842,7 +851,7 @@ ACKNOWLEDGEMENT:
  PROCEDURE: iug_load_gmag_mm210
    to load the 210 MM geomagnetic data from the STEL ERG-SC site 
 
- NOTE: This procedure is a simple alias to "erg_load_gmag_nipr" 
+ NOTE: This procedure is a simple alias to "erg_load_gmag_mm210" 
    and calls the original one by just providing the same 
    arguments/keywords given.
    Some load procedures for the ground-based observational data 
@@ -1956,7 +1965,7 @@ ACKNOWLEDGEMENT:
  PROCEDURE: iug_load_sdfit
    to load the SuperDARN fitacf data from the STEL ERG-SC site 
 
- NOTE: This procedure is a simple alias to "<A href="iugonet/erg_ground/radar/superdarn_udas_doc_list.html#ERG_LOAD_SDFIT">ERG_LOAD_SDFIT</A>" 
+ NOTE: This procedure is a simple alias to "erg_load_sdfit" 
    and calls the original one by just providing the same 
    arguments/keywords given.
    Some load procedures for the ground-based observational data 
