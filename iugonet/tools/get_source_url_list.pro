@@ -1,4 +1,4 @@
-TION: GET_SOURCE_URL_LIST
+;FUNCTION: GET_SOURCE_URL_LIST
 ;   url_out=get_source_url_list(url_in, xmldir, xmlfile)
 ;
 ; PURPOSE:
