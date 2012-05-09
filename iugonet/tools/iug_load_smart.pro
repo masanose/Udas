@@ -10,6 +10,7 @@
 ;	:Keywords:
 ;    datatype:  basically set the telescope (e.g., halpha)
 ;    filter:    filter name(s) (e.g., m05 )
+;    maxfile:   set the maximum number of files to be (down)loaded. (Default: 1000)
 ;    lst:       set a named variable to return the URL list of data files
 ;
 ; :EXAMPLES:
@@ -24,6 +25,7 @@
 ;
 ;-
 PRO iug_load_smart, datatype=datatype, filter=filter, $
+    maxfile=maxfile, $
     lst=lst
     
   ;;;;;;;;;;;;;; Datatype and Filter ;;;;;;;;;;;;;;
@@ -50,6 +52,8 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
   
   
   ;Check the arguments
+  IF ~KEYWORD_SET(maxfile) THEN maxfile = 1000L 
+  maxfile = LONG( maxfile )
   IF ~KEYWORD_SET(datatype) THEN datatype='halpha'
   IF ~KEYWORD_SET(filter) THEN filter='m05'
   datatype_arr = STRLOWCASE( thm_check_valid_name( datatype, datatype_all, $
@@ -77,8 +81,9 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
       keyword='smart+AND+'+datatype+'+AND+'+filter+'+AND+fits'
       startdate = tr_str[0]
       enddate = tr_str[1]
+      rpp_param = 'rpp=' + strtrim(string(maxfile),2) + '&'
       query = 'request?query='+keyword+'&ts='+startdate+'&te='+enddate+'&Granule=granule&'
-      url_in = mddb_base_url+query
+      url_in = mddb_base_url+query+rpp_param
       
       ;Obtain the list of URLs of data files by throwing a query to MDDB
       lst = get_source_url_list( url_in )
