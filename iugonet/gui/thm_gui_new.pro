@@ -23,16 +23,16 @@
 ;
 ;HISTORY:
 ;
-;$LastChangedBy: bsadeghi $
-;$LastChangedDate: 2012-02-24 14:14:12 -0800 (Fri, 24 Feb 2012) $
-;$LastChangedRevision: 9847 $
+;$LastChangedBy: aaflores $
+;$LastChangedDate: 2012-03-14 11:25:43 -0700 (Wed, 14 Mar 2012) $
+;$LastChangedRevision: 10090 $
 ;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_00/idl/themis/thm_ui_new/thm_gui_new.pro $
 ;-----------------------------------------------------------------------------------
 
 
 PRO thm_gui_new_event, event
 
-iug_init
+  iug_init
 
   COMPILE_OPT hidden
 
@@ -1236,7 +1236,7 @@ iug_init
     'CALCULATE': BEGIN
       info.windowStorage->getProperty,callSequence=callSequence
       thm_ui_calculate, info.master,info.loadedData,info.calcSettings, info.historywin,info.guiTree,callSequence, $
-                        info.drawObject, info.windowStorage, info.scrollbar
+                        info.drawObject, info.windowStorage, info.scrollbar, info.statusBar
      END
 
     'DPROC': thm_ui_dproc_panel, info
@@ -1811,7 +1811,7 @@ scrollbase = widget_base(master, /row, xpad=0, ypad=0, space=0)
     /Menu, /Separator)
   contextSubPageButton = Widget_Button(contextSubSetButton, Value='Page', UValue='SUBPAGE')
   contextSubMarkButton = Widget_Button(contextSubSetButton, Value='Marker', UValue='SUBMARKER')
-  contextCalculateButton = Widget_Button(drawContextBase, Value='Calculate...', /Separator)
+  contextCalculateButton = Widget_Button(drawContextBase, Value='Calculate...', UValue='CALCULATE',/Separator)
   contextDprocButton = Widget_Button(drawContextBase, Value='Data Analysis...', UValue='DPROC')  
 
   ; Create Status Bar Object
@@ -1878,6 +1878,7 @@ scrollbase = widget_base(master, /row, xpad=0, ypad=0, space=0)
           dataButtons:dataButtons,$
           nWindows:0,$
           mainFileName:'', $
+          lastClick: [0d,0], $
           prevEventType:-1, $
           statusBar:statusBar, $ ;the status message bar for the main window
           pathBar:pathBar, $
