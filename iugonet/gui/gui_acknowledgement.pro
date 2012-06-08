@@ -32,15 +32,20 @@ case instrument of
         'magdas'   : iug_var = !iugonet.data_policy.gmag_magdas
         '210mm#'   : iug_var = !iugonet.data_policy.gmag_mm210
         'WDC_kyoto': iug_var = !iugonet.data_policy.gmag_wdc
-        'NIPR_mag#': iug_var = !iugonet.data_policy.gmag_nipr
+        'NIPR_mag#': begin
+            case site_or_param of
+                'syo': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                else : iug_var = !iugonet.data_policy.gmag_nipr_ice
+            endcase
+          end
       endcase
     end
   'SuperDARN#': begin
       case site_or_param of
         'hok': iug_var = !iugonet.data_policy.sdfit_hok
         'ksr': iug_var = !iugonet.data_policy.sdfit_ksr
-        'sye': iug_var = !iugonet.data_policy.sdfit_sye
-        'sys': iug_var = !iugonet.data_policy.sdfit_sys
+        'sye': iug_var = !iugonet.data_policy.sdfit_syo
+        'sys': iug_var = !iugonet.data_policy.sdfit_syo
       endcase
     end
   'Equatorial_Atomosphere_Radar'  : iug_var = !iugonet.data_policy.ear
@@ -77,15 +82,20 @@ endif else begin
             'magdas'   : !iugonet.data_policy.gmag_magdas = iug_var
             '210mm#'   : !iugonet.data_policy.gmag_mm210 = iug_var
             'WDC_kyoto': !iugonet.data_policy.gmag_wdc = iug_var
-            'NIPR_mag#': !iugonet.data_policy.gmag_nipr = iug_var
+            'NIPR_mag#': begin
+                case site_or_param of
+                    'syo': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    else : !iugonet.data_policy.gmag_nipr_ice = iug_var
+                endcase
+              end
           endcase
         end
       'SuperDARN#': begin
           case site_or_param of
             'hok': !iugonet.data_policy.sdfit_hok = iug_var
             'ksr': !iugonet.data_policy.sdfit_ksr = iug_var
-            'sye': !iugonet.data_policy.sdfit_sye = iug_var
-            'sys': !iugonet.data_policy.sdfit_sys = iug_var
+            'sye': !iugonet.data_policy.sdfit_syo = iug_var
+            'sys': !iugonet.data_policy.sdfit_syo = iug_var
           endcase
         end
       'Equatorial_Atomosphere_Radar'  : !iugonet.data_policy.ear = iug_var

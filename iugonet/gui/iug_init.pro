@@ -41,15 +41,15 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   meteor_rish: 0b,    $
                   sdfit_hok:  0b,     $    ;HOK
                   sdfit_ksr:  0b,     $    ;KSR
-                  sdfit_sye:  0b,     $    ;SYE
-                  sdfit_sys:  0b,     $    ;SYS
+                  sdfit_syo:  0b,     $    ;SYE,SYS
                   gmag_mm210: 0b,     $
-                  gmag_nipr: 0b,      $
+                  gmag_nipr_syo: 0b,  $    ;SYO
+                  gmag_nipr_ice: 0b,  $    ;HUS, TJO, AED
                   gmag_wdc:     0b,   $
                   gmag_wdc_dst: 0b,   $
                   gmag_wdc_ae_asy: 0b,$
                   gmag_magdas: 0b,    $
-                  ear:    0b,         $    ;iug_load_???? の???の部分を入れる？
+                  ear:     0b,        $
                   iprt:    0b,        $
                   eiscat:  0b,        $
                   mu:    0b           $
