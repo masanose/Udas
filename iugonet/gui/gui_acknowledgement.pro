@@ -15,6 +15,8 @@
 function gui_acknowledgement, instrument=instrument, datatype=datatype, $
               site_or_param=site_or_param, par_names=par_names
 
+print,'site_or_param = ', site_or_param
+
 if par_names[0] eq '' then return, 'Cancel'
 
 ;----- Get !iugonet.data_policy -----;

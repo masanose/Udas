@@ -313,6 +313,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
   thm_ui_cleanup_tplot,tn_before,create_time_before=cn_before,del_vars=to_delete,new_vars=new_vars
 
   ;----- Show data policy -----;
+
+  print, instrument
+  print, datatype
+  print, site_or_param
+  print, new_vars
+
   Answer = gui_acknowledgement(instrument=instrument, datatype=datatype, $
               site_or_param=site_or_param, par_names=new_vars)
   
