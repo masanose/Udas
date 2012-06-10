@@ -45,316 +45,269 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;=================================
   ;===== Load the IUGONET data =====
   ;=================================
-  ;----- Iitate Planetary Radio Telescope -----;
-  if instrument eq 'Iitate_Planetary_Radio_Telescope' then begin       
-     iug_load_iprt, site =site_or_param, datatype=datatype, trange = timeRange
-     if parameters[0] eq '*' then begin
-        par_names=tnames('iprt_*')
-     endif else begin
-        par_names=parameters
-     endelse
-  endif
+  case instrument of 
+      ;----- IPRT ----;
+      'Iitate_Planetary_Radio_Telescope' : begin       
+          iug_load_iprt, site=site_or_param, datatype=datatype, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iprt_*')
+          endif else begin
+              par_names=parameters
+          endelse
+          end
   
-  ;----- geomagnetic field index -----;
-  if instrument eq 'geomagnetic_field_index' then begin
-     if datatype eq 'ASY_index' then begin
-        if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
-           if parameters[0] eq '*' then vns=['asy','sym']
-           for i=0, n_elements(vns)-1 do begin
-               iug_load_gmag_wdc, site = vns[i], trange=timeRange 
-           endfor
-           par_names=tnames('wdc_mag_'+'*')        
-        endif
-     endif else if datatype eq 'Dst_index' or datatype eq 'AE_index' then begin
-        if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
-           case datatype of
-              'Dst_index': vns='dst'
-              'AE_index':  vns='ae'
-           endcase
-           if vns eq 'dst' then begin 
-              if parameters[0] eq 'prov' then begin
-                ; par_names='wdc_mag_'+vns+'_prov'
-                 iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
-                 par_names='wdc_mag_'+vns+'_prov'
-              endif else if parameters[0] eq 'final' then begin
-                ; par_names='wdc_mag_'+vns
-                 iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
-                 par_names=tnames('wdc_mag_'+vns+'*')
-              endif else begin
-                 iug_load_gmag_wdc, site=vns, trange=timeRange
-                 par_names=tnames('wdc_mag_'+vns+'*')
-              endelse
-           endif
-           if vns eq 'ae' then begin 
+      ;----- geomagnetic field index ----;
+      'geomagnetic_field_index' : begin
+          case datatype of
+              'ASY_index' : begin
+                  if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
+                      if parameters[0] eq '*' then vns=['asy','sym']
+                      for i=0, n_elements(vns)-1 do begin
+                          iug_load_gmag_wdc, site=vns[i], trange=timeRange 
+                      endfor
+                      par_names=tnames('wdc_mag_'+'*')        
+                  endif
+                  end
+              else : begin
+                  if (site_or_param[0] eq '*(all)') or (site_or_param[0] eq 'WDC_kyoto') then begin
+                      case datatype of
+                          'Dst_index': vns='dst'
+                          'AE_index':  vns='ae'
+                      endcase
+                      if vns eq 'dst' then begin 
+                          if parameters[0] eq 'prov' then begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+                              par_names='wdc_mag_'+vns+'_prov'
+                          endif else if parameters[0] eq 'final' then begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange, level=parameters
+                              par_names=tnames('wdc_mag_'+vns+'*')
+                          endif else begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange
+                              par_names=tnames('wdc_mag_'+vns+'*')
+                          endelse
+                      endif
+                      if vns eq 'ae' then begin 
+                          if parameters[0] eq '*' then begin
+                              vns2=['min','hour','prov_min','prov_hour']
+                              vns4=['min','hour','min','hour']
+                              for i=0, n_elements(vns2)-1 do begin
+                                  if vns2[i] eq ('min' or 'hour') then vns3='final'
+                                  if vns2[i] eq ('prov_min' or 'prov_hour') then vns3='prov'
+                                  iug_load_gmag_wdc, site=vns, trange=timeRange, level=vns3, resolution=vns4[i]
+                              endfor
+                              par_names=tnames('wdc_mag_'+vns+'_'+'*')             
+                          endif else if parameters eq 'prov_min' then begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange, level='prov', resolution='min'
+                              par_names='wdc_mag_'+vns+'_prov_1min'
+                          endif else if parameters eq 'prov_hour' then begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange, level='prov', resolution='hour'
+                              par_names='wdc_mag_'+vns+'_prov_1hr'
+                          endif else if parameters eq 'min' then begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='min'
+                              par_names='wdc_mag_'+vns+'_1min'
+                          endif else if parameters eq 'hour' then begin
+                              iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='hour'
+                              par_names='wdc_mag_'+vns+'_1hr'
+                          endif
+                      endif
+                  endif
+                  end
+          endcase
+          end
+
+      ;----- geomagnetic field fluxgate ----;
+      'geomagnetic_field_fluxgate' : begin
+          case datatype of
+              'magdas' : begin
+                  iug_load_gmag_serc, trange = timeRange, site = site_or_param
+                  par_names=tnames('magdas_mag_' + '*') 
+                  end 
+              '210mm#' : begin
+                  vns=parameters
+                  if parameters[0] eq '*' then vns=['all']
+                  erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
+                  par_names=tnames('mm210_mag_'+'*'+'_'+'*'+'_hdz')
+                  end
+              'WDC_kyoto' : begin
+                  vns=parameters
+                  if parameters[0] eq '*' then vns=['min', 'hour']
+                  for i=0, n_elements(vns)-1 do begin
+                      iug_load_gmag_wdc, trange=timeRange, site = site_or_param, resolution=vns[i]
+                  endfor
+                  par_names=tnames('wdc_mag_'+'*'+'_'+'*')
+                  end
+              'NIPR_mag#' : begin     
+                  iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
+                  par_names=tnames('nipr_mag_'+'*')
+                  end
+          endcase
+          end
+
+      ;----- SuperDARN radar ----;
+      'SuperDARN#' : begin
+          if site_or_param[0] ne '*(all)' then begin
+              erg_load_sdfit, trange=timeRange, sites=site_or_param
+
+              ;Delete the tplot variables not allowed on the GUI:
+              store_data, 'sd_' + '*' + '_position_tbl_*',/delete
+              store_data, 'sd_' + '*' + '_positioncnt_tbl_*',/delete
+              store_data, 'sd_' + '*' + '_veast_bothscat_*',/delete
+              store_data, 'sd_' + '*' + '_vnorth_bothscat_*',/delete
+              store_data, 'sd_' + '*' + '_vlos_bothscat_*',/delete
+    
               if parameters[0] eq '*' then begin
-                 vns2=['min','hour','prov_min','prov_hour']
-                 vns4=['min','hour','min','hour']
-                 for i=0, n_elements(vns2)-1 do begin
-                     if vns2[i] eq ('min' or 'hour') then vns3='final'
-                     if vns2[i] eq ('prov_min' or 'prov_hour') then vns3='prov'
-                     iug_load_gmag_wdc, site=vns, trange=timeRange, level=vns3, resolution=vns4[i]
-                 endfor
-                 par_names=tnames('wdc_mag_'+vns+'_'+'*')             
-              endif else if parameters eq 'prov_min' then begin
-                 par_names='wdc_mag_'+vns+'_prov_1min'
-                 iug_load_gmag_wdc, site=vns, trange=timeRange, level='prov', resolution='min'
-              endif else if parameters eq 'prov_hour' then begin
-                 par_names='wdc_mag_'+vns+'_prov_1hr'
-                 iug_load_gmag_wdc, site=vns, trange=timeRange, level='prov', resolution='hour'
-              endif else if parameters eq 'min' then begin
-                 par_names='wdc_mag_'+vns+'_1min'
-                 iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='min'
-              endif else if parameters eq 'hour' then begin
-                 par_names='wdc_mag_'+vns+'_1hr'
-                 iug_load_gmag_wdc, site=vns, trange=timeRange, level='final', resolution='hour'
-              endif 
-           endif
-        endif
-     endif
-  endif
-
-  ;----- geomagnetic field fluxgate -----;
-  if instrument eq 'geomagnetic_field_fluxgate' then begin
-     if datatype eq 'magdas' then begin
-        iug_load_gmag_serc, trange = timeRange, site = site_or_param
-        par_names=tnames('magdas_mag_' + '*') 
-     endif
-     if datatype eq '210mm#' then begin
-        vns=parameters
-        if parameters[0] eq '*' then vns=['all']
-        erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype=vns 
-        par_names=tnames('mm210_mag_'+'*'+'_'+'*'+'_hdz')
-     endif
-     if datatype eq 'WDC_kyoto' then begin
-        vns=parameters
-        if parameters[0] eq '*' then vns=['min', 'hour']
-           for i=0, n_elements(vns)-1 do begin
-               iug_load_gmag_wdc, trange=timeRange, site = site_or_param, resolution=vns[i]
-           endfor
-           par_names=tnames('wdc_mag_'+'*'+'_'+'*')
-        endif
-     if datatype eq 'NIPR_mag#' then begin     
-        iug_load_gmag_nipr, trange=timeRange, site = site_or_param, datatype = parameters
-        if parameters[0] eq '*' then begin
-           par_names=tnames('nipr_mag_'+'*')
-        endif else begin
-           tr=timerange(timeRange)
-           tr0=tr[0]
-           if strlowcase(parameters[0]) eq '1sec' then begin
-              for i=0, n_elements(site_or_param)-1 do begin
-                  if site_or_param[i] eq 'syo' then begin
-                     crttime=time_double('1998-1-1')
-                     if tr0 lt crttime then tres='2sec' else tres='1sec'
-                  endif
-                  if site_or_param[i] eq 'hus' then begin
-                     crttime=time_double('2001-9-8')
-                     if tr0 lt crttime then tres='2sec' else tres='02hz'
-                  endif
-                  if site_or_param[i] eq 'tjo' then begin
-                     crttime=time_double('2001-9-12')
-                     if tr0 lt crttime then tres='2sec' else tres='02hz'
-                  endif
-                  if site_or_param[i] eq 'aed' then begin
-                     crttime=time_double('2001-9-27')
-                     if tr0 lt crttime then tres='2sec' else tres='02hz'
-                  endif
-                  if site_or_param[i] eq 'isa' then begin
-                     tres='2sec'
-                  endif
-              endfor
-           endif else begin
-              tres=parameters
-           endelse
-           par_names=tnames('nipr_mag_'+'*'+'_'+'*')
-        endelse
-     endif
-  endif  
+                  par_names=tnames('sd_' + '*' + '_' + '*'+ '_*')
+              endif else begin
+                  par_names=tnames('sd_' + '*' + '_' + parameters +'_*')
+              endelse
+          endif
+          end
   
-  ;----- SuperDARN radar ----;
-  if instrument eq 'SuperDARN#' then begin
-     if site_or_param[0] ne '*(all)' then begin
-        erg_load_sdfit, trange=timeRange, sites=site_or_param
-
-        ;Delete the tplot variables not allowed on the GUI:
-        store_data, 'sd_' + '*' + '_position_tbl_*',/delete
-        store_data, 'sd_' + '*' + '_positioncnt_tbl_*',/delete
-        store_data, 'sd_' + '*' + '_veast_bothscat_*',/delete
-        store_data, 'sd_' + '*' + '_vnorth_bothscat_*',/delete
-        store_data, 'sd_' + '*' + '_vlos_bothscat_*',/delete
-    
-        if parameters[0] eq '*' then begin
-           par_names=tnames('sd_' + '*' + '_' + '*'+ '_*')
-        endif else begin
-           par_names=tnames('sd_' + '*' + '_' + parameters +'_*')
-        endelse
-     endif
-  endif
+      ;----- Equatorial Atomosphere Radar -----;
+      'Equatorial_Atomosphere_Radar' : begin
+          if parameters[0] eq '*' then begin
+              vns=['all']
+              iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
+              case datatype of
+                  'troposphere': par_names=tnames('iug_ear_trop'+'*')
+                  'e_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
+                  'ef_region': par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
+                  'v_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
+                  'f_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
+              endcase
+          endif else begin
+              vns=parameters
+              iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
+              case datatype of
+                  'troposphere': par_names=tnames('iug_ear_trop_'+vns)
+                  'e_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
+                  'ef_region': par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
+                  'v_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
+                  'f_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
+              endcase
+          endelse
+          end 
   
-  ;----- Equatorial Atomosphere Radar -----;
-  if instrument eq 'Equatorial_Atomosphere_Radar' then begin
-     if parameters[0] eq '*' then begin
-        vns=['all']
-        iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
-        case datatype of
-             'troposphere': par_names=tnames('iug_ear_trop'+'*')
-             'e_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
-             'ef_region': par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
-             'v_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
-             'f_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+'*')
-        endcase
-     endif else begin
-        vns=parameters
-        iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
-        case datatype of
-             'troposphere': par_names=tnames('iug_ear_trop_'+vns)
-             'e_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
-             'ef_region': par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
-             'v_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
-             'f_region':  par_names=tnames('iug_ear_fai'+'*'+'_'+vns)
-        endcase
-     endelse
-  endif 
-  
-  ;----- Medium Frequency radar -----;
-  if instrument eq 'Medium_Frequency_radar' then begin
-     iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
-     if parameters[0] eq '*' then begin
-        par_names=tnames('iug_mf_'+'*'+'_'+'*')
-     endif else begin
-        par_names=tnames('iug_mf_'+'*'+'_'+parameters)
-     endelse
-  endif
+      ;----- Medium Frequency radar -----;
+      'Medium_Frequency_radar' : begin
+          iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_mf_'+'*'+'_'+'*')
+          endif else begin
+              par_names=tnames('iug_mf_'+'*'+'_'+parameters)
+          endelse
+          end
    
-  ;----- Meteor Wind radar -----;
-  if instrument eq 'Meteor_Wind_radar' then begin
-     if parameters[0] ne '*' then begin 
-        vns=parameters
-     endif else if parameters[0] eq '*' then vns=['all']
-     iug_load_meteor_rish, datatype =datatype, site=site_or_param, parameter = vns, trange = timeRange
-     par_names=tnames('iug_meteor_'+'*'+'_'+'*')
-  endif
+      ;----- Meteor Wind radar -----;
+      'Meteor_Wind_radar' : begin
+          if parameters[0] eq '*' then begin 
+              vns=['all']
+          endif else begin
+	      vns=parameters
+          endelse
+          iug_load_meteor_rish, datatype=datatype, site=site_or_param, parameter=vns, trange=timeRange
+          par_names=tnames('iug_meteor_'+'*'+'_'+'*')
+          end
   
-  ;----- Middle Upper atomosphere radar -----;
-  if instrument eq 'Middle_Upper_atomosphere_radar' then begin
-     iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
-     if parameters[0] eq '*' then begin
-        case datatype of
-          'troposphere': par_names=tnames('iug_mu_trop_'+'*')
-;          'meteor_win':  par_names=tnames('iug_mu_meteor_'+'*')
-        endcase
-     endif else begin
-        case datatype of
-          'troposphere': par_names=tnames('iug_mu_trop_'+parameters)
-;          'meteor_win':  par_names='iug_mu_meteor_'+parameters
-        endcase
-     endelse
-  endif
+      ;----- Middle Upper atomosphere radar -----;
+      'Middle_Upper_atomosphere_radar' : begin
+          iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
+          if parameters[0] eq '*' then begin
+              case datatype of
+                  'troposphere': par_names=tnames('iug_mu_trop_'+'*')
+;                  'meteor_win':  par_names=tnames('iug_mu_meteor_'+'*')
+              endcase
+          endif else begin
+              case datatype of
+                  'troposphere': par_names=tnames('iug_mu_trop_'+parameters)
+;                  'meteor_win':  par_names='iug_mu_meteor_'+parameters
+              endcase
+          endelse
+          end
   
-  ;----- Bandary Layer Radar -----;
-  if instrument eq 'Boundary_Layer_Radar' then begin          
-     iug_load_blr_rish, site =site_or_param, parameter=parameters, trange = timeRange
-     if parameters[0] eq '*' then begin
-        par_names=tnames('iug_blr_'+'*'+'_'+'*')
-     endif else begin
-        par_names=tnames('iug_blr_'+'*'+'_'+parameters)
-     endelse
-  endif
+      ;----- Bandary Layer Radar -----;
+      'Boundary_Layer_Radar' : begin          
+          iug_load_blr_rish, site =site_or_param, parameter=parameters, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_blr_'+'*'+'_'+'*')
+          endif else begin
+              par_names=tnames('iug_blr_'+'*'+'_'+parameters)
+          endelse
+          end
 
-  ;----- Lower Troposphere Radar -----;
-  if instrument eq 'Lower_Troposphere_Radar' then begin       
-     iug_load_ltr_rish, site =site_or_param, parameter=parameters, trange = timeRange
-     if parameters[0] eq '*' then begin
-        par_names=tnames('iug_ltr_'+'*'+'_'+'*')
-     endif else begin
-        par_names=tnames('iug_ltr_'+'*'+'_'+parameters)
-     endelse
-  endif
+      ;----- Lower Troposphere Radar -----;
+      'Lower_Troposphere_Radar' : begin       
+          iug_load_ltr_rish, site =site_or_param, parameter=parameters, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_ltr_'+'*'+'_'+'*')
+          endif else begin
+              par_names=tnames('iug_ltr_'+'*'+'_'+parameters)
+          endelse
+          end
     
-  ;----- EISCAT radar -----;
-  if instrument eq 'EISCAT_radar' then begin
-     vns=strmid(datatype,0,3)
-     iug_load_eiscat, site=site_or_param, pulse_code=parameters, ydatatype=vns, $
-     trange = timeRange
-     if parameters[0] eq '*' then begin
-        par_names=tnames('eiscat_'+'*'+'_'+'*')
-     endif else begin
-        par_names=tnames('eiscat_'+'*'+'_'+parameters+'_'+'*')
-     endelse
-  endif
+      ;----- EISCAT radar -----;
+      'EISCAT_radar' : begin
+          vns=strmid(datatype,0,3)
+          iug_load_eiscat, site=site_or_param, pulse_code=parameters, ydatatype=vns, $
+          trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('eiscat_'+'*'+'_'+'*')
+          endif else begin
+              par_names=tnames('eiscat_'+'*'+'_'+parameters+'_'+'*')
+          endelse
+          end
 
-  ;----- Wind Profiler Radar (LQ-7) -----;
-  if instrument eq 'Wind_Profiler_Radar_(LQ-7)' then begin       
-     iug_load_wpr_rish, site =site_or_param, parameter=parameters, trange = timeRange
-     if parameters[0] eq '*' then begin
-        par_names=tnames('iug_wpr_'+'*'+'_'+'*')
-     endif else begin
-        par_names=tnames('iug_wpr_'+'*'+'_'+parameters)
-     endelse
-  endif
+      ;----- Wind Profiler Radar (LQ-7) -----;
+      'Wind_Profiler_Radar_(LQ-7)' : begin       
+          iug_load_wpr_rish, site =site_or_param, parameter=parameters, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_wpr_'+'*'+'_'+'*')
+          endif else begin
+              par_names=tnames('iug_wpr_'+'*'+'_'+parameters)
+          endelse
+          end
 
-  ;load data of Radio sonde 
-  ;if instrument eq 'Radio_sonde' then begin
-  ;   iug_load_radiosonde_rish_dawex_nc, datatype = datatype, site =site_or_param, trange = timeRange
-  ;   if parameters[0] eq '*' then begin 
-  ;      par_names=tnames('iug_radiosonde_'+site_or_param+'_'+'*')
-  ;   endif else begin
-  ;      par_names='iug_radiosonde_'+site_or_param+'_'+parameters
-  ;   endelse        
-  ;   if site_or_param eq 'sgk' then begin      
-  ;      iug_load_radiosonde_rish_sgk_txt, datatype = datatype, site =site_or_param, trange = timeRange
-  ;      if parameters[0] eq '*' then begin 
-  ;         par_names=tnames('iug_radiosonde_'+site_or_param+'_'+'*')
-  ;      endif else begin
-  ;         par_names='iug_radiosonde_'+site_or_param+'_'+parameters
-  ;      endelse
-  ;   endif
-  ;endif
-  
+  endcase
+
+  ;----- Clean up tplot -----;  
   thm_ui_cleanup_tplot,tn_before,create_time_before=cn_before,del_vars=to_delete,new_vars=new_vars
 
   ;----- Show data policy -----;
-
-  print, instrument
-  print, datatype
-  print, site_or_param
-  print, new_vars
-
   Answer = gui_acknowledgement(instrument=instrument, datatype=datatype, $
-              site_or_param=site_or_param, par_names=new_vars)
-  
+        site_or_param=site_or_param, par_names=new_vars)
+
   if new_vars[0] ne '' then begin
+      ;----- only add the requested new parameters -----;
+      new_vars = ssl_set_intersection([par_names],[new_vars])
+      loaded = 1
     
-     ;----- only add the requested new parameters -----;
-     new_vars = ssl_set_intersection([par_names],[new_vars])
-     loaded = 1
-    
-     if Answer eq 'OK' then begin
+      if Answer eq 'OK' then begin
 
-        ;----- loop over loaded data -----;
-        for i = 0,n_elements(new_vars)-1 do begin
+          ;----- loop over loaded data -----;
+          for i = 0,n_elements(new_vars)-1 do begin
       
-            ;----- In case of more than two observatoies -----;
-            if (instrument eq 'SuperDARN#') or (instrument eq 'EISCAT_radar') then begin
-               site_name=strsplit(new_vars[i],'_',/extract)
-               site_name2 = site_name[1]
-            endif else begin
-               site_name=strsplit(new_vars[i],'_',/extract)
-               site_name2 = site_name[2]
-            endelse
+              ;----- In case of more than two observatoies -----;
+              if (instrument eq 'SuperDARN#') or (instrument eq 'EISCAT_radar') then begin
+                  site_name=strsplit(new_vars[i],'_',/extract)
+                  site_name2 = site_name[1]
+              endif else begin
+                  site_name=strsplit(new_vars[i],'_',/extract)
+                  site_name2 = site_name[2]
+              endelse
 
-            ;----- Add the time clip of tplot variable between start and end times -----;   
-            trange = timeRange
-            time_clip, new_vars[i],trange[0],trange[1],/replace 
+              ;----- Add the time clip of tplot variable between start and end times -----;   
+              trange = timeRange
+              time_clip, new_vars[i],trange[0],trange[1],/replace 
 
-            result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)
+              result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)
         
-            if ~result then begin
-               statusBar->update,'Error loading: ' + new_vars[i]
-               historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
-               return
-            endif
-        endfor
-     endif
+              if ~result then begin
+                  statusBar->update,'Error loading: ' + new_vars[i]
+                  historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
+                  return
+              endif
+          endfor
+      endif
   endif 
   
   if n_elements(to_delete) gt 0 && is_string(to_delete) then begin
