@@ -49,10 +49,8 @@ pro thm_ui_call_sequence::addloadcall,st_time0, $
                                       dtype, $
                                       observ, $
                                       outcoord,$
-   ;================Changed from tdas 6.00 to 7.00 ============
                                       raw,$
                                       overwrite_selections
-   ;===========================================================
    
    compile_opt idl2
   
@@ -62,11 +60,9 @@ pro thm_ui_call_sequence::addloadcall,st_time0, $
            dtype:dtype,$
            observ:observ,$
            outcoord:outcoord,$
-   ;================Changed from tdas 6.00 to 7.00 ============
            raw:raw,$
            overwrite_selections:overwrite_selections}
-   ;===========================================================
-              
+           
   self->addSt,in_st 
                      
                      
@@ -398,10 +394,8 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
                                historywin=historywin,$
                                statustext=statustext,$
                                state_gui_id=guiID,$
-     ;===============Changed from tdas 6.00 to 7.00=============================
                                overwrite_selections=st.overwrite_selections,$
-                               /replay                               
-     ;==========================================================================
+                               /replay
     endif else if st.type eq 'loadgoesdata' then begin
       thm_ui_load_goes_data_load_pro,$
                          st.probes,$
@@ -436,7 +430,7 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
       thm_ui_load_iugonet_data_load_pro,$
                          st.instrument[0],$
                          st.datatype[0],$
-                         st.site_or_param,$ ; add to st.site_or_param by A. Shinbori.
+                         st.site_or_param,$
                          st.parameters,$
                          st.timeRange,$
                          self.loadedData,$
