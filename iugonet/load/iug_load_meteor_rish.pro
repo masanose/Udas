@@ -4,9 +4,8 @@
 ;iug_load_meteor_rish
 ;
 ;PURPOSE:
-;  Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
-;  in the NetCDF format taken by the meteor wind radar (MWR) at Kototabang and Serpong and loads data into
-;  tplot format.
+;  Queries the RISH servers for the meteor observation data (netCDF format) taken by 
+;  the meteor wind radar (MWR) at Kototabang and Serpong and loads data into tplot format.
 ;
 ;SYNTAX:
 ; iug_load_meteor_rish, datatype = datatype, site=site, parameters = parameters, $
@@ -29,10 +28,12 @@
 ;
 ;
 ;CODE:
-; A. Shinbori, 09/19/2010.
+; A. Shinbori, 19/09/2010.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 03/24/2011.
+; A. Shinbori, 24/03/2011.
+; A. Shinbori, 11/05/2011.
+; A. Shinbori, 28/05/2012.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -42,20 +43,24 @@
 ;-
 
 
-pro iug_load_meteor_rish, datatype = datatype, site=site, parameter = parameter, $
-                           downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_meteor_rish, datatype = datatype, $
+   site=site, $
+   parameter = parameter, $
+   downloadonly=downloadonly, $
+   trange=trange, $
+   verbose=verbose
 
-
-
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
+
  
 ;************************************
 ;Load 'thermosphere' data by default:
 ;************************************
 if (not keyword_set(datatype)) then datatype='thermosphere'
+
 
 ;****************
 ;Parameter check:
@@ -70,23 +75,23 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
-;***********
-;site codes:
-;***********
+
+;****************
+;Site code check:
+;****************
 ;--- all sites (default)
 site_code_all = strsplit('ktb srp',' ', /extract)
 
 ;--- check site codes
-if(not keyword_set(site)) then site='all'
+if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 
 print, site_code
 
 for i=0, n_elements(site_code)-1 do begin
-  if site_code[i] eq 'ktb' then iug_load_meteor_ktb_txt, datatype = datatype, parameter = parameter, $
+  if site_code[i] eq 'ktb' then iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose
-  if site_code[i] eq 'srp' then iug_load_meteor_srp_txt, datatype = datatype, parameter = parameter, $
+  if site_code[i] eq 'srp' then iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose
 endfor
-
 end
