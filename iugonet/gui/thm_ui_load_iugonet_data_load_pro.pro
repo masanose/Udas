@@ -19,6 +19,7 @@
 ;A. Shinbori, 06/03/2012
 ;A. Shinbori, 12/04/2012
 ;Y.-M. Tanaka,11/05/2012
+;A. Shinbori, 15/06/2012
 ;-
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -165,6 +166,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   
       ;----- Equatorial Atomosphere Radar -----;
       'Equatorial_Atomosphere_Radar' : begin
+          if site_or_param[0] eq '*(all)' then site_or_param = 'all'
           if parameters[0] eq '*' then begin
               vns=['all']
               iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange

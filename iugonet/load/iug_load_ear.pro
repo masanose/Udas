@@ -92,10 +92,6 @@ parameter_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
                           ' ', /extract)
 
 ;--- check parameters_1
-if keyword_set(parameter) then begin
-   if (parameter eq '*(all)') then parameter ='all'
-endif
-
 if (not keyword_set(parameter)) then parameter='all'
 parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
