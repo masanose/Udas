@@ -185,7 +185,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
       ;----- Middle Upper atomosphere radar -----;
       'Middle_Upper_atomosphere_radar' : begin
-          iug_load_mu, datatype =datatype, parameter=parameters, trange = timeRange 
+          iug_load_mu, datatype =datatype, trange = timeRange 
           if parameters[0] eq '*' then begin
               vns='*'
           endif else begin
