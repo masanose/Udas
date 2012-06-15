@@ -15,8 +15,6 @@
 function gui_acknowledgement, instrument=instrument, datatype=datatype, $
               site_or_param=site_or_param, par_names=par_names
 
-print,'site_or_param = ', site_or_param
-
 if par_names[0] eq '' then return, 'Cancel'
 
 ;----- Get !iugonet.data_policy -----;
@@ -34,7 +32,15 @@ case instrument of
         'magdas'   : iug_var = !iugonet.data_policy.gmag_magdas
         '210mm#'   : iug_var = !iugonet.data_policy.gmag_mm210
         'WDC_kyoto': iug_var = !iugonet.data_policy.gmag_wdc
-        'NIPR_mag#': iug_var = !iugonet.data_policy.gmag_nipr
+        'NIPR_mag#': begin
+            case site_or_param of
+                'syo': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'aed': iug_var = !iugonet.data_policy.gmag_nipr_ice
+                'hus': iug_var = !iugonet.data_policy.gmag_nipr_ice
+                'isa': iug_var = !iugonet.data_policy.gmag_nipr_ice
+                'tjo': iug_var = !iugonet.data_policy.gmag_nipr_ice
+            endcase
+          end
       endcase
     end
   'SuperDARN#': begin
@@ -79,7 +85,15 @@ endif else begin
             'magdas'   : !iugonet.data_policy.gmag_magdas = iug_var
             '210mm#'   : !iugonet.data_policy.gmag_mm210 = iug_var
             'WDC_kyoto': !iugonet.data_policy.gmag_wdc = iug_var
-            'NIPR_mag#': !iugonet.data_policy.gmag_nipr = iug_var
+            'NIPR_mag#': begin
+                case site_or_param of
+                    'syo': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'aed': !iugonet.data_policy.gmag_nipr_ice = iug_var
+                    'hus': !iugonet.data_policy.gmag_nipr_ice = iug_var
+                    'isa': !iugonet.data_policy.gmag_nipr_ice = iug_var
+                    'tjo': !iugonet.data_policy.gmag_nipr_ice = iug_var
+                endcase
+              end
           endcase
         end
       'SuperDARN#': begin

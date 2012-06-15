@@ -469,7 +469,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[2])[0] = ptr_new(['*'])
   (*param2Array[2])[1] = ptr_new(['*','1min','1h'])
   (*param2Array[2])[2] = ptr_new(['*','min','hour'])
-  (*param2Array[2])[3] = ptr_new(['*','1sec','20hz'])  
+  (*param2Array[2])[3] = ptr_new(['*','1sec'])  
   (*param2Array[3])[0] = ptr_new(['*','final','prov'])
   (*param2Array[3])[1] = ptr_new(['*','min','hour','prov_min','prov_hour'])
   (*param2Array[3])[2] = ptr_new(['*','asy','sym'])
@@ -482,21 +482,12 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[9])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err','vlos','vlos_err',$
                                   'echo_flag','quality','quality_flag','vnorth','vnorth_iscat','vnorth_gscat','veast','veast_iscat','veast_gscat','vlos_iscat','vlos_gscat']);,'position_tbl'])
-  (*param2Array[10])[0] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
-                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
-                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
-                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
-                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
-  (*param2Array[10])[1] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
-                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
-                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
-                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
-                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
-  (*param2Array[10])[2] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
-                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
-                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
-                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
-                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
+  (*param2Array[10])[0] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
+                                   'lat','long','alt','colf','comp','q','qflag'])
+  (*param2Array[10])[1] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
+                                   'lat','long','alt','colf','comp','q','qflag'])
+  (*param2Array[10])[2] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
+                                   'lat','long','alt','colf','comp','q','qflag'])
   (*param2Array[11])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5']) 
 ;  (*param2Array[8])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
 ;  (*param2Array[9])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
