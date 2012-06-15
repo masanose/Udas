@@ -84,8 +84,8 @@ for i=0,n_elements(site_code)-1 do begin
     source = file_retrieve(/struct)
     source.verbose = verbose
     source.local_data_dir  = root_data_dir() + 'iugonet/nipr/eiscat/'
-;    source.remote_data_dir = 'http://polaris.nipr.ac.jp/~eiscat/eiscatdata/cdf/'
-    source.remote_data_dir = 'http://polaris.nipr.ac.jp/~ytanaka/data/eiscat/'
+    source.remote_data_dir = 'http://polaris.nipr.ac.jp/~eiscat/eiscatdata/cdf/v2/'
+;    source.remote_data_dir = 'http://polaris.nipr.ac.jp/~ytanaka/data/eiscat/'
     if keyword_set(no_download) then source.no_download = 1
 
     relpathnames1 = file_dailynames(file_format='YYYY', trange=trange)
