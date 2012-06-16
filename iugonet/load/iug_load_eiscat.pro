@@ -39,8 +39,8 @@
 ;   to load data with various int_times separately to different tplot
 ;   vars.
 ; Modified by: Y.-M. Tanaka, June 6, 2012
-;   Combined all pulse_code and integration time data for one day into 
-;   a CDF file
+;   Integragted all pulse_code and integration_time data for one day 
+;   into a CDF file
 ;-
 
 ;********************************************
@@ -164,12 +164,10 @@ for i=0,n_elements(site_code)-1 do begin
                     'quality'      : paramstr='q'
                     'quality_flag' : paramstr='qflag'
                     'collision_freq'  : paramstr='colf'
-                    'colision_freq'  : paramstr='colf'
                     'int_time_real'  : paramstr='inttimr'
                     'elev_angle'   : paramstr='elev'
                     'number_gate'  : paramstr='ngate'
                     'txpower'     : paramstr='txpow'
-                    'txpopwer'     : paramstr='txpow'
                     'mconst'       : paramstr='mcnst'
                     'heating'      : paramstr='heat'
                     else           : paramstr=param
