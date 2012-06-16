@@ -5,11 +5,8 @@
 ;PURPOSE:
 ;  Modularized gui iugonet data loader
 ;
-;HISTORY:
-;$LastChangedBy: Y.Tanaka $
-;$LastChangedDate: 2010-04-20 $
-; 
 ;Modifications:
+;Y.-M. Tanaka,20/04/2010
 ;A. Shinbori, 12/05/2010
 ;A. Shinbori, 10/07/2010
 ;A. Shinbori, 25/11/2010

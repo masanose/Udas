@@ -1,31 +1,19 @@
 ;+
+;NAME:
+;  show_acknowledgement
 ;
-;Name:
-; show_acknowledgement
+;PURPOSE:
+;  Show data usage policy for each observation data.
 ;
-;Purpose:
-; Output of the data acknowledgement message for each observation data.
-;
-;Syntax:
-; gui_load_acknowledgement, datatype = datatype, par_names = par_names
-;
-;Keywords:
-;  par_names = tplot names. For example, iug_load_acknowledgement, par_names = 'iug_mf_pam_vwnd'.
-;               The default is 'iug_mf_pam_uwnd'.
-;  datatype = Observation data type. For example, iug_load_acknowledgement, datatype = '210mm*'.
-;             The default is 'thermosphere'. 
+;EXAMPLE:
+;  show_acknowledgement, instrument=instrument, datatype=datatype, $
+;	par_names=par_names
 ;
 ;Code:
 ;  A. Shinbori, 13/01/2011.
 ;  
 ;Modifications:
 ;  Y.-M. Tanaka, 11/05/2012
-;  
-;Acknowledgment:
-; $LastChangedBy:  $
-; $LastChangedDate:  $
-; $LastChangedRevision:  $
-; $URL $
 ;-
 
 function show_acknowledgement, instrument=instrument, datatype=datatype, $

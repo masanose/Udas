@@ -1,5 +1,5 @@
 ;+
-; Name: 
+; NAME: 
 ;   gui_acknowledgement, instrument=instrument, $
 ;                        datatype=datatype, $
 ;                        site_or_param=site_or_param, $
@@ -9,7 +9,6 @@
 ;   Show data policy for IUGONET data on GUI
 ;
 ; Written by: Y.-M. Tanaka, May 11, 2012 (ytanaka at nipr.ac.jp)
-;
 ;-
 
 function gui_acknowledgement, instrument=instrument, datatype=datatype, $

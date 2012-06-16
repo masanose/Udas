@@ -329,8 +329,6 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[7] = ptr_new(['thermosphere'])
   typeArray[8] = ptr_new(['troposphere'])
   typeArray[9] = ptr_new(['ionosphere'])  
-  ;typeArray[9] = ptr_new(['troposphere'])
-  typeArray[9] = ptr_new(['ionosphere'])  
   typeArray[10] = ptr_new(['altitude_prof','latitude_prof','longitude_prof'])
   typeArray[11] = ptr_new(['troposphere'])  
                                      
