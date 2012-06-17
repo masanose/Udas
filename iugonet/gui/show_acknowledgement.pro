@@ -6,8 +6,8 @@
 ;  Show data usage policy for each observation data.
 ;
 ;EXAMPLE:
-;  show_acknowledgement, instrument=instrument, datatype=datatype, $
-;	par_names=par_names
+;  Answer=show_acknowledgement(instrument=instrument, datatype=datatype, $
+;	par_names=par_names)
 ;
 ;Code:
 ;  A. Shinbori, 13/01/2011.
