@@ -42,6 +42,7 @@
 ;A. Shinbori, 11/05/2011.
 ;A. Shinbori, 27/05/2011.
 ;A. Shinbori, 15/06/2011.
+;A. Shinbori, 25/07/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -95,7 +96,6 @@ parameter_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
 if (not keyword_set(parameter)) then parameter='all'
 parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
-if (n_elements(datatype) eq 1) and (datatype ne 'troposphere') then print, parameters
 
 ;===============================
 ;======Load data of EAR=========
