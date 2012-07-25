@@ -16,7 +16,7 @@
 ;            The default is 'thermosphere'.
 ;  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_nc, length = '1_day'.
 ;           A kind of parameters is 2 types of '1_day', and '1_month'.  
-; parameters = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
+; parameter = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
 ;             A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
 ;             The default is 'all'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -37,7 +37,8 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 28/05/2012.
 ; A. Shinbori, 12/06/2012.
-; 
+; A. Shinbori, 25/07/2012.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
