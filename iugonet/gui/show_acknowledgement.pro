@@ -31,7 +31,13 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
 	(datatype eq 'NIPR_mag#') then begin
      theMessage=str.cdf.gatt.rules_of_use
   endif else if (datatype eq '210mm#') then begin
-     theMessage=str.cdf.gatt.text
+     theMessage = [ $
+                str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
+                'Information about '+str.cdf.gatt.station_code, '', $
+                'PI and HOST PI(s):', str.cdf.gatt.pi_name, '', $
+                'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
+                'Rules of the Road for 210 MM Data Use:',str.cdf.gatt.text $
+                ] 
   endif else begin
      theMessage=str.data_att.acknowledgment
   endelse
