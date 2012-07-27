@@ -27,10 +27,23 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
 
   ;----- Get acknowledgement message -----;
   get_data, par_names[0], dlimit=str
-  if (instrument eq 'EISCAT_radar') or (instrument eq 'SuperDARN#') or $
-	(datatype eq 'NIPR_mag#') then begin
+  if instrument eq 'EISCAT_radar' then begin
+     theMessage = [ $
+                'Information about EISCAT radar data', '', $
+                'PI: ', str.cdf.gatt.PI_name, '', $
+                'Rules of the Road for EISCAT Radar Data: ',str.cdf.gatt.rules_of_use, '', $
+                str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
+  endif else if datatype eq 'NIPR_mag#' then begin
+     theMessage = [ $
+                str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
+                'Information about '+str.cdf.gatt.station_code, '', $
+                'PI:', str.cdf.gatt.pi_name, '', $
+                'Affiliations:', str.cdf.gatt.pi_affiliation, '', $
+                'Rules of the Road for NIPR Fluxgate Magnetometer Data: ',str.cdf.gatt.rules_of_use, '', $
+                str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
+  endif else if instrument eq 'SuperDARN#' then begin
      theMessage=str.cdf.gatt.rules_of_use
-  endif else if (datatype eq '210mm#') then begin
+  endif else if datatype eq '210mm#' then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
                 'Information about '+str.cdf.gatt.station_code, '', $
