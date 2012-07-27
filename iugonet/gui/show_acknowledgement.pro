@@ -42,15 +42,18 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Rules of the Road for NIPR Fluxgate Magnetometer Data: ',str.cdf.gatt.rules_of_use, '', $
                 str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
   endif else if instrument eq 'SuperDARN#' then begin
-     theMessage=str.cdf.gatt.rules_of_use
+     theMessage = [ $
+                str.cdf.gatt.logical_source_description, '', $
+                'PI:',str.cdf.gatt.pi_name,str.cdf.gatt.pi_affiliation, $
+                '', 'Rules of the Road:', str.cdf.gatt.rules_of_use ]
   endif else if datatype eq '210mm#' then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
                 'Information about '+str.cdf.gatt.station_code, '', $
                 'PI and HOST PI(s):', str.cdf.gatt.pi_name, '', $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
-                'Rules of the Road for 210 MM Data Use:',str.cdf.gatt.text $
-                ] 
+                'Rules of the Road for 210 MM Data Use:',str.cdf.gatt.text, $
+                '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
   endif else begin
      theMessage=str.data_att.acknowledgment
   endelse
