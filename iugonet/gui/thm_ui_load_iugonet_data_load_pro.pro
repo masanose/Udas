@@ -266,7 +266,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
                   historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
                   return
               endif
-          endif
+          endif else begin
+              break
+          endelse
       endfor
   endif 
   
