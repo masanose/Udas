@@ -1,16 +1,16 @@
 ;+
 ; FUNCTION: GET_PULSECODE_EISCAT
-;    get_pulsecode_eiscat, pulse_in, mode, pulse_out
+;    pulse_out = get_pulsecode_eiscat(pulse_in, mode)
 ;
 ; :DESCRIPTION:
-;    Convert pulse_code of the EISCAT radar observation to 
-;        pulse_code_id or vice versa. 
+;    Convert pulse_code_id of the EISCAT radar observation to 
+;        pulse_code or vice versa. 
 ;
 ; :KEYWORDS:
-;    pulse_in:  input (pulse_code or id)
-;    mode:      0(default) : pulse_code ---> id
-;               others     :     id     ---> pulse_code
-;    pulse_out: output (id or pulse_code)
+;    pulse_in:  pulse_code_id(integer) or pulse_code(string)
+;    mode:      0(default) :     id     ---> pulse_code
+;               others     : pulse_code --->     id
+;    pulse_out: output (pulse_code or id)
 ;
 ; Written by Y.-M. Tanaka, June 15, 2012 (ytanaka at nipr.ac.jp)
 ;-
@@ -23,117 +23,13 @@ if ~keyword_set(pulse_in) then begin
     stop
 endif
 
-;----- pulse_code --> pulse_code_id -----;
-if mode eq 0 then begin
-    case pulse_in of
-          'cp0': pulse_out=0
-          'cp1': pulse_out=1
-          'cp2': pulse_out=2
-          'cp3': pulse_out=3
-          'cp4': pulse_out=4
-          'cp5': pulse_out=5
-          'cp6': pulse_out=6
-          'cp7': pulse_out=7
-          'cp8': pulse_out=8
-          'cp9': pulse_out=9
-          'tau0': pulse_out=10
-          'tau1': pulse_out=11 
-          'tau2': pulse_out=12 
-          'tau3': pulse_out=13 
-          'tau4': pulse_out=14 
-          'tau5': pulse_out=15 
-          'tau6': pulse_out=16 
-          'tau7': pulse_out=17 
-          'tau8': pulse_out=18 
-          'tau9': pulse_out=19
-          't2pl': pulse_out=20
-          'ipy0': pulse_out=31
-          'beat': pulse_out=32
-          'taro':  pulse_out=33
-          'folk':  pulse_out=34
-          'arc1':  pulse_out=35
-          'mand':  pulse_out=36
-          'stef':  pulse_out=37
-          'hild':  pulse_out=38
-          'pia0':  pulse_out=39
-          'gup0':  pulse_out=40
-          'gup1':  pulse_out=41
-          'gup2':  pulse_out=42
-          'gup3':  pulse_out=43
-          'cp0e':  pulse_out=50
-          'cp0f':  pulse_out=51
-          'cp0g':  pulse_out=52
-          'cp0h':  pulse_out=53
-          'cp1c':  pulse_out=54
-          'cp1d':  pulse_out=55
-          'cp1e':  pulse_out=56
-          'cp1f':  pulse_out=57
-          'cp1h':  pulse_out=58
-          'cp1i':  pulse_out=59
-          'cp1j':  pulse_out=60
-          'cp1k':  pulse_out=61
-          'cp1l':  pulse_out=62
-          'cp2b':  pulse_out=63
-          'cp2c':  pulse_out=64
-          'cp2d':  pulse_out=65
-          'cp2e':  pulse_out=66
-          'cp2f':  pulse_out=67
-          'cp2h':  pulse_out=68
-          'cp2i':  pulse_out=69
-          'cp2j':  pulse_out=70
-          'cp2k':  pulse_out=71
-          'cp3b':  pulse_out=72
-          'cp3c':  pulse_out=73
-          'cp3d':  pulse_out=74
-          'cp3e':  pulse_out=75
-          'cp3f':  pulse_out=76
-          'cp3h':  pulse_out=77
-          'cp3i':  pulse_out=78
-          'cp3j':  pulse_out=79
-          'cp3k':  pulse_out=80
-          'cp4a':  pulse_out=81
-          'cp4b':  pulse_out=82
-          'cp5a':  pulse_out=83
-          'cp5b':  pulse_out=84
-          'cp5c':  pulse_out=85
-          'cp6a':  pulse_out=86
-          'cp6b':  pulse_out=87
-          'cp6c':  pulse_out=88
-          'cp7a':  pulse_out=89
-          'cp7b':  pulse_out=90
-          'cp7c':  pulse_out=91
-          'cp7d':  pulse_out=92
-          'cp7e':  pulse_out=93
-          'cp7f':  pulse_out=94
-          'cp7g':  pulse_out=95
-          'cp7h':  pulse_out=96
-          'sp00':  pulse_out=97
-          'sp1c':  pulse_out=98
-          'sp1d':  pulse_out=99
-          'sp1e':  pulse_out=100
-          'sp1f':  pulse_out=101
-          'sp1h':  pulse_out=102
-          'sp1i':  pulse_out=103
-          'sp1j':  pulse_out=104
-          'sp1k':  pulse_out=105
-          'sp2b':  pulse_out=106
-          'sp2c':  pulse_out=107
-          'sp2d':  pulse_out=108
-          'sp2e':  pulse_out=109
-          'sp2f':  pulse_out=110
-          'sp2h':  pulse_out=111
-          'sp2i':  pulse_out=112
-          'CP1H':  pulse_out=113
-          'CP1K':  pulse_out=114
-          'CP3F':  pulse_out=115
-          'PULS':  pulse_out=116
-          'CONV':  pulse_out=117
-          else  :  pulse_out=255
-    endcase
-
 ;----- pulse_code_id --> pulse_code -----;
-endif else begin
-    case pulse_in of
+if mode eq 0 then begin
+    if size(pulse_in, /type) ne 2 then begin
+        print, 'The pulse_in must be an integer for this mode.'
+        pulse_out=''
+    endif else begin
+        case pulse_in of
            0    :  pulse_out='cp0'
            1    :  pulse_out='cp1'
            2    :  pulse_out='cp2'
@@ -238,9 +134,126 @@ endif else begin
            117  :  pulse_out='CONV'
            else :  begin
 		       print, 'The pulse_code_id is not supported.'
-                       stop
+                       pulse_out=''
                    end
-    endcase
+        endcase
+    endelse
+
+;----- pulse_code --> pulse_code_id -----;
+endif else begin
+    if size(pulse_in, /type) ne 7 then begin
+        print, 'The pulse_in must be an string for this mode.'
+        pulse_out=-1
+    endif else begin
+        case pulse_in of
+          'cp0': pulse_out=0
+          'cp1': pulse_out=1
+          'cp2': pulse_out=2
+          'cp3': pulse_out=3
+          'cp4': pulse_out=4
+          'cp5': pulse_out=5
+          'cp6': pulse_out=6
+          'cp7': pulse_out=7
+          'cp8': pulse_out=8
+          'cp9': pulse_out=9
+          'tau0': pulse_out=10
+          'tau1': pulse_out=11 
+          'tau2': pulse_out=12 
+          'tau3': pulse_out=13 
+          'tau4': pulse_out=14 
+          'tau5': pulse_out=15 
+          'tau6': pulse_out=16 
+          'tau7': pulse_out=17 
+          'tau8': pulse_out=18 
+          'tau9': pulse_out=19
+          't2pl': pulse_out=20
+          'ipy0': pulse_out=31
+          'beat': pulse_out=32
+          'taro':  pulse_out=33
+          'folk':  pulse_out=34
+          'arc1':  pulse_out=35
+          'mand':  pulse_out=36
+          'stef':  pulse_out=37
+          'hild':  pulse_out=38
+          'pia0':  pulse_out=39
+          'gup0':  pulse_out=40
+          'gup1':  pulse_out=41
+          'gup2':  pulse_out=42
+          'gup3':  pulse_out=43
+          'cp0e':  pulse_out=50
+          'cp0f':  pulse_out=51
+          'cp0g':  pulse_out=52
+          'cp0h':  pulse_out=53
+          'cp1c':  pulse_out=54
+          'cp1d':  pulse_out=55
+          'cp1e':  pulse_out=56
+          'cp1f':  pulse_out=57
+          'cp1h':  pulse_out=58
+          'cp1i':  pulse_out=59
+          'cp1j':  pulse_out=60
+          'cp1k':  pulse_out=61
+          'cp1l':  pulse_out=62
+          'cp2b':  pulse_out=63
+          'cp2c':  pulse_out=64
+          'cp2d':  pulse_out=65
+          'cp2e':  pulse_out=66
+          'cp2f':  pulse_out=67
+          'cp2h':  pulse_out=68
+          'cp2i':  pulse_out=69
+          'cp2j':  pulse_out=70
+          'cp2k':  pulse_out=71
+          'cp3b':  pulse_out=72
+          'cp3c':  pulse_out=73
+          'cp3d':  pulse_out=74
+          'cp3e':  pulse_out=75
+          'cp3f':  pulse_out=76
+          'cp3h':  pulse_out=77
+          'cp3i':  pulse_out=78
+          'cp3j':  pulse_out=79
+          'cp3k':  pulse_out=80
+          'cp4a':  pulse_out=81
+          'cp4b':  pulse_out=82
+          'cp5a':  pulse_out=83
+          'cp5b':  pulse_out=84
+          'cp5c':  pulse_out=85
+          'cp6a':  pulse_out=86
+          'cp6b':  pulse_out=87
+          'cp6c':  pulse_out=88
+          'cp7a':  pulse_out=89
+          'cp7b':  pulse_out=90
+          'cp7c':  pulse_out=91
+          'cp7d':  pulse_out=92
+          'cp7e':  pulse_out=93
+          'cp7f':  pulse_out=94
+          'cp7g':  pulse_out=95
+          'cp7h':  pulse_out=96
+          'sp00':  pulse_out=97
+          'sp1c':  pulse_out=98
+          'sp1d':  pulse_out=99
+          'sp1e':  pulse_out=100
+          'sp1f':  pulse_out=101
+          'sp1h':  pulse_out=102
+          'sp1i':  pulse_out=103
+          'sp1j':  pulse_out=104
+          'sp1k':  pulse_out=105
+          'sp2b':  pulse_out=106
+          'sp2c':  pulse_out=107
+          'sp2d':  pulse_out=108
+          'sp2e':  pulse_out=109
+          'sp2f':  pulse_out=110
+          'sp2h':  pulse_out=111
+          'sp2i':  pulse_out=112
+          'CP1H':  pulse_out=113
+          'CP1K':  pulse_out=114
+          'CP3F':  pulse_out=115
+          'PULS':  pulse_out=116
+          'CONV':  pulse_out=117
+          else  :  begin
+		       print, 'The pulse_code is not supported.'
+                       pulse_out=-1
+                   end
+        endcase
+    endelse
 endelse
 
 return, pulse_out
