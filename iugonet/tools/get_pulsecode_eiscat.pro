@@ -1,6 +1,6 @@
 ;+
-; FUNCTION: GET_PULSECODE
-;    get_pulsecode, pulse_in, mode, pulse_out
+; FUNCTION: GET_PULSECODE_EISCAT
+;    get_pulsecode_eiscat, pulse_in, mode, pulse_out
 ;
 ; :DESCRIPTION:
 ;    Convert pulse_code of the EISCAT radar observation to 
@@ -15,7 +15,7 @@
 ; Written by Y.-M. Tanaka, June 15, 2012 (ytanaka at nipr.ac.jp)
 ;-
 
-function get_pulsecode, pulse_in, mode
+function get_pulsecode_eiscat, pulse_in, mode
 
 if ~keyword_set(mode) then mode=0
 if ~keyword_set(pulse_in) then begin
