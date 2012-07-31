@@ -94,7 +94,7 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
       
       ;Obtain the list of URLs of data files by throwing a query to MDDB
       lst = get_source_url_list( url_in )
-      IF N_ELEMENTS(lst) EQ 0 AND STRLEN(lst[0]) EQ 0 THEN BEGIN
+      IF N_ELEMENTS(lst) EQ 1 AND STRLEN(lst[0]) EQ 0 THEN BEGIN
         PRINT, 'iug_load_smart: No data file was hit by MDDB query!'
         CONTINUE
       ENDIF
