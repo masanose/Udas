@@ -11,8 +11,8 @@
 ;
 ;Modifications:
 ;A. Shinbori, 02/05/2011
-;
-;
+;A. Shinbori, 11/05/2012
+;A. Shinbori, 12/06/2012
 ;
 ;
 ;--------------------------------------------------------------------------------
@@ -65,8 +65,7 @@ pro thm_ui_load_iugonet_data_event,event
         paramList = widget_info(event.handler,find_by_uname='paramlist')
         widget_control,paramList,set_value=*(*state.paramArray[event.index])[0]
        ;========================================================================
-       ;added to the two lines of widget_control parameters 2 by A. Shinbori
-       ;These lines have a relation between the datatype and parameters 2.
+       ;added the two lines of widget_control to parameters-2
         paramList2 = widget_info(event.handler,find_by_uname='paramlist2')
         widget_control,paramList2,set_value=*(*state.param2Array[event.index])[0]
        ;========================================================================  
@@ -77,29 +76,29 @@ pro thm_ui_load_iugonet_data_event,event
         idx = (where(text eq state.instrumentArray))[0]
         parameter = widget_info(event.handler,find_by_uname='paramlist')
         widget_control,parameter,set_value=*(*state.paramArray[idx])[event.index]
-       ;========================================================================
-       ;added to the two lines of widget_control parameters 2 by A. Shinbori 
-       ;These lines have a relation between the instrument and parameters 2.
+       ;===========================================================================
+       ;added the two lines of widget_control in order to have a relation between 
+       ;instrument and parameters-2.
         parameter2 = widget_info(event.handler,find_by_uname='paramlist2')
         widget_control,parameter2,set_value=*(*state.param2Array[idx])[event.index]
-       ;========================================================================   
+       ;===========================================================================   
       end
-      ;====================================================================================
-      ;added to the two lines controlling the widget of site or parameters 1 by A. Shinbori
-      'PARAMLIST': begin    
-      end
-      ;====================================================================================
+      ;==================================================================
+      ;added the two lines controlling the widget of site or parameters-1
+    ;  'PARAMLIST': begin    
+    ;  end
+      ;==================================================================
       'CLEARPARAM': begin
         paramlist = widget_info(event.handler,find_by_uname='paramlist')
         widget_control,paramlist,set_list_select=-1
       end
-      ;====================================================================================
-      ;added to the following lines controlling the widget of CLEARPARAM2 by A. Shinbori
+      ;==================================================================
+      ;added the following lines controlling the widget of CLEARPARAM2
        'CLEARPARAM2': begin
         paramlist2 = widget_info(event.handler,find_by_uname='paramlist2')
         widget_control,paramlist2,set_list_select=-1
       end
-      ;====================================================================================
+      ;==================================================================
       'CLEARDATA': begin
         ok = dialog_message("This will delete all currently loaded data.  Are you sure you wish to continue?",/question,/default_no,/center)
         
@@ -166,10 +165,9 @@ pro thm_ui_load_iugonet_data_event,event
         endif else begin
           paramText = (*(*state.paramArray[instrumentSelect])[typeSelect])[paramSelect]
         endelse
-;        print, paramSelect
 
-;=======================================================================================;
-;       Added to the following sentences of handling the parameter 2 by A. Shinbori.
+;========================================================================================;
+;       Added the following lines of handling the parameter-2
 ;       
         parameter2 = widget_info(event.handler,find_by_uname='paramlist2')
         param2Select = widget_info(parameter2,/list_select)
@@ -206,7 +204,7 @@ pro thm_ui_load_iugonet_data_event,event
                                   instrumentText,$
                                   typeText,$
                                   paramText,$
-                                  param2Text,$ ;added to this parameter by A. Shinbori.
+                                  param2Text,$ ;added this parameter
                                   [startTimeString,endTimeString],$
                                   state.loadedData,$
                                   state.statusBar,$
@@ -223,7 +221,7 @@ pro thm_ui_load_iugonet_data_event,event
                                instrumentText,$
                                typeText,$
                                paramText,$
-                               param2Text,$ ;added this parameter by A. Shinbori.
+                               param2Text,$ ;added this parameter
                                [startTimeString,endTimeString]
       
       end
@@ -286,7 +284,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   clearDataBase = widget_base(rightBase,/row,/align_center)
   clearDataButton = widget_button(clearDataBase,value='Delete All Data',uvalue='CLEARDATA',/align_center,ToolTip='Deletes all loaded data')
  
-  ;===== Added to the left-bottom label =============================================================================================================;
+  ;===== Added the left-bottom label =============================================================================================================;
   NotesBase = widget_base(leftBase,/row,/align_left)
   NotesLabel = widget_label(NotesBase,value='Note: # means that the load procedure has been developed')
   NotesBase = widget_base(leftBase,/row,/align_left)
@@ -306,8 +304,6 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   instrumentLabel = widget_label(instrumentBase,value='Instrument Type: ')
 
- ; instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
-  ;                   'Lower_Troposphere_Radar','Middle_Upper_atomosphere_radar']
   instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
                      'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar', 'SuperDARN#', 'EISCAT_radar',$
                      'Wind_Profiler_Radar_(LQ-7)']
@@ -332,8 +328,6 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[6] = ptr_new(['thermosphere'])
   typeArray[7] = ptr_new(['thermosphere'])
   typeArray[8] = ptr_new(['troposphere'])
-  typeArray[9] = ptr_new(['ionosphere'])  
-  ;typeArray[9] = ptr_new(['troposphere'])
   typeArray[9] = ptr_new(['ionosphere'])  
   typeArray[10] = ptr_new(['altitude_prof','latitude_prof','longitude_prof'])
   typeArray[11] = ptr_new(['troposphere'])  
@@ -375,13 +369,13 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[0])[0] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[1])[0] = ptr_new(['*(all)'])
   (*paramArray[1])[1] = ptr_new(['*(all)','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a','eb3p2b','eb3p4a','eb3p4b','eb3p4c',$
-                                 'eb3p4d','eb3p4e','eb3p4f','eb4p2c','eb4p2d','eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
+                                 'eb3p4d','eb3p4e','eb3p4f','eb3p4g','eb3p4h','eb4p2c','eb4p2d','eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
   (*paramArray[1])[2] = ptr_new(['*(all)','efb1p16','efb1p16a','efb1p16b'])                               
   (*paramArray[1])[3] = ptr_new(['*(all)','vb3p4a','150p8c8a','150p8c8b','150p8c8c','150p8c8d','150p8c8e','150p8c8b2a','150p8c8b2b','150p8c8b2c','150p8c8b2d','150p8c8b2e','150p8c8b2f'])
   (*paramArray[1])[4] = ptr_new(['*(all)','fb1p16a','fb1p16b','fb1p16c','fb1p16d','fb1p16e','fb1p16f','fb1p16g','fb1p16h','fb1p16i',$
                                  'fb1p16j1','fb1p16j2','fb1p16j3','fb1p16j4','fb1p16j5','fb1p16j6','fb1p16j7','fb1p16j8','fb1p16j9',$
-                                 'fb1p16j10','fb1p16j11','fb1p16k1','fb1p16k2','fb1p16k3','fb1p16k4','fb1p16k5','fb8p16','fb8p16k1',$
-                                 'fb8p16k2','fb8p16k3','fb8p16k4','fb1p16m2','fb1p16m3','fb1p16m4','fb8p16m1','fb8p16m2'])
+                                 'fb1p16j10','fb1p16j11','fb1p16k1','fb1p16k2','fb1p16k3','fb1p16k4','fb1p16k5','fb1p16m2','fb1p16m3',$
+                                 'fb1p16m4','fb8p16','fb8p16k1','fb8p16k2','fb8p16k3','fb8p16k4','fb8p16m1','fb8p16m2'])
   (*paramArray[2])[0] = ptr_new(['*(all)','anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
                                  'hob','ilr','kuj','lkw','mcq','mgd','mlb','mnd','mut', $
                                  'onw','prp','ptk','roc','sma','tir','twv','wad','yap'])
@@ -443,7 +437,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   clearTypeButton = widget_button(paramBase,value='Clear Site or Parameters-1',uvalue='CLEARPARAM',ToolTip='Deselect all sites and parameters types') 
 
   ;============================================
-  ;========== Parameters-2 ==========
+  ;========== Parameters-2 ====================
   ;============================================  
 
   param2Array = ptrarr(12)
@@ -473,7 +467,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*param2Array[2])[0] = ptr_new(['*'])
   (*param2Array[2])[1] = ptr_new(['*','1min','1h'])
   (*param2Array[2])[2] = ptr_new(['*','min','hour'])
-  (*param2Array[2])[3] = ptr_new(['*','1sec','20hz'])  
+  (*param2Array[2])[3] = ptr_new(['*','1sec'])  
   (*param2Array[3])[0] = ptr_new(['*','final','prov'])
   (*param2Array[3])[1] = ptr_new(['*','min','hour','prov_min','prov_hour'])
   (*param2Array[3])[2] = ptr_new(['*','asy','sym'])
@@ -486,21 +480,12 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[9])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err','vlos','vlos_err',$
                                   'echo_flag','quality','quality_flag','vnorth','vnorth_iscat','vnorth_gscat','veast','veast_iscat','veast_gscat','vlos_iscat','vlos_gscat']);,'position_tbl'])
-  (*param2Array[10])[0] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
-                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
-                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
-                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
-                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
-  (*param2Array[10])[1] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
-                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
-                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
-                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
-                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
-  (*param2Array[10])[2] = ptr_new(['*','cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7','cp8','cp9',$
-                                   'tau0','tau1','tau2','tau3','tau4','tau5','tau6','tau7','tau8','tau9',$
-                                   'taro','ipy0','beat','folk','arc1','mand','stef','hild','pia0','t2pl',$
-                                   'gup0','gup1','gup2','gup3','cp0e','cp0f','cp0g','cp0h','cp1c','cp1d',$
-                                   'cp1e','cp1f','cp1h','cp1i','cp1j','cp1k','cp1l','cp3f','cp4a','cp4b'])
+  (*param2Array[10])[0] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
+                                   'lat','long','alt','colf','comp','q','qflag'])
+  (*param2Array[10])[1] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
+                                   'lat','long','alt','colf','comp','q','qflag'])
+  (*param2Array[10])[2] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
+                                   'lat','long','alt','colf','comp','q','qflag'])
   (*param2Array[11])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5']) 
 ;  (*param2Array[8])[1] = ptr_new(['*','uwnd','vwnd','uwndsig','vwndsig','mwnum'])
 ;  (*param2Array[9])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
@@ -530,7 +515,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
            instrumentArray:instrumentArray,$
            typeArray:typeArray,$
            paramArray:paramArray,$
-           param2Array:param2Array} ;added to this parameter by A. Shinbori.
+           param2Array:param2Array} ;added this parameter
            
   widget_control,topBase,set_uvalue=state
                                   

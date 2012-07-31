@@ -1,13 +1,13 @@
 ;+
-;PROCEDURE: IUG_CRIB_MF_RISH_PAM_NC.PRO
-;    A sample crib sheet that explains how to use the "iug_crib_mf_rish_pam_nc.pro" 
+;PROCEDURE: IUG_CRIB_MF_RISH.PRO
+;    A sample crib sheet that explains how to use the "iug_crib_mf_rish.pro" 
 ;    procedure. You can run this crib sheet by copying & pasting each 
 ;    command below (except for stop and end) into the IDL command line. 
 ;    Or alternatively compile and run using the command:
-;        .run iug_crib_mf_rish_pam_nc
+;        .run iug_crib_mf_rish
 ;
-;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  Feb 18, 2011
+;Written by: A. Shinbori,  Jul 25, 2012
+;Last Updated:  A. Shinbori,  Jul 25, 2012
 ;-
 
 ;Initializes system variables for themis:
@@ -29,7 +29,7 @@ timespan,'2008-03-01',31,/day
 ;  wwnd = vertical wind
 ;  
 ;===============================================================================
-iug_load_mf_rish_pam_nc
+iug_load_mf_rish
 
 
 ;Plot time-height distribution of zonal, merdional and vertical wind:

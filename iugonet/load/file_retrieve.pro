@@ -1,13 +1,29 @@
 ;+
-; FUNCTION file_retrieve_iug(pathnames,local_data_dir=local_data_dir)
+;FUNCTION file_retrieve(pathnames,local_data_dir=local_data_dir)
 ;
-; PURPOSE:
-;    This procedure is the modified version of file_retrieve in tdas_6_00 for IUGONET data.
-;    It calls file_http_copy_iug inside.
+;Arguments:
+;    pathnames: String or string array with partial path to the remote file. 
+;               (will be appended to remote_data_dir)
+;    newpathnames: (optional) String or string array with partial path to file destination.
+;                   (ill be appended to local_data_dir)
 ;
-; Modified by Y. Tanaka, May 9, 2011.
-;-;-
-function file_retrieve_iug,pathnames, newpathnames, structure_format=structure_format,  $
+;Keywords:
+;    local_data_dir:  String or string array w/ local data directory(s)
+;                     If newpathnames is set it will be appended to this variable; if not, 
+;                     pathnames will be appended. 
+;    remote_data_dir:  String or string array w/ remote data directory(s)
+;                      Pathnames will be appended to this variable.
+;    
+;History: 
+;    2012-6-25:  local_data_dir and remote_data_dir accept array inputs 
+;                with the same # of elements as pathnames/newpathnames
+;
+;$LastChangedBy: jimm $
+;$LastChangedDate: 2012-07-05 10:20:54 -0700 (Thu, 05 Jul 2012) $
+;$LastChangedRevision: 10680 $
+;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/ssl_general/trunk/misc/file_retrieve.pro $
+;-
+function file_retrieve,pathnames, newpathnames, structure_format=structure_format,  $
     use_wget=use_wget, nowait=nowait, $
     local_data_dir=local_data_dir,remote_data_dir=remote_data_dir, $
     min_age_limit=min_age_limit , $
@@ -19,14 +35,13 @@ function file_retrieve_iug,pathnames, newpathnames, structure_format=structure_f
     ascii_mode=ascii_mode,   $
     no_download=no_download,no_server=no_server, $
     no_update=no_update, $
-    ;Add to force_download by Shinbori (2012/03/07)
     force_download=force_download,$
     no_clobber=no_clobber, ignore_filesize=ignore_filesize, $
     verbose=verbose,progress=progress,progobj=progobj
 
-dprint,dlevel=4,verbose=verbose,'Start; $Id: file_retrieve_iug.pro 8174 2011-02-11 21:41:51Z davin-win $'
+dprint,dlevel=4,verbose=verbose,'Start; $Id: file_retrieve.pro 10680 2012-07-05 17:20:54Z jimm $'
 if keyword_set(structure_format) then begin
-   user_agent =  'FILE_RETRIEVE_IUG: IDL'+!version.release + ' ' + !VERSION.OS + '/' + !VERSION.ARCH+ ' (' + (getenv('USER') ? getenv('USER') : getenv('USERNAME'))+')'
+   user_agent =  'FILE_RETRIEVE: IDL'+!version.release + ' ' + !VERSION.OS + '/' + !VERSION.ARCH+ ' (' + (getenv('USER') ? getenv('USER') : getenv('USERNAME'))+')'
    str= {   $
       retrieve_struct,       $
       init:0,                $
@@ -46,11 +61,10 @@ if keyword_set(structure_format) then begin
       ignore_filesize:0 ,    $    ; Set to 1 to ignore the remote/local file sizes when determining if updates are needed.
       ignore_filedate:0 ,    $    ; Not yet operational.
       downloadonly:0  ,      $    ; Set to 1 to only download files but not load files into memory.
-      use_wget:0         ,   $   ; Experimental option (uses the routine WGET instead of file_http_copy_iug)
+      use_wget:0          ,   $   ; Experimental option (uses the routine WGET instead of file_http_copy)
       nowait:0        ,      $    ; Used with wget to download files in the background.
-      verbose:2       ,      $
-      ;Add to force_download by Shinbori (2012/03/07)
-      force_download: 0      $   ;Allows download to be forced no matter modification time.  Useful when moving between different repositories(e.g. QA and production data)
+      verbose:2 ,             $
+      force_download: 0       $   ;Allows download to be forced no matter modification time.  Useful when moving between different repositories(e.g. QA and production data)
    }
    return, str
 endif
@@ -67,7 +81,7 @@ if n_elements(progress) eq 0 then progress=1
 
 
 ;fullnames = filepath(root_dir=local_data_dir, pathnames)
-fullnames = local_data_dir + pathnames   ; trailing '/' is required on local_data_dir
+fullnames = local_data_dir + pathnames   ; trailing '/' is not required on local_data_dir
 n0 = n_elements(fullnames)
 
 if keyword_set(use_wget) and total(/preserv,strmatch(pathnames,'*[ \* \? \[ \] ]*') ) ne 0 then begin
@@ -82,23 +96,30 @@ if keyword_set(remote_data_dir) and  not (keyword_set(no_server) or keyword_set(
      wget,serverdir=remote_data_dir,localdir=local_data_dir,pathname=pathnames,verbose=verbose ,nowait=nowait $
   else begin
 
-     http = strmid(remote_data_dir,0,7) eq 'http://'
+     http0 = strmid(remote_data_dir,0,7) eq 'http://'
      If obj_valid(progobj) Then progobj -> update, 0.0, text = string(format="('Retrieving ',i0,' files from ',a)",n0,remote_data_dir) ;jmm, 15-may-2007
      for i = 0l,n0-1 do begin
          fn = fullnames[i]
          pn = pathnames[i]
          npn = keyword_set(newpathnames) ? newpathnames[i] : ''
+         
+         ;2012-6-25: these variables may be single value or array
+         ; error checks should probably be added to check # of elements between local_data_dir and
+         ; remote_data_dir (if arrays), pathnames, and newpathnames
+         http = n_elements(http0) gt 1 ? http0[i]:http0
+         ldd = n_elements(local_data_dir) gt 1 ? local_data_dir[i]:local_data_dir
+         rdd = n_elements(remote_data_dir) gt 1 ? remote_data_dir[i]:remote_data_dir
+
 ;         if keyword_set(no_update) and file_test(fn,/regular) then continue
          if http then begin
-             file_http_copy_iug,pn,npn,url_info=url_info,serverdir=remote_data_dir,localdir=local_data_dir,verbose=verbose, $
+             file_http_copy,pn,npn,url_info=url_info,serverdir=rdd,localdir=ldd,verbose=verbose, $
                no_clobber=no_clobber,no_update=no_update,ignore_filesize=ignore_filesize,progobj=progobj, $
                ascii_mode=ascii_mode, $
                user_agent=user_agent, $
                preserve_mtime = preserve_mtime, $
-               file_mode=file_mode,dir_mode=dir_mode,last_version=last_version,min_age_limit=min_age_limit, $
-               ;Add to force_download by Shinbori (2012/03/07)
-               force_download=force_download
-             if url_info.io_error ne 0 then begin
+               file_mode=file_mode,dir_mode=dir_mode,last_version=last_version, $
+               min_age_limit=min_age_limit,force_download=force_download
+             if url_info[0].io_error ne 0 then begin
                dprint, "File or URL i/o error detected.  See !error_state for more info"
                printdat,!error_state
                return,''
@@ -123,8 +144,13 @@ for i=0,n_elements(fullnames)-1 do begin
            dprint,dlevel=5,verbose=vb,'Found: "'+fullnames[i]+'"'
          end
    else: begin
-           dprint,dlevel=2,verbose=vb,'Multiple matches found for: "'+fullnames[i]+'"  Using last version.'
-           fullnames[i] = ff[n_elements(ff)-1]   ; Cluge to Use highest version number?
+           if keyword_set(last_version) then begin
+             dprint,dlevel=2,verbose=vb,'Multiple matches found for: "'+fullnames[i]+'"  Using last version.'
+             fullnames[i] = ff[n_elements(ff)-1]   ; Cluge to Use highest version number?
+           endif else begin
+             dprint,dlevel=2,verbose=vb,'Multiple matches found for: "'+fullnames[i]+'"'
+             fullnames = ff
+           endelse
          end
    endcase
 endfor

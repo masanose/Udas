@@ -1,21 +1,128 @@
 ;+
+;  WARNING: the interface to this routine is not yet solidified. Use the wrapper routine:
+;  file_retrieve instead. This routine is still under development.
+;
 ; NAME:
-;    file_http_copy_iug
+;    file_http_copy
 ;
 ; PURPOSE:
-;    This procedure is the modified version of file_http_copy in tdas_6_00 for IUGONET data.
-;    New input parameter "host" was added.
-;    
-;MODIFICATIONS:
-; Y. Koyama, April 28, 2011.
-; A. Shinbori, March 06, 2012
-; 
+;    Downloads file(s) from http servers.
+;    Also performs Searches without download.
+;    Copies the file to a user specified local directory.
+;    By default, files are only downloaded if the remote file is newer than
+;    the local file (based on mtime) or if the files differ in size.
+;    This routine is intended for use with simple HTTP file servers.
+;    Wildcard matching and recursive file searching can be used as well.
 ;
-;ACKNOWLEDGEMENT:
-; $LastChangedBy:  $
-; $LastChangedDate:  $
-; $LastChangedRevision:  $
-; $URL $
+; CALLING SEQUENCE: There are two methods:
+; Method 1:
+;    FILE_HTTP_COPY, pathnames, SERVERDIR=serverdir, LOCALDIR=localdir
+;    where:
+;      pathnames = (input string(s), scaler or array)  Relative path name of file to download.;
+;      serverdir = (scaler input string)  Root name of source URL, must
+;                                         begin with: 'http://' and end with '/'
+;      localdir  = (scaler input string)  Root name of local directory, typically
+;                                         ends with '/'
+;    Note:   The source is at:    serverdir + pathnames
+;            The destination is:  localdir + pathnames
+; Method 2:
+;    FILE_HTTP_COPY, URL
+;       URL = full URL(S) of source file
+;       Directory structure is not retained with this procedure
+;
+; Example:
+;    FILE_HTTP_COPY, 'ssl_general/misc/file_http_copy.pro',  $
+;              SERVERDIR='http://themis.ssl.berkeley.edu/data/themis/socware/bleeding_edge/idl/' $
+;              localdir = 'myidl/'
+;
+;    Note: Unix style directory separaters '/' should be used throughout. This convention will still
+;          work with WINDOWS.
+;
+; Alternate calling sequence:
+;    FILE_HTTP_COPY,URL
+;        where URL is an input (string) such as:  URL = '
+;
+; INPUTS:
+;      URL - scalar or array string giving a fully qualified url
+;
+; OPTIONAL KEYWORDS:
+;     NO_CLOBBER:   (0/1) Set this keyword to prevent overwriting local files.
+;     IGNORE_FILESIZE: (0/1) Set this keyword to ignore file size when
+;           evaluating need to download.
+;     NO_DOWNLOAD:  (0/1) Set this keyword to prevent file downloads (url_info
+;           is still returned)
+;     URL_INFO=url_info: (output) Named variable that returns information about
+;           remote file such as modification time and file size as determined
+;           from the HTML header. A zero is returned if the remote file is
+;           invalid.
+;     FILE_MODE= file_mode:     If non-zero, sets the permissions for downloaded files.
+;     DIR_MODE = dir_mode:      Sets permissions for newly created directories
+;                            (Useful for shared directories)
+;     ASCII_MODE:  (0/1)   When set to 1 it forces files to be downloaded as ascii text files (converts CR/LF)
+;                          Setting this keyword will force ignore_filesize keyword to be set as well because
+;                          files will be of different sizes typically.
+;     VERBOSE:      (input; integer) Set level of verboseness:   Uses "DPRINT"
+;           0-nearly silent;  2-typical messages;  4: debugging info
+;
+;
+; Examples:
+;   ;Download most recent version of this file to current directory:
+;   FILE_HTTP_COPY,'http://themis.ssl.berkeley.edu/data/themis/socware/bleeding_edge/idl/ssl_general/misc/file_http_copy.pro'
+;
+; OPTIONAL INPUT KEYWORD PARAMETERS:
+;       PATHNAME = pathname   ; pathname is the filename to be created.
+;                If the directory does not exist then it will be created.
+;                If PATHNAME does not exist then the original filename is used
+;                and placed in the current directory.
+;;
+; RESTRICTIONS:
+;
+;     PROXY: If you are behind a firewall and have to access the net through a
+;         Web proxy,  set the environment variable 'http_proxy' to point to
+;         your proxy server and port, e.g.
+;         setenv,  'http_proxy=http://web-proxy.mpia-hd.mpg.de:3128'
+;         setenv,  'http_proxy=http://www-proxy1.external.lmco.com'
+;
+;               The URL *MUST* begin with "http://".
+;
+; PROCEDURE:
+;     Open a socket to the webserver and download the header.
+;
+; EXPLANATION:
+;     FILE_HTTP_COPY can access http servers - even from behind a firewall -
+;     and perform simple downloads. Currently,
+;     Requires IDL V5.4 or later on Unix or Windows, V5.6 on
+;     Macintosh
+;
+; EXAMPLE:
+;      IDL> FILE_HTTP_COPY,'http://themis.ssl.berkeley.edu/themisdata/thg/l1/asi/whit/2006/thg_l1_asf_whit_2006010103_v01.cdf'
+;      IDL> PRINTDAT, file_info('thg_l1_asf_whit_2006010103_v01.cdf')
+;      or
+;
+;
+; MINIMUM IDL VERSION:
+;     V5.4  (uses SOCKET)
+; MODIFICATION HISTORY:
+;   Original version:  WEBGET()
+;     Written by M. Feldt, Heidelberg, Oct 2001 <mfeldt@mpia.de>
+;     Use /swap_if_little_endian keyword to SOCKET  W. Landsman August 2002
+;     Less restrictive search on Content-Type   W. Landsman   April 2003
+;     Modified to work with FIRST image server-  A. Barth, Nov 2006
+;   FILE_HTTP_COPY:   New version created by D Larson:  March 2007.
+;     Checks last modification time of remote file to determine need for download
+;     Checks size of remote file to determine need to download
+;     Very heavily modified from WEBGET():
+;   May/June 2007 - Modified to allow file globbing (wildcards).
+;   July 2007   - Modified to return remote file info  (without download)
+;   July 2007   - Modified to allow recursive searches.
+;   August 2007 - Added file_mode keyword.
+;   April  2008 - Added dir_mode keyword
+;   Sep 2009    - Fixed user-agent
+;
+; $LastChangedBy: aaflores $
+; $LastChangedDate: 2012-07-03 16:28:11 -0700 (Tue, 03 Jul 2012) $
+; $LastChangedRevision: 10679 $
+; $URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/ssl_general/trunk/misc/file_http_copy.pro $
 ;-
 
 
@@ -92,7 +199,7 @@ pro file_http_header_info,  Header, hi, verbose=verbose
 
   ; get server time (date)
   date = file_http_header_element(header,'Date:')
-  hi.atime = str2time(date, informat = 'DMYhms')
+  if keyword_set(date) then hi.atime = str2time(date, informat = 'DMYhms') else hi.atime = hi.ltime
   hi.clock_offset = hi.atime - hi.ltime
   dprint,dlevel=6,verbose=verbose,'date=',date
 
@@ -124,7 +231,7 @@ END
 
 
 
-PRO file_http_copy_iug, pathnames, newpathnames, $
+PRO file_http_copy, pathnames, newpathnames, $
      recurse_limit=recurse_limit, $
      verbose=verbose, $            ; input:  (integer)  Set level of verbose output.  (2 is typical)
      serverdir=serverdir,  $       ; input:  (string) URL of source files: ie:  'http://themis.ssl.berkeley.edu/data/themis/'      ;trailing '/' is required
@@ -134,8 +241,8 @@ PRO file_http_copy_iug, pathnames, newpathnames, $
      dir_mode=dir_mode,   $        ; input:   defines directory permissions for newly created directories  (use '777'o for shared directories)
      last_version=last_version, $
      min_age_limit=min_age_limit, $
+     host=host, $                  ;input string: Used to define HOST in HTTP header
      user_agent=user_agent,   $    ; input string: Used to define user_agent in HTTP message.
-     host=host, $               
      user_pass=user_pass,  $
      preserve_mtime=preserve_mtime,$
      restore_mtime=restore_mtime, $
@@ -150,15 +257,15 @@ PRO file_http_copy_iug, pathnames, newpathnames, $
      url_info=url_info_s,  $         ; output:  structure containing URL info obtained from the HTTP Header.
      progobj=progobj, $            ; This keyword is experimental - please don't count on it
      links=links2, $               ; Output: links are returned in this variable if the file is an html file
-     ;Add to force_download by Shinbori (2012/03/06)
      force_download=force_download, $  ;Allows download to be forced no matter modification time.  Useful when moving between different repositories(e.g. QA and production data)
      error = error
+  ;;
   ;;
   ;; sockets supported in unix & windows since V5.4, Macintosh since V5.6
 tstart = systime(1)
 ;  if n_elements(verbose) eq 1 then dprint,setdebug=verbose,getdebug=last_dbg
 
-dprint,dlevel=4,verbose=verbose,'Start; $Id: file_http_copy.pro 9483 2012-01-05 01:45:31Z davin-win $'
+dprint,dlevel=4,verbose=verbose,'Start; $Id: file_http_copy.pro 10679 2012-07-03 23:28:11Z aaflores $'
 url_info_s = 0
 if not keyword_set(localdir) then localdir = ''
 if not keyword_set(serverdir) then serverdir = ''
@@ -223,9 +330,9 @@ for pni=0L,n_elements(pathnames)-1 do begin
      sub_pathname = strmid(pathname,0,slashpos1+1)
      dprint,dlevel=5,verbose=verbose,/phelp,sub_pathname
      ; First get directory listing and extract links:
-     file_http_copy_iug,sub_pathname,serverdir=serverdir,localdir=localdir,url_info=index $
+     file_http_copy,sub_pathname,serverdir=serverdir,localdir=localdir,url_info=index, host=host $
          ,min_age_limit=min_age_limit,verbose=verbose,file_mode=file_mode,dir_mode=dir_mode,if_modified_since=if_modified_since $
-         ,no_update=no_update, links=links, user_agent=user_agent,host=host,preserve_mtime=preserve_mtime, restore_mtime=restore_mtime
+         ,no_update=no_update, links=links, user_agent=user_agent,preserve_mtime=preserve_mtime, restore_mtime=restore_mtime
      dprint,dlevel=4,verbose=verbose,/phelp,links
      slashpos2 = strpos(pathname,slash,globpos)
      if slashpos2 eq -1 then slashpos2 = strlen(pathname)  ; special case for non-directories  (files)
@@ -241,11 +348,11 @@ for pni=0L,n_elements(pathnames)-1 do begin
          for i=i0,nlinks-1 do begin
              dprint,dlevel=4,verbose=verbose,'Retrieve link#'+strtrim(i+1,2),' of ',strtrim(nlinks,2),': ', rec_pathnames[i]
              ; Recursively get files:
-             file_http_copy_iug,rec_pathnames[i],serverdir=serverdir,localdir=localdir  $
+             file_http_copy,rec_pathnames[i],serverdir=serverdir,localdir=localdir, host=host  $
                        , verbose=verbose,file_mode=file_mode,dir_mode=dir_mode, ascii_mode=ascii_mode  $
                        , min_age_limit=min_age_limit, last_version=last_version, url_info=ui $
                        , no_download=no_download, no_clobber=no_clobber, no_update=no_update $
-                       , ignore_filesize=ignore_filesize,user_agent=user_agent,host=host,if_modified_since=if_modified_since $
+                       , ignore_filesize=ignore_filesize,user_agent=user_agent,if_modified_since=if_modified_since $
                        , preserve_mtime=preserve_mtime, restore_mtime=restore_mtime
              dprint,dlevel=5,verbose=verbose,/phelp,lns
              if not keyword_set(ui)  then message,'URL info error'
@@ -287,9 +394,9 @@ for pni=0L,n_elements(pathnames)-1 do begin
 
 ;Warning: The file times (mtime,ctime,atime) can be incorrect (with Windows) if the user has (recently) changed the time zone the computer resides in.
 ;This can lead to unexpected results.
-  file_age = tstart-lcl.mtime ; Add to this sentence by Shinbori (2012/03/06)
-  if file_age lt (keyword_set(min_age_limit) ? min_age_limit : 0) then begin ; Modified this sentence by Shinbori (2012/03/06)
-      dprint,dlevel=3,verbose=verbose,'Found recent file (',strtrim(long(file_age),2),' secs): "'+localname+'" (assumed valid)'; Modified this sentence by Shinbori (2012/03/06)
+  file_age = tstart-lcl.mtime
+  if file_age lt (keyword_set(min_age_limit) ? min_age_limit : 0) then begin
+      dprint,dlevel=3,verbose=verbose,'Found recent file (',strtrim(long(file_age),2),' secs): "'+localname+'" (assumed valid)'
       ;url_info.ltime = systime(1)
       url_info.localname = localname
       url_info.exists = 1
@@ -304,21 +411,7 @@ for pni=0L,n_elements(pathnames)-1 do begin
   connect_timeout = 10
   t_connect = systime(1)
 
-  if n_elements(user_agent) eq 0 then user_agent =  'FILE_HTTP_COPY_IUG IDL'+!version.release + ' ' + !VERSION.OS + '/' + !VERSION.ARCH
-
-;; To insert "Host" information into HTTP command 
-  start_pos=strpos(serverdir,'://')+3  ; specify start_pos to chop "http://", "https://", "ftp://", "sftp://". The number three is from "://".
-  end_pos=strlen(serverdir)
-  tmp=strmid(serverdir,start_pos,end_pos-start_pos)
-
-  start_pos=0
-
-  end_pos=strpos(tmp,':')
-  if end_pos eq -1 then end_pos = strpos(tmp,'/') 
-  if end_pos eq -1 then end_pos = strlen(tmp)
-  
-  host=strmid(tmp,start_pos,end_pos-start_pos)
-;;
+  if n_elements(user_agent) eq 0 then user_agent =  'FILE_HTTP_COPY IDL'+!version.release + ' ' + !VERSION.OS + '/' + !VERSION.ARCH
 
   stack = scope_traceback(/structure)
   referrer = stack.routine + string(stack.line,format='("(",i0,")")')
@@ -343,8 +436,8 @@ for pni=0L,n_elements(pathnames)-1 do begin
          server = strmid(server,0,lastcolon)
       endif else port = 80
 
-      dprint,dlevel=4,verbose=verbose,'Opening server: "',server, '" on Port: ',port ;Modified this sentence by Shinbori (2012/03/06)
-      if not keyword_set(server) then dprint,dlevel=0,verbose=verbose,'Bad server: "'+server+'"' ;Modified this sentence by Shinbori (2012/03/06)
+      dprint,dlevel=4,verbose=verbose,'Opening server: "',server, '" on Port: ',port
+      if not keyword_set(server) then dprint,dlevel=0,verbose=verbose,'Bad server: "'+server+'"'
       socket, unit, Server,  Port, /get_lun,/swap_if_little_endian,error=error,$
                  read_timeout=read_timeout,connect_timeout=connect_timeout
       if error ne 0 then begin
@@ -357,13 +450,15 @@ for pni=0L,n_elements(pathnames)-1 do begin
       endif
       dprint,dlevel=4,verbose=verbose,'Purl= ',purl
       printf, unit, 'GET '+purl +  ' HTTP/1.0'
+      
+      ; aaflores july-2012 Allow HOST keyword to overwrite default value
+      if ~keyword_set(host) then host = server
+      ; lphilpott may-2012 Add Host header to fix problem with site that have a permanent redirect
+      printf, unit, 'Host: ' + host 
+
       if keyword_set(user_agent) then begin
          printf, unit, 'User-Agent: ',user_agent
          dprint,dlevel=4,verbose=verbose,'User Agent: ',user_agent
-      endif
-      if keyword_set(host) then begin
-         printf, unit, 'Host: ',host
-         dprint,dlevel=4,verbose=verbose,'Host: ',host
       endif
       if size(/type,referrer) eq 7 then begin
          printf, unit,  'Referer: ',referrer
@@ -413,14 +508,16 @@ DONE: On_IOERROR, NULL
   dprint,dlevel=6,verbose=verbose,'Header= ',transpose(header)
   dprint,dlevel=6,verbose=verbose,phelp=2,url_info
 
-  if url_info.status_code eq 302 then begin   ; Redirection
+  ; lphilpott may-2012 call redirect code for permanent redirects (301) in addition to temporary redirects
+  if url_info.status_code eq 302 || url_info.status_code eq 301 then begin   ; Redirection
       location = file_http_header_element(header,'Location:')
       dprint,dlevel=1,verbose=verbose,'Redirection to: ',location
       if keyword_set(location) then begin
-          file_http_copy_iug,location,keyword_set(newpathnames) ? newpathname : '', $
-               localdir=localdir,verbose=verbose, $
-               url_info=url_info,file_mode=file_mode,dir_mode=dir_mode, ascii_mode=ascii_mode, $
-               user_agent=user_agent,host=host,preserve_mtime=preserve_mtime,restore_mtime=restore_mtime,if_modified_since=if_modified_since
+          file_http_copy,location,keyword_set(newpathnames) ? newpathname : '', $
+               localdir=file_dirname(localdir+pathname)+'/',verbose=verbose, links=links2,$; lphilpott may-2012 change localdir so that the final directory the file is saved to is the one intended
+               ;localdir=localdir,verbose=verbose, $
+               url_info=url_info,file_mode=file_mode,dir_mode=dir_mode, ascii_mode=ascii_mode, host=host, $
+               user_agent=user_agent,preserve_mtime=preserve_mtime,restore_mtime=restore_mtime,if_modified_since=if_modified_since
           goto, close_server
       endif
   endif
@@ -464,9 +561,9 @@ DONE: On_IOERROR, NULL
          endelse
 
          if keyword_set(no_download) then  download_file = 0
-         if keyword_set(force_download) then download_file = 1;Add to this sentence by Shinbori (2012/03/06)
-         
-         
+         if keyword_set(force_download) then download_file = 1
+
+
          if download_file then begin    ;  begin file download
              dirname = file_dirname(localname)
              file_mkdir2,dirname,mode = dir_mode,dlevel=2,verbose=verbose
@@ -569,20 +666,20 @@ DONE: On_IOERROR, NULL
      if keyword_set(index) then if index.localname ne localdir+indexfilename then links=''
 
      if not keyword_set(links) then begin   ; Get directory list
-         file_http_copy_iug,'',serverdir=serverdir,localdir=localdir, $
+         file_http_copy,'',serverdir=serverdir,localdir=localdir, $
              min_age_limit=min_age_limit,verbose=verbose,no_update=no_update, $
-             file_mode=file_mode,dir_mode=dir_mode,ascii_mode=1 , $
-             url_info=index,links=links,user_agent=user_agent,host=host,if_modified_since=if_modified_since   ;No need to preserve mtime on dir listings ,preserve_mtime=preserve_mtime
+             file_mode=file_mode,dir_mode=dir_mode,ascii_mode=1 , host=host, $
+             url_info=index,links=links,user_agent=user_agent,if_modified_since=if_modified_since   ;No need to preserve mtime on dir listings ,preserve_mtime=preserve_mtime
      endif
      wdir = where(strpos(links,'/',0) gt 0,ndirs)
      for i=0,ndirs-1 do begin
          dir = links[wdir[i]]
-         file_http_copy_iug,pathname,recurse_limit=recurse_limit-1,serverdir=serverdir+dir,localdir=localdir+dir $
+         file_http_copy,pathname,recurse_limit=recurse_limit-1,serverdir=serverdir+dir,localdir=localdir+dir $
                        , verbose=verbose,file_mode=file_mode,dir_mode=dir_mode,ascii_mode=ascii_mode $
                        , min_age_limit=min_age_limit, last_version=last_version, url_info=ui $
                        , no_download=no_download, no_clobber=no_clobber,no_update=no_update  $
-                       , ignore_filesize=ignore_filesize,user_agent=user_agent $
-                       , host=host, preserve_mtime=preserve_mtime,retore_mtime=restore_mtime,if_modified_since=if_modified_since
+                       , ignore_filesize=ignore_filesize,user_agent=user_agent, host=host $
+                       , preserve_mtime=preserve_mtime,retore_mtime=restore_mtime,if_modified_since=if_modified_since
          if not keyword_set(ui)  then message,'URL error'
          w = where(ui.exists ne 0,nw)
          if nw ne 0 then url_info  = keyword_set(url_info)  ?  [url_info,ui[w]]   : ui[w]  ; only include existing files
