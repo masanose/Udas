@@ -108,6 +108,7 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
         url_str = strsplit( url, '/', /extract )
         nstr = N_ELEMENTS(url_str)
         fname = url_str[nstr-1]
+        ;;append_array, fname_arr, fname
         syyyy = url_str[4] & smm = url_str[5] & sdd = url_str[6]
         local_data_dir = local_data_dir_tmpl
         pos = STRPOS( local_data_dir, 'YYYY' ) & STRPUT, local_data_dir, syyyy, pos
@@ -115,9 +116,11 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
         pos = STRPOS( local_data_dir, 'DD' ) & STRPUT, local_data_dir, sdd, pos
         remote_data_dir = 'http://' + STRJOIN( url_str[1:(nstr-2)], '/' ) + '/'
         
-        ;Download if no data file in local dir or the remote data file is newer than the local one
-        ;;;;print, local_data_dir  ;for debugging
-        ;;;;print, remote_data_dir ;for debugging
+        ;Generate the data dir arrays
+        ;;append_array, local_data_dir_arr, local_data_dir
+        ;;append_array, remote_data_dir_arr, remote_data_dir
+        
+        ;Download data files
         source.local_data_dir = local_data_dir
         source.remote_data_dir = remote_data_dir
         fpath = ''
@@ -129,8 +132,8 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
       
       ;;;;;;;;;;;;;;;; Read data files to generate tplot variables ;;;;;;;;;;;;;
       
-      PRINT, 'The following FITS files will be read: '
-      PRINT, loaded_flist ; for debugging
+      ;PRINT, 'The following FITS files will be read: '
+      ;PRINT, loaded_flist ; for debugging
       
     databuf=intarr(n_elements(loaded_flist),512,512)
 
