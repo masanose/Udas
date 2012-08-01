@@ -132,7 +132,7 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
       PRINT, 'The following FITS files will be read: '
       PRINT, loaded_flist ; for debugging
       
-    databuf=intarr(512,512,n_elements(loaded_flist))
+    databuf=intarr(n_elements(loaded_flist),512,512)
 
     for j=0,n_elements(loaded_flist)-1 do begin
      file=loaded_flist[j]
@@ -144,14 +144,14 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
         dprint,'Loading SMART_T1 H-alpha Full-disk Sun Image ',file,' not found. Skipping'
         continue
       endelse
- 
+     
      fits_read,file,img,hd
      
      timearr = time_double(sxpar(hd,'DATE-OBS'))      
      redimg = congrid(img,512,512)
 
 ;     append_array,databuf,redimg
-     databuf[*,*,j] = redimg
+     databuf[j,*,*] = redimg
      append_array,timebuf,timearr
       
     endfor ; (j)
