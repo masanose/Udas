@@ -176,15 +176,15 @@ for isite=0, n_elements(site_code)-1 do begin
                       strhour+':'+strmin+':'+strsec)
       
             if new_time ne old_time then begin
-              alt_tmp=alt(itime, ialt)
-;print, 'alt_tmp = ', alt_tmp
-              if alt_tmp gt 180. then begin
-;print, 'itime_exb = ', itime_exb
-                timevec_exb(itime_exb)=new_time
-                exb(itime_exb, 0)=Ve(itime, ialt)
-                exb(itime_exb, 1)=Vn(itime, ialt)
-                exb(itime_exb, 2)=Vu(itime, ialt)
-                itime_exb++ 
+              if (itime ne -1) then begin
+                alt_tmp=alt(itime, ialt)
+                if (alt_tmp gt 180.) then begin
+                  timevec_exb(itime_exb)=new_time
+                  exb(itime_exb, 0)=Ve(itime, ialt)
+                  exb(itime_exb, 1)=Vn(itime, ialt)
+                  exb(itime_exb, 2)=Vu(itime, ialt)
+                  itime_exb++ 
+                endif
               endif
 
               ialt=0
