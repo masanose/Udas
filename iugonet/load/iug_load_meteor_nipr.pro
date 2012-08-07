@@ -1,13 +1,13 @@
 ;+
-;Procedure: IUG_LOAD_METEOR_NIPR
+; PROCEDURE: IUG_LOAD_METEOR_NIPR
 ;   iug_load_meteor_nipr, site = site, trange = trange, $
 ;       get_support_data = get_support_data, verbose = verbose, $
 ;       downloadonly = downloadonly, no_download = no_download
 ;
-;Purpose:
+; PURPOSE:
 ;   loads meteor radar data of NIPR
 ;
-;Keywords:
+; KEYWORDS:
 ;   site  = Observatory name.  For example, iug_load_meteor_nipr, site = 'tro'.
 ;   trange = (Optional) Time range of interest  (2 element array).
 ;   /verbose: set to output some useful info
@@ -15,7 +15,7 @@
 ;           into variables.
 ;   /no_download: use only files which are online locally.
 ;
-;Example:
+; EXAMPLE:
 ;   iug_load_meteor_nipr, site = 'tro', trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
 ; Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
