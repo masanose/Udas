@@ -4,7 +4,7 @@
 ;         verbose = verbose, downloadonly = downloadonly
 ;
 ;PURPOSE:
-;  Loads 3D velocity data obtained with EISCAT UHF radar/ESR.
+;  Loads 3D ion velocity data obtained with EISCAT UHF radar/ESR.
 ;
 ;KEYWORDS:
 ;  site  = Observatory name.  For example, serc_load_gmag_sample, site = 'tro'.
@@ -43,7 +43,7 @@ if md[0] eq '' then return
 print, 'md = ', md
 
 ;----- all pulse codes -----;
-pulse_code_all = strsplit('beat ipy0 arc1 stef t2pl tau1', /extract)
+pulse_code_all = strsplit('beat ipy0 arc1 stef t2pl tau1 tau0', /extract)
 
 ;----- pulse_code -----;
 if(not keyword_set(pulse_code)) then pulse_code='all'
@@ -61,7 +61,7 @@ if(not keyword_set(downloadonly)) then downloadonly=0
 if(not keyword_set(no_download)) then no_download=0
 
 ; acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'The vecter velocity data are calculated with procedure made by '$
+acknowledgstring = 'The 3D ion velocity data are calculated with procedure made by '$
   + 'Y. Ogawa (yogawa at nipr.ac.jp), so ask him if you have any questions on the '$
   + 'data. The distribution of the vecter velocity data has been partly '$
   + 'supported by the IUGONET (Inter-university Upper atmosphere Global Observation '$
@@ -247,7 +247,7 @@ for isite=0, n_elements(site_code)-1 do begin
           print, 'Information about NIPR Meteor Radar data'
           print, 'PI: ', dlimit.data_att.PI_name
           print, ''
-          print, 'Rules of the Road for NIPR Meteor Radar Data:'
+          print, 'Rules of the Road for EISCAT 3D ion velocity Data:'
           print, ''
           print_str_maxlet, dlimit.data_att.acknowledgment
           print, ''
