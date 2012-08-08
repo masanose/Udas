@@ -1,12 +1,15 @@
 ;+
 ; NAME: 
+;   gui_acknowledgement
+;
+; PURPOSE:
+;   Show data policy for IUGONET data on GUI
+;
+; EXAMPLE:
 ;   gui_acknowledgement, instrument=instrument, $
 ;                        datatype=datatype, $
 ;                        site_or_param=site_or_param, $
 ;                        par_names=par_names
-;
-; PURPOSE:
-;   Show data policy for IUGONET data on GUI
 ;
 ; Written by: Y.-M. Tanaka, May 11, 2012 (ytanaka at nipr.ac.jp)
 ;-
