@@ -14,10 +14,10 @@
 thm_init
 
 ;Set the date and time for loading data
-timespan, '2007-01-22',2
+timespan, '2007-01-22',1
 
-;Load geomagnetic observation data at Kakioka observatory.
-iug_load_gmag_wdc, site='kak', resolution='min'
+;Load ae index 
+iug_load_gmag_wdc, site='ae', resolution='min'
 
 ;List the loaded data names
 tplot_names
@@ -26,6 +26,6 @@ tplot_names
 tplot_options, 'title', 'Sample plot of iug_crib_gmag_wdc'
 
 ;Plot data
-tplot,'wdc_mag_kak_1min'
+tplot,'wdc_mag_ae_prov_1min'
 
 end
