@@ -89,10 +89,10 @@ case instrument of
         'sys': iug_var = !iugonet.data_policy.sdfit_syo
       endcase
     end
-  'Equatorial_Atomosphere_Radar'  : iug_var = !iugonet.data_policy.ear
+  'Equatorial_Atmosphere_Radar'  : iug_var = !iugonet.data_policy.ear
   'Medium_Frequency_radar'        : iug_var = !iugonet.data_policy.mf_rish
   'Meteor_Wind_radar'             : iug_var = !iugonet.data_policy.meteor_rish
-  'Middle_Upper_atomosphere_radar': iug_var = !iugonet.data_policy.mu
+  'Middle_Upper_atmosphere_radar': iug_var = !iugonet.data_policy.mu
   'Boundary_Layer_Radar'          : iug_var = !iugonet.data_policy.blr_rish
   'Lower_Troposphere_Radar'       : iug_var = !iugonet.data_policy.ltr_rish
   'EISCAT_radar'                  : iug_var = !iugonet.data_policy.eiscat
@@ -178,10 +178,10 @@ endif else begin
             'sys': !iugonet.data_policy.sdfit_syo = iug_var
           endcase
         end
-      'Equatorial_Atomosphere_Radar'  : !iugonet.data_policy.ear = iug_var
+      'Equatorial_Atmosphere_Radar'  : !iugonet.data_policy.ear = iug_var
       'Medium_Frequency_radar'        : !iugonet.data_policy.mf_rish = iug_var
       'Meteor_Wind_radar'             : !iugonet.data_policy.meteor_rish = iug_var
-      'Middle_Upper_atomosphere_radar': !iugonet.data_policy.mu = iug_var
+      'Middle_Upper_atmosphere_radar': !iugonet.data_policy.mu = iug_var
       'Boundary_Layer_Radar'          : !iugonet.data_policy.blr_rish = iug_var
       'Lower_Troposphere_Radar'       : !iugonet.data_policy.ltr_rish = iug_var
       'EISCAT_radar'                  : !iugonet.data_policy.eiscat = iug_var
