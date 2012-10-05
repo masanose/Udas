@@ -14,8 +14,18 @@
 thm_init
 
 ;----- Set URLs -----;
-url_fits1 = 'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/'
-url_fits2 = 'http://idlastro.gsfc.nasa.gov/ftp/pro/misc/'
+url_fits = ['http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/misc/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/misc/']
+fname_fits = ['fits_close.pro', 'fits_open.pro', 'fits_read.pro', $
+            'sxaddpar.pro', 'sxdelpar.pro', 'sxpar.pro', 'gettok.pro', $
+            'valid_num.pro']
+
 ; dir_fits_def = './'
 
 ;----- Select directory to install tdas -----;
@@ -28,17 +38,9 @@ if(dir_fits eq '') then begin
     print, 'Directory was not selected.'
 endif else begin
     ;----- Download tdas -----;
-    source = file_retrieve(/struct)
-
-    source.local_data_dir = dir_fits + 'fitslib/fits/'
-    source.remote_data_dir = url_fits1
-    print,'Downloading fits library from ' + url_fits1
-    files = file_retrieve('*.pro', _extra=source)
-
-    source.local_data_dir = dir_fits + 'fitslib/misc/'
-    source.remote_data_dir = url_fits2
-    print,'Downloading fits library from ' + url_fits2
-    files = file_retrieve('*.pro', _extra=source)
+    local_data_dir = dir_fits + 'fitslib/'
+    print,'Downloading fits library'
+    files = file_retrieve(fname_fits, local_data_dir=local_data_dir, remote_data_dir=url_fits)
 endelse
 
 end

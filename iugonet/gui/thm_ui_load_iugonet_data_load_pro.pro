@@ -253,7 +253,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
           ;----- Show data policy -----;
           Answer = gui_acknowledgement(instrument=instrument, datatype=datatype, $
-              site_or_param=site_name2, par_names=new_vars)
+              site_or_param=site_name2, par_names=new_vars[i])
 
           if Answer eq 'OK' then begin
               ;----- Add the time clip of tplot variable between start and end times -----;   
@@ -267,7 +267,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
                   historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
                   return
               endif
-          endif
+          endif else begin
+              break
+          endelse
       endfor
   endif 
   

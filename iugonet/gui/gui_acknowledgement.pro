@@ -1,12 +1,15 @@
 ;+
 ; NAME: 
+;   gui_acknowledgement
+;
+; PURPOSE:
+;   Show data policy for IUGONET data on GUI
+;
+; EXAMPLE:
 ;   gui_acknowledgement, instrument=instrument, $
 ;                        datatype=datatype, $
 ;                        site_or_param=site_or_param, $
 ;                        par_names=par_names
-;
-; PURPOSE:
-;   Show data policy for IUGONET data on GUI
 ;
 ; Written by: Y.-M. Tanaka, May 11, 2012 (ytanaka at nipr.ac.jp)
 ;-
@@ -29,7 +32,43 @@ case instrument of
   'geomagnetic_field_fluxgate': begin
       case datatype of
         'magdas'   : iug_var = !iugonet.data_policy.gmag_magdas
-        '210mm#'   : iug_var = !iugonet.data_policy.gmag_mm210
+        '210mm#'   : begin
+          case site_or_param of 
+            'adl': iug_var = !iugonet.data_policy.gmag_mm210_adl
+            'bik': iug_var = !iugonet.data_policy.gmag_mm210_bik
+            'bsv': iug_var = !iugonet.data_policy.gmag_mm210_bsv
+            'can': iug_var = !iugonet.data_policy.gmag_mm210_can
+            'cbi': iug_var = !iugonet.data_policy.gmag_mm210_cbi
+            'chd': iug_var = !iugonet.data_policy.gmag_mm210_chd
+            'dal': iug_var = !iugonet.data_policy.gmag_mm210_dal
+            'daw': iug_var = !iugonet.data_policy.gmag_mm210_daw
+            'ewa': iug_var = !iugonet.data_policy.gmag_mm210_ewa
+            'gua': iug_var = !iugonet.data_policy.gmag_mm210_gua
+            'kag': iug_var = !iugonet.data_policy.gmag_mm210_kag
+            'kat': iug_var = !iugonet.data_policy.gmag_mm210_kat
+            'kot': iug_var = !iugonet.data_policy.gmag_mm210_kot
+            'ktb': iug_var = !iugonet.data_policy.gmag_mm210_ktb
+            'ktn': iug_var = !iugonet.data_policy.gmag_mm210_ktn
+            'lmt': iug_var = !iugonet.data_policy.gmag_mm210_lmt
+            'lnp': iug_var = !iugonet.data_policy.gmag_mm210_lnp
+            'mcq': iug_var = !iugonet.data_policy.gmag_mm210_mcq
+            'mgd': iug_var = !iugonet.data_policy.gmag_mm210_mgd
+            'msr': iug_var = !iugonet.data_policy.gmag_mm210_msr
+            'mut': iug_var = !iugonet.data_policy.gmag_mm210_mut
+            'onw': iug_var = !iugonet.data_policy.gmag_mm210_onw
+            'ppi': iug_var = !iugonet.data_policy.gmag_mm210_ppi
+            'ptk': iug_var = !iugonet.data_policy.gmag_mm210_ptk
+            'ptn': iug_var = !iugonet.data_policy.gmag_mm210_ptn
+            'rik': iug_var = !iugonet.data_policy.gmag_mm210_rik
+            'tik': iug_var = !iugonet.data_policy.gmag_mm210_tik
+            'wep': iug_var = !iugonet.data_policy.gmag_mm210_wep
+            'wew': iug_var = !iugonet.data_policy.gmag_mm210_wew
+            'wtk': iug_var = !iugonet.data_policy.gmag_mm210_wtk
+            'yap': iug_var = !iugonet.data_policy.gmag_mm210_yap
+            'ymk': iug_var = !iugonet.data_policy.gmag_mm210_ymk
+            'zyk': iug_var = !iugonet.data_policy.gmag_mm210_zyk
+          endcase
+        endcase
         'WDC_kyoto': iug_var = !iugonet.data_policy.gmag_wdc
         'NIPR_mag#': begin
             case site_or_param of
@@ -82,7 +121,43 @@ endif else begin
       'geomagnetic_field_fluxgate': begin
           case datatype of
             'magdas'   : !iugonet.data_policy.gmag_magdas = iug_var
-            '210mm#'   : !iugonet.data_policy.gmag_mm210 = iug_var
+            '210mm#'   : begin
+              case site_or_param of 
+                'adl': !iugonet.data_policy.gmag_mm210_adl = iug_var
+                'bik': !iugonet.data_policy.gmag_mm210_bik = iug_var
+                'bsv': !iugonet.data_policy.gmag_mm210_bsv = iug_var
+                'can': !iugonet.data_policy.gmag_mm210_can = iug_var
+                'cbi': !iugonet.data_policy.gmag_mm210_cbi = iug_var
+                'chd': !iugonet.data_policy.gmag_mm210_chd = iug_var
+                'dal': !iugonet.data_policy.gmag_mm210_dal = iug_var
+                'daw': !iugonet.data_policy.gmag_mm210_daw = iug_var
+                'ewa': !iugonet.data_policy.gmag_mm210_ewa = iug_var
+                'gua': !iugonet.data_policy.gmag_mm210_gua = iug_var
+                'kag': !iugonet.data_policy.gmag_mm210_kag = iug_var
+                'kat': !iugonet.data_policy.gmag_mm210_kat = iug_var
+                'kot': !iugonet.data_policy.gmag_mm210_kot = iug_var
+                'ktb': !iugonet.data_policy.gmag_mm210_ktb = iug_var
+                'ktn': !iugonet.data_policy.gmag_mm210_ktn = iug_var
+                'lmt': !iugonet.data_policy.gmag_mm210_lmt = iug_var
+                'lnp': !iugonet.data_policy.gmag_mm210_lnp = iug_var
+                'mcq': !iugonet.data_policy.gmag_mm210_mcq = iug_var
+                'mgd': !iugonet.data_policy.gmag_mm210_mgd = iug_var
+                'msr': !iugonet.data_policy.gmag_mm210_msr = iug_var
+                'mut': !iugonet.data_policy.gmag_mm210_mut = iug_var
+                'onw': !iugonet.data_policy.gmag_mm210_onw = iug_var
+                'ppi': !iugonet.data_policy.gmag_mm210_ppi = iug_var
+                'ptk': !iugonet.data_policy.gmag_mm210_ptk = iug_var
+                'ptn': !iugonet.data_policy.gmag_mm210_ptn = iug_var
+                'rik': !iugonet.data_policy.gmag_mm210_rik = iug_var
+                'tik': !iugonet.data_policy.gmag_mm210_tik = iug_var
+                'wep': !iugonet.data_policy.gmag_mm210_wep = iug_var
+                'wew': !iugonet.data_policy.gmag_mm210_wew = iug_var
+                'wtk': !iugonet.data_policy.gmag_mm210_wtk = iug_var
+                'yap': !iugonet.data_policy.gmag_mm210_yap = iug_var
+                'ymk': !iugonet.data_policy.gmag_mm210_ymk = iug_var
+                'zyk': !iugonet.data_policy.gmag_mm210_zyk = iug_var
+              endcase
+            endcase
             'WDC_kyoto': !iugonet.data_policy.gmag_wdc = iug_var
             'NIPR_mag#': begin
                 case site_or_param of

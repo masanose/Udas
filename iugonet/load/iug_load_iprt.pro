@@ -20,9 +20,10 @@
 ;                 into variables.
 ;
 ; PROCEDURES USED:
-;  fits_read, sxpar, fits_open, fits_close, gettok, sxdelpar
+;  fits_read, sxpar, fits_open, fits_close, gettok, sxdelpar, sxaddpar, valid_num
 ;  For the use of this procedure, get FITS I/O procedures from
 ;  the IDL Astronomy Library (http://idlastro.gsfc.nasa.gov/fitsio.html).
+;  You can download these procedures by running get_fitslib.
 ;
 ;
 ;Example:
