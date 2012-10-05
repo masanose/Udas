@@ -16,6 +16,7 @@
 ;A. Shinbori, 06/03/2012
 ;A. Shinbori, 12/04/2012
 ;Y.-M. Tanaka,15/06/2012
+;A. Shinbori, 05/10/2012
 ;-
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -49,8 +50,8 @@ pro thm_ui_load_iugonet_data_load_pro,$
           par_names=tnames('iug_blr_*')
       end
 
-      ;----- Equatorial Atomosphere Radar -----;
-      'Equatorial_Atomosphere_Radar' : begin
+      ;----- Equatorial Atmosphere Radar -----;
+      'Equatorial_Atmosphere_Radar' : begin
           iug_load_ear, datatype = datatype, parameter = site_or_param, trange = timeRange
           if parameters[0] eq '*' then begin
               vns='*'
@@ -180,8 +181,8 @@ pro thm_ui_load_iugonet_data_load_pro,$
           par_names=tnames('iug_meteor_*')
       end
 
-      ;----- Middle Upper atomosphere radar -----;
-      'Middle_Upper_atomosphere_radar' : begin
+      ;----- Middle Upper atmosphere radar -----;
+      'Middle_Upper_atmosphere_radar' : begin
           iug_load_mu, datatype =datatype, trange = timeRange 
           if parameters[0] eq '*' then begin
               vns='*'

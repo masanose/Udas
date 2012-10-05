@@ -13,6 +13,7 @@
 ;A. Shinbori, 02/05/2011
 ;A. Shinbori, 11/05/2012
 ;A. Shinbori, 12/06/2012
+;A. Shinbori, 05/10/2012
 ;
 ;
 ;--------------------------------------------------------------------------------
@@ -304,8 +305,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   
   instrumentLabel = widget_label(instrumentBase,value='Instrument Type: ')
 
-  instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atomosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
-                     'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atomosphere_radar', 'SuperDARN#', 'EISCAT_radar',$
+  instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atmosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
+                     'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atmosphere_radar', 'SuperDARN#', 'EISCAT_radar',$
                      'Wind_Profiler_Radar_(LQ-7)']
   
   instrumentCombo = widget_combobox(instrumentBase,$
