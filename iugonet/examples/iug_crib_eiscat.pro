@@ -21,38 +21,31 @@ thm_init
 ; Set the date and duration (in days)
 timespan, '2010-1-18',3
 
-; Load the Tromso UHF radar data
-iug_load_eiscat, site='tro_uhf'
+; Load the ESR-42m radar data
+iug_load_eiscat, site='esr_42m'
 
 ; View the loaded data
 tplot_names
-
-; Plot Ne for the integration times of 60s and 0s, and all.
-tplot,['eiscat_trouhf_beat_0060_ne','eiscat_trouhf_beat_0000_ne',$
-       'eiscat_trouhf_beat_all_ne']
-
-; Stop
-print,'Enter ".c" to continue.'
-stop
-
-; Load data observed with the ipy0 pulse-code by all EISCAT radars
-iug_load_eiscat, site='*', pulse_code='ipy0'
-
-; View the loaded data
-tplot_names
-
-; Plot the loaded Ne data
-tplot, 'eiscat_*_ipy0_all_ne'
-
-; Stop
-print,'Enter ".c" to continue.'
-stop
-
-; Set title
-tplot_options, 'title', 'Sample plot of EISCAT radar data'
 
 ; Plot Ne, Te, Ti, Vi for ESR-42m radar
-tplot,['eiscat_esr42m_ipy0_all_ne','eiscat_esr42m_ipy0_all_te',$
-       'eiscat_esr42m_ipy0_all_ti','eiscat_esr42m_ipy0_all_vi']
+tplot,['eiscat_esr42m_ne','eiscat_esr42m_te',$
+       'eiscat_esr42m_ti','eiscat_esr42m_vi']
+
+
+; Stop
+print,'Enter ".c" to continue.'
+stop
+
+; Load data observed at all sites
+iug_load_eiscat
+
+; View the loaded data
+tplot_names
+
+; Set title
+; tplot_options, 'title', 'Sample plot of EISCAT radar data'
+
+; Plot Ne for all sites
+tplot, 'eiscat_*_ne'
 
 end

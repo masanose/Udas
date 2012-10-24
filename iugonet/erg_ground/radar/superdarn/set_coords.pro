@@ -22,10 +22,10 @@
 ; 	2010/11/18: Created
 ;   2011/01/07: added glat to coordinate option
 ; 
-; $LastChangedBy: horit $
-; $LastChangedDate: 2011-06-20 22:42:07 +0900 (Mon, 20 Jun 2011) $
-; $LastChangedRevision: 135 $
-; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/set_coords.pro $
+; $LastChangedBy:$
+; $LastChangedDate:$
+; $LastChangedRevision:$
+; $URL:$
 ;-
 pro set_coords, tplot_vars, coord, quiet=quiet
 

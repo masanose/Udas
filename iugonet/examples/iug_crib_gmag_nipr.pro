@@ -41,7 +41,7 @@ timespan,'2003-10-29/06:00:00',4,/hours
 ylim,'nipr_mag_*',-4000,2000
 
 ; Set title
-tplot_options, 'title', 'Sample plot of NIPR magnetometer data'
+; tplot_options, 'title', 'Sample plot of NIPR magnetometer data'
 
 ; Plot
 tplot

@@ -9,7 +9,9 @@
 ; :KEYWORDS:
 ;    sites: 3-letter code of SD radar name. 
 ;           Currently only the following codes work: 
-;           'hok', 'ksr'  
+;           'hok','ksr','sye','sys','bks','rkn','unw','tig', $
+;           'kod','inv','han','pyk', 'cve', 'cvw', 'fhe', 'fhw', $
+;           'sas', 'pgr', 'kap', 'gbr', 'sto', 'wal'
 ;    cdffn: File path of a CDF file if given explicitly. 
 ;    get_support_data: Turn this on to load the supporting data 
 ;    trange: time range for which data are loaded. 
@@ -40,8 +42,8 @@
 ;
 ;
 ; $LastChangedBy: horit $
-; $LastChangedDate: 2011-11-25 18:09:37 +0900 (Fri, 25 Nov 2011) $
-; $LastChangedRevision: 161 $
+; $LastChangedDate: 2012-08-01 22:37:55 +0900 (Wed, 01 Aug 2012) $
+; $LastChangedRevision: 169 $
 ; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/erg_load_sdfit.pro $
 ;-
 ;---------------------------------------------------
@@ -70,9 +72,12 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
 
   ;Initialize the TDAS environment
   thm_init
+  sd_init
 
   ;Set the list of the available sites
-  valid_sites = [ 'hok','ksr','sye','sys','bks' ]
+  valid_sites = [ 'hok','ksr','sye','sys','bks','rkn','unw','tig', $
+    'kod','inv','han','pyk', 'cve', 'cvw', 'fhe', 'fhw', $
+    'sas', 'pgr', 'kap', 'gbr', 'sto', 'wal' ]
 
   ;If a CDF file path is not given explicitly
   IF ~KEYWORD_SET(cdffn) THEN BEGIN
@@ -106,7 +111,7 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
  
     source = file_retrieve(/struct)
     source.local_data_dir = root_data_dir()+'ergsc/ground/radar/sd/fitacf/'+stn+'/'
-    source.remote_data_dir = 'http://gemsissc.stelab.nagoya-u.ac.jp/data/ergsc/ground/radar/sd/fitacf/'+stn+'/'
+    source.remote_data_dir = !sdarn.remote_data_dir+stn+'/'
     source.min_age_limit = 900
     if keyword_set(downloadonly) then source.downloadonly = 1
     if keyword_set(no_download) then begin
@@ -252,9 +257,13 @@ PRO erg_load_sdfit, sites=sites, cdffn=cdffn, $
   ;Load the position table(s) ;;;;;;;;;;;;;;;;;;
   ;Currently supports SD fitacf CDFs containing up to 4 pos. tables.
   tbl_0='' & tbl_1='' & tbl_2='' &tbl_3='' & tbl_4=''
+  tbl_5='' & tbl_6='' & tbl_7='' &tbl_8=''
   time_0='' & time_1='' & time_2='' & time_3='' & time_4=''
-  tbllist = ['tbl_0', 'tbl_1' , 'tbl_2', 'tbl_3', 'tbl_4']
-  timelist = ['time_0','time_1','time_2','time_3', 'time_4']
+  time_5='' & time_6='' & time_7='' & time_8=''
+  tbllist = ['tbl_0', 'tbl_1' , 'tbl_2', 'tbl_3', 'tbl_4', $
+    'tbl_5', 'tbl_6' , 'tbl_7', 'tbl_8' ]
+  timelist = ['time_0','time_1','time_2','time_3', 'time_4', $
+    'time_5','time_6','time_7','time_8']
   FOR i=0L, N_ELEMENTS(datfiles)-1 DO BEGIN
     if ~file_test(datfiles[i]) then continue
     cdfi = cdf_load_vars( datfiles[i], varformat='*',/convert_int1_to_int2 )

@@ -1,6 +1,6 @@
 ==================================================================
-; UDAS plug-in software package for tdas_6_00
-;                                                February 10, 2012
+; UDAS plug-in software package for tdas_7_00
+;                                                   April 16, 2012
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -18,7 +18,8 @@ see the project website at http://www.iugonet.org/en/.
 - Research Institute for Sustainable Humanosphere, Kyoto University
 - World Data Center for Geomagnetism, Kyoto University
 - Kwasan and Hida Observatories, Kyoto University
-- Space Environment Research Center, Kyushu University
+- International Center for Space Weather Science and Education, Kyushu University
+  (the former Space Environment Research Center, Kyushu University)
 
 
 ++++++++++++++++++++++++++++++++
@@ -36,10 +37,6 @@ Please see TDAS Users' Guide.
 
 <iugonet>
 ------------------------------------------------------------
-<erg_ground>
-Load procedures for ERG-related data:
-- erg_load_sdfit 	; SuperDARN radar data
-
 <load>
 Load procedures for IUGONET data:
 - iug_load_blr_rish     ; Boundary layer radar data from RISH, Kyoto Univ
@@ -58,14 +55,11 @@ Load procedures for IUGONET data:
 - iug_load_sdfit        ; Alias for "erg_load_sdfit"
 
 <examples>
-Example crib sheets for IUGONET/ERG data
+Example crib sheets for IUGONET data
 
 <gui>
 Procudures in this directory are used to customize TDAS-GUI for 
 IUGONET/ERG data
-
-<tools>
-Convenient tools.
 
 ------------------------------------------------------------
 
@@ -76,7 +70,7 @@ Convenient tools.
 
 CUI:
 ------------------------------------------------------------------------
-  timespan,'2007-06-21' & erg_load_sdfit, site='hok'
+  timespan,'2007-06-21' & iug_load_sdfit, site='hok'
   timespan,'2006-12-01' & iug_load_blr_rish, site='ktb'
   timespan,'2003-03-25' & iug_load_ear
   timespan,'2011-02-03' & iug_load_eiscat
@@ -136,10 +130,10 @@ only to MAGDAS 1-minute averaged data observed during recent WHI campaign
 http://magdas.serc.kyushu-u.ac.jp/whi/index.php
 Future data release is a work in progress.
 
-3. Procedure "iug_load_iprt" calls fits_read, sxpar, fits_open, 
-fits_close, gettok, sxdelpar. For the use of this procedure,
-get FITS I/O procedures from the IDL Astronomy Library   
-(http://idlastro.gsfc.nasa.gov/fitsio.html).
+3. Procedure "iug_load_iprt" (accordingly, loading the IPRT data by GUI) needs 
+the additional FITS library, such as fits_read, sxpar, fits_open, fits_close, 
+gettok, sxdelpar. For the use of this procedure, get FITS I/O procedures from 
+the IDL Astronomy Library (http://idlastro.gsfc.nasa.gov/fitsio.html).
 
 4. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database:
@@ -154,10 +148,6 @@ week by using GUI due to the memory problem.
 ++++++++++++++++++++++++++++++++
   We acknowledge the cooperation and generosity of the THEMIS Science Support 
 Team in allowing us to use TDAS for our analysis software. 
-  SuperDARN KSR radar data was provided by the National Institute of 
-Information and Communications Technology (NICT) through ERG-SC. The load 
-program for this data was developed in collaboration with NICT (NICT website: 
-http://www.nict.go.jp/index-e.html).
 
 
 ++++++++++++++++++++++++++++++++

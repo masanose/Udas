@@ -12,10 +12,10 @@
 ; :HISTORY:
 ;   2010/11/20: created 
 ; 
-; $LastChangedBy: horit $
-; $LastChangedDate: 2011-11-17 20:42:32 +0900 (Thu, 17 Nov 2011) $
-; $LastChangedRevision: 160 $
-; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/loadct_sd.pro $
+; $LastChangedBy: $
+; $LastChangedDate: $
+; $LastChangedRevision: $
+; $URL: $
 ;-
 
 ;To define the cutlass color table. The RGB values are loaded 

@@ -36,9 +36,9 @@
 ; 
 ;HISTORY:
 ;$LastChangedBy: pcruce $
-;$LastChangedDate: 2011-02-10 13:01:17 -0800 (Thu, 10 Feb 2011) $
-;$LastChangedRevision: 8138 $
-;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_6_00/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
+;$LastChangedDate: 2011-05-26 15:14:36 -0700 (Thu, 26 May 2011) $
+;$LastChangedRevision: 8707 $
+;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_00/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
 ;
 ;--------------------------------------------------------------------------------
 
@@ -49,7 +49,8 @@ pro thm_ui_call_sequence::addloadcall,st_time0, $
                                       dtype, $
                                       observ, $
                                       outcoord,$
-                                      raw
+                                      raw,$
+                                      overwrite_selections
    
    compile_opt idl2
   
@@ -59,7 +60,8 @@ pro thm_ui_call_sequence::addloadcall,st_time0, $
            dtype:dtype,$
            observ:observ,$
            outcoord:outcoord,$
-           raw:raw}
+           raw:raw,$
+           overwrite_selections:overwrite_selections}
            
   self->addSt,in_st 
                      
@@ -391,9 +393,9 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
                                loadedData=self.loadedData,$
                                historywin=historywin,$
                                statustext=statustext,$
-                               state_gui_id=guiID
-                               
-    
+                               state_gui_id=guiID,$
+                               overwrite_selections=st.overwrite_selections,$
+                               /replay
     endif else if st.type eq 'loadgoesdata' then begin
       thm_ui_load_goes_data_load_pro,$
                          st.probes,$
@@ -428,7 +430,7 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
       thm_ui_load_iugonet_data_load_pro,$
                          st.instrument[0],$
                          st.datatype[0],$
-                         st.site_or_param,$ ; add to st.site_or_param by A. Shinbori.
+                         st.site_or_param,$
                          st.parameters,$
                          st.timeRange,$
                          self.loadedData,$

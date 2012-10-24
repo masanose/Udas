@@ -2,7 +2,7 @@
 ; PROCEDURE: iug_load_gmag_mm210
 ;   to load the 210 MM geomagnetic data from the STEL ERG-SC site 
 ;
-; NOTE: This procedure is a simple alias to "erg_load_gmag_nipr" 
+; NOTE: This procedure is a simple alias to "erg_load_gmag_mm210" 
 ;   and calls the original one by just providing the same 
 ;   arguments/keywords given.
 ;   Some load procedures for the ground-based observational data 

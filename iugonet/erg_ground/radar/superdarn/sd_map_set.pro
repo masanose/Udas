@@ -33,10 +33,10 @@
 ; :HISTORY:
 ; 	2011/01/11: Created
 ;
-; $LastChangedBy: horit $
-; $LastChangedDate: 2011-11-17 20:42:32 +0900 (Thu, 17 Nov 2011) $
-; $LastChangedRevision: 160 $
-; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_map_set.pro $
+; $LastChangedBy: $
+; $LastChangedDate: $
+; $LastChangedRevision: $
+; $URL: $
 ;-
 PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
     center_glat=glatc, center_glon=glonc, $

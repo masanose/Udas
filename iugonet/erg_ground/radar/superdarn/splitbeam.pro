@@ -10,10 +10,10 @@
 ; :HISTORY:
 ;    2010/03/02: Created
 ;
-; $LastChangedBy: horit $
-; $LastChangedDate: 2011-06-10 04:24:38 +0900 (Fri, 10 Jun 2011) $
-; $LastChangedRevision: 131 $
-; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/splitbeam.pro $
+; $LastChangedBy:$
+; $LastChangedDate:$
+; $LastChangedRevision:$
+; $URL:$
 ;-
 PRO splitbeam, tvars
 

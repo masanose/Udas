@@ -14,10 +14,10 @@
 ; :HISTORY: 
 ;   2010/03/10: Created
 ; 
-; $LastChangedBy: horit $
-; $LastChangedDate: 2011-10-06 19:21:38 +0900 (Thu, 06 Oct 2011) $
-; $LastChangedRevision: 155 $
-; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_init.pro $
+; $LastChangedBy: $
+; $LastChangedDate: $
+; $LastChangedRevision: $
+; $URL: $
 ;-
 pro sd_init, reset=reset
 
@@ -32,6 +32,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   plot_time: 0.D, $
                   charsize: 1.0 $
                 } $
+      ,remote_data_dir:'http://gemsissc.stelab.nagoya-u.ac.jp/data/ergsc/ground/radar/sd/fitacf/' $
     }
     
 endif

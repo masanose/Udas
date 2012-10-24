@@ -155,7 +155,7 @@ pro thm_ui_init_load_window_event, event
 
 
     exit_sequence:
-    Print, 'Load Themis Data widget killed.' 
+    dprint,  'Load Themis Data widget killed.' 
     state.historyWin->Update,'THM_UI_INIT_LOAD_WINDOW: Widget closed' 
     ;update central tree to reflect last expansion of current tree 
     thm_ui_init_load_update_tree_copy,state
@@ -228,7 +228,7 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
 
   compile_opt idl2, hidden
   
-  tabNum = 6 ;<========= modified from 5 to 6 by Shinbori
+  tabNum = 6
   treeNum = tabNum - 1
   
   tlb = widget_base(/Col, Title = "THEMIS: Load Ground and Probe Data", Group_Leader = gui_id, $
@@ -241,7 +241,7 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
       goesTab = widget_base(tabBase, title='GOES Data')
       windTab = widget_base(tabBase, title='WIND Data')
       aceTab = widget_base(tabBase,title='ACE Data')
-      iugonetTab = widget_base(tabBase,title='IUGONET Data')   ;<===== Added to IUGONET tab =====;
+      iugonetTab = widget_base(tabBase,title='IUGONET Data') 
       
     ;statusBase = Widget_Base(tlb, /Row)
     bottomBase = widget_base(tlb, /Col, YPad=6, /Align_Left)
@@ -286,9 +286,9 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   
   thm_ui_load_ace_data,aceTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
                         callSequence,loadTree=aceTree,timeWidget=aceTimeWidget
-  ;=========================================================
-  ;=== Added to the procedure 'thm_ui_load_iugonet_data' ===
-  ;=========================================================
+  ;========================================
+  ;=== Added 'thm_ui_load_iugonet_data' ===
+  ;========================================
   thm_ui_load_iugonet_data,iugonetTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
                         callSequence,loadTree=iugonetTree,timeWidget=iugonetTimeWidget                          
 
@@ -300,14 +300,14 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   treeArray[2] = goesTree
   treeArray[3] = windTree
   treeArray[4] = aceTree 
-  treeArray[5] = iugonetTree  ;<===== Added to IUGONET Tree =====;
+  treeArray[5] = iugonetTree
   
   timeArray[0] = loadTimeWidget
   timeArray[1] = specTimeWidget
   timeArray[2] = goesTimeWidget
   timeArray[3] = windTimeWidget
   timeArray[4] = aceTimeWidget
-  timeArray[5] = iugonetTimeWidget   ;<===== Added to IUGONET TimeWidget =====;  
+  timeArray[5] = iugonetTimeWidget
   
   tabArray = lonarr(tabNum)
   tabArray[0] = loadDataTab
@@ -315,14 +315,14 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   tabArray[2] = goesTab
   tabArray[3] = windTab
   tabArray[4] = aceTab
-  tabArray[5] = iugonetTab   ;<===== Added to IUGONET Tab =====; 
+  tabArray[5] = iugonetTab
   
   tabTitleText = ["Themis: Load Ground and Probe Data",$
                   "Themis: Load Derived Particle Energy and Angular Spectra",$
                   "GOES: Load Data",$
                   "WIND: Load Data",$
                   "ACE: Load Data",$
-                  "IUGONET: Load Data"]  ;<===== Added to the comment of IUGONET load Data=====;
+                  "IUGONET: Load Data"]
                  
 
   state = {tlb:tlb, gui_id:gui_id,tabBase:tabBase, historyWin:historyWin, statusText:statusText,treeArray:treeArray,timeArray:timeArray,tabArray:tabArray,treeCopyPtr:treeCopyPtr,previousTab:0,tabTitleText:tabTitleText, userSelectPtr:userSelectPtr}
@@ -333,7 +333,14 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   Widget_Control, tlb, get_UValue = state, /No_Copy
   thm_ui_load_data_set_user_select,state
   Widget_Control, tlb, set_UValue = state, /No_Copy
-  XManager, 'thm_ui_init_load_window', tlb, /No_Block
 
+  ;keep windows in X11 from snaping back to 
+  ;center during tree widget events 
+  if !d.NAME eq 'X' then begin
+    widget_control, tlb, xoffset=0, yoffset=0
+  endif
+  
+  XManager, 'thm_ui_init_load_window', tlb, /No_Block
+ 
   RETURN
 end
