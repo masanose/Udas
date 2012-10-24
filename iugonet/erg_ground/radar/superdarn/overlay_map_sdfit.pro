@@ -18,6 +18,7 @@
 ;    nocolorscale: Set to surpress drawing the color scale 
 ;    colorscalepos: Set the position of the color scale in the noraml 
 ;                   coordinates. Default: [0.85, 0.1, 0.87, 0.45] 
+;    pixel_scale: Set a values of range 0.0-1.0 to scale pixels drawn on a 2D map plot
 ;
 ; :AUTHOR:
 ; 	Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
@@ -31,12 +32,48 @@
 ; $LastChangedRevision: $
 ; $URL: $;
 ;-
+PRO get_resized_pixel, lons, lats, ratio, rlons, rlats
+  
+  ;Check the arguments
+  if n_params() ne 5 then return
+  if n_elements(lons) ne 4 or n_elements(lats) ne 4 then begin
+    rlons = lons & rlats = lats
+    return
+  endif
+  if ratio le 0. or ratio gt 1. then begin
+    rlons = lons & rlats = lats
+    return
+  endif
+  
+  thes = (90. - lats)*!dtor
+  phis = lons*!dtor
+  zarr = cos(thes)
+  xarr = sin(thes)*cos(phis)
+  yarr = sin(thes)*sin(phis)
+  xc = mean(xarr) & yc = mean(yarr) & zc = mean(zarr) 
+  dx = xarr - xc & dy = yarr - yc & dz = zarr - zc 
+  
+  x_rs = xc + ratio*dx
+  y_rs = yc + ratio*dy
+  z_rs = zc + ratio*dz
+  nmlz = sqrt( x_rs^2 + y_rs^2 + z_rs^2 ) 
+  x_rs /= nmlz & y_rs /= nmlz & z_rs /= nmlz
+  
+  the_rs = acos( z_rs )
+  rlats = 90. - the_rs*!radeg
+  rlons = ( atan(y_rs,x_rs)*!radeg + 360. ) mod 360.
+  
+  return
+end
+
+;----------------------------------------------------------
 PRO overlay_map_sdfit, datvn, time=time, position=position, $
     erase=erase, clip=clip, geo_plot=geo_plot, $
     nogscat=nogscat, gscatmaskoff=gscatmaskoff, $
     notimelabel=notimelabel, timelabelpos=timelabelpos, $
     nocolorscale=nocolorscale, colorscalepos=colorscalepos, $
-    charscale=charscale
+    charscale=charscale, force_nhemis=force_nhemis, $
+    pixel_scale=pixel_scale
     
   ;Initialize SDARN system variable and get the default charsize
   sd_init
@@ -63,18 +100,22 @@ PRO overlay_map_sdfit, datvn, time=time, position=position, $
     RETURN
   ENDIF
   
+  IF KEYWORD_SET(pixel_scale) then begin
+    if pixel_scale le 0. or pixel_scale ge 1. then pixel_scale = 0L 
+  ENDIF
+  
   ;Loop for processing multiple arguments
   tmp_datvn = datvn
   FOR nv=0L, N_ELEMENTS(tmp_datvn)-1 DO BEGIN
   
-    datvn = tmp_datvn[nv]
+    tdatvn = tmp_datvn[nv]
     
     ;get the radar name and the suffix
-    stn = STRMID(datvn, 3,3)
-    suf = STRMID(datvn, 0,1,/reverse)
+    stn = STRMID(tdatvn, 3,3)
+    suf = STRMID(tdatvn, 0,1,/reverse)
     
     ;Load the data to be drawn and to be used for drawing on a 2-d map
-    get_data, datvn, data=tmp_d, dl=dl, lim=lim
+    get_data, tdatvn, data=tmp_d, dl=dl, lim=lim
     ;;if (size(d))[2] ne 8 then get_data, d[0], data=d, dl=dl, lim=lim ;For multi-tplot vars
     
     ;Loop for processing a multi-tplot vars
@@ -102,11 +143,16 @@ PRO overlay_map_sdfit, datvn, time=time, position=position, $
       
       ;Choose data for the time given by keyword
       idx = nn( scno.x, time_double(time) )
+      if scno.y[idx] lt 0 then begin  ; Increment idx if the selected beam is a camp beam (beam_scan=-1).
+        for tmp_beamno=idx,idx+24 do if scno.y[tmp_beamno] ge 0 then break
+        idx = tmp_beamno
+      endif
       bmno = WHERE( scno.y EQ scno.y[idx] )
       
       ;;for debugging
-      PRINT, '    time by sd_time: '+time_string(time)
-      PRINT, 'selected time frame: '+time_string(scno.x[idx])
+      bm_rng = minmax(bmno)
+      PRINT, '             time by sd_time: '+time_string(time)
+      PRINT, 'time range of selected beams: '+time_string(scno.x[bm_rng[0]])+' -- '+time_string(scno.x[bm_rng[1]])
       ;print, 'scan no: ',scno.y[idx]
       ;print, 'beam no:', bmno
       ;print, 'scan time: '+time_string(min(scno.x[bmno]))+' -- '+time_string(max(scno.x[bmno]))
@@ -172,6 +218,9 @@ PRO overlay_map_sdfit, datvn, time=time, position=position, $
           endif
           plt_lon = ( (mlt_arr + 24.) MOD 24. ) * 180./12.
           
+          ;to draw a fan plot forcibly on the N hemis
+          if keyword_set(force_nhemis) then mlat=abs(mlat)
+          
           pos_plt = pos ;replicate as an array with same numbers of elements
           pos_plt[*,*,0] = plt_lon
           pos_plt[*,*,1] = mlat
@@ -185,8 +234,8 @@ PRO overlay_map_sdfit, datvn, time=time, position=position, $
           clvl = clmin + cnum*(val-valrng[0])/(valrng[1]-valrng[0])
           clvl = (clvl > clmin)
           clvl = (clvl < clmax) ; clmin <= color level <= clmax
-          IF FIX(echflgarr[j]) ne 1 AND strpos(datvn,'_pwr') lt 0 $
-            AND strpos(datvn,'spec_width') lt 0 THEN BEGIN
+          IF FIX(echflgarr[j]) ne 1 AND strpos(tdatvn,'_pwr') lt 0 $
+            AND strpos(tdatvn,'spec_width') lt 0 THEN BEGIN
             ;ground echo case
             IF KEYWORD_SET(nogscat) THEN CONTINUE ;skip plotting if nogscat keyword i set
             if ~keyword_set(gscatmaskoff) then begin
@@ -197,6 +246,13 @@ PRO overlay_map_sdfit, datvn, time=time, position=position, $
           ;Lon and Lat for a square to be filled
           lon = [ pos_plt[j,0,0], pos_plt[j,1,0], pos_plt[j+1,1,0], pos_plt[j+1,0,0] ]
           lat = [ pos_plt[j,0,1], pos_plt[j,1,1], pos_plt[j+1,1,1], pos_plt[j+1,0,1] ]
+          
+          
+          if keyword_set(pixel_scale) then begin
+            get_resized_pixel, lon, lat, pixel_scale, rlons, rlats
+            lon = rlons
+            lat = rlats
+          endif
           
           ;Draw the pixel for a range gate in a beam 
           POLYFILL, lon, lat, color=clvl  

@@ -1,12 +1,12 @@
 =======================================================
 ; How to install UDAS.
-;                                      December 1, 2011
+;                                        April 16, 2011
 =======================================================
 
 0. If TDAS has not been installed yet, download TDAS from 
 http://themis.ssl.berkeley.edu/software.shtml ,
 and set it up according to the TDAS User's guide.
-1. Download UDAS from http://devel.iugonet.org/en/software/install.html
+1. Download UDAS from http://www.iugonet.org/en/software/install.html
 2. Unzip the downloaded file.
 3. Copy "udas_x_xx_x" into any directory you want.
 4. Set IDL path as follows;
@@ -55,7 +55,7 @@ setenv IDL_PATH '<IDL_DEFAULT>:+/path/to/udas:+/path/to/tdas'
 b) Replace /path/to/udas and /path/to/tdas with your actual installation 
 directories. Please note that /path/to/udas must be located prior to 
 /path/to/tdas.
-c) Restart your shell/terminal or source your .cshrc/ to be sure that changes 
+c) Restart your shell/terminal or source your .cshrc to be sure that changes 
 took effect.
 d) Restart IDL.
 ------------------------------------------------

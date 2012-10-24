@@ -1,5 +1,21 @@
 ------------------------------------------------------
-; What's new in udas_1_00            February 10, 2012
+; What's new in udas_2_00_1             April 16, 2012
+------------------------------------------------------
+1) Modified some procedures to run on TDAS7.00.
+
+2) Modified "iug_load_eiscat.pro" for the EISCAT radar data.
+
+The "iug_load_eiscat.pro" was modified so as to make the tplot variables 
+for the superposed data of some different pulse-codes.
+
+3) Removed the procedures for SuperDARN radar data.
+
+The procedures for the SuperDARN radar data have been included in (the 
+original) TDAS7.00 and removed from UDAS2.00.1.
+
+
+------------------------------------------------------
+; What's new in udas_1_00_1          February 10, 2012
 ------------------------------------------------------
 1) Added "iug_crib_iprt.pro" for IPRT data.
 

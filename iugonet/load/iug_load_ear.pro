@@ -4,7 +4,7 @@
 ;iug_load_ear
 ;
 ;PURPOSE:
-;  Queries the Kyoto_RISH servers for all the observation data (troposphere and FAI)
+;  Queries the RISH servers for all the observation data (troposphere and FAI)
 ;  taken by the equatorial atmosphere radar (EAR) and loads data into tplot format.
 ;
 ;SYNTAX:
@@ -39,6 +39,10 @@
 ;MODIFICATIONS:
 ;A. Shinbori, 25/11/2010.
 ;A. Shinbori, 08/11/2011.
+;A. Shinbori, 11/05/2011.
+;A. Shinbori, 27/05/2011.
+;A. Shinbori, 15/06/2011.
+;A. Shinbori, 25/07/2011.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -47,14 +51,17 @@
 ; $URL $
 ;-
   
-pro iug_load_ear, datatype = datatype, parameter = site_or_param, $
-                  trange = trange, verbose = verbose, downloadonly=downloadonly
+pro iug_load_ear, datatype = datatype, $
+   parameter = parameter, $
+   trange = trange, $
+   verbose = verbose, $
+   downloadonly=downloadonly
 
-;******************
-;keyword check:
-;******************
-;verbose
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
+
 
 ;****************
 ;Datatype check:
@@ -64,7 +71,7 @@ if (not keyword_set(verbose)) then verbose=2
 datatype_all = strsplit('troposphere e_region ef_region v_region f_region',' ', /extract)
 
 ;--- check datatypes
-if(not keyword_set(datatype)) then datatype='all'
+if (not keyword_set(datatype)) then datatype='all'
 datatypes = thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
 
 print, datatypes
@@ -75,48 +82,47 @@ print, datatypes
 
 ;--- all parameter (default)
 parameter_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
-                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb4p2c eb4p2d '+$
+                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb3p4g eb3p4h eb4p2c eb4p2d '+$
                           'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a efb1p16 efb1p16a efb1p16b '+$
                           'vb3p4a 150p8c8a 150p8c8b 150p8c8c 150p8c8d 150p8c8e 150p8c8b2a '+$
                           '150p8c8b2b 150p8c8b2c 150p8c8b2d 150p8c8b2e 150p8c8b2f '+$
                           'fb1p16a fb1p16b fb1p16c fb1p16d fb1p16e fb1p16f fb1p16g fb1p16h fb1p16i '+$
                           'fb1p16j1 fb1p16j2 fb1p16j3 fb1p16j4 fb1p16j5 fb1p16j6 fb1p16j7 fb1p16j8 fb1p16j9 '+$
-                          'fb1p16j10 fb1p16j11 fb1p16k1 fb1p16k2 fb1p16k3 fb1p16k4 fb1p16k5 fb8p16k1 fb8p16k2 '+$
-                          'fb8p16k3 fb8p16k4 fb1p16m2 fb1p16m3 fb1p16m4 fb8p16m1 fb8p16m2',+$
+                          'fb1p16j10 fb1p16j11 fb1p16k1 fb1p16k2 fb1p16k3 fb1p16k4 fb1p16k5 fb1p16m2 fb1p16m3 fb1p16m4 fb8p16 fb8p16k1 fb8p16k2 '+$
+                          'fb8p16k3 fb8p16k4 fb8p16m1 fb8p16m2',+$
                           ' ', /extract)
 
 ;--- check parameters_1
-if(not keyword_set(parameter)) then parameter='all'
+if (not keyword_set(parameter)) then parameter='all'
 parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
-print, parameters
-                 
-  ;===============================
-  ;======Load data of EAR=========
-  ;===============================
-  for i=0, n_elements(datatypes)-1 do begin
+
+;===============================
+;======Load data of EAR=========
+;===============================
+for i=0, n_elements(datatypes)-1 do begin
   ;load of ear tropsphere data
-    if datatypes[i] eq 'troposphere' then begin
+   if datatypes[i] eq 'troposphere' then begin
       iug_load_ear_trop_nc, datatype = datatypes[i], trange = trange, downloadonly=downloadonly, verbose = verbose
-    endif 
-    if datatypes[i] eq 'e_region' then begin
-       iug_load_ear_iono_er_nc, datatype = datatypes[i], parameter = parameters, trange = trange,$
+   endif 
+  ;load of ear fai data
+   if datatypes[i] eq 'e_region' then begin
+      iug_load_ear_iono_er_nc, datatype = datatypes[i], parameter1 = parameters, trange = trange,$
+                               downloadonly=downloadonly, verbose = verbose
+   endif 
+   if datatypes[i] eq 'ef_region' then begin
+      iug_load_ear_iono_efr_nc, datatype = datatypes[i], parameter1 = parameters, trange = trange,$
                                 downloadonly=downloadonly, verbose = verbose
-    endif 
-    if datatypes[i] eq 'ef_region' then begin
-       iug_load_ear_iono_efr_nc, datatype = datatypes[i], parameter = parameters, trange = trange,$
-                                 downloadonly=downloadonly, verbose = verbose
-    endif  
-    if datatypes[i] eq 'v_region' then begin
-       iug_load_ear_iono_vr_nc, datatype = datatypes[i], parameter = parameters, trange = trange,$
-                                downloadonly=downloadonly, verbose = verbose
-    endif
-    if datatypes[i] eq 'f_region' then begin
-       iug_load_ear_iono_fr_nc, datatype = datatypes[i], parameter = parameters, trange = trange,$
-                                downloadonly=downloadonly, verbose = verbose
-    endif 
-  endfor
-  
+   endif  
+   if datatypes[i] eq 'v_region' then begin
+      iug_load_ear_iono_vr_nc, datatype = datatypes[i], parameter1 = parameters, trange = trange,$
+                               downloadonly=downloadonly, verbose = verbose
+   endif
+   if datatypes[i] eq 'f_region' then begin
+      iug_load_ear_iono_fr_nc, datatype = datatypes[i], parameter1 = parameters, trange = trange,$
+                               downloadonly=downloadonly, verbose = verbose
+   endif 
+endfor  
 end
 
 
