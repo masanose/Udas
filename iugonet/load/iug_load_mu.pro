@@ -30,7 +30,9 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 03/24/2011.
-;
+; A. Shinbori, 08/08/2012.
+; A. Shinbori, 04/10/2012.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -38,8 +40,8 @@
 ; $URL $
 ;-
   
-pro iug_load_mu, datatype = datatype,parameter = site_or_param,$
-                 downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_mu, datatype = datatype, level = level, parameter = parameter, downloadonly=downloadonly, $
+                 trange=trange, verbose=verbose
 
 ;******************
 ;keyword check:
@@ -60,6 +62,27 @@ datatypes = thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_
 
 print, datatypes
 
+;****************
+;Level check:
+;****************
+
+;--- all parameter (default)
+level_all = strsplit('org scr',' ', /extract)
+
+;--- check parameters_1
+if (not keyword_set(level)) then level='all'
+levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
+
+;****************
+;Parameter check:
+;****************
+
+;--- all parameters (default)
+parameter_all = strsplit('h1t60min00 h1t60min30 h2t60min00 h2t60min30',' ', /extract)
+
+;--- check parameters
+if(not keyword_set(parameter)) then parameter='all'
+parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
                  
   ;===============================
   ;======Load data of MU=========
@@ -70,10 +93,22 @@ print, datatypes
       iug_load_mu_trop_nc, datatype = datatypes[i], downloadonly=downloadonly, trange=trange, verbose=verbose
    endif 
    
-   ;load of MU meteor wind data
-   ;if datatype eq 'meteor_wind' then begin
-    ;  iug_load_mu_meteor_txt, datatype = datatype, parameter = parameter2, trange = trange
-  ; endif
+  ;load of MU mesosphere data
+   if datatypes[i] eq 'mesosphere' then begin
+      iug_load_mu_meso_nc, datatype = datatypes[i], level = levels, downloadonly=downloadonly, trange=trange, verbose=verbose
+      iug_load_mu_meso_wind_nc, datatype = datatypes[i], level = levels, downloadonly=downloadonly, trange=trange, verbose=verbose
+   endif 
+ 
+  ;load of MU ionosphere data
+   if datatypes[i] eq 'ionosphere' then begin
+      iug_load_mu_iono_drift_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
+      iug_load_mu_iono_pwr_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
+      iug_load_mu_iono_teti_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
+   endif
+  ;load of MU meteor data  
+   if datatypes[i] eq 'meteor' then begin
+      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, trange = trange,downloadonly=downloadonly, verbose = verbose
+   endif
    endfor  
    
 end
