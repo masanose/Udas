@@ -28,6 +28,7 @@
 ;  A. Shinbori, 24/10/2012.
 ;  
 ;MODIFICATIONS:
+;  A. Shinbori, 12/11/2012.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -202,9 +203,9 @@ endif else file_names=fns
          if size(intensity_all_f2,/type) eq 4 then begin 
             for i=0,n_elements(freq)-1 do begin 
                data[*,*] = intensity_all_f2[*,i,*]
-               store_data,'iug_ionosonde_sgk_'+ STRTRIM(string(freq[i]),2),data={x:site_time,y:data,v:height3},dlimit=dlimit
-               options,'iug_ionosonde_sgk_'+STRTRIM(string(freq[i]),2),ytitle = 'Ionosonde-sgk!CHeight [km]',ztitle = 'Echo power ('+STRTRIM(string(freq[i]),2)+' MHz) [dBV]'
-               options,'iug_ionosonde_sgk_'+STRTRIM(string(freq[i]),2),'spec',1
+               store_data,'iug_ionosonde_sgk_'+ strmid(STRTRIM(string(freq[i]),2),0,5),data={x:site_time,y:data,v:height3},dlimit=dlimit
+               options,'iug_ionosonde_sgk_'+strmid(STRTRIM(string(freq[i]),2),0,5),ytitle = 'Ionosonde-sgk!CHeight [km]',ztitle = 'Echo power!C('+strmid(STRTRIM(string(freq[i]),2),0,5)+' MHz)!C[dBV]'
+               options,'iug_ionosonde_sgk_'+strmid(STRTRIM(string(freq[i]),2),0,5),'spec',1
             endfor
          endif
       endif   

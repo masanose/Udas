@@ -193,11 +193,14 @@ if (downloadonly eq 0) then begin
   ;******************************
 
   ;Acknowlegment string (use for creating tplot vars)
-   acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
-                    + 'we ask that you acknowledge us in your use of the data. This may be done by' $
-                    + 'including text such as the MU data provided by Research Institute' $
-                    + 'for Sustainable Humanosphere of Kyoto University. We would also' $
-                    + 'appreciate receiving a copy of the relevant publications.'
+      acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
+                       + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
+                       + 'including text such as the MU data provided by Research Institute ' $
+                       + 'for Sustainable Humanosphere of Kyoto University. We would also' $
+                       + 'appreciate receiving a copy of the relevant publications.The distribution of ' $
+                       + 'ionogram data has been partly supported by the IUGONET (Inter-university Upper ' $
+                       + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
+                       + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
    if size(ti_app,/type) eq 4 then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'Y. Yamamoto'))
@@ -265,7 +268,11 @@ print, 'If you acquire the middle and upper atmosphere (MU) radar data, '
 print, 'we ask that you acknowledge us in your use of the data. ' 
 print, 'This may be done by including text such as MU data provided ' 
 print, 'by Research Institute for Sustainable Humanosphere of Kyoto University. ' 
-print, 'We would also appreciate receiving a copy of the relevant publications.'
+print, 'We would also appreciate receiving a copy of the relevant publications. '
+print, 'The distribution of ionogram data has been partly supported by the IUGONET '
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project '
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '
+print, 'Sports, Science and Technology (MEXT), Japan.' 
 
 end
 

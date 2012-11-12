@@ -28,6 +28,7 @@
 ; A. Shinbori, 21/07/2012.
 ;
 ;MODIFICATIONS:
+; A. Shinbori, 12/11/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -85,7 +86,7 @@ if ~size(fns,/type) then begin
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/nc/'
-  ;source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807_1.01/'
+   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/netcdf/'
     
    ;Get files and local paths, and concatenate local paths:
    ;=======================================================

@@ -10,14 +10,19 @@
 ;
 ;SYNTAX:
 ;  iug_load_mu [ ,DATATYPE = string ]
-;                [ ,TRANGE = [min,max] ]
-;                [ ,FILENAMES = string scalar or array ]
-;                [ ,<and data keywords below> ]
+;              [ ,LEVEL = string ]
+;              [ ,PARAMETER = string ]
+;              [ ,TRANGE = [min,max] ]
+;              [ ,FILENAMES = string scalar or array ]
+;              [ ,<and data keywords below> ]
 ;
 ;KEYWOARDS:
 ;  DATATYPE = The type of data to be loaded. In this load program,
 ;             DATATYPEs are 'troposphere' etc.
-; 
+;  LEVEL = The level of mesospheric data to be loaded. In this load program,
+;             LEVELs are 'org' and 'scr'.
+;  PARAMETER = The parameter of meteor data to be loaded. In this load program,
+;             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00' and 'h2t60min30'.
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
 ;  FILENAMES (In):
@@ -32,6 +37,7 @@
 ; A. Shinbori, 03/24/2011.
 ; A. Shinbori, 08/08/2012.
 ; A. Shinbori, 04/10/2012.
+; A. Shinbori, 12/11/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -105,9 +111,10 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
       iug_load_mu_iono_pwr_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
       iug_load_mu_iono_teti_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
    endif
+   
   ;load of MU meteor data  
    if datatypes[i] eq 'meteor' then begin
-      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, trange = trange,downloadonly=downloadonly, verbose = verbose
+      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, trange = trange, downloadonly=downloadonly, verbose = verbose
    endif
    endfor  
    

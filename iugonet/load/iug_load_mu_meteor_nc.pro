@@ -119,7 +119,7 @@ for iii=0,n_elements(parameters)-1 do begin
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/mu/meteor/nc/'+length+'/'+site_data_dir[iii]
-      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/meteor/data/nc/'+length+'/'+site_data_dir[iii]
+      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/meteor/data/netcdf/'+length+'/'+site_data_dir[iii]
     
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
