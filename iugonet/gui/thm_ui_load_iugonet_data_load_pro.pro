@@ -5,8 +5,11 @@
 ;PURPOSE:
 ;  Modularized gui iugonet data loader
 ;
+;HISTORY:
+;$LastChangedBy: Y.Tanaka $
+;$LastChangedDate: 2010-04-20 $
+; 
 ;Modifications:
-;Y.-M. Tanaka,20/04/2010
 ;A. Shinbori, 12/05/2010
 ;A. Shinbori, 10/07/2010
 ;A. Shinbori, 25/11/2010
@@ -16,7 +19,7 @@
 ;A. Shinbori, 06/03/2012
 ;A. Shinbori, 12/04/2012
 ;Y.-M. Tanaka,15/06/2012
-;A. Shinbori, 05/10/2012
+;A. Shinbori, 24/10/2012
 ;-
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -183,13 +186,23 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
       ;----- Middle Upper atmosphere radar -----;
       'Middle_Upper_atmosphere_radar' : begin
-          iug_load_mu, datatype =datatype, trange = timeRange 
+          iug_load_mu, datatype =datatype, level=site_or_param, parameter = parameters, trange = timeRange
+          if site_or_param[0] eq '*' then begin
+              lvl='*'
+          endif else begin
+              lvl=site_or_param
+          endelse 
           if parameters[0] eq '*' then begin
               vns='*'
           endif else begin
               vns=parameters
           endelse
-          par_names=tnames('iug_mu_trop_'+vns)
+          case datatype of
+              'troposphere': par_names=tnames('iug_mu_trop_'+vns)
+              'mesosphere': par_names=tnames('iug_mu_meso_'+vns+'_'+lvl)
+              'ionosphere': par_names=tnames('iug_mu_iono_'+vns+'*')
+              'meteor': par_names=tnames('iug_mu_meteor_*')
+          endcase
       end
   
       ;----- SuperDARN radar ----;
@@ -229,6 +242,22 @@ pro thm_ui_load_iugonet_data_load_pro,$
           par_names=tnames('iug_wpr_*')
       end
 
+      ;----- Automatic Weather Station -----;
+      'Automatic_Weather_Station' : begin       
+          iug_load_aws_rish, site =site_or_param, trange = timeRange
+          par_names=tnames('iug_aws_*')
+      end
+
+      ;----- Ionosonde -----;
+      'Ionosonde' : begin       
+          iug_load_ionosonde_rish, site =site_or_param, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_ionosonde_sgk_freq_*')
+          endif else begin
+              par_names=tnames('iug_ionosonde_sgk_freq_'+parameters)
+          endelse
+      end
+      
   endcase
 
   ;----- Clean up tplot -----;  
@@ -247,6 +276,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
           if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN#') or $
               (instrument eq 'EISCAT_radar') then begin
               site_name2 = site_name[1]
+          endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
+              if n_elements(site_name) eq 5 then begin 
+                 if site_name[4] eq 'org' then site_name2 = 'meso(org)'
+                 if site_name[4] eq 'scr' then site_name2 = 'meso(scr)'
+              endif else begin
+                 site_name2 = site_name[2]
+              endelse
           endif else begin
               site_name2 = site_name[2]
           endelse
@@ -267,9 +303,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
                   historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
                   return
               endif
-          endif else begin
-              break
-          endelse
+          endif
       endfor
   endif 
   

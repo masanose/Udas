@@ -34,7 +34,9 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
     { $
       init: 0 $
       ,data_policy: { $
+                  aws_rish: 0b,       $
                   blr_rish: 0b,       $
+                  ionosonde_rish: 0b, $
                   ltr_rish: 0b,       $
                   wpr_rish: 0b,       $
                   mf_rish: 0b,        $
