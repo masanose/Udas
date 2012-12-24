@@ -29,6 +29,7 @@
 ;  
 ;MODIFICATIONS:
 ;  A. Shinbori, 17/10/2012.
+;  A. Shinbori, 17/12/2012.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -72,16 +73,9 @@ print, site_code
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
 ;
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
-
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 if ~size(fns,/type) then begin   
   ;****************************
   ;Get files for ith component:
@@ -114,7 +108,7 @@ if (downloadonly eq 0) then begin
    ;Read the files:
    ;===============
       
-   ;Definition of parameters and array:
+   ;Definition of string variable:
     s=''
 
    ;Initialize data and time buffer
@@ -124,9 +118,10 @@ if (downloadonly eq 0) then begin
     aws_rh = 0
     aws_uwnd = 0
     aws_vwnd = 0
-         
-   ;Loop on files (zonal component): 
-   ;================================
+    
+   ;==============      
+   ;Loop on files: 
+   ;==============
     for j=0,n_elements(local_paths)-1 do begin
        file= local_paths[j]
        if file_test(/regular,file) then  dprint,'Loading the surface meteorological data taken by the AWS-sgk :',file $
@@ -223,15 +218,10 @@ if (downloadonly eq 0) then begin
       new_vars=tnames('iug_aws_sgk_press')
       if new_vars[0] ne '' then begin 
          options,'iug_aws_sgk_press',ytitle='AWS-sgk!CPress.!C[hPa]'
-         options,'iug_aws_sgk_press', labels='press [hPa]'
          options,'iug_aws_sgk_temp',ytitle='AWS-sgk!CTemp.!C[degree C]'
-         options,'iug_aws_sgk_temp', labels='temp [degree C]'
          options,'iug_aws_sgk_rh',ytitle='AWS-sgk!CRH!C[%]'
-         options,'iug_aws_sgk_rh', labels='rh [%]'
          options,'iug_aws_sgk_uwnd',ytitle='AWS-sgk!Cuwnd!C[m/s]'
-         options,'iug_aws_sgk_uwnd', labels='uwnd [m/s]'
          options,'iug_aws_sgk_vwnd',ytitle='AWS-sgk!Cvwnd!C[m/s]'
-         options,'iug_aws_sgk_vwnd', labels='vwnd [m/s]'
       endif 
    endif
   ;Clear time and data buffer:
@@ -261,19 +251,20 @@ if new_vars[0] ne '' then begin
    print,'*****************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
 print, 'If you acquire surface meteorlogical data, we ask that you acknowledge us'
 print, 'in your use of the data. This may be done by including text such as surface' 
-print, 'meteorological dataprovided by Research Institute for Sustainable Humanosphere' 
+print, 'meteorological data provided by Research Institute for Sustainable Humanosphere' 
 print, 'of Kyoto University. We would also appreciate receiving a copy of the relevant' 
 print, 'publications. The distribution of BLR data has been partly supported by the'
 print, 'IUGONET (Inter-university Upper atmosphere Global Observation NETwork) project'
 print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, Sports,'
 print, 'Science and Technology (MEXT), Japan.'
+
 end
 

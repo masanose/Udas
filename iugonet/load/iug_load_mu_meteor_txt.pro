@@ -30,6 +30,7 @@
 ; A. Shinbori, 13/11/2011.
 ; A. Shinbori, 08/08/2012.
 ; A. Shinbori, 12/11/2012.
+; A. Shinbori, 24/12/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -92,15 +93,15 @@ for i=0, n_elements(site_data_dir)-1 do begin
    site_data_lastmane[i]=parameters[i]
 endfor
 
-
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 jj=0
 for iii=0,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin     
@@ -218,17 +219,19 @@ for iii=0,n_elements(parameters)-1 do begin
                endif
                time_diff=time-time_val
                if n eq 0 then time_diff=3600
-               
-              ;Appned time and meteor data if time_val is not equal to time:
-              ;=============================================================
+              
+              ;===============================================================
+              ;Appned array of time and data if time_val is not equal to time:
+              ;===============================================================
                if time_val ne time then begin
                   time_val=time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                            -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(09)+':'+string(00)+':'+string(00))          
                   time_val2=time_val-time_diff
                   if time_val2 eq 0 then time_val2=time_val+3600
-                 ;
-                 ;Append data of time and meteor data at determined altitude:
-                 ;=========================================================
+                
+                 ;==============================
+                 ;Append array of time and data:
+                 ;==============================
                   if n ne 0 then begin
                      append_array, site_time, time_val2
                      append_array, zon_wind, zon_wind_data
@@ -254,9 +257,10 @@ for iii=0,n_elements(parameters)-1 do begin
             endif           
          endwhile 
          free_lun,lun
-        ;
-        ;Append data of time and meteor data at the last time in each file:
-        ;==================================================================
+        
+        ;==============================
+        ;Append array of time and data:
+        ;==============================
          append_array, mu_time, time_val2+3600
          append_array, zon_wind, zon_wind_data
          append_array, mer_wind, mer_wind_data
@@ -264,9 +268,9 @@ for iii=0,n_elements(parameters)-1 do begin
          append_array, mer_thermal, mer_thermal_data
          append_array, meteor_num, meteor_num_data
 
-        ;
-        ;Append data of time and meteor data of each file:
-        ;=================================================
+        ;==============================
+        ;Append array of time and data:
+        ;==============================
          append_array, site_time, mu_time
          append_array, zon_wind2, zon_wind
          append_array, mer_wind2, mer_wind
@@ -274,9 +278,9 @@ for iii=0,n_elements(parameters)-1 do begin
          append_array, mer_thermal2, mer_thermal
          append_array, meteor_num2, meteor_num
 
-        ;
-        ;Initiarizatin of old parameters (time and wind data):
-        ;=====================================================                            
+        ;================================================
+        ;Initiarizatin of old parameters (time and data):
+        ;================================================                            
          mu_time=0
          zon_wind=0
          mer_wind=0
@@ -289,10 +293,9 @@ for iii=0,n_elements(parameters)-1 do begin
          height[g]=float(70+g*dh) 
       endfor
 
-     ;******************************
+     ;==============================
      ;Store data in TPLOT variables:
-     ;******************************
-
+     ;==============================
      ;Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
@@ -322,13 +325,6 @@ for iii=0,n_elements(parameters)-1 do begin
             options, ['iug_mu_meteor_uwnd_'+parameters[iii],'iug_mu_meteor_vwnd_'+parameters[iii],$
                       'iug_mu_meteor_uwndsig_'+parameters[iii],'iug_mu_meteor_vwndsig_'+parameters[iii],$
                       'iug_mu_meteor_mwnum_'+parameters[iii]], 'spec', 1
-
-           ;Add options of setting labels
-            options,'iug_mu_meteor_uwnd_'+parameters[iii], labels='MU meteor'+parameters[iii]+' [km]'
-            options,'iug_mu_meteor_vwnd_'+parameters[iii], labels='MU meteor'+parameters[iii]+' [km]'
-            options,'iug_mu_meteor_uwndsig_'+parameters[iii], labels='MU meteor'+parameters[iii]+' [km]'
-            options,'iug_mu_meteor_vwndsig_'+parameters[iii], labels='MU meteor'+parameters[iii]+' [km]'
-            options,'iug_mu_meteor_mwnum_'+parameters[iii], labels='MU meteor'+parameters[iii]+' [km]'
          endif
       endif
   
@@ -367,9 +363,9 @@ if new_vars[0] ne '' then begin
    print,'******************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************

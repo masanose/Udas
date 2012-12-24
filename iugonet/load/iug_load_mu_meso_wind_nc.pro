@@ -29,7 +29,8 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
-; 
+; A. Shinbori, 24/12/2012.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -72,28 +73,32 @@ print, levels
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 for ii=0,n_elements(levels)-1 do begin
-if ~size(fns,/type) then begin
+   if ~size(fns,/type) then begin
 
-   ;Get files for ith component:
-   ;***************************
-   file_names = file_dailynames( $
-   file_format='YYYY/YYYYMM/'+$
-               'YYYYMMDD',trange=trange,times=times,/unique)+'.wnd.nc'
-   ;
-   ;Define FILE_RETRIEVE structure:
-   ;===============================
-   source = file_retrieve(/struct)
-   source.verbose=verbose
-   source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/nc/'
-   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/netcdf/'
+     ;Get files for ith component:
+     ;***************************
+      file_names = file_dailynames( $
+      file_format='YYYY/YYYYMM/'+$
+                  'YYYYMMDD',trange=trange,times=times,/unique)+'.wnd.nc'
+     ;
+     ;Define FILE_RETRIEVE structure:
+     ;===============================
+      source = file_retrieve(/struct)
+      source.verbose=verbose
+      source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/nc/'
+      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/netcdf/'
     
-   ;Get files and local paths, and concatenate local paths:
-   ;=======================================================
-   local_paths=file_retrieve(file_names,_extra=source)
-   local_paths_all = ~(~size(local_paths_all,/type)) ? $
-                     [local_paths_all, local_paths] : local_paths
-   if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
+     ;Get files and local paths, and concatenate local paths:
+     ;=======================================================
+      local_paths=file_retrieve(file_names,_extra=source)
+      local_paths_all = ~(~size(local_paths_all,/type)) ? $
+                        [local_paths_all, local_paths] : local_paths
+      if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
    endif else file_names=fns
 
    ;--- Load data into tplot variables
@@ -116,8 +121,9 @@ if ~size(fns,/type) then begin
       flag_vwind = 0
       flag_wwind = 0
       
-      ;Loop on files (zonal component): 
-      ;================================
+      ;==============
+      ;Loop on files: 
+      ;==============
       for j=0,n_elements(local_paths)-1 do begin
          file= local_paths[j]
          if file_test(/regular,file) then  dprint,'Loading the mesosphere wind data taken by the MU radar: ',file $
@@ -212,9 +218,9 @@ if ~size(fns,/type) then begin
             endfor
          endfor
          
-        ;
-        ;Append data of time and troposphere observations:
-        ;=================================================
+        ;==============================
+        ;Append array of time and data:
+        ;==============================
          append_array, mu_time, unix_time
          append_array, mu_uwnd, uwnd
          append_array, mu_vwnd, vwnd
@@ -226,8 +232,7 @@ if ~size(fns,/type) then begin
     
         ;==============================
         ;Store data in TPLOT variables:
-        ;==============================
-        
+        ;==============================      
         ;Acknowlegment string (use for creating tplot vars):
          acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, '+ $
                             'we ask that you acknowledge us in your use of the data. This may be done by '+ $
@@ -279,9 +284,9 @@ if ~size(fns,/type) then begin
    mu_wwnd = 0
    
 endfor      
-  ;******************************
+  ;*************************
   ;print of acknowledgement:
-  ;******************************
+  ;*************************
    print, '****************************************************************
    print, 'Acknowledgement'
    print, '****************************************************************
@@ -293,6 +298,7 @@ endfor
    print, 'The distribution of MU radar data has been partly supported by the IUGONET'
    print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
    print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
-   print, 'Sports, Science and Technology (MEXT), Japan.'      
+   print, 'Sports, Science and Technology (MEXT), Japan.' 
+        
 end
 

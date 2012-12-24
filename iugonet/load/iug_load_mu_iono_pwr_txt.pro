@@ -30,7 +30,8 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
-;
+; A. Shinbori, 24/12/2012.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -66,20 +67,18 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 
 print, parameters
 
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
-
-;Definition of parameter:
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 h=0
 site_time=0
 jj=0  
-
 for ii=0,n_elements(parameters)-1 do begin   
    if ~size(fns,/type) then begin 
      ;
@@ -129,7 +128,7 @@ for ii=0,n_elements(parameters)-1 do begin
 
         ;
         ;Read the beam direction:
-        ;=====================        
+        ;========================        
          readf,lun,s
          temp = strsplit(s,",",/extract)
          az = temp[0]
@@ -170,19 +169,18 @@ for ii=0,n_elements(parameters)-1 do begin
                pwr[0,j] =a
             endfor
                                
-           ;======================================================
-           ;Append data of time and electron and ion temperatures:
-           ;======================================================
+           ;==============================
+           ;Append array of time and data:
+           ;==============================
             append_array, site_time, mu_time
             append_array, pwr_app, pwr
          endwhile
          free_lun,lun
       endfor
-
-     ;******************************
+      
+     ;==============================
      ;Store data in TPLOT variables:
-     ;******************************
-
+     ;==============================
      ;Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
@@ -199,23 +197,13 @@ for ii=0,n_elements(parameters)-1 do begin
          options,'iug_mu_iono_'+parameters[ii],ytitle='MU-iono!CHeight!C[km]',ztitle= parameters[ii]+'!C[dB]'
          options,'iug_mu_iono_'+parameters[ii],spec=1
       
-        ;Add options of setting labels
-        ; options,'iug_mu_iono_temp_ti', labels='MU iono Height [km]'
-        ; options,'iug_mu_iono_temp_te', labels='MU iono Height [km]'
-        ; options,'iug_mu_iono_temp_er_ti', labels='MU iono Height [km]'
-        ; options,'iug_mu_iono_temp_er_te', labels='MU iono Height [km]'
-        ; options,'iug_mu_iono_temp_er_tr', labels='MU iono Height [km]'
-        ; options,'iug_mu_iono_temp_snr,', labels='MU iono Height [km]'
-   
-     ;Add tdegap
-      tdegap, 'iug_mu_iono_'+parameters[ii],dt=3600,/overwrite
-
-   endif
+        ;Add tdegap
+         tdegap, 'iug_mu_iono_'+parameters[ii],dt=3600,/overwrite
+      endif
   
-  ;Clear time and data buffer:
-   site_time=0
-   pwr_app=0
-
+     ;Clear time and data buffer:
+      site_time=0
+      pwr_app=0
    endif
    jj=n_elements(local_paths)
 endfor
@@ -227,9 +215,9 @@ if new_vars[0] ne '' then begin
    print,'******************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************

@@ -34,6 +34,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
+; A. Shinbori, 24/12/2012.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -55,9 +56,9 @@ pro iug_load_mu_meso_txt, datatype = datatype, $
 if (not keyword_set(verbose)) then verbose=2
 
  
-;****************************************
+;**********************************
 ;Load 'mesosphere' data by default:
-;****************************************
+;**********************************
 if (not keyword_set(datatype)) then datatype='mesosphere'
 
 ;******************
@@ -92,17 +93,16 @@ print, parameters2
 ;--- all parameters2 (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
-
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
 ;
-
-;Definition of parameter:
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 jj=0
-
 for ii=0,n_elements(parameters2)-1 do begin
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
@@ -146,10 +146,10 @@ for ii=0,n_elements(parameters2)-1 do begin
         ;Initialize data and time buffer
          mu_time=0
          mu_data=0
-         time=0
-      
-        ;Loop on files (zonal component): 
-        ;================================
+         
+        ;==============
+        ;Loop on files: 
+        ;==============
          for h=jj,n_elements(local_paths)-1 do begin
             file= local_paths[h]
             if file_test(/regular,file) then  dprint,'Loading MU mesosphere file: ',file $
@@ -216,9 +216,9 @@ for ii=0,n_elements(parameters2)-1 do begin
                      data2=float(data[1])
                   endif
 
-                 ;
-                 ;Append data of time and FAI observations:
-                 ;=========================================
+                 ;==============================
+                 ;Append array of time and data:
+                 ;==============================
                   append_array, mu_time, time
                   append_array, mu_data, data2
                endif
@@ -284,10 +284,9 @@ if new_vars[0] ne '' then begin
    print,'*****************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
-
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
@@ -298,5 +297,6 @@ print, 'Distribution of the data has been partly supported by the IUGONET '
 print, '(Inter-university Upper atmosphere Global Observation NETwork) project '
 print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '
 print, 'Sports, Science and Technology (MEXT), Japan.'
+
 end
 

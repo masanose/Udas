@@ -38,6 +38,7 @@
 ; A. Shinbori, 28/05/2012.
 ; A. Shinbori, 12/06/2012.
 ; A. Shinbori, 25/07/2012.
+; A. Shinbori, 18/12/2012.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -96,27 +97,27 @@ for i=0, n_elements(site_data_dir)-1 do begin
    site_data_lastmane[i]=parameters[i]
 endfor
 
-
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
-
-;Definition of parameters:
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 jj=0
 for iii=0,n_elements(parameters)-1 do begin   
    if ~size(fns,/type) then begin
       if length eq '1_day' then begin 
+      
         ;Get files for ith component:
         ;***************************       
          file_names = file_dailynames( $
                       file_format='YYYY/Wk'+$
                       'YYYYMMDD',trange=trange,times=times,/unique)+'.'+site_data_lastmane[iii]+'.nc'
       endif else if length eq '1_month' then begin
+      
         ;Get files for ith component:
         ;***************************       
          file_names = file_dailynames( $
@@ -151,7 +152,8 @@ for iii=0,n_elements(parameters)-1 do begin
       zon_thermal=0
       mer_thermal=0
       meteor_num=0    
- 
+   
+     ;======================================
      ;Loop on files (read the NetCDF files): 
      ;======================================
       for j=jj,n_elements(local_paths)-1 do begin
@@ -170,7 +172,7 @@ for iii=0,n_elements(parameters)-1 do begin
          print,'Dimensions', glob.ndims
          for i=0,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
-            if i EQ glob.recdim then  $
+            if i eq glob.recdim then  $
                print,'    ', name, size, '(Unlimited dim)' $
             else      $      
                print,'    ', name, size  
@@ -255,9 +257,9 @@ for iii=0,n_elements(parameters)-1 do begin
                num_data[i,k] =e
             endfor
          endfor
-    
-        ;Append data of time and meteor observations:
-        ;============================================
+        ;=============================================
+        ;Append array of time and meteor observations:
+        ;=============================================
          append_array, site_time, unix_time
          append_array, zon_wind, uwind_data
          append_array, mer_wind, vwind_data
@@ -316,12 +318,6 @@ for iii=0,n_elements(parameters)-1 do begin
          options, ['iug_meteor_ktb_uwnd_'+parameters[iii],'iug_meteor_ktb_vwnd_'+parameters[iii],$
                    'iug_meteor_ktb_uwndsig_'+parameters[iii],'iug_meteor_ktb_vwndsig_'+parameters[iii],$
                    'iug_meteor_ktb_mwnum_'+parameters[iii]], 'spec', 1
-        ;Add options of setting labels
-         options,'iug_meteor_ktb_uwnd_'+parameters[iii], labels='MW ktb'+parameters[iii]+' [km]'
-         options,'iug_meteor_ktb_vwnd_'+parameters[iii], labels='MW ktb'+parameters[iii]+' [km]'
-         options,'iug_meteor_ktb_uwndsig_'+parameters[iii], labels='MW ktb'+parameters[iii]+' [km]'
-         options,'iug_meteor_ktb_vwndsig_'+parameters[iii], labels='MW ktb'+parameters[iii]+' [km]'
-         options,'iug_meteor_ktb_mwnum_'+parameters[iii], labels='MW ktb'+parameters[iii]+' [km]'
       endif
    endif
   
@@ -361,9 +357,9 @@ if new_vars[0] ne '' then begin
    print,'******************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
@@ -373,6 +369,7 @@ print, '(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Po
 print, 'The distribution of meteor wind radar data has been partly supported by the IUGONET'
 print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
 print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, Sports, Science'
-print, 'and Technology (MEXT), Japan.'  
+print, 'and Technology (MEXT), Japan.'
+  
 end
 

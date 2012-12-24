@@ -27,7 +27,8 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012. 
-;
+; A. Shinbori, 24/12/2012.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -50,18 +51,17 @@ if (not keyword_set(verbose)) then verbose=2
 ;************************************
 if (not keyword_set(datatype)) then datatype='ionosphere'
 
-
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 h=0
-site_time=0
-     
+site_time=0 
 if ~size(fns,/type) then begin 
   ;
   ;Get files for ith component:
@@ -200,9 +200,9 @@ if (downloadonly eq 0) then begin
       er_tr = transpose(er_tr)
       snr = transpose(snr)
       
-     ;======================================================
-     ;Append data of time and electron and ion temperatures:
-     ;======================================================
+     ;==============================
+     ;Append array of time and data:
+     ;==============================
       append_array, site_time, unix_time
       append_array, ti_app, ti
       append_array, te_app, te
@@ -214,19 +214,18 @@ if (downloadonly eq 0) then begin
       ncdf_close,cdfid  ; done
    endfor
 
-  ;******************************
+  ;==============================
   ;Store data in TPLOT variables:
-  ;******************************
-
+  ;==============================
   ;Acknowlegment string (use for creating tplot vars)
-      acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
-                       + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
-                       + 'including text such as the MU data provided by Research Institute ' $
-                       + 'for Sustainable Humanosphere of Kyoto University. We would also' $
-                       + 'appreciate receiving a copy of the relevant publications.The distribution of ' $
-                       + 'ionogram data has been partly supported by the IUGONET (Inter-university Upper ' $
-                       + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
-                       + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
+   acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
+                    + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
+                    + 'including text such as the MU data provided by Research Institute ' $
+                    + 'for Sustainable Humanosphere of Kyoto University. We would also' $
+                    + 'appreciate receiving a copy of the relevant publications.The distribution of ' $
+                    + 'ionogram data has been partly supported by the IUGONET (Inter-university Upper ' $
+                    + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
+                    + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
    if size(ti_app,/type) eq 4 then begin
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'Y. Yamamoto'))
@@ -249,15 +248,6 @@ if (downloadonly eq 0) then begin
       options,'iug_mu_iono_snr',ytitle='MU-iono!CHeight!C[km]',ztitle='SNR!C[dB]'
       options,'iug_mu_iono_snr',spec=1
       
-     ;Add options of setting labels
-     ; options,'iug_mu_iono_temp_ti', labels='MU iono Height [km]'
-     ; options,'iug_mu_iono_temp_te', labels='MU iono Height [km]'
-     ; options,'iug_mu_iono_temp_er_ti', labels='MU iono Height [km]'
-     ; options,'iug_mu_iono_temp_er_te', labels='MU iono Height [km]'
-     ; options,'iug_mu_iono_temp_er_tr', labels='MU iono Height [km]'
-     ; options,'iug_mu_iono_temp_snr,', labels='MU iono Height [km]'
-
-   
      ;Add tdegap
       tdegap, 'iug_mu_iono_ti',dt=3600,/overwrite
       tdegap, 'iug_mu_iono_te',dt=3600,/overwrite
@@ -284,9 +274,9 @@ if new_vars[0] ne '' then begin
    print,'******************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************

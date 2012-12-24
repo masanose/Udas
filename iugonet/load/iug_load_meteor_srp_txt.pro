@@ -38,7 +38,8 @@
 ; A. Shinbori, 07/02/2012.
 ; A. Shinbori, 28/05/2012.
 ; A. Shinbori, 12/06/2012.
-; 
+; A. Shinbori, 18/12/2012.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -108,27 +109,27 @@ for i=0, n_elements(site_data_dir)-1 do begin
    site_data_lastmane[i]=parameters[i]
 endfor
 
- 
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
-
-;Definition of parameters:
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 jj=0
 for iii=0,n_elements(parameters)-1 do begin 
    if ~size(fns,/type) then begin
       if length eq '1_day' then begin 
+      
         ;Get files for ith component:
         ;***************************       
          file_names = file_dailynames( $
                       file_format='YYYY/jkt'+$
                       'YYYYMMDD',trange=trange,times=times,/unique)+'.'+site_data_lastmane[iii]+'.txt'
       endif else if length eq '1_month' then begin
+      
         ;Get files for ith component:
         ;***************************       
          file_names = file_dailynames( $
@@ -155,6 +156,7 @@ for iii=0,n_elements(parameters)-1 do begin
    if (not keyword_set(downloadonly)) then downloadonly=0
 
    if (downloadonly eq 0) then begin
+     
      ;Read the files:
      ;===============   
      ;Definition of parameter:
@@ -183,7 +185,8 @@ for iii=0,n_elements(parameters)-1 do begin
       srp_time = 0
       time = 0
       time_val = -10
-      
+     
+     ;============== 
      ;Loop on files: 
      ;==============
       for j=jj,n_elements(local_paths)-1 do begin
@@ -246,9 +249,10 @@ for iii=0,n_elements(parameters)-1 do begin
                              -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))          
                     time_val2=time_val-time_diff
                     if time_val2 eq 0 then time_val2=time_val+dt
-                   ;
-                   ;Append data of time and meteor observations at determined altitude:
-                   ;===================================================================
+                    
+                   ;====================================================================
+                   ;Append array of time and meteor observations at determined altitude:
+                   ;====================================================================
                     if n ne 0 then begin
                        append_array, site_time, time_val2
                        append_array, zon_wind, zon_wind_data
@@ -274,9 +278,9 @@ for iii=0,n_elements(parameters)-1 do begin
              endif 
           endwhile 
           free_lun,lun
-         ;
-         ;Append data of time and meteor observations at the last time in each file:
-         ;================================================================
+         ;===========================================================================
+         ;Append array of time and meteor observations at the last time in each file:
+         ;===========================================================================
           append_array, site_time, time_val2+dt
           append_array, zon_wind, zon_wind_data
           append_array, mer_wind, mer_wind_data
@@ -284,9 +288,9 @@ for iii=0,n_elements(parameters)-1 do begin
           append_array, mer_thermal, mer_thermal_data
           append_array, meteor_num, meteor_num_data
 
-         ;
-         ;Append data of time and meteor observations of each file:
-         ;=========================================================
+         ;==========================================================
+         ;Append array of time and meteor observations of each file:
+         ;==========================================================
           append_array, srp_time, site_time
           append_array, zon_wind2, zon_wind
           append_array, mer_wind2, mer_wind
@@ -356,12 +360,6 @@ for iii=0,n_elements(parameters)-1 do begin
           options, ['iug_meteor_srp_uwnd_'+site_data_lastmane[iii],'iug_meteor_srp_vwnd_'+site_data_lastmane[iii],$
                     'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii],'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii],$
                     'iug_meteor_srp_mwnum_'+site_data_lastmane[iii]], 'spec', 1
-         ;Add options of setting labels
-          options,'iug_meteor_srp_uwnd_'+site_data_lastmane[iii], labels='MW srp'
-          options,'iug_meteor_srp_vwnd_'+site_data_lastmane[iii], labels='MW srp'
-          options,'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii], labels='MW srp'
-          options,'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii], labels='MW srp'
-          options,'iug_meteor_srp_mwnum_'+site_data_lastmane[iii], labels='MW srp'
        endif
 
       ;Clear time and data buffer:
@@ -401,9 +399,9 @@ if new_vars[0] ne '' then begin
    print,'******************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
@@ -414,5 +412,6 @@ print, 'The distribution of meteor wind radar data has been partly supported by 
 print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
 print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, Sports, Science'
 print, 'and Technology (MEXT), Japan.'  
+
 end
 

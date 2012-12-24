@@ -40,7 +40,8 @@
 ; A. Shinbori, 24/03/2011.
 ; A. Shinbori, 06/10/2011.
 ; A. Shinbori, 31/01/2012.
-;
+; A. Shinbori, 17/12/2012.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -48,22 +49,26 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_iono_fr_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2,$
-                              downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_ear_iono_fr_txt, datatype = datatype, $
+  parameter1=parameter1, $
+  parameter2=parameter2, $
+  downloadonly=downloadonly, $
+  trange=trange, $
+  verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
  
-;****************************************
+;**********************************
 ;Load 'ionosphere' data by default:
-;****************************************
+;**********************************
 if (not keyword_set(datatype)) then datatype='fai'
 
-;***********
+;************
 ;parameters1:
-;***********
+;************
 ;--- all parameters1 (default)
 parameter1_all = strsplit('fb1p16a fb1p16b fb1p16c fb1p16d fb1p16e fb1p16f fb1p16g fb1p16h fb1p16i '+$
                           'fb1p16j1 fb1p16j2 fb1p16j3 fb1p16j4 fb1p16j5 fb1p16j6 fb1p16j7 fb1p16j8 fb1p16j9 '+$
@@ -76,10 +81,9 @@ parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /inc
 
 print, parameters
 
-
-;***********
+;************
 ;parameters2:
-;***********
+;************
 ;--- all parameters2 (default)
 parameter2_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 dpl6 dpl7 dpl8 pwr1 pwr2 pwr3 pwr4 pwr5 '+$
                           'pwr6 pwr7 pwr8 wdt1 wdt2 wdt3 wdt4 wdt5 wdt6 wdt7 wdt8 pn1 pn2 pn3 '+$
@@ -97,183 +101,174 @@ print, parameters2
 ;--- all parameters2 (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
-;Acknowlegment string (use for creating tplot vars)
-acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for '+$
-                   'Sustainable Humanosphere (RISH), Kyoto University and is operated by '+$
-                   'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. '+$
-                   'Distribution of the data has been partly supported by the IUGONET '+$
-                   '(Inter-university Upper atmosphere Global Observation NETwork) project '+$
-                   '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '+$
-                   'Sports, Science and Technology (MEXT), Japan.'
-
-
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
 ;
-
-;Definition of parameter:
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 jj=0
-
 for ii=0,n_elements(parameters)-1 do begin
-  for iii=0,n_elements(parameters2)-1 do begin
-    if ~size(fns,/type) then begin
-
-    ;Get files for ith component:
-    ;***************************
-       file_names = file_dailynames( $
-       file_format='YYYY/'+$
-                   'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.'+parameters2[iii]+'.csv'
-    ;
-    ;Define FILE_RETRIEVE structure:
-    ;===============================
-       source = file_retrieve(/struct)
-       source.verbose=verbose
-       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/fai/f_region/csv/'
-       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/csv/'
+   for iii=0,n_elements(parameters2)-1 do begin
+      if ~size(fns,/type) then begin
+      
+        ;Get files for ith component:
+        ;***************************
+         file_names = file_dailynames( $
+         file_format='YYYY/'+$
+                     'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.'+parameters2[iii]+'.csv'
+        ;
+        ;Define FILE_RETRIEVE structure:
+        ;===============================
+         source = file_retrieve(/struct)
+         source.verbose=verbose
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/fai/f_region/csv/'
+         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/csv/'
     
-    ;Get files and local paths, and concatenate local paths:
-    ;=======================================================
-       local_paths=file_retrieve(file_names,_extra=source)
-       local_paths_all = ~(~size(local_paths_all,/type)) ? $
-                         [local_paths_all, local_paths] : local_paths
-       if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
-    endif else file_names=fns
+        ;Get files and local paths, and concatenate local paths:
+        ;=======================================================
+         local_paths=file_retrieve(file_names,_extra=source)
+         local_paths_all = ~(~size(local_paths_all,/type)) ? $
+                           [local_paths_all, local_paths] : local_paths
+         if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
+      endif else file_names=fns
 
-    ;--- Load data into tplot variables
-    if(not keyword_set(downloadonly)) then downloadonly=0
+     ;--- Load data into tplot variables
+      if (not keyword_set(downloadonly)) then downloadonly=0
 
-    if(downloadonly eq 0) then begin
-
-   ;===========================================================
-   ;read data, and create tplot vars at each parameter:
-   ;===========================================================
-   ;Read the files:
-   ;===============
-      
-    ; Definition of parameters:  
-      s=''
-      u=''
-
-    ; Initialize data and time buffer:
-      ear_time=0
-      ear_data=0
-      time=0
-      
-    ;Loop on files (zonal component): 
-    ;================================
-
-      for h=jj,n_elements(local_paths)-1 do begin
-          file= local_paths[h]
-          if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
-          else begin
-             dprint,'EAR file ',file,' not found. Skipping'
-             continue
-          endelse  
-          openr,lun,file,/get_lun  
-          readf, lun, s  
-    ;
-    ;Read information of altitude:
-    ;=============================
-          
-          readf, lun, s
-      
-          ;Definition of altitude and data arraies:
-          h_data = strsplit(s,',',/extract)
-          altitude = fltarr(n_elements(h_data)-1)
-
-          ;Enter the altitude information:
-          for j=0,n_elements(h_data)-2 do begin
-              altitude[j] = float(h_data[j+1])
-          endfor
-          
-          ;Enter the missing value:
-          for j=0,n_elements(altitude)-1 do begin
-              b = altitude[j]
-              wbad = where(b eq 0,nbad)
-              if nbad gt 0 then b[wbad] = !values.f_nan
-              altitude[j]=b
-          endfor
-    ;
-    ;Loop on readdata:
-    ;=================
-          while(not eof(lun)) do begin
-             readf,lun,s
-             ok=1
-             if strmid(s,0,1) eq '[' then ok=0
-             if ok && keyword_set(s) then begin
-                dprint,s ,dlevel=5
-                data = strsplit(s,',',/extract)
+      if (downloadonly eq 0) then begin
          
-            ;Calculate time:
-            ;==============
-                u=data(0)
-                year = strmid(u,0,4)
-                month = strmid(u,5,2)
-                day = strmid(u,8,2)
-                hour = strmid(u,11,2)
-                minute = strmid(u,14,2)
+        ;===================================================
+        ;read data, and create tplot vars at each parameter:
+        ;===================================================
+        ;Read the files:
+        ;===============
+      
+        ;Definition of parameters:  
+         s=''
+         u=''
+
+        ;Initialize data and time buffer:
+         ear_time=0
+         ear_data=0
+            
+        ;==============
+        ;Loop on files: 
+        ;==============
+         for h=jj,n_elements(local_paths)-1 do begin
+            file= local_paths[h]
+            if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+            else begin
+               dprint,'EAR file ',file,' not found. Skipping'
+               continue
+            endelse
+              
+            openr,lun,file,/get_lun  
+            readf, lun, s  
+           ;
+           ;Read information of altitude:
+           ;=============================         
+            readf, lun, s
+      
+           ;Definition of altitude and data arraies:
+            h_data = strsplit(s,',',/extract)
+            altitude = fltarr(n_elements(h_data)-1)
+
+           ;Enter the altitude information:
+            for j=0,n_elements(h_data)-2 do begin
+               altitude[j] = float(h_data[j+1])
+            endfor
+          
+           ;Enter the missing value:
+            for j=0,n_elements(altitude)-1 do begin
+               b = altitude[j]
+               wbad = where(b eq 0,nbad)
+               if nbad gt 0 then b[wbad] = !values.f_nan
+               altitude[j]=b
+            endfor
+           ;
+           ;Loop on readdata:
+           ;=================
+            while(not eof(lun)) do begin
+               readf,lun,s
+               ok=1
+               if strmid(s,0,1) eq '[' then ok=0
+               if ok && keyword_set(s) then begin
+                  dprint,s ,dlevel=5
+                  data = strsplit(s,',',/extract)
+         
+                 ;Calculate time:
+                 ;==============
+                  u=data(0)
+                  year = strmid(u,0,4)
+                  month = strmid(u,5,2)
+                  day = strmid(u,8,2)
+                  hour = strmid(u,11,2)
+                  minute = strmid(u,14,2)
                   
-            ;====Convert time from local time to unix time      
-                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                          -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
-            ;
-            ;Enter the missing value:
-                for j=0,n_elements(data)-2 do begin
-                    a = float(data[j+1])
-                    wbad = where(a eq -999,nbad)
-                    if nbad gt 0 then a[wbad] = !values.f_nan
-                    data[k,j]=a
-                endfor
-            ;
-            ;Append data of time:
-            ;====================
-                append_array, ear_time, time
-            ;
-            ;Append data of wind velocity:
-            ;=============================
-                append_array, ear_data, data2
-
-             endif
-          endwhile 
-          free_lun,lun  
-      endfor
-
-   ;******************************
-   ;Store data in TPLOT variables:
-   ;******************************
-
-      if time ne 0 then begin
-         if strmid(parameters2[iii],0,2) eq 'dp' then o=0
-         if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
-         if strmid(parameters2[iii],0,2) eq 'pw' then o=1
-         if strmid(parameters2[iii],0,2) eq 'pn' then o=1
-         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
-         store_data,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-         new_vars=tnames('iug_ear_fai'+parameters[ii]+'_'+parameters2[iii])
-         if new_vars[0] ne '' then begin
-            options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
-            options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI F-region [km]'
-         
-           ; Add options
-            if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
-         endif
-      endif 
+                 ;====Convert time from local time to unix time      
+                  time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
+                         -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
+                 ;
+                 ;Enter the missing value:
+                  for j=0,n_elements(data)-2 do begin
+                     a = float(data[j+1])
+                     wbad = where(a eq -999,nbad)
+                     if nbad gt 0 then a[wbad] = !values.f_nan
+                     data[k,j]=a
+                  endfor
+                 ;=============================
+                 ;Append data of time and data:
+                 ;=============================
+                  append_array, ear_time, time
+                  append_array, ear_data, data2
+               endif
+            endwhile 
+            free_lun,lun  
+         endfor
+          
+        ;==============================
+        ;Store data in TPLOT variables:
+        ;==============================
+        ;Acknowlegment string (use for creating tplot vars)
+         acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for ' $
+                          + 'Sustainable Humanosphere (RISH), Kyoto University and is operated by ' $
+                          + 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. ' $
+                          + 'Distribution of the data has been partly supported by the IUGONET ' $
+                          + '(Inter-university Upper atmosphere Global Observation NETwork) project ' $
+                          + '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, ' $
+                          + 'Sports, Science and Technology (MEXT), Japan.'
+  
+         if size(pwr1,/type) eq 4 then begin
+            if strmid(parameters2[iii],0,2) eq 'dp' then o=0
+            if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
+            if strmid(parameters2[iii],0,2) eq 'pw' then o=1
+            if strmid(parameters2[iii],0,2) eq 'pn' then o=1
+            dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
+            store_data,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+            new_vars=tnames('iug_ear_fai'+parameters[ii]+'_'+parameters2[iii])
+            if new_vars[0] ne '' then begin
+               options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
+               options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI F-region [km]'   
+               if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
+            endif
+         endif 
       
-     ;Clear time and data buffer:
-      ear_time=0
-      ear_data=0
+        ;Clear time and data buffer:
+         ear_time=0
+         ear_data=0
     
-      new_vars=tnames('iug_ear_fai*')
-      if new_vars[0] ne '' then begin    
-       ; Add tdegap
-         tdegap, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],/overwrite
+         new_vars=tnames('iug_ear_fai*')
+         if new_vars[0] ne '' then begin    
+          ;Add tdegap
+           tdegap, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],/overwrite
+         endif
       endif
-   endif
-   jj=n_elements(local_paths)
-  endfor
+      jj=n_elements(local_paths)
+   endfor
    jj=n_elements(local_paths)
 endfor
   
@@ -284,10 +279,9 @@ if new_vars[0] ne '' then begin
    print,'*****************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
-
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
@@ -298,7 +292,6 @@ print, 'Distribution of the data has been partly supported by the IUGONET '
 print, '(Inter-university Upper atmosphere Global Observation NETwork) project '
 print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '
 print, 'Sports, Science and Technology (MEXT), Japan.'
-
 
 end
 

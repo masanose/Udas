@@ -27,7 +27,8 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
-;
+; A. Shinbori, 24/12/2012.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -50,18 +51,17 @@ if (not keyword_set(verbose)) then verbose=2
 ;************************************
 if (not keyword_set(datatype)) then datatype='ionosphere'
 
-
-;==================================================================
-;Download files, read data, and create tplot vars at each component
-;==================================================================
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
 h=0
-site_time=0
-     
+site_time=0    
 if ~size(fns,/type) then begin 
   ;
   ;Get files for ith component:
@@ -159,9 +159,9 @@ if (downloadonly eq 0) then begin
                Vd_b[k-9] =f
             endfor
          endif
-        ;=======================================
-        ;Append data of time and drift velocity:
-        ;=======================================
+        ;==============================
+        ;Append array of time and data:
+        ;==============================
          append_array, site_time, time
          append_array, Vperp_e_app, Vperp_e
          append_array, Vperp_n_app, Vperp_n
@@ -172,10 +172,10 @@ if (downloadonly eq 0) then begin
       endwhile 
       free_lun,lun     
    endfor  
-  ;******************************
+   
+  ;==============================
   ;Store data in TPLOT variables:
-  ;******************************
-
+  ;==============================
   ;Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
@@ -200,14 +200,6 @@ if (downloadonly eq 0) then begin
       options,'iug_mu_iono_Vz_ew',ytitle='MU-iono!CVz_ew!C[m/s]'
       store_data,'iug_mu_iono_Vd_b',data={x:site_time, y:Vd_b_app},dlimit=dlimit
       options,'iug_mu_iono_Vd_b',ytitle='MU-iono!CVd_b!C[m/s]'
-
-     ;Add options of setting labels
-     ; options,'iug_mu_iono_drift_Vperp_e', labels='MU iono drift Vperp_e [m/s]'
-     ; options,'iug_mu_iono_drift_Vperp_n', labels='MU iono drift Vperp_n [m/s]'
-     ; options,'iug_mu_iono_drift_Vpara_u', labels='MU iono drift Vpara_u [m/s]'
-     ; options,'iug_mu_iono_drift_Vz_ns', labels='MU iono drift Vperp_ns [m/s]'
-     ; options,'iug_mu_iono_drift_Vz_ew', labels='MU iono drift Vperp_ew [m/s]'
-     ; options,'iug_mu_iono_drift_Vd_b', labels='MU iono drift Vd_b [m/s]'
    endif
   
   ;Clear time and data buffer:
@@ -236,9 +228,9 @@ if new_vars[0] ne '' then begin
    print,'******************************
 endif
 
-;******************************
+;*************************
 ;print of acknowledgement:
-;******************************
+;*************************
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
