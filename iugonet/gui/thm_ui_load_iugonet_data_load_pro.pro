@@ -47,10 +47,31 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;===== Load the IUGONET data =====
   ;=================================
   case instrument of 
+      ;----- Automatic Weather Station -----;
+      'Automatic_Weather_Station' : begin       
+          iug_load_aws_rish, site =site_or_param, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_aws_*')
+          endif else begin
+              par_names=tnames('iug_aws_*'+parameters)
+          endelse
+      end
+
       ;----- Bandary Layer Radar -----;
       'Boundary_Layer_Radar' : begin          
           iug_load_blr_rish, site =site_or_param, parameter=parameters, trange = timeRange
           par_names=tnames('iug_blr_*')
+      end
+
+      ;----- EISCAT radar -----;
+      'EISCAT_radar' : begin
+          vns=strmid(datatype,0,3)
+          iug_load_eiscat, site=site_or_param, ydatatype=vns, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('eiscat_*')
+          endif else begin
+              par_names=tnames('eiscat_*_'+parameters)
+          endelse
       end
 
       ;----- Equatorial Atmosphere Radar -----;
@@ -225,27 +246,10 @@ pro thm_ui_load_iugonet_data_load_pro,$
           endif
       end
   
-      ;----- EISCAT radar -----;
-      'EISCAT_radar' : begin
-          vns=strmid(datatype,0,3)
-          iug_load_eiscat, site=site_or_param, ydatatype=vns, trange = timeRange
-          if parameters[0] eq '*' then begin
-              par_names=tnames('eiscat_*')
-          endif else begin
-              par_names=tnames('eiscat_*_'+parameters)
-          endelse
-      end
-
       ;----- Wind Profiler Radar (LQ-7) -----;
       'Wind_Profiler_Radar_(LQ-7)' : begin       
           iug_load_wpr_rish, site =site_or_param, parameter=parameters, trange = timeRange
           par_names=tnames('iug_wpr_*')
-      end
-
-      ;----- Automatic Weather Station -----;
-      'Automatic_Weather_Station' : begin       
-          iug_load_aws_rish, site =site_or_param, trange = timeRange
-          par_names=tnames('iug_aws_*')
       end
 
       ;----- Ionosonde -----;
