@@ -14,6 +14,7 @@
 ;A. Shinbori, 11/05/2012
 ;A. Shinbori, 12/06/2012
 ;A. Shinbori, 24/10/2012
+;A. Shinbori, 14/12/2012
 ;
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_event,event
@@ -306,7 +307,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
 
   instrumentArray = ['Boundary_Layer_Radar','Equatorial_Atmosphere_Radar','geomagnetic_field_fluxgate','geomagnetic_field_index','Iitate_Planetary_Radio_Telescope',$
                      'Lower_Troposphere_Radar','Medium_Frequency_radar','Meteor_Wind_radar','Middle_Upper_atmosphere_radar', 'SuperDARN#', 'EISCAT_radar',$
-                     'Wind_Profiler_Radar_(LQ-7)','Automatic_Weather_Station','Ionosonde']
+                     'Wind_Profiler_Radar_(LQ-7)','Automatic_Weather_Station','Ionosonde','Radiosonde']
   
   instrumentCombo = widget_combobox(instrumentBase,$
                                        value=instrumentArray,$
@@ -317,7 +318,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;================================
   ;=========== Data Type ==========
   ;================================
-  typeArray = ptrarr(14)
+  typeArray = ptrarr(15)
   
   typeArray[0] = ptr_new(['troposphere'])
   typeArray[1] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
@@ -335,6 +336,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   typeArray[11] = ptr_new(['troposphere'])  
   typeArray[12] = ptr_new(['troposphere']) 
   typeArray[13] = ptr_new(['ionosphere']) 
+  typeArray[14] = ptr_new(['DAWEX','misc']) 
                                      
   dataBase = widget_base(selectionBase,/row)
   typeBase = widget_base(dataBase,/col)
@@ -356,7 +358,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;============================================
   ;========== Sites and Parameters-1 ==========
   ;============================================
-  paramArray = ptrarr(14)
+  paramArray = ptrarr(15)
   paramArray[0] = ptr_new(ptrarr(1))
   paramArray[1] = ptr_new(ptrarr(5))
   paramArray[2] = ptr_new(ptrarr(4))
@@ -371,6 +373,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[11] = ptr_new(ptrarr(1))
   paramArray[12] = ptr_new(ptrarr(1))
   paramArray[13] = ptr_new(ptrarr(1))
+  paramArray[14] = ptr_new(ptrarr(2))
   
   (*paramArray[0])[0] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[1])[0] = ptr_new(['*(all)'])
@@ -433,6 +436,8 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[11])[0] = ptr_new(['*(all)','sgk'])
   (*paramArray[12])[0] = ptr_new(['*(all)','sgk'])
   (*paramArray[13])[0] = ptr_new(['*(all)','sgk'])
+  (*paramArray[14])[0] = ptr_new(['*(all)','drw','gpn','ktr'])
+  (*paramArray[14])[1] = ptr_new(['*(all)','ktb','sgk','srp'])
    
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Site or parameter(s)-1:')
@@ -451,7 +456,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   ;========== Parameters-2 ====================
   ;============================================  
 
-  param2Array = ptrarr(14)
+  param2Array = ptrarr(15)
   param2Array[0] = ptr_new(ptrarr(1))
   param2Array[1] = ptr_new(ptrarr(5))
   param2Array[2] = ptr_new(ptrarr(4))
@@ -466,6 +471,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   param2Array[11] = ptr_new(ptrarr(1))
   param2Array[12] = ptr_new(ptrarr(1))
   param2Array[13] = ptr_new(ptrarr(1))
+  param2Array[14] = ptr_new(ptrarr(2))
     
   (*param2Array[0])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
   (*param2Array[1])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
@@ -505,9 +511,10 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
                                    'lat','long','alt','colf','comp','q','qflag'])
   (*param2Array[11])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
   (*param2Array[12])[0] = ptr_new(['*','press','temp','rh','uwnd','vwnd'])
-  (*param2Array[13])[0] = ptr_new(['*','2.00','3.00','4.00','5.00','6.00','7.00','8.00','9.00','10.00','11.00','12.00','13.00','14.00','15.00','16.00','17.00','18.00']) 
-   
-                   
+  (*param2Array[13])[0] = ptr_new(['*','2MHz','3MHz','4MHz','5MHz','6MHz','7MHz','8MHz','9MHz','10MHz','11MHz','12MHz','13MHz','14MHz','15MHz','16MHz','17MHz','18MHz']) 
+  (*param2Array[14])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
+  (*param2Array[14])[1] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
+                  
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Parameter(s)-2:')
   paramList2 = widget_list(paramBase,$

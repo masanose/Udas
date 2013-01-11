@@ -20,6 +20,7 @@
 ;A. Shinbori, 12/04/2012
 ;Y.-M. Tanaka,15/06/2012
 ;A. Shinbori, 24/10/2012
+;A. Shinbori, 14/12/2012
 ;-
 ;--------------------------------------------------------------------------------
 pro thm_ui_load_iugonet_data_load_pro,$
@@ -251,10 +252,21 @@ pro thm_ui_load_iugonet_data_load_pro,$
       ;----- Ionosonde -----;
       'Ionosonde' : begin       
           iug_load_ionosonde_rish, site =site_or_param, trange = timeRange
+          tplot_iug_ionogram,datatype=datatype, valuename=tnames('iug_ionosonde_sgk_ionogram')
+          if (parameters[0] eq '*') then begin
+                par_names=tnames('iug_ionosonde_sgk_freq_*')
+           endif else begin
+                par_names=tnames('iug_ionosonde_sgk_freq_'+parameters)
+           endelse
+      end
+
+      ;----- Ionosonde -----;
+      'Radiosonde' : begin       
+          iug_load_radiosonde_rish, datatype =datatype, site =site_or_param, trange = timeRange
           if parameters[0] eq '*' then begin
-              par_names=tnames('iug_ionosonde_sgk_freq_*')
+              par_names=tnames('iug_radiosonde_*')
           endif else begin
-              par_names=tnames('iug_ionosonde_sgk_freq_'+parameters)
+              par_names=tnames('iug_radiosonde_*_'+parameters)
           endelse
       end
       
