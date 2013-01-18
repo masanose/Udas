@@ -33,10 +33,10 @@
 ; :HISTORY:
 ; 	2011/01/11: Created
 ;
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
-; $URL: $
+; $LastChangedBy: horit $
+; $LastChangedDate: 2013-01-16 20:26:19 +0900 (Wed, 16 Jan 2013) $
+; $LastChangedRevision: 208 $
+; $URL: http://gemsissc.stelab.nagoya-u.ac.jp/svn/ergsc/trunk/erg/ground/radar/superdarn/sd_map_set.pro $
 ;-
 PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
     center_glat=glatc, center_glon=glonc, $
@@ -52,7 +52,8 @@ PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
   npar = N_PARAMS()
   IF npar LT 1 THEN time = !sdarn.sd_polar.plot_time
   
-  IF KEYWORD_SET(glatc) OR KEYWORD_SET(glonc) THEN BEGIN
+  IF ((size(glatc, /type) gt 0) AND (size(glatc, /type) lt 6)) AND $
+   ((size(glonc, /type) gt 0) AND (size(glonc, /type) lt 6)) THEN BEGIN
     glonc = (glonc+360.) MOD 360.
     IF glonc GT 180. THEN glonc -= 360.
   ENDIF ELSE BEGIN
@@ -98,6 +99,7 @@ PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
   IF position[0] GE position[2] OR position[1] GE position[3] THEN BEGIN
     PRINT, '!p.position is not set, temporally use [0,0,1,1]'
     position = [0.,0.,1.,1.]
+    !p.position = position
   ENDIF
   
   ;Set the scale for drawing the map_set canvas
@@ -161,18 +163,19 @@ PRO sd_map_set, time, erase=erase, clip=clip, position=position, $
     lonlabs0 = replicate(lonlab,n_elements(mlts))
     if hemis eq 1 then lonlabs1 = replicate( (lonlab+10.) < 89.5,n_elements(mlts)) $
     else lonlabs1 = replicate( (lonlab-10.) > (-89.5),n_elements(mlts))
-    nrmcord0 = CONVERT_COORD(mlts,lonlabs0,/data,/to_normal)
-    nrmcord1 = CONVERT_COORD(mlts,lonlabs1,/data,/to_normal)
+    nrmcord0 = CONVERT_COORD(mlts,lonlabs0,/data,/to_device)
+    nrmcord1 = CONVERT_COORD(mlts,lonlabs1,/data,/to_device)
     ori = transpose( atan( nrmcord1[1,*]-nrmcord0[1,*], nrmcord1[0,*]-nrmcord0[0,*] )*!radeg )
     ori = ( ori + 360. ) mod 360. 
     
     ;ori = lons + 90 & ori[WHERE(ori GT 180)] -= 360.
     
     ;idx=WHERE(lons GT 180. ) & lons[idx] -= 360.
-
+    
+    nrmcord0 = CONVERT_COORD(mlts,lonlabs0,/data,/to_normal)
     FOR i=0,N_ELEMENTS(mlts)-1 DO BEGIN
       
-      nrmcord = reform(nrmcord0[*,i]) 
+      nrmcord = reform(nrmcord0[*,i])
       pos = [!x.window[0],!y.window[0],!x.window[1],!y.window[1]]
       IF nrmcord[0] LE pos[0] OR nrmcord[0] GE pos[2] OR $
         nrmcord[1] LE pos[1] OR nrmcord[1] GE pos[3] THEN CONTINUE
