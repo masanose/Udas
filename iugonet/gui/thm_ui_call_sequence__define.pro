@@ -38,7 +38,7 @@
 ;$LastChangedBy: pcruce $
 ;$LastChangedDate: 2011-05-26 15:14:36 -0700 (Thu, 26 May 2011) $
 ;$LastChangedRevision: 8707 $
-;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_00/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
+;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_01/idl/themis/thm_ui_new/objects/thm_ui_call_sequence__define.pro $
 ;
 ;--------------------------------------------------------------------------------
 

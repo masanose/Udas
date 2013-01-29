@@ -4,7 +4,7 @@
 ; thm_gui_new
 ;
 ;PURPOSE:
-; GUI for THEMIS data analysis
+; GUI for THEMIS data analysis, including setup of the IUGONET environment variables.
 ;
 ;CALLING SEQUENCE:
 ; themis_gui_new
@@ -26,7 +26,7 @@
 ;$LastChangedBy: aaflores $
 ;$LastChangedDate: 2012-03-14 11:25:43 -0700 (Wed, 14 Mar 2012) $
 ;$LastChangedRevision: 10090 $
-;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_00/idl/themis/thm_ui_new/thm_gui_new.pro $
+;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/thmsoc/tags/tdas_7_01/idl/themis/thm_ui_new/thm_gui_new.pro $
 ;-----------------------------------------------------------------------------------
 
 
