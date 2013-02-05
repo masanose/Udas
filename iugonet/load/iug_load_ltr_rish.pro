@@ -216,7 +216,7 @@ for iii=0,n_elements(parameters)-1 do begin
                   a = float(data[j+1])
                   wbad = where(a eq 999, nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
-                  data2[k,j]=a
+                  data2[0,j]=a
                endfor
               ;==============================
               ;Append array of time and data:

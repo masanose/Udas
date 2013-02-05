@@ -28,7 +28,8 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 03/24/2011.
-;
+; A. Shinbori, 02/04/2013.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -56,7 +57,7 @@ if (not keyword_set(datatype)) then datatype='thermosphere'
 ;site codes:
 ;***********
 ;--- all sites (default)
-site_code_all = strsplit('pam',' ', /extract)
+site_code_all = strsplit('pam pon',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(site)) then site='all'
@@ -65,8 +66,10 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 for i=0, n_elements(site_code)-1 do begin
-  if site_code[i] eq 'pam' then iug_load_mf_rish_pam_nc, site = site_code[i], downloadonly=downloadonly, trange=trange, verbose=verbose
-  ;if site_code[i] eq 'pon' then iug_load_mf_rish_pon_txt, site = site_code[i], downloadonly=downloadonly, trange=trange, verbose=verbose
+  if site_code[i] eq 'pam' then iug_load_mf_rish_pam_nc, site = site_code[i], downloadonly=downloadonly, $
+                                                         trange=trange, verbose=verbose
+  if site_code[i] eq 'pon' then iug_load_mf_rish_pon_nc, site = site_code[i], downloadonly=downloadonly, $
+                                                         trange=trange, verbose=verbose
 endfor
 
 end

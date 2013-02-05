@@ -23,6 +23,8 @@
 ;             LEVELs are 'org' and 'scr'.
 ;  PARAMETER = The parameter of meteor data to be loaded. In this load program,
 ;             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00' and 'h2t60min30'.
+;  LENGTH = The file type of meteor data to be loaded.
+;             LENGTHs are '1-day' and '1-month'. Default is 1-day.
 ;  TRANGE (In):
 ;    Pass a time range a la TIME_STRING.PRO.
 ;  FILENAMES (In):
@@ -114,7 +116,7 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
    
   ;load of MU meteor data  
    if datatypes[i] eq 'meteor' then begin
-      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, trange = trange, downloadonly=downloadonly, verbose = verbose
+      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, length=length, trange = trange, downloadonly=downloadonly, verbose = verbose
    endif
    endfor  
    

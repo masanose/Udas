@@ -107,8 +107,8 @@ if n_elements(site_code) le 3 then begin
       if site_code[i] eq 'kth' then begin
          kkk[i]=2 
       endif
-    endfor
-  endif
+   endfor
+endif
 
 for ii=0,n_elements(site_code)-1 do begin
    kk=kkk[ii]

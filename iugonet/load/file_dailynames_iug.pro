@@ -40,8 +40,8 @@ endif
 if not keyword_set(file_format) then file_format = 'YYYYMMDD'
 
 
-
-tr = timerange(trange)
+;Change of time range from UT to LT:
+tr = timerange(trange)+3600*9
 
 ;mmtr = floor( tr / res + [0d,.999d] )
 ; The above line is not quite correct if the end of the input time

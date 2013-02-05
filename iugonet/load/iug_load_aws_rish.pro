@@ -30,6 +30,7 @@
 ;MODIFICATIONS:
 ;  A. Shinbori, 17/10/2012.
 ;  A. Shinbori, 17/12/2012.
+;  A. Shinbori, 04/02/2013.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -257,14 +258,14 @@ endif
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire surface meteorlogical data, we ask that you acknowledge us'
+print, 'If you acquire surface meteorological data, we ask that you acknowledge us'
 print, 'in your use of the data. This may be done by including text such as surface' 
 print, 'meteorological data provided by Research Institute for Sustainable Humanosphere' 
 print, 'of Kyoto University. We would also appreciate receiving a copy of the relevant' 
-print, 'publications. The distribution of BLR data has been partly supported by the'
-print, 'IUGONET (Inter-university Upper atmosphere Global Observation NETwork) project'
-print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, Sports,'
-print, 'Science and Technology (MEXT), Japan.'
+print, 'publications. The distribution of surface meteorological data has been partly '
+print, 'supported by the IUGONET (Inter-university Upper atmosphere Global Observation '
+print, 'NETwork) project (http://www.iugonet.org/) funded by the Ministry of Education, '
+print, 'Culture, Sports, Science and Technology (MEXT), Japan.'
 
 end
 

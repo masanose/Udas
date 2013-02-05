@@ -10,11 +10,10 @@
 ;  iug_gmag_wdc_xyz [ ,SITE = string ]
 ;  
 ;KEYWORDS:
-;  site  = Station ABB code. Default is all '*'.
+;  site  = Station ABB code or name of geomagnetic index.
 ;          Ex1) iug_gmag_wdc_xyz, site = 'kak', ...
 ;          Ex2) iug_gmag_wdc_xyz, site = ['gua', 'kak'], ...
 ;  reolution = Time resolution of the data: 'min' or 'hour'.
-;          Default is 'min'.
 ;  
 ;EXAMPLE:
 ;   iug_gmag_wdc_xyz, site = 'kak',resolution='min'
@@ -23,7 +22,6 @@
 ;A. Shinbori, 28/11/2012.
 ;
 ;MODIFICATIONS:
-;A. Shinbori, 04/12/2012
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -81,7 +79,7 @@ if result[0] ne '' then begin
         ;Store the tplot variables:
          store_data,result[j]+'_xyz',data ={x:d.x,y:y}
          options,result[j]+'_xyz',ytitle = str.ytitle,labels = ['X [nT]', 'Y [nT]','Z [nT]'], colors = colors
-         print, 'Created tplot variable '+ result[j]+'_xyz'
+         print, 'Created '+ result[j]+'_xyz'
       endif
 
      ;Reform the data array of geomagnetic field corresponding to the data labels (XYZF coordinates)
@@ -89,10 +87,11 @@ if result[0] ne '' then begin
          y[*,0]=x_comp
          y[*,1]=y_comp
          y[*,2]=z_comp
+        ;d.y[*,3]=f_comp
         ;Store the tplot variables:
          store_data,result[j]+'_xyz',data ={x:d.x,y:y}
          options,result[j]+'_xyz',ytitle = str.ytitle,labels = ['X [nT]', 'Y [nT]','Z [nT]'], colors = colors
-         print, 'Created tplot variable '+ result[j]+'_xyz'
+         print, 'Created '+ result[j]+'_xyz'
       endif
    endfor
 endif
