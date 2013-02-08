@@ -51,11 +51,26 @@ pro uspec_coh,vname1,vname2,$
     main_period
 
 ;Get data from two tplot variables:
+if strlen(tnames(vname1)) * strlen(tnames(vname2)) eq 0 then begin
+  print, 'Cannot find the tploe vars in argument!'
+  return
+endif
 get_data,vname1,data=d1
 get_data,vname2,data=d2
 
 Y1=d1.y  
 Y2=d2.y
+
+;Error check
+if n_elements(y1) ne n_elements(y2) then begin
+  print, 'var1 and var2 have different array sizes!'
+  return
+endif
+idx1 = where( ~finite(y1) ) & idx2 = where( ~finite(y2) )
+if idx1[0] ne -1 or idx2[0] ne -1 then begin
+  print, 'Either of var1 or var2 has some invalid data (NaN or Inf)!'
+  return
+endif
 
 ;Keyword check:   
 if not keyword_set(width) then width = 10.0
