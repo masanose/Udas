@@ -51,7 +51,7 @@
 ;-
 
 
-function hilbert,x,d, analytic = a   ; performs the Hilbert transform of some data.
+function hilbert_trans,x,d, analytic = a   ; performs the Hilbert transform of some data.
   ;Return to caller if an error occurs
    on_error,2 
              
@@ -219,7 +219,7 @@ if sz(2) ne 6 then begin
    if keyword_set(VERBOSE) then print,'Not complex data, finding analytic signal.'
    
   ;Take hilbert transfrom
-   time_series = (hilbert(time_series,/analytic))
+   time_series = (hilbert_trans(time_series,/analytic))
   ;The /2 is because the  spectrum is  *2 from an. sig.
   ;Note that the nyquist point and DC are 2*normal in AS(t)
 endif
