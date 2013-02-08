@@ -133,7 +133,11 @@ n = n_elements( vector )
 
 ; The default position of the first application of the smoothing window
 if n_elements( start_index ) eq 0 then start_index = 0
-if start_index lt 0 then stop
+if start_index lt 0 then begin
+  print, 'In filter.pro, start_index is less then zero!'
+  return, 0
+endif
+
 ; The default window stepping
 if not( keyword_set( step ) ) then step = 1
 

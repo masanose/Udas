@@ -81,7 +81,10 @@ FUNCTION CROSS_SPEC, $
 
 ; Vector length
 ny = n_elements( y1 )
-if ny ne n_elements( y2 ) then stop
+if ny ne n_elements( y2 ) then begin
+  print, 'In cross_spec(), y1 and y2 have diffferent array sizes!'
+  return, 0
+endif
 
 ; The default time step
 if not( keyword_set( deltat ) ) then deltat = 1.
