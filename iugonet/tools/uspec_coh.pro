@@ -87,14 +87,7 @@ result = cross_spec( Y1, Y2,DELTAT=deltat, amplitude=amplitude, phase=phase, fre
 g2=1-(sl)^(1.0/((2.0*(n_elements(Y1)-width+1)+1)-1))
 print,'coherence confidence interval',g2
 
-max_cxy=0
-for i=0,n_elements(result.cxy)-1 do begin
-   if finite(result.cxy(i)) then begin 
-      if result.cxy(i) ge max_cxy then begin 
-         max_cxy=result.cxy(i)
-      endif
-   endif
-endfor
+max_cxy = max( result.cxy, /nan )
 
 print,'max coherence',max_cxy
 main_period=1/(deltat*result.f(where(result.cxy eq max_cxy)))
