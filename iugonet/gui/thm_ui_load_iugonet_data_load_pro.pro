@@ -48,10 +48,31 @@ pro thm_ui_load_iugonet_data_load_pro,$
   ;===== Load the IUGONET data =====
   ;=================================
   case instrument of 
+      ;----- Automatic Weather Station -----;
+      'Automatic_Weather_Station' : begin       
+          iug_load_aws_rish, site =site_or_param, trange = timeRange
+          if (parameters[0] eq '*') then begin
+             par_names=tnames('iug_aws_*')
+          endif else begin
+             par_names=tnames('iug_aws_*_'+parameters)
+          endelse
+      end
+
       ;----- Bandary Layer Radar -----;
       'Boundary_Layer_Radar' : begin          
           iug_load_blr_rish, site =site_or_param, parameter=parameters, trange = timeRange
           par_names=tnames('iug_blr_*')
+      end
+
+      ;----- EISCAT radar -----;
+      'EISCAT_radar' : begin
+          vns=strmid(datatype,0,3)
+          iug_load_eiscat, site=site_or_param, ydatatype=vns, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('eiscat_*')
+          endif else begin
+              par_names=tnames('eiscat_*_'+parameters)
+          endelse
       end
 
       ;----- Equatorial Atmosphere Radar -----;
@@ -163,6 +184,17 @@ pro thm_ui_load_iugonet_data_load_pro,$
           endelse
       end
 
+      ;----- Ionosonde -----;
+      'Ionosonde' : begin       
+          iug_load_ionosonde_rish, site =site_or_param, trange = timeRange
+          tplot_iug_ionogram,datatype=datatype, valuename=tnames('iug_ionosonde_sgk_ionogram')
+          if (parameters[0] eq '*') then begin
+                par_names=tnames('iug_ionosonde_sgk_freq_*')
+           endif else begin
+                par_names=tnames('iug_ionosonde_sgk_freq_'+parameters)
+           endelse
+      end
+
       ;----- Lower Troposphere Radar -----;
       'Lower_Troposphere_Radar' : begin       
           iug_load_ltr_rish, site =site_or_param, parameter=parameters, trange = timeRange
@@ -206,8 +238,18 @@ pro thm_ui_load_iugonet_data_load_pro,$
           endcase
       end
   
+      ;----- Radiosonde -----;
+      'Radiosonde' : begin       
+          iug_load_radiosonde_rish, datatype =datatype, site =site_or_param, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_radiosonde_*')
+          endif else begin
+              par_names=tnames('iug_radiosonde_*_'+parameters)
+          endelse
+      end
+      
       ;----- SuperDARN radar ----;
-      'SuperDARN#' : begin
+      'SuperDARN_radar#' : begin
           if site_or_param[0] ne '*(all)' then begin
               erg_load_sdfit, trange=timeRange, sites=site_or_param
 
@@ -221,55 +263,17 @@ pro thm_ui_load_iugonet_data_load_pro,$
               if parameters[0] eq '*' then begin
                   par_names=tnames('sd_*')
               endif else begin
-                  par_names=tnames('sd_*_' + parameters +'_*')
+                  par_names=tnames('sd_*_' + parameters +'_?')
               endelse
           endif
       end
   
-      ;----- EISCAT radar -----;
-      'EISCAT_radar' : begin
-          vns=strmid(datatype,0,3)
-          iug_load_eiscat, site=site_or_param, ydatatype=vns, trange = timeRange
-          if parameters[0] eq '*' then begin
-              par_names=tnames('eiscat_*')
-          endif else begin
-              par_names=tnames('eiscat_*_'+parameters)
-          endelse
-      end
-
       ;----- Wind Profiler Radar (LQ-7) -----;
       'Wind_Profiler_Radar_(LQ-7)' : begin       
           iug_load_wpr_rish, site =site_or_param, parameter=parameters, trange = timeRange
           par_names=tnames('iug_wpr_*')
       end
 
-      ;----- Automatic Weather Station -----;
-      'Automatic_Weather_Station' : begin       
-          iug_load_aws_rish, site =site_or_param, trange = timeRange
-          par_names=tnames('iug_aws_*')
-      end
-
-      ;----- Ionosonde -----;
-      'Ionosonde' : begin       
-          iug_load_ionosonde_rish, site =site_or_param, trange = timeRange
-          tplot_iug_ionogram,datatype=datatype, valuename=tnames('iug_ionosonde_sgk_ionogram')
-          if (parameters[0] eq '*') then begin
-                par_names=tnames('iug_ionosonde_sgk_freq_*')
-           endif else begin
-                par_names=tnames('iug_ionosonde_sgk_freq_'+parameters)
-           endelse
-      end
-
-      ;----- Ionosonde -----;
-      'Radiosonde' : begin       
-          iug_load_radiosonde_rish, datatype =datatype, site =site_or_param, trange = timeRange
-          if parameters[0] eq '*' then begin
-              par_names=tnames('iug_radiosonde_*')
-          endif else begin
-              par_names=tnames('iug_radiosonde_*_'+parameters)
-          endelse
-      end
-      
   endcase
 
   ;----- Clean up tplot -----;  
@@ -285,7 +289,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
       
           ;----- In case of more than two observatoies -----;
           site_name=strsplit(new_vars[i],'_',/extract)
-          if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN#') or $
+          if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN_radar#') or $
               (instrument eq 'EISCAT_radar') then begin
               site_name2 = site_name[1]
           endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
@@ -330,9 +334,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
      statusBar->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
      historyWin->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
   endif else begin
-     if (instrument eq 'SuperDARN#') and (site_or_param[0] eq '*(all)') then begin
-        statusBar->update,'SuperDARN does not support *(all) as a site or parameter(s)-1. Please select others.'
-        historyWin->update,'SuperDARN does not support *(all) as a site or parameter(s)-1. Please select others.'      
+     if (instrument eq 'SuperDARN_radar#') and (site_or_param[0] eq '*(all)') then begin
+        statusBar->update,'SuperDARN radar does not support *(all) as a site or parameter(s)-1. Please select others.'
+        historyWin->update,'SuperDARN radar does not support *(all) as a site or parameter(s)-1. Please select others.'      
      endif else begin
         statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
         historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
