@@ -17,6 +17,7 @@
 ;  site = Ionosonde observation site.  
 ;         For example, iug_load_ionosonde_rish, site = 'sgk'.
 ;         The default is 'all', i.e., load all available observation points.
+;  /fixed_freq, if set, then tplot variables for every fixed frequency (2-18 MHZ) are created.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
@@ -31,7 +32,8 @@
 ;  A. Shinbori, 12/11/2012.
 ;  A. Shinbori, 18/12/2012.
 ;  A. Shinbori, 09/01/2013.
-;  
+;  A. Shinbori, 18/02/2013.
+;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -41,6 +43,7 @@
 
 pro iug_load_ionosonde_rish, datatype = datatype, $
   site=site, $
+  fixed_freq = fixed_freq, $
   downloadonly=downloadonly, $
   trange=trange, verbose=verbose
 
@@ -177,13 +180,12 @@ if (downloadonly eq 0) then begin
       ;Clear the buffer:
        height2 = 0
        intensity2 = 0
-    endfor 
-
-   ;==============================
-   ;Store data in TPLOT variables:
-   ;==============================
-   ;Acknowlegment string (use for creating tplot vars)
-    acknowledgstring = 'If you acquire the ionogram data, ' $
+    endfor
+  ;==============================
+  ;Store data in TPLOT variables:
+  ;==============================
+  ;Acknowlegment string (use for creating tplot vars)
+   acknowledgstring = 'If you acquire the ionogram data, ' $
                      + 'we ask that you acknowledge us in your use of the data. This may be done by' $
                      + 'including text such as the ionogram data provided by Research Institute' $
                      + 'for Sustainable Humanosphere of Kyoto University. We would also' $
@@ -192,12 +194,31 @@ if (downloadonly eq 0) then begin
                      + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded ' $
                      + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'    
                          
-    dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
-    if size(intensity_all_f2,/type) eq 4 then begin 
-       store_data,'iug_ionosonde_sgk_ionogram',data={x:site_time,y:intensity_all_f2,v1:freq,v2:height3},dlimit=dlimit
-       ;options,'iug_ionosonde_sgk_ionogram',ytitle = 'Ionosonde-sgk!CHeight [km]',ztitle = 'Echo power!C('+strmid(STRTRIM(string(freq[i]),2),0,5)+' MHz)!C[dBV]'
-       ;options,'iug_ionosonde_sgk_ionogram','spec',1
-    endif
+   dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
+   if size(intensity_all_f2,/type) eq 4 then begin
+     ;==========================================
+     ;Create tplot variables for ionogram data: 
+     ;========================================== 
+      if not keyword_set(fixed_freq) then begin
+         store_data,'iug_ionosonde_sgk_ionogram',data={x:site_time,y:intensity_all_f2,v1:freq,v2:height3},dlimit=dlimit
+      endif
+
+     ;===========================================================
+     ;Create tplot variables for every fixed frequency (2-18 MHz) 
+     ;=========================================================== 
+      if keyword_set(fixed_freq) then begin
+         for i=0, n_elements(freq)-1 do begin
+            power = fltarr(n_elements(site_time),n_elements(height3))
+            power[*,*] = intensity_all_f2[*,i,*]
+            if (i mod 10) eq 0 then begin
+               store_data,'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz',data={x:site_time,y:power,v:height3},dlimit=dlimit
+              ;Add options
+               options,'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz',ytitle = 'Height [km]', ztitle = 'Echo power at '+strtrim(string(i/10+2),2)+' [MHz]'
+               options, 'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz', spec=1
+            endif
+         endfor    
+      endif
+   endif
 endif   
 
 ;Clear time and data buffer:
