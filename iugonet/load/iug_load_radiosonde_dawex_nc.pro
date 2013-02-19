@@ -65,7 +65,7 @@ if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 if site_code eq '' then begin
    print, 'This station code is not valid. Please input the allowed keywords, all, drw, gpn, and ktr.'
-   stop
+   return
 endif
 print, site_code
 
