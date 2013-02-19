@@ -52,7 +52,7 @@ pro uspec_coh,vname1,vname2,$
 
 ;Get data from two tplot variables:
 if strlen(tnames(vname1)) * strlen(tnames(vname2)) eq 0 then begin
-  print, 'Cannot find the tploe vars in argument!'
+  print, 'Cannot find the tplot vars in argument!'
   return
 endif
 get_data,vname1,data=d1
