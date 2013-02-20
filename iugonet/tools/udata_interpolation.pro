@@ -1,14 +1,53 @@
-;等間隔補間
+;+
+;NAME:
+;udata_interpolation
+;
+;PURPOSE:
+;  Perform the data interpolation for two time-serise data. 
+;
+;CALLING SEQUENCE:
+; udata_interpolation, vname1,vname2
+; 
+;INPUT:
+; vname1 = first tplot variable name
+; vname2 = second tplot variable name
+; 
+;KEYWORDS:
+;  st_time0  = start time of data interpolation
+;  ed_time0 = end time of data interpolation
+;  reverse = exchange of two data sets
+;    If set, the data interplation is performed on the basis of time range of data2.
+;  set_interval = set up time interval to interplate the two data sets.
+;  If not set, the time interval is determined on the basis of the minimum interval
+;  in the two data sets. 
+;  
+;EXAMPLE:
+;   udata_interpolation, tplot1, tplot2
+;
+;CODE:
+;R. Hamaguchi, 15/01/2013.
+;
+;MODIFICATIONS:
+;A. Shinbori, 20/02/2013.
+;
+;ACKNOWLEDGEMENT:
+; $LastChangedBy:  $
+; $LastChangedDate:  $
+; $LastChangedRevision:  $
+; $URL $
+;-
 
 pro udata_interpolation,vname1,vname2,$
-    r_data=r_data,$
     st_time0=st_time0,$
     ed_time0=ed_time0,$
-    rev=rev,$
-    set_interval=set_interval,$
-    itp_interval
+    reverse=reverse,$
+    set_interval=set_interval
 
 ;Get data from two tplot variables:
+if strlen(tnames(vname1)) * strlen(tnames(vname2)) eq 0 then begin
+  print, 'Cannot find the tplot vars in argument!'
+  return
+endif
 get_data,vname1,data=d1
 get_data,vname2,data=d2
 
@@ -17,7 +56,7 @@ data_01=d1.y
 time_02=d2.x
 data_02=d2.y
 
-;データ入れ替え
+;Exchange of two data sets:
 if keyword_set(rev) then begin
     if(rev eq 1) then begin
         tmpD=data_01
@@ -70,8 +109,10 @@ print,'End Time : ',time_string(ed_time)
 ;st_timeとed_timeの幅内で初めて データが出た点をdata_01の開始点とする
 ;最終点もデータのある点にする
 
-
-;補間間隔の決定　指定がなければ最小時間間隔
+;================================================
+;Determination of interval of data interpolation.
+;If not set, it is the minimum time inverval.
+;================================================
 for i=1L,n_elements(data_01)-1 do begin
     append_array,interval,time_01(i)-time_01(i-1)
 endfor
