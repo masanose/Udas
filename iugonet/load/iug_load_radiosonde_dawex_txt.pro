@@ -30,6 +30,7 @@
 ;  A. Shinbori, 19/12/2012.
 ;  
 ;MODIFICATIONS:
+;  A. Shinbori, 16/02/2013.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -61,9 +62,12 @@ if (not keyword_set(datatype)) then datatype='troposhere'
 site_code_all = strsplit('drw gpn ktr',' ', /extract)
 
 ;--- check site codes
-if(not keyword_set(site)) then site='all'
+if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-
+if site_code eq '' then begin
+   print, 'This station code is not valid. Please input the allowed keywords, all, drw, gpn, and ktr.'
+   return
+endif
 print, site_code
 
 ;*************
@@ -178,9 +182,9 @@ for ii=0,n_elements(site_code)-1 do begin
         ;Read time information:
          readf,lun,s
          temp_name = strsplit(s,' ', /extract)
-         if (temp_name[3] eq 'OCT') || (temp_name[3] eq 'October') then month =10      
-         if (temp_name[3] eq 'NOV') || (temp_name[3] eq 'November') then month =11
-         if (temp_name[3] eq 'DEC') || (temp_name[3] eq 'December') then month =12
+         if (temp_name[3] eq 'Oct') then month = 10      
+         if (temp_name[3] eq 'Nov') then month =11
+         if (temp_name[3] eq 'Dec') then month =12
          if fix(temp_name[4]) gt 2000 then year = fix(temp_name[4])
          if fix(temp_name[4]) lt 2000 then year = 2000+fix(temp_name[4])
          day = fix(temp_name[2])
