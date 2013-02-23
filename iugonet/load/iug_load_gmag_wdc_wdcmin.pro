@@ -298,7 +298,7 @@ pro iug_load_gmag_wdc_wdcmin, $
         
     
     print, '**************************************************'
-    print, dlimit.data_att.acknowledgment
+    print_str_maxlet, dlimit.data_att.acknowledgment
     print, '**************************************************'
     
     databuf = 0
