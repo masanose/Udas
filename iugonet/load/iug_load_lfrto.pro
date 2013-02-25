@@ -99,6 +99,7 @@ source.verbose = verbose
 filedate  = file_dailynames(file_format='YYYYMMDD', trange=trange)
 if keyword_set(no_download) then source.no_download = 1
 
+show_text=0
 for i=0,n_elements(site_code)-1 do begin
   ;--- Set the file path
   source.local_data_dir = root_data_dir() + 'iugonet/TohokuU/radio_obs/'+site_code[i]+'/lf/'
@@ -115,19 +116,26 @@ for i=0,n_elements(site_code)-1 do begin
       relfnames = 'lfrto'+'_'+tres[k]+'_'+site_code[i]+'_'+trans_code[j]+'_'+filedate+'_v01.cdf'
       datfiles  = file_retrieve(relfnames, _extra=source)
 
+      ;--- Skip load where no data
+      filenum=n_elements(datfiles)
+      file_exist=intarr(filenum)
+      for it=0,filenum-1 do begin
+        file_exist[it] = file_test(datfiles[it])
+      endfor
+
       ;--- Load data into tplot variables
-      if(file_test(datfiles) eq 1 and downloadonly eq 0) then begin
+      if(downloadonly eq 0 and (where(file_exist eq 1))[0] ne -1) then begin
+        datfiles  = datfiles[where(file_exist eq 1)]
+        show_text = 1
+
         for l=0,n_elements(param)-1 do begin
           cdf2tplot, file=source.local_data_dir+relfnames,varformat='lf_'+param[l]+'_'+tres[k]
- 
-         ;--- shorten tplot variable name
+          ;--- shorten tplot variable name
           if (param[l] eq 'power' and tres[k] eq '30sec') then ptr = 'pow30s'
           if (param[l] eq 'phase' and tres[k] eq '30sec') then ptr = 'pha30s'
-
           ;--- Rename
           copy_data,  'lf_'+param[l]+'_'+tres[k], 'lfrto_'+site_code[i]+'_'+trans_code[j]+'_'+ptr
           store_data,  'lf_'+param[l]+'_'+tres[k], /delete
-
         endfor
       endif
 
@@ -139,7 +147,7 @@ endfor
 
 ;--- Acknowledgement
 datfile = source.local_data_dir+relfnames[0]
-if (file_test(datfile) eq 1) then begin
+if (show_text eq 1) then begin
   gatt = cdf_var_atts(datfile)
   dprint, '**********************************************************************'
   dprint, gatt.project
@@ -153,7 +161,10 @@ if (file_test(datfile) eq 1) then begin
   dprint, gatt.LINK_TEXT, ' ', gatt.HTTP_LINK
   dprint, '**********************************************************************'
   dprint, ''
-endif
+endif else begin
+  dprint, 'No data is loaded'
+  dprint, ''
+endelse
 
 return
 end

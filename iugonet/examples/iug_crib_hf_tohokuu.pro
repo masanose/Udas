@@ -17,7 +17,7 @@ thm_init
 ;Specify the time span.
 timespan, '2004-01-09'
 
-;Load LFRTO data
+;Load hf spectrum data
 iug_load_hf_tohokuu
 
 ; View the loaded data names
