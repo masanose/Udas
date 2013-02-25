@@ -7,7 +7,7 @@
 ;        .run iug_crib_aws_rish
 ;
 ;Written by: A. Shinbori,  Nov 12, 2012
-;Last Updated: A. Shinbori,  Nov 12, 2012 
+;Last Updated: A. Shinbori,  Feb 25, 2013 
 ;-
 
 ;Initializes system variables for themis:
@@ -49,7 +49,7 @@ stop
 
 ; Set up the plot time range of zonal and meridional winds in the troposphere:
 ;=============================================================================
-tlimit, '1994-05-01 00:00:00', '1994-05-02 00:00:00'
+tlimit, '1994-05-05 00:00:00', '1994-05-06 00:00:00'
 tplot
 
 end
