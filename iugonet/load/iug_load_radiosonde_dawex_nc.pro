@@ -64,10 +64,7 @@ site_code_all = strsplit('drw gpn ktr',' ', /extract)
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-<<<<<<< HEAD
 
-=======
->>>>>>> 83a2992a56045ab9fb9846f6c01c2030e060b9e1
 if n_elements(site_code) eq 1 then begin
    if site_code eq '' then begin
       print, 'This station code is not valid. Please input the allowed keywords, all, drw, gpn, and ktr.'
