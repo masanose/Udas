@@ -37,7 +37,7 @@
 ;  A. Shinbori, 31/01/2012.
 ;  A. Shinbori, 10/02/2012.
 ;  A. Shinbori, 17/12/2012.
-;  A. Shinbori, 19/02/2013.
+;  A. Shinbori, 25/02/2013.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -72,9 +72,12 @@ site_code_all = strsplit('ktb sgk srp',' ', /extract)
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-if site_code eq '' then begin
-   print, 'This station code is not valid. Please input the allowed keywords, all, ktb, sgk, and srp.'
-   return
+
+if n_elements(site_code) eq 1 then begin
+   if site_code eq '' then begin
+      print, 'This station code is not valid. Please input the allowed keywords, all, ktb, sgk, and srp.'
+      return
+   endif
 endif
 print, site_code
  
