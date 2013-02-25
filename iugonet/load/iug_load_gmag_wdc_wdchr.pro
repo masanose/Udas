@@ -306,7 +306,7 @@ pro iug_load_gmag_wdc_wdchr, $
 
 
     print, '**************************************************'
-    print, dlimit.data_att.acknowledgment
+    print_str_maxlet, dlimit.data_att.acknowledgment
     print, '**************************************************'
     
     
