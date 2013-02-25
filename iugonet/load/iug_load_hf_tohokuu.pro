@@ -27,7 +27,7 @@
 ;   $URL:
 ;-
 
-pro iug_load_hf_tohokuU, site=site, parameter=parameter,$
+pro iug_load_hf_tohokuu, site=site, parameter=parameter,$
          downloadonly=downloadonly, no_download=no_download,$
          trange=trange
 
@@ -47,27 +47,39 @@ print, param
 
 ;--- data file structure
 source = file_retrieve(/struct)
-filedate  = file_dailynames(file_format='YYYYMMDD',trange=trange)
 
 ;--- Download options
 if keyword_set(downloadonly) then source.downloadonly=1
 if keyword_set(no_download)  then source.no_download=1
 if(not keyword_set(downloadonly)) then downloadonly=0
 
+show_text=0
 for i=0,n_elements(site_code)-1 do begin
+  ;--- Set filedate(YYYYMMDD) and filehour(YYYYMMDDhh)
+  filehour = file_dailynames(file_format='YYYYMMDDhh',trange=trange,/hour_res)
+  filedate = strmid(filehour,0,8)
+
   ;--- Set the file path
-  source.local_data_dir = root_data_dir() + 'iugonet/TohokuU/radio_obs/iit/hfspec/'
-  source.remote_data_dir = 'http://ariel.gp.tohoku.ac.jp/~jupiter/it_hf/cdf/'
+  source.local_data_dir = root_data_dir() + 'iugonet/tohokuu/radio_obs/iit/hfspec/'
+  source.remote_data_dir = 'http://ariel.gp.tohoku.ac.jp/~jupiter/it_hf/cdf2/'
 
   ;--- Download file
-  relfnames = 'it_h1_hf_'+filedate+'_v01.cdf'
+  relfnames = filedate+'/'+'it_h1_hf_'+filehour+'_v02.cdf'
   datfiles  = file_retrieve(relfnames, _extra=source)
 
-  ;--- Load data into tplot variables
-  if(file_test(datfiles) eq 1 and downloadonly eq 0) then begin
-    for j=0,n_elements(param)-1 do begin
+  ;--- Skip load where no data
+  filenum=n_elements(datfiles)
+  file_exist=intarr(filenum)
+  for it=0,filenum-1 do begin
+    file_exist[it] = file_test(datfiles[it])
+  endfor
 
-      print,param
+  ;--- Load data into tplot variables
+  if(downloadonly eq 0 and (where(file_exist eq 1))[0] ne -1) then begin
+    datfiles  = datfiles[where(file_exist eq 1)]
+    show_text = 1
+
+    for j=0,n_elements(param)-1 do begin
       cdf2tplot, file=datfiles,varformat=strupcase(param[j])
       ;--- Rename
       copy_data,  strupcase(param[j]),'iug_iit_hf_'+param[j]
@@ -76,14 +88,12 @@ for i=0,n_elements(site_code)-1 do begin
   endif
 endfor
 
-
 ;--- Acknowledgement
 datfile = source.local_data_dir+relfnames[0]
-if (file_test(datfile) eq 1) then begin
-  gatt = cdf_var_atts(datfile)
+if (show_text eq 1) then begin
   dprint, ''
   dprint, '**********************************************************************'
-  dprint, gatt.project
+  dprint, "Jupiter's/solar wide band spectral data in HF-band"
   dprint, ''
   dprint, 'PI and Host PI(s): ', 'Atsushi Kumamoto'
   dprint, 'Affiliations: ', 'PPARC, Tohoku University'
@@ -92,7 +102,10 @@ if (file_test(datfile) eq 1) then begin
   dprint, 'When the data is used in or contributes to a presentation or publication, you should let us know and make acknowledgement to the Planetary Plasma and Atmospheric Research Center, Tohoku University.'
   dprint, '**********************************************************************'
   dprint, ''
-endif
+endif else begin
+  dprint, 'No data is loaded'
+  dprint, ''
+endelse
 
 return
 end
