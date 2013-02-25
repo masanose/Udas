@@ -41,7 +41,7 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', $
                 'Rules of the Road for NIPR Fluxgate Magnetometer Data: ',str.cdf.gatt.rules_of_use, '', $
                 str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
-  endif else if instrument eq 'SuperDARN#' then begin
+  endif else if instrument eq 'SuperDARN_radar#' then begin
      theMessage = [ $
                 str.cdf.gatt.logical_source_description, '', $
                 'PI:',str.cdf.gatt.pi_name,str.cdf.gatt.pi_affiliation, $
