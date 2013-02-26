@@ -37,7 +37,8 @@
 ; A. Shinbori, 11/05/2011.
 ; A. Shinbori, 28/05/2012.
 ; A. Shinbori, 24/07/2012.
-; 
+; A. Shinbori, 19/01/2013.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -90,7 +91,7 @@ print, parameters
 ;Site code check:
 ;****************
 ;--- all sites (default)
-site_code_all = strsplit('ktb srp',' ', /extract)
+site_code_all = strsplit('bik ktb srp',' ', /extract)
 
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
@@ -99,6 +100,8 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 for i=0, n_elements(site_code)-1 do begin
+  if site_code[i] eq 'bik' then iug_load_meteor_bik_nc, datatype = datatype, parameter = parameter, length=length, $
+                                                        downloadonly=downloadonly, trange=trange, verbose=verbose
   if site_code[i] eq 'ktb' then iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, length=length, $
                                                         downloadonly=downloadonly, trange=trange, verbose=verbose
   if site_code[i] eq 'srp' then iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, length=length, $
