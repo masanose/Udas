@@ -31,6 +31,7 @@
 ;  
 ;MODIFICATIONS:
 ;  A. Shinbori, 16/02/2013.
+;  A. Shinbori, 26/02/2013.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -64,6 +65,7 @@ site_code_all = strsplit('drw gpn ktr',' ', /extract)
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
+
 if n_elements(site_code) eq 1 then begin
    if site_code eq '' then begin
       print, 'This station code is not valid. Please input the allowed keywords, all, drw, gpn, and ktr.'
