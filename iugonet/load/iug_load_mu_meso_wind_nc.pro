@@ -91,7 +91,7 @@ for ii=0,n_elements(levels)-1 do begin
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/nc/'
-      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/netcdf/'
+     ; source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/netcdf/'
     
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
