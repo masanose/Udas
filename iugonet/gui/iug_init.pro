@@ -34,16 +34,23 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
     { $
       init: 0 $
       ,data_policy: { $
-                  aws_rish: 0b,       $
-                  blr_rish: 0b,       $
-                  ionosonde_rish: 0b, $
-                  ltr_rish: 0b,       $
-                  wpr_rish: 0b,       $
-                  mf_rish: 0b,        $
-                  meteor_rish: 0b,    $
-                  sdfit_hok:  0b,     $    ;HOK
-                  sdfit_ksr:  0b,     $    ;KSR
-                  sdfit_syo:  0b,     $    ;SYE,SYS
+                  aws_rish_id:  0b,    $ ;BIK,MND,PON
+                  aws_rish_ktb: 0b,    $ ;KTB
+                  aws_rish_sgk: 0b,    $ ;SGK
+                  blr_rish_ktb: 0b,    $
+                  blr_rish_sgk: 0b,    $
+                  blr_rish_srp: 0b,    $
+                  ionosonde_rish: 0b,  $
+                  ltr_rish: 0b,        $
+                  wpr_rish_bik: 0b,    $
+                  wpr_rish_mnd: 0b,    $
+                  wpr_rish_pon: 0b,    $
+                  wpr_rish_sgk: 0b,    $
+                  mf_rish: 0b,         $
+                  meteor_rish: 0b,     $
+                  sdfit_hok:  0b,      $    ;HOK
+                  sdfit_ksr:  0b,      $    ;KSR
+                  sdfit_syo:  0b,      $    ;SYE,SYS
                   gmag_mm210_adl: 0b,     $
                   gmag_mm210_bik: 0b,     $
                   gmag_mm210_bsv: 0b,     $
@@ -86,6 +93,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   ear:     0b,        $
                   iprt:    0b,        $
                   eiscat:  0b,        $
+                  radiosonde_rish: 0b, $
                   mu:    0b           $
                 } $
     }
@@ -98,7 +106,6 @@ if !iugonet.init ne 0 then return
 
 
 !iugonet.init = 1
-
 
 return
 end
