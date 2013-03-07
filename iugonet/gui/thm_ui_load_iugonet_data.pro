@@ -375,7 +375,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   paramArray[13] = ptr_new(ptrarr(1))
   paramArray[14] = ptr_new(ptrarr(1))
   
-  (*paramArray[0])[0] = ptr_new(['*(all)','sgk'])
+  (*paramArray[0])[0] = ptr_new(['*(all)','bik','ktb','mnd','pon','sgk'])
   (*paramArray[1])[0] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[2])[0] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
   (*paramArray[2])[1] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
@@ -435,7 +435,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   (*paramArray[12])[0] = ptr_new(['*(all)','drw','gpn','ktr'])
   (*paramArray[12])[1] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[13])[0] = ptr_new(['*(all)','hok','sye','sys'])
-  (*paramArray[14])[0] = ptr_new(['*(all)','sgk'])
+  (*paramArray[14])[0] = ptr_new(['*(all)','bik','mnd','pon','sgk'])
    
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Site or parameter(s)-1:')
@@ -471,7 +471,7 @@ pro thm_ui_load_iugonet_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,t
   param2Array[13] = ptr_new(ptrarr(1))
   param2Array[14] = ptr_new(ptrarr(1))
     
-  (*param2Array[0])[0] = ptr_new(['*','press','temp','rh','uwnd','vwnd'])
+  (*param2Array[0])[0] = ptr_new(['*','press','precipi','rh','sr','temp','uwnd','vwnd','wnddir','wndspd'])
   (*param2Array[1])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
   (*param2Array[2])[0] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
                                    'lat','long','alt','colf','comp','q','qflag'])

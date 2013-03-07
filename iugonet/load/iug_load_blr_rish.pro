@@ -37,7 +37,7 @@
 ;  A. Shinbori, 31/01/2012.
 ;  A. Shinbori, 10/02/2012.
 ;  A. Shinbori, 17/12/2012.
-;  A. Shinbori, 25/02/2013.
+;  A. Shinbori, 27/02/2013.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -117,12 +117,12 @@ unit_all = strsplit('m/s dB',' ', /extract)
 h=0
 jj=0
 kk=0
-kkk=intarr(3)
+kkk=intarr(n_elements(site_data_dir))
 start_time=time_double('1992-4-13')
 end_time=time_double('1992-8-29')
 
 ;In the case that the parameters are except for all.'
-if n_elements(site_code) le 3 then begin
+if n_elements(site_code) le n_elements(site_data_dir) then begin
    h_max=n_elements(site_code)
    for i=0,n_elements(site_code)-1 do begin
       if site_code[i] eq 'ktb' then begin
@@ -186,8 +186,8 @@ for ii=0,h_max-1 do begin
 
       if (downloadonly eq 0) then begin
     
-      ;Read the files:
-      ;===============
+        ;Read the files:
+        ;===============
       
         ;Definition of parameters and array:
          s=''
@@ -197,9 +197,10 @@ for ii=0,h_max-1 do begin
         ;Initialize data and time buffer:
          blr_data = 0
          blr_time = 0
-
-        ;Loop on files (zonal component): 
-        ;================================
+         
+        ;==============
+        ;Loop on files: 
+        ;==============
          for h=jj,n_elements(local_paths)-1 do begin
             file= local_paths[h]
             if file_test(/regular,file) then  dprint,'Loading the observation data of the troposphere taken by the BLR-'+site_code2+' :',file $
@@ -271,13 +272,11 @@ for ii=0,h_max-1 do begin
                      if nbad gt 0 then a[wbad] = !values.f_nan
                      data2[k,j]=a
                   endfor
-                 ;
-                 ;Append data of time:
-                 ;====================
-                  append_array, blr_time, time
-                 ;
-                 ;Append data of wind velocity:
+                 
                  ;=============================
+                 ;Append data of time and data:
+                 ;=============================
+                  append_array, blr_time, time
                   append_array, blr_data, data2  
                endif
             endwhile 

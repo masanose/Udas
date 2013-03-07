@@ -78,7 +78,7 @@ case instrument of
           end
       endcase
     end
-  'SuperDARN_radar#': begin
+  'SuperDARN#': begin
       case site_or_param of
         'hok': iug_var = !iugonet.data_policy.sdfit_hok
         'ksr': iug_var = !iugonet.data_policy.sdfit_ksr
@@ -86,7 +86,16 @@ case instrument of
         'sys': iug_var = !iugonet.data_policy.sdfit_syo
       endcase
     end
-  'Automatic_Weather_Station'     : iug_var = !iugonet.data_policy.aws_rish
+  'Radiosonde'                    : iug_var = !iugonet.data_policy.radiosonde_rish
+  'Automatic_Weather_Station': begin
+     case site_or_param of
+        'bik': iug_var = !iugonet.data_policy.aws_rish_id
+        'ktb': iug_var = !iugonet.data_policy.aws_rish_ktb
+        'mnd': iug_var = !iugonet.data_policy.aws_rish_id
+        'pon': iug_var = !iugonet.data_policy.aws_rish_id
+        'sgk': iug_var = !iugonet.data_policy.aws_rish_sgk
+     endcase
+   end
   'Equatorial_Atmosphere_Radar'   : iug_var = !iugonet.data_policy.ear
   'Ionosonde'                     : iug_var = !iugonet.data_policy.ionosonde_rish
   'Medium_Frequency_radar'        : iug_var = !iugonet.data_policy.mf_rish
@@ -95,7 +104,14 @@ case instrument of
   'Boundary_Layer_Radar'          : iug_var = !iugonet.data_policy.blr_rish
   'Lower_Troposphere_Radar'       : iug_var = !iugonet.data_policy.ltr_rish
   'EISCAT_radar'                  : iug_var = !iugonet.data_policy.eiscat
-  'Wind_Profiler_Radar_(LQ-7)'    : iug_var = !iugonet.data_policy.wpr_rish
+  'Wind_Profiler_Radar_(LQ-7)'    : begin
+      case site_or_param of
+        'bik': iug_var = !iugonet.data_policy.wpr_rish_bik
+        'mnd': iug_var = !iugonet.data_policy.wpr_rish_mnd
+        'pon': iug_var = !iugonet.data_policy.wpr_rish_pon
+        'sgk': iug_var = !iugonet.data_policy.wpr_rish_sgk
+        endcase
+    end
 endcase
 
 ;----- If iug_var is 0, show data policy. -----;
@@ -169,7 +185,7 @@ endif else begin
               end
           endcase
         end
-      'SuperDARN_radar#': begin
+      'SuperDARN#': begin
           case site_or_param of
             'hok': !iugonet.data_policy.sdfit_hok = iug_var
             'ksr': !iugonet.data_policy.sdfit_ksr = iug_var
@@ -184,9 +200,25 @@ endif else begin
       'Boundary_Layer_Radar'          : !iugonet.data_policy.blr_rish = iug_var
       'Lower_Troposphere_Radar'       : !iugonet.data_policy.ltr_rish = iug_var
       'EISCAT_radar'                  : !iugonet.data_policy.eiscat = iug_var
-      'Wind_Profiler_Radar_(LQ-7)'    : !iugonet.data_policy.wpr_rish = iug_var
-      'Automatic_Weather_Station'     : !iugonet.data_policy.aws_rish = iug_var
+      'Wind_Profiler_Radar_(LQ-7)': begin
+          case site_or_param of
+             'bik': !iugonet.data_policy.wpr_rish_bik = iug_var
+             'mnd': !iugonet.data_policy.wpr_rish_mnd = iug_var
+             'pon': !iugonet.data_policy.wpr_rish_pon = iug_var
+             'sgk': !iugonet.data_policy.wpr_rish_sgk = iug_var
+          endcase
+        end
+      'Automatic_Weather_Station': begin
+          case site_or_param of
+           'bik': !iugonet.data_policy.aws_rish_id = iug_var
+           'ktb': !iugonet.data_policy.aws_rish_ktb = iug_var
+           'mnd': !iugonet.data_policy.aws_rish_id = iug_var
+           'pon': !iugonet.data_policy.aws_rish_id = iug_var
+           'sgk': !iugonet.data_policy.aws_rish_sgk = iug_var
+          endcase
+        end   
       'Ionosonde'                     : !iugonet.data_policy.ionosonde_rish = iug_var
+      'Radiosonde'                    : !iugonet.data_policy.radiosonde_rish = iug_var
     endcase
   endif
 endelse

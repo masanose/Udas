@@ -48,7 +48,7 @@
 ; $URL $
 ;-
   
-pro iug_load_mu, datatype = datatype, level = level, parameter = parameter, downloadonly=downloadonly, $
+pro iug_load_mu, datatype = datatype, level = level, length=length, parameter = parameter, downloadonly=downloadonly, $
                  trange=trange, verbose=verbose
 
 ;******************
