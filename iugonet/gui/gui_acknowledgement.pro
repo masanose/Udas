@@ -78,7 +78,7 @@ case instrument of
           end
       endcase
     end
-  'SuperDARN#': begin
+  'SuperDARN_radar#': begin
       case site_or_param of
         'hok': iug_var = !iugonet.data_policy.sdfit_hok
         'ksr': iug_var = !iugonet.data_policy.sdfit_ksr
@@ -185,7 +185,7 @@ endif else begin
               end
           endcase
         end
-      'SuperDARN#': begin
+      'SuperDARN_radar#': begin
           case site_or_param of
             'hok': !iugonet.data_policy.sdfit_hok = iug_var
             'ksr': !iugonet.data_policy.sdfit_ksr = iug_var
