@@ -102,6 +102,7 @@ case instrument of
   'Meteor_Wind_radar'             : iug_var = !iugonet.data_policy.meteor_rish
   'Middle_Upper_atmosphere_radar' : iug_var = !iugonet.data_policy.mu
   'Boundary_Layer_Radar'          : iug_var = !iugonet.data_policy.blr_rish
+  'Low_Frequency_radio_transmitter' : iug_var = !iugonet.data_policy.lfrto
   'Lower_Troposphere_Radar'       : iug_var = !iugonet.data_policy.ltr_rish
   'EISCAT_radar'                  : iug_var = !iugonet.data_policy.eiscat
   'Wind_Profiler_Radar_(LQ-7)'    : begin
@@ -198,6 +199,7 @@ endif else begin
       'Meteor_Wind_radar'             : !iugonet.data_policy.meteor_rish = iug_var
       'Middle_Upper_atmosphere_radar' : !iugonet.data_policy.mu = iug_var
       'Boundary_Layer_Radar'          : !iugonet.data_policy.blr_rish = iug_var
+      'Low_Frequency_radio_transmitter' : !iugonet.data_policy.lfrto = iug_var
       'Lower_Troposphere_Radar'       : !iugonet.data_policy.ltr_rish = iug_var
       'EISCAT_radar'                  : !iugonet.data_policy.eiscat = iug_var
       'Wind_Profiler_Radar_(LQ-7)': begin

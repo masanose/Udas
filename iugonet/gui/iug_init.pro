@@ -92,6 +92,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   gmag_magdas: 0b,    $
                   ear:     0b,        $
                   iprt:    0b,        $
+                  lfrto:   0b,        $
                   eiscat:  0b,        $
                   radiosonde_rish: 0b, $
                   mu:    0b           $

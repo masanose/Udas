@@ -54,6 +54,13 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
                 'Rules of the Road for 210 MM Data Use:',str.cdf.gatt.text, $
                 '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
+  endif else if instrument eq 'Low_Frequency_radio_transmitter' then begin
+     theMessage = [ $
+                str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
+                'PI and HOST PI(s):', str.cdf.gatt.PI_name, '', $
+                'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
+                'Rules of the Road for LFRTO Data Use:',str.cdf.gatt.text, $
+                '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
   endif else begin
      theMessage=str.data_att.acknowledgment
   endelse

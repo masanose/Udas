@@ -201,6 +201,17 @@ pro thm_ui_load_iugonet_data_load_pro,$
           par_names=tnames('iug_ltr_*')
       end
 
+      ;----- Lower Troposphere Radar -----;
+      'Low_Frequency_radio_transmitter' : begin       
+          iug_load_lfrto, site = datatype, trans = site_or_param, parameter = parameters, $
+              trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('lfrto_'+datatype+'_*_*')
+          endif else begin
+              par_names=tnames('lfrto_'+datatype+'_*_'+strmid(parameters,0,3)+'*')
+          endelse
+      end
+
       ;----- Medium Frequency radar -----;
       'Medium_Frequency_radar' : begin
           iug_load_mf_rish, datatype = datatype, site =site_or_param, trange = timeRange 
