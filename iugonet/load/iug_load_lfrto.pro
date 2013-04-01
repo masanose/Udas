@@ -97,6 +97,7 @@ if (not keyword_set(no_download)) then no_download=0
 source = file_retrieve(/struct)
 source.verbose = verbose
 filedate  = file_dailynames(file_format='YYYYMMDD', trange=trange)
+filemonth = strmid(filedate,0,6)
 if keyword_set(no_download) then source.no_download = 1
 
 show_text=0
@@ -113,7 +114,7 @@ for i=0,n_elements(site_code)-1 do begin
     for k=0,n_elements(tres)-1 do begin
 
       ;--- Download file
-      relfnames = 'lfrto'+'_'+tres[k]+'_'+site_code[i]+'_'+trans_code[j]+'_'+filedate+'_v01.cdf'
+      relfnames = filemonth+'/'+'lfrto'+'_'+tres[k]+'_'+site_code[i]+'_'+trans_code[j]+'_'+filedate+'_v01.cdf'
       datfiles  = file_retrieve(relfnames, _extra=source)
 
       ;--- Skip load where no data
