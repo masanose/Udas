@@ -78,6 +78,28 @@ case instrument of
           end
       endcase
     end
+  'geomagnetic_field_induction': begin
+      case datatype of
+        'NIPR_mag#': begin
+            case site_or_param of
+                'syo': iug_var = !iugonet.data_policy.imag_nipr_syo
+                'aed': iug_var = !iugonet.data_policy.imag_nipr_ice
+                'hus': iug_var = !iugonet.data_policy.imag_nipr_ice
+                'isa': iug_var = !iugonet.data_policy.imag_nipr_ice
+                'tjo': iug_var = !iugonet.data_policy.imag_nipr_ice
+            endcase
+          end
+        'STEL#': begin
+            case site_or_param of 
+                'ath': iug_var = !iugonet.data_policy.imag_stel_ath
+                'mgd': iug_var = !iugonet.data_policy.imag_stel_mgd
+                'ptk': iug_var = !iugonet.data_policy.imag_stel_ptk
+                'msr': iug_var = !iugonet.data_policy.imag_stel_msr
+                'sta': iug_var = !iugonet.data_policy.imag_stel_sta
+            endcase
+          end
+      endcase
+    end
   'SuperDARN_radar#': begin
       case site_or_param of
         'hok': iug_var = !iugonet.data_policy.sdfit_hok
@@ -182,6 +204,28 @@ endif else begin
                     'hus': !iugonet.data_policy.gmag_nipr_ice = iug_var
                     'isa': !iugonet.data_policy.gmag_nipr_ice = iug_var
                     'tjo': !iugonet.data_policy.gmag_nipr_ice = iug_var
+                endcase
+              end
+          endcase
+        end
+      'geomagnetic_field_induction': begin
+          case datatype of
+            'NIPR_mag#': begin
+                case site_or_param of
+                    'syo': !iugonet.data_policy.imag_nipr_syo = iug_var
+                    'aed': !iugonet.data_policy.imag_nipr_ice = iug_var
+                    'hus': !iugonet.data_policy.imag_nipr_ice = iug_var
+                    'isa': !iugonet.data_policy.imag_nipr_ice = iug_var
+                    'tjo': !iugonet.data_policy.imag_nipr_ice = iug_var
+                endcase
+              end
+            'STEL#': begin
+                case site_or_param of 
+                    'ath': !iugonet.data_policy.imag_stel_ath = iug_var
+                    'mgd': !iugonet.data_policy.imag_stel_mgd = iug_var
+                    'ptk': !iugonet.data_policy.imag_stel_ptk = iug_var
+                    'msr': !iugonet.data_policy.imag_stel_msr = iug_var
+                    'sta': !iugonet.data_policy.imag_stel_sta = iug_var
                 endcase
               end
           endcase

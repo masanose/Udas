@@ -175,6 +175,20 @@ pro thm_ui_load_iugonet_data_load_pro,$
           endcase
       end
 
+      ;----- geomagnetic field induction ----;
+      'geomagnetic_field_induction' : begin
+          case datatype of
+              'NIPR_mag#' : begin
+                  iug_load_gmag_nipr_induction, trange=timeRange, site = site_or_param
+                  par_names=tnames('nipr_imag_*')
+              end
+              'STEL#' : begin
+                  erg_load_gmag_stel_induction, trange = timeRange, site = site_or_param
+                  par_names=tnames('stel_induction_*')
+              end
+          endcase
+      end
+
       ;----- IPRT ----;
       'Iitate_Planetary_Radio_Telescope' : begin       
           iug_load_iprt, site=site_or_param, datatype=datatype, trange = timeRange
@@ -300,9 +314,13 @@ pro thm_ui_load_iugonet_data_load_pro,$
       
           ;----- In case of more than two observatoies -----;
           site_name=strsplit(new_vars[i],'_',/extract)
+print, site_name
           if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN_radar#') or $
               (instrument eq 'EISCAT_radar') then begin
               site_name2 = site_name[1]
+          endif else if (instrument eq 'geomagnetic_field_induction') and $
+              (datatype eq 'STEL#') then begin
+              site_name2 = site_name[4]
           endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
               if n_elements(site_name) eq 5 then begin 
                  if site_name[4] eq 'org' then site_name2 = 'meso(org)'
