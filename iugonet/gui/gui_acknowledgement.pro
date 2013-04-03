@@ -90,13 +90,7 @@ case instrument of
             endcase
           end
         'STEL#': begin
-            case site_or_param of 
-                'ath': iug_var = !iugonet.data_policy.imag_stel_ath
-                'mgd': iug_var = !iugonet.data_policy.imag_stel_mgd
-                'ptk': iug_var = !iugonet.data_policy.imag_stel_ptk
-                'msr': iug_var = !iugonet.data_policy.imag_stel_msr
-                'sta': iug_var = !iugonet.data_policy.imag_stel_sta
-            endcase
+            iug_var = !iugonet.data_policy.imag_stel
           end
       endcase
     end
@@ -220,13 +214,7 @@ endif else begin
                 endcase
               end
             'STEL#': begin
-                case site_or_param of 
-                    'ath': !iugonet.data_policy.imag_stel_ath = iug_var
-                    'mgd': !iugonet.data_policy.imag_stel_mgd = iug_var
-                    'ptk': !iugonet.data_policy.imag_stel_ptk = iug_var
-                    'msr': !iugonet.data_policy.imag_stel_msr = iug_var
-                    'sta': !iugonet.data_policy.imag_stel_sta = iug_var
-                endcase
+                !iugonet.data_policy.imag_stel = iug_var
               end
           endcase
         end

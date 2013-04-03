@@ -38,6 +38,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
   compile_opt hidden,idl2
 
   loaded = 0
+  notryload = 0
 
   new_vars = ''
   Answer = ''
@@ -177,16 +178,22 @@ pro thm_ui_load_iugonet_data_load_pro,$
 
       ;----- geomagnetic field induction ----;
       'geomagnetic_field_induction' : begin
-          case datatype of
-              'NIPR_mag#' : begin
-                  iug_load_gmag_nipr_induction, trange=timeRange, site = site_or_param
-                  par_names=tnames('nipr_imag_*')
-              end
-              'STEL#' : begin
-                  erg_load_gmag_stel_induction, trange = timeRange, site = site_or_param
-                  par_names=tnames('stel_induction_*')
-              end
-          endcase
+          trd=time_double(timeRange)
+          tssec=trd[1]-trd[0]
+          if tssec gt 86400 then begin
+              notryload=1
+          endif else begin
+              case datatype of
+                  'NIPR_mag#' : begin
+                      iug_load_gmag_nipr_induction, trange=timeRange, site = site_or_param
+                      par_names=tnames('nipr_imag_*')
+                  end
+                  'STEL#' : begin
+                      erg_load_gmag_stel_induction, trange = timeRange, site = site_or_param
+                      par_names=tnames('stel_induction_*')
+                  end
+              endcase
+          endelse
       end
 
       ;----- IPRT ----;
@@ -275,7 +282,9 @@ pro thm_ui_load_iugonet_data_load_pro,$
       
       ;----- SuperDARN radar ----;
       'SuperDARN_radar#' : begin
-          if site_or_param[0] ne '*(all)' then begin
+          if site_or_param[0] eq '*(all)' then begin
+              notryload=1
+          endif else begin
               erg_load_sdfit, trange=timeRange, sites=site_or_param
 
               ;Delete the tplot variables not allowed on the GUI:
@@ -290,7 +299,7 @@ pro thm_ui_load_iugonet_data_load_pro,$
               endif else begin
                   par_names=tnames('sd_*_' + parameters +'_?')
               endelse
-          endif
+          endelse
       end
   
       ;----- Wind Profiler Radar (LQ-7) -----;
@@ -314,7 +323,6 @@ pro thm_ui_load_iugonet_data_load_pro,$
       
           ;----- In case of more than two observatoies -----;
           site_name=strsplit(new_vars[i],'_',/extract)
-print, site_name
           if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN_radar#') or $
               (instrument eq 'EISCAT_radar') then begin
               site_name2 = site_name[1]
@@ -364,14 +372,15 @@ print, site_name
   endif else if (loaded eq 1) and (Answer eq 'Cancel') then begin     
      statusBar->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
      historyWin->update,'You must accept the rules of the load for IUGONET data before you load and plot the data.'
+  endif else if (notryload eq 1) and (instrument eq 'SuperDARN_radar#') then begin
+     statusBar->update,'SuperDARN radar does not support *(all) as a site or parameter(s)-1. Please select others.'
+     historyWin->update,'SuperDARN radar does not support *(all) as a site or parameter(s)-1. Please select others.'      
+  endif else if (notryload eq 1) and (instrument eq 'geomagnetic_field_induction') then begin
+     statusBar->update,'Time range for induction magnetometer must be less than 24 hours.'
+     historyWin->update,'Time range for induction magnetometer must be less than 24 hours.'      
   endif else begin
-     if (instrument eq 'SuperDARN_radar#') and (site_or_param[0] eq '*(all)') then begin
-        statusBar->update,'SuperDARN radar does not support *(all) as a site or parameter(s)-1. Please select others.'
-        historyWin->update,'SuperDARN radar does not support *(all) as a site or parameter(s)-1. Please select others.'      
-     endif else begin
-        statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
-        historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
-     endelse
+     statusBar->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.'
+     historyWin->update,'No IUGONET Data Loaded.  Data may not be available during this time interval.' 
   endelse
 
 end

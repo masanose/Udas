@@ -84,11 +84,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   gmag_mm210_yap: 0b,     $
                   gmag_mm210_ymk: 0b,     $
                   gmag_mm210_zyk: 0b,     $
-                  imag_stel_ath:  0b,     $
-                  imag_stel_mgd:  0b,     $
-                  imag_stel_ptk:  0b,     $
-                  imag_stel_msr:  0b,     $
-                  imag_stel_sta:  0b,     $
+                  imag_stel:      0b,     $
                   gmag_nipr_syo:  0b, $    ;Syowa
                   gmag_nipr_ice:  0b, $    ;Iceland
                   imag_nipr_syo:  0b, $
