@@ -1,6 +1,6 @@
 ;+
 ;NAME:
-;  thm_ui_load_iugonet_data_load_pro
+;  iug_ui_load_data_load_pro
 ;
 ;PURPOSE:
 ;  Modularized gui iugonet data loader
@@ -24,7 +24,7 @@
 ;A. Shinbori, 18/02/2013
 ;-
 ;--------------------------------------------------------------------------------
-pro thm_ui_load_iugonet_data_load_pro,$
+pro iug_ui_load_data_load_pro,$
                          instrument,$
                          datatype,$
                          site_or_param,$
@@ -196,6 +196,16 @@ pro thm_ui_load_iugonet_data_load_pro,$
           endelse
       end
 
+      ;----- HF_Solar_Jupiter_radio_spectrometer ----;
+      'HF_Solar_Jupiter_radio_spectrometer' : begin
+          iug_load_hf_tohokuu, site=site_or_param, parameter=parameters, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('iug_*_hf_*')
+          endif else begin
+              par_names=tnames('iug_*_hf_'+strlowcase(parameters))
+          endelse
+      end
+
       ;----- IPRT ----;
       'Iitate_Planetary_Radio_Telescope' : begin       
           iug_load_iprt, site=site_or_param, datatype=datatype, trange = timeRange
@@ -203,6 +213,17 @@ pro thm_ui_load_iugonet_data_load_pro,$
               par_names=tnames('iprt_*')
           endif else begin
               par_names=parameters
+          endelse
+      end
+
+      ;----- Imaging_Riometer ----;
+      'Imaging_Riometer' : begin
+          freq=strmid(datatype,0,2)
+          iug_load_irio_nipr, site=site_or_param, datatype=freq, /keogram, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('nipr_irio*_*_cna_*')
+          endif else begin
+              par_names=tnames('nipr_irio*_*_cna_'+parameters)
           endelse
       end
 
@@ -264,12 +285,12 @@ pro thm_ui_load_iugonet_data_load_pro,$
           endelse
           case datatype of
               'troposphere': par_names=tnames('iug_mu_trop_'+vns)
-              'mesosphere': par_names=tnames('iug_mu_meso_'+vns+'_'+lvl)
-              'ionosphere': par_names=tnames('iug_mu_iono_'+vns+'*')
+              'mesosphere': par_names=tnames('iug_mu_meso_'+vns+'_*')
+              'ionosphere': par_names=tnames('iug_mu_iono_'+vns)
               'meteor': par_names=tnames('iug_mu_meteor_*')
           endcase
       end
-  
+
       ;----- Radiosonde -----;
       'Radiosonde' : begin       
           iug_load_radiosonde_rish, datatype =datatype, site =site_or_param, trange = timeRange
@@ -316,50 +337,53 @@ pro thm_ui_load_iugonet_data_load_pro,$
   if new_vars[0] ne '' then begin
       ;----- only add the requested new parameters -----;
       new_vars = ssl_set_intersection([par_names],[new_vars])
-      loaded = 1
+
+      if size(new_vars[0], /type) eq 7 then begin
+          loaded = 1
     
-      ;----- loop over loaded data -----;
-      for i = 0,n_elements(new_vars)-1 do begin
-      
-          ;----- In case of more than two observatoies -----;
-          site_name=strsplit(new_vars[i],'_',/extract)
-          if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN_radar#') or $
-              (instrument eq 'EISCAT_radar') then begin
-              site_name2 = site_name[1]
-          endif else if (instrument eq 'geomagnetic_field_induction') and $
-              (datatype eq 'STEL#') then begin
-              site_name2 = site_name[4]
-          endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
-              if n_elements(site_name) eq 5 then begin 
-                 if site_name[4] eq 'org' then site_name2 = 'meso(org)'
-                 if site_name[4] eq 'scr' then site_name2 = 'meso(scr)'
+          ;----- loop over loaded data -----;
+          for i = 0,n_elements(new_vars)-1 do begin
+
+              ;----- In case of more than two observatoies -----;
+              site_name=strsplit(new_vars[i],'_',/extract)
+              if (instrument eq 'Iitate_Planetary_Radio_Telescope') or (instrument eq 'SuperDARN_radar#') or $
+                  (instrument eq 'EISCAT_radar') or (instrument eq 'HF_Solar_Jupiter_radio_spectrometer') then begin
+                  site_name2 = site_name[1]
+              endif else if (instrument eq 'geomagnetic_field_induction') and $
+                  (datatype eq 'STEL#') then begin
+                  site_name2 = site_name[4]
+              endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
+                  if n_elements(site_name) eq 5 then begin 
+                     if site_name[4] eq 'org' then site_name2 = 'meso(org)'
+                     if site_name[4] eq 'scr' then site_name2 = 'meso(scr)'
+                  endif else begin
+                     site_name2 = site_name[2]
+                  endelse
               endif else begin
-                 site_name2 = site_name[2]
+                  site_name2 = site_name[2]
               endelse
-          endif else begin
-              site_name2 = site_name[2]
-          endelse
 
-          ;----- Show data policy -----;
-          Answer = gui_acknowledgement(instrument=instrument, datatype=datatype, $
-              site_or_param=site_name2, par_names=new_vars[i])
+              ;----- Show data policy -----;
+              Answer = gui_acknowledgement(instrument=instrument, datatype=datatype, $
+                  site_or_param=site_name2, par_names=new_vars[i])
 
-          if Answer eq 'OK' then begin
-              ;----- Add the time clip of tplot variable between start and end times -----;   
-              trange = timeRange
-              time_clip, new_vars[i],trange[0],trange[1],/replace 
+              if Answer eq 'OK' then begin
+                  ;----- Add the time clip of tplot variable between start and end times -----;   
+                  trange = timeRange
+                  time_clip, new_vars[i],trange[0],trange[1],/replace 
 
-              result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)
+                  result = loadedData->add(new_vars[i],mission='IUGONET',observatory=instrument, instrument=site_name2)
         
-              if ~result then begin
-                  statusBar->update,'Error loading: ' + new_vars[i]
-                  historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
-                  return
-              endif
-          endif else begin
-              break
-          endelse
-      endfor
+                  if ~result then begin
+                      statusBar->update,'Error loading: ' + new_vars[i]
+                      historyWin->update,'IUGONET: Error loading: ' + new_vars[i]
+                      return
+                  endif
+              endif else begin
+                  break
+              endelse
+          endfor
+      endif
   endif 
   
   if n_elements(to_delete) gt 0 && is_string(to_delete) then begin

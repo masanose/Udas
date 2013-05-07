@@ -81,13 +81,9 @@ print, site_code
 ;===============================
 for i=0, n_elements(site_code)-1 do begin
   ;load of aws data at the Indonesian sites
-   if (site_code[i] eq 'bik') or (site_code[i] eq 'mnd') or (site_code[i] eq 'pon') then begin
+   if (site_code[i] eq 'bik') or (site_code[i] eq 'ktb') or (site_code[i] eq 'mnd') or (site_code[i] eq 'pon') then begin
       iug_load_aws_id, datatype = datatype, site=site_code[i], trange = trange, downloadonly=downloadonly, verbose = verbose
-   endif
-   if (site_code[i] eq 'ktb') then begin
-      iug_load_aws_ktb, datatype = datatype, site=site_code[i], trange = trange,$
-                        downloadonly=downloadonly, verbose = verbose
-   endif    
+   endif   
   ;load of aws data at the Shigaraki sites
    if (site_code[i] eq 'sgk') then begin
       iug_load_aws_sgk, datatype = datatype, site=site_code[i], trange = trange,$

@@ -1,4 +1,36 @@
 ------------------------------------------------------
+; What's new in udas_2_01_1             April 16, 2013
+------------------------------------------------------
+1) Added 8 new load procedures:
+- iug_load_aws_rish  ; Surface meterology data taken by the automatic 
+                       weather station (AWS)
+- iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
+- iug_load_hf_tohokuu ; Jupiter's/solar wide band spectral data in HF-band
+- iug_load_ionosonde_rish ; Ionogram data taken by the ionosonde at Shigaraki
+- iug_load_irio_nipr ; Imaging Riometer data at Syowa station, Antarctica
+- iug_load_lfrto     ; Low Frequency Radio Transmitter Observation data 
+                       from the Tohoku University site
+- iug_load_radiosonde_rish ; Radiosonde data from RISH, Kyoto Univ.
+- iug_load_smart     ; Solar images obtained by the SMART telescope
+                       at the Hida Observatory, Kyoto Univ.
+
+2) Modified "iug_load_mu.pro" to deal with the ionosphere, mesosphere, 
+and meteor wind special observation data.
+
+3) Added the new instrument types shown at the item 1) to the DataLoad 
+Windows of GUI.
+
+4) Added some new functions to get the information of data from the IUGONET 
+metadata database (MDDB).
+
+------------------------------------------------------
+; What's new in udas_2_00_2         Novermber 29, 2012
+------------------------------------------------------
+1) Modified some procudures for GUI.
+
+New functions were added to show data policy for each IUGONET data.
+
+------------------------------------------------------
 ; What's new in udas_2_00_1             April 16, 2012
 ------------------------------------------------------
 1) Modified some procedures to run on TDAS7.00.

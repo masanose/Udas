@@ -286,10 +286,10 @@ pro thm_ui_init_load_window, gui_id, windowStorage, loadedData, historyWin, $
   
   thm_ui_load_ace_data,aceTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
                         callSequence,loadTree=aceTree,timeWidget=aceTimeWidget
-  ;========================================
-  ;=== Added 'thm_ui_load_iugonet_data' ===
-  ;========================================
-  thm_ui_load_iugonet_data,iugonetTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
+  ;================================
+  ;=== Added 'iug_ui_load_data' ===
+  ;================================
+  iug_ui_load_data,iugonetTab,loadedData,historyWin,statusText,treeCopyPtr,timeRange,$
                         callSequence,loadTree=iugonetTree,timeWidget=iugonetTimeWidget                          
 
   treeArray = objarr(treeNum+1)

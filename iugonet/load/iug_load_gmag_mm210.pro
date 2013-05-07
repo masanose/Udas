@@ -11,6 +11,8 @@
 ;   ERG and IUGONET projects.
 ;   For more information, see http://www.iugonet.org/en/ 
 ;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
+;   See the rules of the road.
+;   For more information, see http://stdb2.stelab.nagoya-u.ac.jp/mm210/
 ;
 ; KEYWORDS:
 ;   site  = Observatory name, example, iug_load_gmag_mm210, site='rik',
@@ -29,14 +31,6 @@
 ; EXAMPLE:
 ;   iug_load_gmag_mm210, site='rik onw', datatype='1min', $
 ;                        trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
-;
-; NOTE: There is an alias of this procedure named "iug_load_gmag_mm210".
-;   Some load procedures for the ground-based observational data 
-;   in the  ERG mission, named "erg_load_???", can be also called  
-;   by "iug_load_???", because these data are related to the both 
-;   ERG and IUGONET projects.
-;   For more information, see http://www.iugonet.org/en/ 
-;                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
 ;
 ; Written by: Y.-M Tanaka, Apr 22, 2010 (ytanaka at nipr.ac.jp)
 ;

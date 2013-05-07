@@ -7,7 +7,7 @@
 ;
 ; Example:
 ;   iug_get_obsinfo, nlat=40, slat=35, elon=140, wlon=130, $
-;                     query='Kyoto', obs=obs
+;                    query='Kyoto', obs=obs
 ;
 ; KEYWORDS:
 ;   nlat: the northernmost latitude (degree)

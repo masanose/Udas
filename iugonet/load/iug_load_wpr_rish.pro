@@ -36,7 +36,8 @@
 ; A. Shinbori. 31/01/2012.
 ; A. Shinbori, 10/02/2012.
 ; A. Shinbori, 04/03/2013.
-; 
+; A. Shinbori, 08/04/2013.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -207,9 +208,9 @@ for ii=0,h_max-1 do begin
         ;==============
          for h=jj,n_elements(local_paths)-1 do begin
             file= local_paths[h]
-            if file_test(/regular,file) then  dprint,'Loading WPR-shigaraki file: ',file $
+            if file_test(/regular,file) then  dprint,'Loading WPR-'+site_code2+' file: ',file $
             else begin
-               dprint,'WPR-shigaraki file ',file,' not found. Skipping'
+               dprint,'WPR-'+site_code2+' file ',file,' not found. Skipping'
                continue
             endelse
             openr,lun,file,/get_lun    
@@ -218,7 +219,12 @@ for ii=0,h_max-1 do begin
            ;=============================
             readf, lun, s
             height = strsplit(s,',',/extract)
-             
+            
+           ;Definition of time zone at each station:
+            if site_code2 eq 'pontianak' then time_zone = 7.0
+            if site_code2 eq 'manado' then time_zone = 8.0
+            if (site_code2 eq 'biak') or (site_code2 eq 'shigaraki') then time_zone = 9.0   
+           
            ;Definition of altitude and data arraies:
             altitude = fltarr(n_elements(height)-1)
             data = strarr(n_elements(height)-1)
@@ -260,15 +266,9 @@ for ii=0,h_max-1 do begin
                   hour = strmid(u,11,2)
                   minute = strmid(u,14,2)  
                   
-                 ;====convert time from LT to UT 
-                  if site_code[ii] ne 'sgk' then begin    
-                     time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
-                  endif else if site_code[ii] eq 'sgk' then begin
-                     time[k] = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                               -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
-                     if time[k] lt time_double(string(2006)+'-'+string(3)+'-'+string(29)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
-                  endif
+                 ;Convert time from LT to UT
+                  time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)+':'+string(0)) $
+                        -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
                  ;
                  ;Enter the missing value:
                   for j=0,n_elements(height)-2 do begin

@@ -20,11 +20,12 @@ url_fits = ['http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
             'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
             'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
             'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
+            'http://idlastro.gsfc.nasa.gov/ftp/pro/fits/',$
             'http://idlastro.gsfc.nasa.gov/ftp/pro/misc/',$
             'http://idlastro.gsfc.nasa.gov/ftp/pro/misc/']
-fname_fits = ['fits_close.pro', 'fits_open.pro', 'fits_read.pro', $
-            'sxaddpar.pro', 'sxdelpar.pro', 'sxpar.pro', 'gettok.pro', $
-            'valid_num.pro']
+fname_fits = ['readfits.pro', 'fits_close.pro', 'fits_open.pro', $
+            'fits_read.pro', 'sxaddpar.pro', 'sxdelpar.pro', 'sxpar.pro', $
+            'gettok.pro', 'valid_num.pro']
 
 ; dir_fits_def = './'
 

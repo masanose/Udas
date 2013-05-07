@@ -9,8 +9,8 @@
 ;
 ; NOTE: See the rules of the road.
 ;       For more information, see:
-;       http://polaris.nipr.ac.jp/~dbase/e/100/e/100_03_UAPM_at_Syowa_e.htm
-;    &  http://polaris.nipr.ac.jp/~dbase/e/100/e/100_15_Iceland_e.htm
+;       http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=103
+;    &  http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=115
 ; Written by: Y.-M. Tanaka, May 2, 2011
 ;             National Institute of Polar Research, Japan.
 ;             ytanaka at nipr.ac.jp

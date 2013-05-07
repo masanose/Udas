@@ -423,11 +423,11 @@ pro thm_ui_call_sequence::reCall,historywin=historywin,statustext=statustext,gui
                          self.loadedData,$
                          historyWin,$
                          statustext
-   ;==============================================
-   ;=== Call thm_ui_load_iugonet_data_load_pro ===
-   ;==============================================
+   ;======================================
+   ;=== Call iug_ui_load_data_load_pro ===
+   ;======================================
    endif else if st.type eq 'loadiugonetdata' then begin
-      thm_ui_load_iugonet_data_load_pro,$
+      iug_ui_load_data_load_pro,$
                          st.instrument[0],$
                          st.datatype[0],$
                          st.site_or_param,$

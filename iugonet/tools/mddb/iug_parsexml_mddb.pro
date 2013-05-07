@@ -1,3 +1,20 @@
+;+
+; FUNCTION:
+;   iug_parsexml_mddb
+;
+; PURPOSE:
+;   Parses XML file and extract information.
+;
+; KEYWORDS:
+;   filename: filename of the XML file.
+;   tag: tag name to extract information. 
+;
+; EXAMPLE:
+;   iug_parsexml_mddb, filename='tmp.xml', tag='ResourceID'
+;
+; Written by Y.-M. Tanaka, Feb. 13, 2010 (ytanaka at nipr.ac.jp)
+;-
+
 function iug_parsexml_mddb, filename=filename, tag=tag
 
 output=''

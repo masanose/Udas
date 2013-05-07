@@ -80,10 +80,18 @@ for i=0,n_elements(site_code)-1 do begin
     show_text = 1
 
     for j=0,n_elements(param)-1 do begin
-      cdf2tplot, file=datfiles,varformat=strupcase(param[j])
-      ;--- Rename
-      copy_data,  strupcase(param[j]),'iug_iit_hf_'+param[j]
+      ;--- load data
+      cdf2tplot, file=datfiles, varformat=strupcase(param[j])
+      get_data, strupcase(param[j]), data=data, dlimit=dlimit
       store_data, strupcase(param[j]), /delete
+
+      ;--- add metadata
+      gatt={Project:dlimit.cdf.gatt.project, Logical_source_description:"Jupiter's/solar wide band spectral data in HF-band", PI_name:"Atsushi Kumamoto", PI_affiliation:"Tohoku University", TEXT:"When the data is used in or contributes to a presentation or publication, you should let us know and make acknowledgement to the Planetary Plasma and Atmospheric Research Center, Tohoku University.", LINK_TEXT:"For more information, see", HTTP_LINK:"http://ariel.gp.tohoku.ac.jp/~jupiter/"}
+      cdf = {filename:dlimit.cdf.filename, gatt:gatt, vname:dlimit.cdf.vname, vatt:dlimit.cdf.vatt}
+      dl =  {cdf:cdf, spec:dlimit.spec, log:dlimit.log, ysubtitle:dlimit.ysubtitle}
+
+      ;--- restore data
+      store_data, 'iug_iit_hf_'+param[j], data=data, dlimit=dl
     endfor
   endif
 endfor
@@ -103,8 +111,9 @@ if (show_text eq 1) then begin
   dprint, '**********************************************************************'
   dprint, ''
 endif else begin
+  dprint, '**********************************************************************'
   dprint, 'No data is loaded'
-  dprint, ''
+  dprint, '**********************************************************************'
 endelse
 
 return

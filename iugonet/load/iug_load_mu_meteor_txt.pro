@@ -31,6 +31,7 @@
 ; A. Shinbori, 08/08/2012.
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
+; A. Shinbori, 15/04/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -55,6 +56,11 @@ if (not keyword_set(verbose)) then verbose=2
 ;Load 'troposphere_wind' data by default:
 ;****************************************
 if (not keyword_set(datatype)) then datatype='thermosphere'
+
+;*****************************
+;Load '1_day' data by default:
+;*****************************
+if (not keyword_set(length)) then length='1_day'
 
 ;***********
 ;site codes:
@@ -306,17 +312,17 @@ for iii=0,n_elements(parameters)-1 do begin
                        + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded ' $
                        + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
-      if size(zon_wind,/type) eq 4 then begin
+      if size(zon_wind2,/type) eq 4 then begin
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
-         store_data,'iug_mu_meteor_uwnd_'+parameters[iii],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
+         store_data,'iug_mu_meteor_uwnd_'+parameters[iii],data={x:site_time, y:zon_wind2, v:height},dlimit=dlimit
          options,'iug_mu_meteor_uwnd_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-         store_data,'iug_mu_meteor_vwnd_'+parameters[iii],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
+         store_data,'iug_mu_meteor_vwnd_'+parameters[iii],data={x:site_time, y:mer_wind2, v:height},dlimit=dlimit
          options,'iug_mu_meteor_vwnd_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-         store_data,'iug_mu_meteor_uwndsig_'+parameters[iii],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
+         store_data,'iug_mu_meteor_uwndsig_'+parameters[iii],data={x:site_time, y:zon_thermal2, v:height},dlimit=dlimit
          options,'iug_mu_meteor_uwndsig_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
-         store_data,'iug_mu_meteor_vwndsig_'+parameters[iii],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
+         store_data,'iug_mu_meteor_vwndsig_'+parameters[iii],data={x:site_time, y:mer_thermal2, v:height},dlimit=dlimit
          options,'iug_mu_meteor_vwndsig_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
-         store_data,'iug_mu_meteor_mwnum_'+parameters[iii],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
+         store_data,'iug_mu_meteor_mwnum_'+parameters[iii],data={x:site_time, y:meteor_num2, v:height},dlimit=dlimit
          options,'iug_mu_meteor_mwnum_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='mwnum'
 
          new_vars=tnames('iug_mu_meteor_*')

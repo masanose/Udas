@@ -27,12 +27,22 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
 
   ;----- Get acknowledgement message -----;
   get_data, par_names[0], dlimit=str
-  if instrument eq 'EISCAT_radar' then begin
+  if (instrument eq 'EISCAT_radar') or (instrument eq 'Imaging_Riometer') or $
+     (instrument eq 'SuperDARN_radar#') then begin
      theMessage = [ $
-                'Information about EISCAT radar data', '', $
+                str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
                 'PI: ', str.cdf.gatt.PI_name, '', $
-                'Rules of the Road for EISCAT Radar Data: ',str.cdf.gatt.rules_of_use, '', $
+                'Affiliations:', str.cdf.gatt.pi_affiliation, '', $
+                'Rules of the Road: ',str.cdf.gatt.rules_of_use, '', $
                 str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
+  endif else if (instrument eq 'Low_Frequency_radio_transmitter') or $
+     (instrument eq 'HF_Solar_Jupiter_radio_spectrometer') then begin
+     theMessage = [ $
+                str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
+                'PI and HOST PI(s):', str.cdf.gatt.PI_name, '', $
+                'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
+                'Rules of the Road:',str.cdf.gatt.text, $
+                '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
   endif else if datatype eq 'NIPR_mag#' then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
@@ -41,11 +51,6 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', $
                 'Rules of the Road: ',str.cdf.gatt.rules_of_use, '', $
                 str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
-  endif else if instrument eq 'SuperDARN_radar#' then begin
-     theMessage = [ $
-                str.cdf.gatt.logical_source_description, '', $
-                'PI:',str.cdf.gatt.pi_name,str.cdf.gatt.pi_affiliation, $
-                '', 'Rules of the Road:', str.cdf.gatt.rules_of_use ]
   endif else if datatype eq '210mm#' or datatype eq 'STEL#' then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
@@ -53,13 +58,6 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'PI and HOST PI(s):', str.cdf.gatt.pi_name, '', $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
                 'Rules of the Road:',str.cdf.gatt.text, $
-                '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
-  endif else if instrument eq 'Low_Frequency_radio_transmitter' then begin
-     theMessage = [ $
-                str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
-                'PI and HOST PI(s):', str.cdf.gatt.PI_name, '', $
-                'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
-                'Rules of the Road for LFRTO Data Use:',str.cdf.gatt.text, $
                 '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
   endif else begin
      theMessage=str.data_att.acknowledgment

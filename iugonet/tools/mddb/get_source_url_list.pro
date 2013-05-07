@@ -1,15 +1,15 @@
-;FUNCTION: GET_SOURCE_URL_LIST
+;+
+; FUNCTION: GET_SOURCE_URL_LIST
 ;   url_out=get_source_url_list(url_in, xmldir, xmlfile)
 ;
 ; PURPOSE:
-;   Gets URL for downloading data from the metadata database.
+;   Gets URLs of data files from the metadata database.
 ;
 ; KEYWORDS:
-;   url_in =
-;
-;   url_out =
-;
-;   xmldir =
+;   url_in = Query in the OpenSearch format
+;   xmldir = Directory where XML file will be downloaded to.
+;   xmlfile = Returned XML file for search result
+;   url_out = URLs of data files returned by the Metadata databese
 ;
 ; EXAMPLE:
 ;   url_in='http://search.iugonet.org/iugonet/open-search/request?'+$

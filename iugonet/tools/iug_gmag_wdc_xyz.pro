@@ -46,13 +46,14 @@ if (not keyword_set(resolution)) then resolution='min'
 colors=[3,5,6]
 
 ;Search the tplot variables:
+result=''
 if site[0] ne '*' then begin
    for i=0, n_elements(site)-1 do begin
       res=tnames('wdc_mag_'+site[i]+'_1'+resolution)
       if res ne '' then append_array,result,res 
    endfor
 endif else begin
-   result = tnames('wdc_mag_*_1'+resolution)
+      result = tnames('wdc_mag_*_1'+resolution)
 endelse
 
 if result[0] ne '' then begin
@@ -73,8 +74,8 @@ if result[0] ne '' then begin
      ;Reform the data array of geomagnetic field corresponding to the data labels (HDZF coordinates) 
      ;and replace the HDZF components by the XYZF ones.
       if size(d_comp,/N_ELEMENTS) ne 0 then begin
-         y[*,0]=h_comp*cos(d_comp*!pi/60.0/180.0)
-         y[*,1]=h_comp*sin(d_comp*!pi/60.0/180.0)
+         y[*,0]=h_comp*cos(d_comp*!pi/180.0)
+         y[*,1]=h_comp*sin(d_comp*!pi/180.0)
          y[*,2]=z_comp
         ;Store the tplot variables:
          store_data,result[j]+'_xyz',data ={x:d.x,y:y}

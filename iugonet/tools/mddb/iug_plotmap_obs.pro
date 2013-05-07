@@ -1,52 +1,39 @@
 ;+
-; PROCEDURE iug_plotmap_obs
+; :PROCEDURE: 
+;    iug_plotmap_obs
 ;
-; PURPOSE:
-;		Draw a fan plot of SD data on the world map
+; :PURPOSE:
+;    Plots observatories on the world map.
 ;
-;	:Params:
-;    var:   tplot variable to be plotted
-;
-;	:Keywords:
-;    noerase:     Set to plot data without erasing the screen 
-;    clip:        Set to scale in to get a magnified map
+; :KEYWORDS:
+;    glatlim:     geographic latitude range
+;    glonlim:     geographic longitude range
+;    query:       free word to search
+;    charsize:    font size of observatory name
+;    charcolor:   color of observatory name
+;    psym:        plot symbol for observatories
+;    symsize:     symbol size
+;    symcolor:    symbol color
+;    noname:      If set, no observatory name will be written on the map.
 ;    position:    Set the location of the plot frame in the plot window
-;    center_glat: geographical latitude at which a plot region is centered
-;    center_glon: geographical longitude at which a plot region is centered
-;    mltlabel:    Set to draw the MLT labels every 2 hour
-;    lonlab:      a latitude from which (toward the poles) the MLT labels are drawn
-;    force_scale: Forcibly put a given value in "scale" of map_set
-;    geo_plot:    Set to plot in the geographical coordinates
-;    coast:      Set to superpose the world map on the plot
-;    nocolorscale: Set to surpress drawing the color scale 
-;    colorscalepos: Set the position of the color scale in the noraml 
-;                   coordinates. Default: [0.85, 0.1, 0.87, 0.45] 
+;    isotropic:   Set to produce a map that has the same scale in X and Y.
 ;
+;    obs: information of observatories returned from metadata database.
+;    
 ; :EXAMPLES:
-;   plot_map_sdfit, 'sd_hok_vlos_bothscat'
-;   plot_map_sdfit, 'sd_hok_vlos_bothscat', center_glat=70., center_glon=180. 
-;   
+;    iug_plotmap_obs, glatlim=[55, 75], glonlim=[0, 40], $
+;                     query='wdc'
+;
 ; :Author:
-; 	Tomo Hori (E-mail: horit at stelab.nagoya-u.ac.jp)
-;
-; :HISTORY:
-; 	2011/03/11: Created
-; 	2011/06/15: Renamed to plot_map_sdfit
-;
+;       Y.-M. Tanaka (E-mail: ytanaka@nipr.ac.jp)
 ;-
 
-PRO iug_plotmap_obs $
-    , glatlim=glatlim, glonlim=glonlim $
-    , query=query, charsize=charsize $
-    , psym=psym, symsize=symsize $
-    , noerase=noerase $
-    , clip=clip $
-    , position=position $
-    , mltlabel=mltlabel $
-    , lonlab=lonlab $
-    , geomag=geomag $
-    , coast=coast $
-    , obs=obs
+PRO iug_plotmap_obs, $
+      glatlim=glatlim, glonlim=glonlim, query=query, rpp=rpp, $
+      charsize=charsize, charcolor=charcolor, $
+      psym=psym, symsize=symsize, symcolor=symcolor, $
+      noname=noname, position=position, $
+      isotropic=isotropic, obs=obs
 
 ;glatlim=[20, 50]
 ;glonlim=[120, 150]
@@ -54,7 +41,6 @@ PRO iug_plotmap_obs $
 
 if ~keyword_set(glatlim) then glatlim=[-90, 90]
 if ~keyword_set(glonlim) then glonlim=[-180, 180]
-if ~keyword_set(geomag) then geo_plot=1
 
 slat=glatlim[0] 
 nlat=glatlim[1]
@@ -65,24 +51,24 @@ glatc=mean(glatlim)
 glonc=mean(glonlim)
 
 lats = indgen(19)*10-90
-lons = indgen(24)*15-180
+lons = indgen(25)*15-180
 latnames=' '
 lonnames=' '
 
 ;----- Search observatory -----;
 iug_get_obsinfo, nlat=nlat, slat=slat, elon=elon, wlon=wlon, $
-                 query=query, obs=obs
+                 query=query, rpp=rpp, obs=obs
 
 ;----- Draw map -----;
-map_set, glatc, glonc, /azim, limit=[slat, wlon, nlat, elon], /cont, /isotropic
-map_continents
+map_set, glatc, glonc, limit=[slat, wlon, nlat, elon], $
+         isotropic=isotropic, /orthographic, /continent, /horizon
 map_grid,lats=lats, lons=lons, latnames=latnames, lonnames=lonnames
 
 ;----- Draw observatory -----;
 overlay_map_obs, obs, position=position, $
-    erase=(~KEYWORD_SET(noerase)), clip=clip, geomag=geomag, $ 
-    charsize=charsize, psym=psym, symsize=symsize
-
+    charsize=charsize, charcolor=charcolor, $
+    psym=psym, symsize=symsize, symcolor=symcolor, $
+    noname=noname
 
 end
 

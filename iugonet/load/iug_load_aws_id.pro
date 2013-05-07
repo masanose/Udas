@@ -28,7 +28,8 @@
 ;  A. Shinbori, 28/02/2013.
 ;  
 ;MODIFICATIONS:
-;   
+;  A. Shinbori, 08/04/2013.
+;    
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -57,7 +58,7 @@ if (not keyword_set(datatype)) then datatype= 'troposphere'
 ;Site code check:
 ;****************
 ;--- all sites (default)
-site_code_all = strsplit('bik mnd pon',' ', /extract)
+site_code_all = strsplit('bik ktb mnd pon',' ', /extract)
 
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
@@ -75,7 +76,7 @@ print, site_code
 ;***************
 ;data directory:
 ;***************
-site_data_dir = strsplit('bik/aws/ mnd/aws/ pon/aws/',' ', /extract)
+site_data_dir = strsplit('bik/aws/ ktb/aws/ mnd/aws/ pon/aws/',' ', /extract)
 
 ;******************************************************************
 ;Loop on downloading files
@@ -99,11 +100,14 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
       if site_code[i] eq 'bik' then begin
          kkk[i]=0 
       endif
-      if site_code[i] eq 'mnd' then begin
+      if site_code[i] eq 'ktb' then begin
          kkk[i]=1 
       endif
-      if site_code[i] eq 'pon' then begin
+      if site_code[i] eq 'mnd' then begin
          kkk[i]=2 
+      endif
+      if site_code[i] eq 'pon' then begin
+         kkk[i]=3 
       endif
    endfor
 endif
@@ -114,6 +118,9 @@ for ii=0,h_max-1 do begin
      ;Definition of blr site names:
       if site_code[ii] eq 'bik' then begin
          site_code2='biak'
+      endif
+      if site_code[ii] eq 'ktb' then begin
+         site_code2='kototabang'
       endif
       if site_code[ii] eq 'mnd' then begin
          site_code2='manado'
@@ -183,9 +190,11 @@ for ii=0,h_max-1 do begin
         readf, lun, s
         readf, lun, s
              
-       ;Definition of altitude and data arraies:
-        time_zone = 7
-            
+       ;Definition of time zone at each station:
+        if (site_code2 eq 'pontianak') or (site_code2 eq 'kototabang') then time_zone = 7.0
+        if site_code2 eq 'manado' then time_zone = 8.0
+        if site_code2 eq 'biak' then time_zone = 9.0   
+         
        ;Read the data:
         while(not eof(lun)) do begin
            readf,lun,s
@@ -262,7 +271,7 @@ for ii=0,h_max-1 do begin
                         + 'This may be done by including text such as surface meteorological data were obtained by the JEPP-HARIMAU ' $
                         + 'and SATREPS-MCCOE projects promoted by JAMSTEC and BPPT under collaboration with RISH of Kyoto University ' $
                         + 'and LAPAN. We would also appreciate receiving a copy of the relevant publications. ' $
-                        + 'The distribution of BLR data has been partly supported by the IUGONET (Inter-university Upper ' $
+                        + 'The distribution of surface meteorological data has been partly supported by the IUGONET (Inter-university Upper ' $
                         + 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
                         + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.' 
  
@@ -327,7 +336,7 @@ print, 'If you acquire surface meteorological data, we ask that you acknowledge 
 print, 'This may be done by including text such as surface meteorological data were obtained by the JEPP-HARIMAU ' 
 print, 'and SATREPS-MCCOE projects promoted by JAMSTEC and BPPT under collaboration with RISH of Kyoto University ' 
 print, 'and LAPAN. We would also appreciate receiving a copy of the relevant publications ' 
-print, 'The distribution of BLR data has been partly supported by the IUGONET (Inter-university Upper '
+print, 'The distribution of surface meteorological data has been partly supported by the IUGONET (Inter-university Upper '
 print, 'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '
 print, 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 end
