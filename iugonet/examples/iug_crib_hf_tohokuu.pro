@@ -24,13 +24,13 @@ iug_load_hf_tohokuu
 tplot_names
 
 ; Plot the loaded data
-tplot,['iug_iit_hf_rh','iug_itt_hf_lh']
+tplot,['iug_iit_hf_rh','iug_iit_hf_lh']
 
 ; Stop
 print,'Enter ".c" to continue.'
 stop
 
 ; Plot the loaded data with 'trange' option
-tplot,['iug_iit_hf_rh','iug_itt_hf_lh'],trange=['2004-01-09/22:00:00','2004-01-09/23:00:00']
+tplot,['iug_iit_hf_rh','iug_iit_hf_lh'],trange=['2004-01-09/22:00:00','2004-01-09/23:00:00']
 
 end
