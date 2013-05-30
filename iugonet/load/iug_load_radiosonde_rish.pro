@@ -31,6 +31,7 @@
 ; A. Shinbori, 19/12/2012.
 ;
 ;MODIFICATIONS:
+; A. Shinbori, 20/05/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -86,8 +87,8 @@ print, site_code
          iug_load_radiosonde_dawex_nc, datatype = datatypes[i], site=site_code, downloadonly=downloadonly, trange=trange, verbose=verbose
       endif 
      ;load of MU mesosphere data
-      if datatypes[i] eq 'misc' then begin
-        ;iug_load_radiosonde_sgk_txt, datatype = datatypes[i], site=site_code, downloadonly=downloadonly, trange=trange, verbose=verbose
+      if (datatypes[i] eq 'misc') then begin
+         iug_load_radiosonde_sgk_csv, datatype = datatypes[i], site=site_code, downloadonly=downloadonly, trange=trange, verbose=verbose
       endif 
    endfor  
 end
