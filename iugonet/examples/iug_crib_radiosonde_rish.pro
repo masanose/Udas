@@ -14,6 +14,10 @@
 ;=========================================
 thm_init
 
+;**********************
+;DAWEX radiosonde data:
+;**********************
+
 ;Specify timespan:
 ;=================
 timespan,'2001-10-13',5,/day
@@ -29,7 +33,7 @@ timespan,'2001-10-13',5,/day
 ;  uwnd = zonal wind:
 ;  vwnd = meridional wind
 ;===============================================================================
-iug_load_radiosonde_rish, site = 'drw'
+iug_load_radiosonde_rish,datatype ='DAWEX', site = 'drw'
 
 
 ;Plot time-height distribution of temperature, relative humidity, zonal and meridional winds:
@@ -50,6 +54,48 @@ stop
 ; Set up the plot time range of zonal, meridional and vertical winds in the troposphere:
 ;=======================================================================================
 tlimit, '2001-10-15 00:00:00', '2001-10-16 00:00:00'
+tplot
+
+;**************************
+;Shigaraki radiosonde data:
+;**************************
+
+;Specify timespan:
+;=================
+timespan,'2009-07-01',62,/day
+
+
+;Load preessure, temperature, dew point temperature, relative humidity, 
+;zonal, and meridional winds at Darwin in timespan:
+;We can select the parameters as 'press', 'temp', 'dewp','rh','uwnd', and 'vwnd':
+;  press = pressure
+;  temp = temperature
+;  dewp = dew point temperature
+;  rh = relative humidity
+;  uwnd = zonal wind:
+;  vwnd = meridional wind
+;===============================================================================
+iug_load_radiosonde_rish,datatype ='misc', site = 'sgk'
+
+
+;Plot time-height distribution of temperature, relative humidity, zonal and meridional winds:
+;============================================================================================
+tplot,['iug_radiosonde_sgk_press','iug_radiosonde_sgk_temp','iug_radiosonde_sgk_rh',$
+       'iug_radiosonde_sgk_uwnd','iug_radiosonde_sgk_vwnd']
+
+stop
+
+;Substract the average data of zonal and meridional winds:
+;=========================================================
+tsub_average, 'iug_radiosonde_sgk_uwnd'
+tsub_average, 'iug_radiosonde_sgk_vwnd'
+tplot, ['iug_radiosonde_sgk_uwnd-d','iug_radiosonde_sgk_vwnd-d']
+
+stop
+
+; Set up the plot time range of zonal, meridional and vertical winds in the troposphere:
+;=======================================================================================
+tlimit, '2009-07-31 00:00:00', '2009-08-03 00:00:00'
 tplot
 
 end
