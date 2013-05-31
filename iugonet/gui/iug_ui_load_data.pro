@@ -6,8 +6,8 @@
 ;  Generates the tab that loads iugonet data for the gui.
 ;
 ;HISTORY:
-;$LastChangedBy: Y.Tanaka $
-;$LastChangedDate: 2010-04-20 $
+;$LastChangedBy: jwl $
+;$LastChangedDate: 2013-04-29 10:20:24 -0700 (Mon, 29 Apr 2013) $
 ;
 ;Modifications:
 ;A. Shinbori, 02/05/2011
@@ -198,32 +198,34 @@ pro iug_ui_load_data_event,event
           break
         endif
               
-        ;======================================
+        ;==============================================
         ;=== Call iug_ui_load_data_load_pro ===
-        ;======================================
-        iug_ui_load_data_load_pro, $
-                                  instrumentText,$
-                                  typeText,$
-                                  paramText,$
-                                  param2Text,$ ;added this parameter
-                                  [startTimeString,endTimeString],$
-                                  state.loadedData,$
-                                  state.statusBar,$
-                                  state.historyWin
-                                  
-      
+        ;==============================================
+        
+        widget_control, /hourglass
+
+        if ~keyword_set(overwrite_selections) then overwrite_selections=''
+        loadStruc = { instrumentText:instrumentText,$
+                      typeText:typeText,$
+                      paramText:paramText,$
+                      param2Text:param2Text,$ ;added this parameter
+                      timeRange:[startTimeString,endTimeString] }
+
+        iug_ui_load_data_load_pro,      $
+                      loadStruc,                $
+                      state.loadedData,         $
+                      state.statusBar,          $
+                      state.historyWin,         $
+                      overwrite_selections=overwrite_selections  
       
         state.loadTree->update
         
-        ;====================================
-        ;=== callSequence->addloadiugonet ===
-        ;====================================
-        state.callSequence->addloadiugonet,$
-                               instrumentText,$
-                               typeText,$
-                               paramText,$
-                               param2Text,$ ;added this parameter
-                               [startTimeString,endTimeString]
+        callSeqStruc = { type:'loadapidata',       $
+                         subtype:'iug_ui_load_data_load_pro',  $
+                         loadStruc:loadStruc,     $
+                         overwrite_selections:overwrite_selections }
+                      
+        state.callSequence->addSt, callSeqStruc
       
       end
       else:
@@ -296,7 +298,8 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
                                   historyWin,$
                                   timeRangeObj=timeRangeObj,$
                                   uvalue='TIME_WIDGET',$
-                                  uname='time_widget')
+                                  uname='time_widget',$
+                                  startyear=1880)
   
   ;================================
   ;========== Instrument ==========
@@ -444,7 +447,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[12])[0] = ptr_new(['*(all)','nau','ndk','nlk','npm','nrk','nwc','wwvb'])
   (*paramArray[12])[1] = ptr_new(['*(all)','dcf','gbz','msf','nrk'])
   (*paramArray[13])[0] = ptr_new(['*(all)','pam'])
-  (*paramArray[14])[0] = ptr_new(['*(all)','ktb','srp'])
+  (*paramArray[14])[0] = ptr_new(['*(all)','bik','ktb','srp'])
   (*paramArray[15])[0] = ptr_new(['*(all)'])
   (*paramArray[15])[1] = ptr_new(['*(all)','org','scr'])
   (*paramArray[15])[2] = ptr_new(['*(all)'])
@@ -453,7 +456,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[16])[1] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[17])[0] = ptr_new(['*(all)','hok','sye','sys'])
   (*paramArray[18])[0] = ptr_new(['*(all)','bik','mnd','pon','sgk'])
-   
+
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Site or parameter(s)-1:')
   paramList = widget_list(paramBase,$
@@ -539,7 +542,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*param2Array[17])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err','vlos','vlos_err',$
                                   'echo_flag','quality','quality_flag','vnorth','vnorth_iscat','vnorth_gscat','veast','veast_iscat','veast_gscat','vlos_iscat','vlos_gscat']);,'position_tbl'])
   (*param2Array[18])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
-                  
+                   
   paramBase = widget_base(dataBase,/col)
   paramLabel = widget_label(paramBase,value='Parameter(s)-2:')
   paramList2 = widget_list(paramBase,$

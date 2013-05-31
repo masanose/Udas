@@ -24,25 +24,31 @@
 ;A. Shinbori, 18/02/2013
 ;-
 ;--------------------------------------------------------------------------------
-pro iug_ui_load_data_load_pro,$
-                         instrument,$
-                         datatype,$
-                         site_or_param,$
-                         parameters,$
-                         timeRange,$
-                         loadedData,$
-                         statusBar,$
-                         historyWin
-                         
 
+pro iug_ui_load_data_load_pro,    $
+                      loadStruc,          $
+                      loadedData,         $
+                      statusBar,          $
+                      historyWin,         $
+                      replay=replay,      $
+                      overwrite_selections=overwrite_selections 
+                         
   compile_opt hidden,idl2
 
+  iug_init
   loaded = 0
   notryload = 0
 
   new_vars = ''
   Answer = ''
   par_names2=''
+
+  ; retrieve parameters from structure
+  instrument=loadStruc.instrumentText
+  datatype=loadStruc.typeText
+  site_or_param=loadStruc.paramText
+  parameters=loadStruc.param2Text
+  timeRange=loadStruc.timeRange
 
   tn_before = [tnames('*',create_time=cn_before)]
   
