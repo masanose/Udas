@@ -44,8 +44,8 @@ pro iug_plot2d_irio, vn, col, row, start_time=start_time, step=step, $
   row = ( row < 10 )
 
   ;altitude
-  xrng=[-150, 150]
-  yrng=[-150, 150]
+  xrng=[-80, 80]
+  yrng=[-80, 80]
   alt = 90.   ; altitude = 90km
 
   ;Obtain the data variable
@@ -119,8 +119,7 @@ pro iug_plot2d_irio, vn, col, row, start_time=start_time, step=step, $
       img = (img < valrng[1]) ; clmin <= color level <= clmax
 
       ;Contour plot
-      triangulate, xdat, ydat, tri
-      contour, img, xdat, ydat, /fill, triangulation=tri, $
+      contour, img, xdat, ydat, /fill, $
                 c_colors = cols, levels = lvls, xstyle=1, ystyle=1, $
 		xrange=xrng, yrange=yrng, /isotropic, $
                 xtitle=xttl, ytitle=yttl, title=tstr
