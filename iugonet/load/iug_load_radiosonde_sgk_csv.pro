@@ -268,11 +268,10 @@ for ii=0,n_elements(site_code)-1 do begin
      ;Store data in TPLOT variables:
      ;==============================
      ;Acknowlegment string (use for creating tplot vars)
-      acknowledgstring = 'If you acquire the dawin sonde campaine data, we ask that you' $
-                       + 'acknowledge us in your use of the data. This may be done by' $
-                       + 'including text such as the dawin donde campaine data provided by Research Institute' $
-                       + 'for Sustainable Humanosphere of Kyoto University. We would also' $
-                       + 'appreciate receiving a copy of the relevant publications. The distribution of dawin sonde data' $
+      acknowledgstring = 'If you acquire radiosonde data, we ask that you acknowledge us in your use of the data. ' $
+                       + 'This may be done by including text such as radiosonde data provided by Research Institute ' $
+                       + 'for Sustainable Humanosphere of Kyoto University. We would also appreciate receiving a copy ' $
+                       + 'of the relevant publications. The distribution of dawin sonde data' $
                        + 'has been partly supported by the IUGONET (Inter-university Upper atmosphere Global' $
                        + 'Observation NETwork) project (http://www.iugonet.org/) funded by the' $
                        + 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
@@ -332,13 +331,13 @@ endif
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire the dawin sonde campaine data, we ask that you acknowledge'
-print, 'us in your use of the data. This may be done by including text such as' 
-print, 'radiosonde data provided by Research Institute for Sustainable Humanosphere' 
-print, 'of Kyoto University. We would also appreciate receiving a copy of the' 
-print, 'relevant publications. The distribution of dawin sonde campaine data'
-print, 'has been partly supported by the IUGONET (Inter-university Upper atmosphere'
-print, 'Global Observation NETwork) project (http://www.iugonet.org/) funded by the'
-print, 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
-
+print, 'If you acquire radiosonde data, we ask that you acknowledge us in  ' 
+print, 'your use of the data.This may be done by including text such as ' 
+print, 'radiosonde data provided by Research Institute for Sustainable ' 
+print, 'Humanosphere of Kyoto University. We would also appreciate ' 
+print, 'receiving a copy of the relevant publications. The distribution ' 
+print, 'of dawin sonde datahas been partly supported by the IUGONET ' 
+print, '(Inter-university Upper atmosphere Global Observation NETwork) '
+print, 'project (http://www.iugonet.org/) funded by theMinistry of Education, '
+print, 'Culture, Sports, Science and Technology (MEXT), Japan.'
 end
