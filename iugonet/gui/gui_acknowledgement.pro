@@ -124,9 +124,23 @@ case instrument of
   'Lower_Troposphere_Radar'       : iug_var = !iugonet.data_policy.ltr_rish
   'Low_Frequency_radio_transmitter' : iug_var = !iugonet.data_policy.lfrto
   'Medium_Frequency_radar'        : iug_var = !iugonet.data_policy.mf_rish
-  'Meteor_Wind_radar'             : iug_var = !iugonet.data_policy.meteor_rish
+  'Meteor_Wind_radar': begin
+      case site_or_param of
+        'bik':iug_var = !iugonet.data_policy.meteor_rish_id
+        'ktb':iug_var = !iugonet.data_policy.meteor_rish_id
+        'srp':iug_var = !iugonet.data_policy.meteor_rish_id
+        'sgk':iug_var = !iugonet.data_policy.meteor_rish_sgk
+      endcase
+    end
   'Middle_Upper_atmosphere_radar' : iug_var = !iugonet.data_policy.mu
-  'Radiosonde'                    : iug_var = !iugonet.data_policy.radiosonde_rish
+  'Radiosonde' : begin
+     case site_or_param of
+       'drw':iug_var = !iugonet.data_policy.radiosonde_rish_dawex
+       'gpn':iug_var = !iugonet.data_policy.radiosonde_rish_dawex
+       'ktr':iug_var = !iugonet.data_policy.radiosonde_rish_dawex
+       'sgk':iug_var = !iugonet.data_policy.radiosonde_rish_sgk
+     endcase
+   end
   'SuperDARN_radar#': begin
       case site_or_param of
         'hok': iug_var = !iugonet.data_policy.sdfit_hok
@@ -140,7 +154,7 @@ case instrument of
         'mnd': iug_var = !iugonet.data_policy.wpr_rish_mnd
         'pon': iug_var = !iugonet.data_policy.wpr_rish_pon
         'sgk': iug_var = !iugonet.data_policy.wpr_rish_sgk
-        endcase
+      endcase
     end
 endcase
 
@@ -261,9 +275,23 @@ endif else begin
       'Lower_Troposphere_Radar'       : !iugonet.data_policy.ltr_rish = iug_var
       'Low_Frequency_radio_transmitter' : !iugonet.data_policy.lfrto = iug_var
       'Medium_Frequency_radar'        : !iugonet.data_policy.mf_rish = iug_var
-      'Meteor_Wind_radar'             : !iugonet.data_policy.meteor_rish = iug_var
+      'Meteor_Wind_radar': begin
+          case site_or_param of
+            'bik': !iugonet.data_policy.meteor_rish_id = iug_var
+            'ktb': !iugonet.data_policy.meteor_rish_id = iug_var
+            'srp': !iugonet.data_policy.meteor_rish_id = iug_var
+            'sgk': !iugonet.data_policy.meteor_rish_sgk = iug_var
+          endcase
+        end
       'Middle_Upper_atmosphere_radar' : !iugonet.data_policy.mu = iug_var
-      'Radiosonde'                    : !iugonet.data_policy.radiosonde_rish = iug_var
+      'Radiosonde': begin
+          case site_or_param of
+            'drw': !iugonet.data_policy.radiosonde_rish_dawex = iug_var
+            'gpn': !iugonet.data_policy.radiosonde_rish_dawex = iug_var
+            'ktr': !iugonet.data_policy.radiosonde_rish_dawex = iug_var
+            'sgk': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
+          endcase
+        end
       'SuperDARN_radar#': begin
           case site_or_param of
             'hok': !iugonet.data_policy.sdfit_hok = iug_var

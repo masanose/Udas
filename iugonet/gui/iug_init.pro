@@ -91,10 +91,12 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   ionosonde_rish:  0b, $
                   ltr_rish:        0b, $
                   lfrto:           0b, $
-                  meteor_rish:     0b, $
+                  meteor_rish_id:  0b, $
+                  meteor_rish_sgk: 0b, $
                   mf_rish:         0b, $
                   mu:              0b, $
-                  radiosonde_rish: 0b, $
+                  radiosonde_rish_dawex: 0b, $
+                  radiosonde_rish_sgk: 0b, $
                   sdfit_hok:       0b, $ ;HOK
                   sdfit_syo:       0b, $ ;SYE,SYS
                   wpr_rish_bik:    0b, $
