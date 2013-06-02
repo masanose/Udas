@@ -71,23 +71,28 @@ for i=0,n_elements(param_name)-1 do begin
    
    for j=0, n_elements(d.x)-1 do begin 
       if split_para[3] eq 'press' then begin
-         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Pressure [hPa]' ,ytitle='Height [km]',charsize=1.5,title= split_para[2]
+         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Pressure [hPa]' ,ytitle='Height [km]',$
+                             charsize=1.5,title= split_para[2],yrange=[0,40]
          oplot,d.y[j,*],d.v
       endif 
       if split_para[3] eq 'temp' then begin
-         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Temperature [degree C]' ,ytitle='Height [km]',charsize=1.5,title= split_para[2] 
+         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Temperature [degree C]' ,ytitle='Height [km]',$
+                             charsize=1.5,title= split_para[2],yrange=[0,40] 
          oplot,d.y[j,*],d.v
       endif 
       if split_para[3] eq 'rh' then begin
-         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Relative humidity [%]' ,ytitle='Height [km]',charsize=1.5,title= split_para[2] 
+         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Relative humidity [%]' ,ytitle='Height [km]',$
+                             charsize=1.5,title= split_para[2],yrange=[0,40] 
          oplot,d.y[j,*],d.v
       endif 
       if split_para[3] eq 'uwnd' then begin
-         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Zonal wind [m/s]' ,ytitle='Height [km]',charsize=1.5,xrange=[-50,50],title= split_para[2]
+         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Zonal wind [m/s]' ,ytitle='Height [km]',$
+                             charsize=1.5,title= split_para[2],xrange=[-50,50],yrange=[0,40]
          oplot,d.y[j,*],d.v
       endif 
        if split_para[3] eq 'vwnd' then begin
-         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Meridional wind [m/s]' ,ytitle='Height [km]',charsize=1.5,xrange=[-50,50],title= split_para[2]
+         if j eq 0 then plot,d.y[j,*],d.v, xtitle='Meridional wind [m/s]' ,ytitle='Height [km]',$
+                             charsize=1.5,title= split_para[2],xrange=[-50,50],yrange=[0,40]
          oplot,d.y[j,*],d.v
       endif 
    endfor

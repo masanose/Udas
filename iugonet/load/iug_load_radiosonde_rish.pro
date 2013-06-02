@@ -57,7 +57,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;***************
 
 ;--- all datatypes (default)
-datatype_all = strsplit('DAWEX misc',' ', /extract)
+datatype_all = strsplit('dawex misc',' ', /extract)
 
 ;--- check datatypes
 if(not keyword_set(datatype)) then datatype='all'
