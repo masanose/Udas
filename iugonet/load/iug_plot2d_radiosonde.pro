@@ -82,7 +82,7 @@ for i=0,n_elements(param_name)-1 do begin
       endif 
       if split_para[3] eq 'rh' then begin
          if j eq 0 then plot,d.y[j,*],d.v, xtitle='Relative humidity [%]' ,ytitle='Height [km]',$
-                             charsize=1.5,title= split_para[2],yrange=[0,40] 
+                             charsize=1.5,title= split_para[2],xrange=[0,100],yrange=[0,40] 
          oplot,d.y[j,*],d.v
       endif 
       if split_para[3] eq 'uwnd' then begin
