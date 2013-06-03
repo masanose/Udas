@@ -64,7 +64,7 @@ endelse
 print, X, Y
 
 ;Set up the window size of ionogram plot:
-window ,0, xsize=1280,ysize=800
+window ,0, xsize=1280,ysize=800,TITLE='IUGONET ionosonde data'
 
 ;plot ionograms:
 for t=0,Nt-1 do begin
