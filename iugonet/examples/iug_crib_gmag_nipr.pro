@@ -22,7 +22,7 @@ thm_init
 timespan, '2003-10-29'
 
 ; Load NIPR data
-erg_load_gmag_nipr,site=['syo','hus','tjo']
+iug_load_gmag_nipr,site=['syo','hus','tjo']
 
 ; View the loaded data names
 tplot_names
