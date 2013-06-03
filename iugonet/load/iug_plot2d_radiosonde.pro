@@ -49,7 +49,7 @@ site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all
 print, site_code
 
 ;Set up the window size of radiosonde data plot:
-window ,0, xsize=1400,ysize=700,TITLE='IUGONET radiosonde data'
+window ,0, xsize=1400,ysize=700,TITLE='IUGONET radiosonde data:'
 
 ;================================================
 ;Get the radiosonde data from tplot variable and 
