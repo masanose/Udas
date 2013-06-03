@@ -45,6 +45,10 @@ if not keyword_set(valuename) then valuename='iug_ionosonde_sgk_ionogram'
 ;loadct,39
 
 ;Get the ionogram data from tplot variable:
+if strlen(tnames(valuename)) eq 0 then begin
+   print, 'Cannot find the tplot vars in argument!'
+   return
+endif
 get_data,valuename,data=d
 
 ;Number of total frames:

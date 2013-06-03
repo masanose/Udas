@@ -56,6 +56,12 @@ window ,0, xsize=1400,ysize=700,TITLE='IUGONET radiosonde data:'
 ;plot the hight profile of each parameter:
 ;================================================
 param_name=tnames('iug_radiosonde_*')
+
+if strlen(param_name) eq 0 then begin
+   print, 'Cannot find the tplot vars in argument!'
+   return
+endif
+
 tmp=''
 site_number=0
 for i=0, n_elements(param_name)-1 do begin
