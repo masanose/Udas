@@ -21,7 +21,7 @@
 ;   iug_load_smart,filter='m08'
 ;   tplot_names
 ;   iug_plot2d_smart,'smart_t1_p00',4,4
-;   movie_iug_smart,'smart_t1_m08'
+;   iug_movie_smart,'smart_t1_m08'
 ;
 ; :Author:
 ; 	Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
