@@ -31,7 +31,7 @@
 ; A. Shinbori, 19/12/2012.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 20/05/2013.
+; A. Shinbori, 04/06/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -84,11 +84,17 @@ print, site_code
   for i=0, n_elements(datatypes)-1 do begin
      ;load of DAWEX radiosonde data
       if strupcase(datatypes[i]) eq 'DAWEX' then begin
-         iug_load_radiosonde_dawex_nc, datatype = datatypes[i], site=site_code, downloadonly=downloadonly, trange=trange, verbose=verbose
+         for j=0, n_elements(site_code)-1 do begin
+            iug_load_radiosonde_dawex_nc, datatype = datatypes[i], site=site_code[j], $
+                                          downloadonly=downloadonly, trange=trange, verbose=verbose
+         endfor
       endif 
      ;load of MU mesosphere data
       if (datatypes[i] eq 'misc') then begin
-         iug_load_radiosonde_sgk_csv, datatype = datatypes[i], site=site_code, downloadonly=downloadonly, trange=trange, verbose=verbose
+         for j=0, n_elements(site_code)-1 do begin
+            iug_load_radiosonde_sgk_csv, datatype = datatypes[i], site=site_code[j], $
+                                         downloadonly=downloadonly, trange=trange, verbose=verbose
+         endfor
       endif 
    endfor  
 end
