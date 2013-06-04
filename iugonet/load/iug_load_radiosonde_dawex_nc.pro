@@ -31,6 +31,7 @@
 ;  
 ;MODIFICATIONS:
 ;  A. Shinbori, 26/02/2013.
+;  A. Shinbori, 30/05/2013.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -111,7 +112,7 @@ if n_elements(site_code) le 3 then begin
       if site_code[i] eq 'gpn' then begin
          kkk[i]=1 
       endif
-      if site_code[i] eq 'kth' then begin
+      if site_code[i] eq 'ktr' then begin
          kkk[i]=2 
       endif
    endfor
@@ -143,7 +144,7 @@ for ii=0,n_elements(site_code)-1 do begin
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir =  root_data_dir() + 'iugonet/rish/DAWEX/'+site_code[ii]+'/radiosonde/nc/'
-      source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/DAWEX_sonde/'+site_code2+'/nc/'
+      source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/DAWEX/'+site_code2+'/nc/'
     
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
