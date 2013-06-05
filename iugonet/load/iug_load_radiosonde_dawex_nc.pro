@@ -144,7 +144,7 @@ for ii=0,n_elements(site_code)-1 do begin
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir =  root_data_dir() + 'iugonet/rish/DAWEX/'+site_code[ii]+'/radiosonde/nc/'
-      source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/DAWEX/'+site_code2+'/nc/'
+      source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/DAWEX/data/'+site_code2+'/nc/'
     
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
