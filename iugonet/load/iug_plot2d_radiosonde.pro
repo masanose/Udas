@@ -57,7 +57,7 @@ window ,0, xsize=1400,ysize=700,TITLE='IUGONET radiosonde data:'
 ;================================================
 param_name=tnames('iug_radiosonde_*')
 
-if strlen(param_name) eq 0 then begin
+if strlen(param_name[0]) eq 0 then begin
    print, 'Cannot find the tplot vars in argument!'
    return
 endif
