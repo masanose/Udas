@@ -70,7 +70,7 @@ Procudures in this directory are used to customize TDAS-GUI for
 IUGONET/ERG data
 
 <tools>
-Convenient functions to 
+Convenient functions to plot and analyze data.
 ------------------------------------------------------------
 
 
