@@ -1,296 +1,160 @@
 ------------------------------------------------------
+; What's new in udas_3_00_1               June 7, 2013
+------------------------------------------------------
+1) Modified some procedures for the GUI to run them on TDAS8.00.
 
-; What's new in udas_2_01_1             April 16, 2013
+2) Modified "iug_plot2d_irio.pro" and "iug_plot2d_ionosonde.pro" slightly.
+
+3) Added "pon" to the sites for the load procedure of the MF radar.
+
+4) Added "bik" and "sgk" to the sites for the load procedure of the 
+meteor radar.
 
 ------------------------------------------------------
-
+; What's new in udas_2_01_1             April 16, 2013
+------------------------------------------------------
 1) Added 8 new load procedures:
-
 - iug_load_aws_rish  ; Surface meterology data taken by the automatic 
-
                        weather station (AWS)
-
 - iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
-
 - iug_load_hf_tohokuu ; Jupiter's/solar wide band spectral data in HF-band
-
 - iug_load_ionosonde_rish ; Ionogram data taken by the ionosonde at Shigaraki
-
 - iug_load_irio_nipr ; Imaging Riometer data at Syowa station, Antarctica
-
 - iug_load_lfrto     ; Low Frequency Radio Transmitter Observation data 
-
                        from the Tohoku University site
-
 - iug_load_radiosonde_rish ; Radiosonde data from RISH, Kyoto Univ.
-
 - iug_load_smart     ; Solar images obtained by the SMART telescope
-
                        at the Hida Observatory, Kyoto Univ.
 
-
-
 2) Modified "iug_load_mu.pro" to deal with the ionosphere, mesosphere, 
-
 and meteor wind special observation data.
 
-
-
 3) Added the new instrument types shown at the item 1) to the DataLoad 
-
 Windows of GUI.
 
-
-
 4) Added some new functions to get the information of data from the IUGONET 
-
 metadata database (MDDB).
 
-
-
 ------------------------------------------------------
-
 ; What's new in udas_2_00_2         Novermber 29, 2012
-
 ------------------------------------------------------
-
 1) Modified some procudures for GUI.
-
-
 
 New functions were added to show data policy for each IUGONET data.
 
-
-
 ------------------------------------------------------
-
 ; What's new in udas_2_00_1             April 16, 2012
-
 ------------------------------------------------------
-
 1) Modified some procedures to run on TDAS7.00.
-
-
 
 2) Modified "iug_load_eiscat.pro" for the EISCAT radar data.
 
-
-
 The "iug_load_eiscat.pro" was modified so as to make the tplot variables 
-
 for the superposed data of some different pulse-codes.
-
-
 
 3) Removed the procedures for SuperDARN radar data.
 
-
-
 The procedures for the SuperDARN radar data have been included in (the 
-
 original) TDAS7.00 and removed from UDAS2.00.1.
 
 
-
-
-
 ------------------------------------------------------
-
 ; What's new in udas_1_00_1          February 10, 2012
-
 ------------------------------------------------------
-
 1) Added "iug_crib_iprt.pro" for IPRT data.
-
-
 
 "iug_crib_iprt.pro" is a sample crib sheet that explains how to use "iug_load_iprt".
 
-
-
 2) Renamed some load procedures for the radar data.
 
-
-
 "iug_load_blr_rish_txt" --> "iug_load_blr_rish"
-
 "iug_load_ltr_rish_txt" --> "iug_load_ltr_rish"
-
 "iug_load_wpr_rish_txt" --> "iug_load_wpr_rish"
-
-
 
 3) Modified "iug_load_gmag_???" for the magnetometer data.
 
-
-
 The default colors for the plot of the fluxgate magnetometer data were 
-
 changed from Black, Green, and Brown to Blue, Green, and Red, respectively.
 
 
-
-
-
 ------------------------------------------------------
-
 ; What's new in udas_1_00_b4          December 2, 2011
-
 ------------------------------------------------------
-
 1) Added "iug_load_wpr_rish_txt.pro" and "iug_crib_wpr_rish_txt" for LQ7 data.
-
-
 
 "iug_load_wpr_rish_txt" loads LQ7 radar data distributed in CSV files by RISH.
 
-
-
 2) Modified some procedures for GUI.
 
-
-
 "thm_ui_calendar.pro" was modified so that the time range can be selected 
-
 for the period before 1957 in the GUI main pannel.
 
-
-
 "EISCAT_radar" and "Wind_Profiler_Radar_(LQ-7)" were added to the insrument 
-
 type in the IUGONET data load window.
 
-
-
 "*(all)" and "*" were added to the choices of the parameters in the IUGONET 
-
 data load window.
-
-
 
 3) Modified the load procudure for EISCAT radar data.
 
-
-
 "iug_load_eiscat.pro" was modified to load data with various integration 
-
 time separately to the different tplot variables.
-
-
 
 4) Updated the example crib sheets.
 
 
-
-
-
 ------------------------------------------------------
-
 ; What's new in udas_1_00_b3            August 2, 2011
-
 ------------------------------------------------------
-
 1) Added "iug_load_eiscat" and "iug_crib_eiscat" for EISCAT radar data.
-
-
 
 "iug_load_eiscat" loads EISCAT radar data distributed in CDF files by NIPR.
 
-
-
 2) Modified "thm_ui_load_iugonet_data_load_pro" for GUI.
 
-
-
 "thm_ui_load_iugonet_data_load_pro" was modified so that the meteor wind 
-
 radar data can be downloaded for several sites.
-
-
 
 3) Modified "iug_load_blr_rish_txt.pro" for the BLR data.
 
-
-
 "iug_load_blr_rish_txt.pro" was modified so that the boundary layer radar 
-
 data can be downloaded for several sites.
-
-
 
 4) Modified "iug_load_mf_rish_pam_nc" for the MF radar data at Pameungpeuk.
 
-
-
 The URL address of the Pameungpeuk data location was changed.
-
-
 
 5) Modified "iug_load_meteor_srp_txt" for the meteor wind radar data at Serpon.
 
-
-
 A new option argument was added to "iug_load_meteor_srp_txt". Please see 
-
  the header document for details of the options
-
-
 
 6) Modified "iug_load_meteor_srp_nc" for the meteor wind radar data at Serpon.
 
-
-
 "iug_load_meteor_srp_nc" was revised so that the meteor wind radar data can 
-
 be downloaded for several sites and a new option argument was added. 
-
 Please see the header document for details of the options. 
 
-
-
 7) Modified "iug_load_meteor_ktb_txt" and "iug_load_meteor_ktb_nc" for the 
-
 meteor wind radar data at Kototabang.
 
-
-
 These load prcedures were revised for time calculation to UT and a new option 
-
 argument was added added. Please see the header document 
-
 for details of the options.
 
-
-
 8) Modified "iug_load_ear_iono_er_nc", "iug_load_ear_iono_efr_nc", 
-
 "iug_load_ear_iono_er_nc", "iug_load_ear_iono_fr_nc" and 
-
 "iug_load_ear_iono_vr_nc" for the EAR-FAI data at Kototabang.
 
-
-
 The new variables "freq", "ipp", "ndata", "nfft", "ncoh", 
-
 and "nicoh" were added in the netCDF data. 
 
 
-
-
-
 -----------------------------------------------------
-
 ; What's new in udas_1_00_b2            June 16, 2011
-
 -----------------------------------------------------
-
 1) Added all-in-one command "plot_map_sdfit" for SD data.
 
-
-
 "plot_map_sdfit" calls internally "sd_map_set", "overlay_map_sdfit", 
-
 and "overlay_map_coast" to generate a SuperDARN 2-D plot by itself. 
-
 Please see the header document for details of the options. 
-

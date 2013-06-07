@@ -1,6 +1,6 @@
 ==================================================================
-; UDAS plug-in software package for tdas_7_01
-;                                                   April 16, 2013
+; UDAS plug-in software package for tdas_8_00
+;                                                     June 7, 2013
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -18,8 +18,8 @@ see the project website at http://www.iugonet.org/en/.
 - Research Institute for Sustainable Humanosphere, Kyoto University
 - World Data Center for Geomagnetism, Kyoto University
 - Kwasan and Hida Observatories, Kyoto University
-- International Center for Space Weather Science and Education, Kyushu University
-  (the former Space Environment Research Center, Kyushu University)
+- International Center for Space Weather Science and Education, Kyushu University (the former Space Environment Research Center, Kyushu University)
+
 
 ++++++++++++++++++++++++++++++++
 +     System Requirements      +
@@ -27,6 +27,7 @@ see the project website at http://www.iugonet.org/en/.
   The system requirements are the same as required for TDAS.
 Please see TDAS Users' Guide.
 (http://themis.ssl.berkeley.edu/software.shtml)
+
 
 ++++++++++++++++++++++++++++++++
 +    Contents on the package   +
@@ -41,9 +42,9 @@ Load procedures for IUGONET data:
 - iug_load_blr_rish     ; Boundary layer radar data from RISH
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
-- iug_load_gmag_serc    ; MAGDAS magnetometer data from ICSWSE, Kyushu Univ
+- iug_load_gmag_nipr    ; Alias for "erg_load_gmag_nipr"
+- iug_load_gmag_serc    ; Fluxgate magnetometer data from NIPR
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
-- iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
 - iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
 - iug_load_hf_tohokuu   ; Jupiter's/solar wide band spectral data in HF-band
 - iug_load_ionosonde_rish ; Ionogram data taken by the ionosonde at Shigaraki
@@ -67,13 +68,18 @@ Example crib sheets for IUGONET data
 <gui>
 Procudures in this directory are used to customize TDAS-GUI for 
 IUGONET/ERG data
+
+<tools>
+Convenient functions to 
 ------------------------------------------------------------
+
 
 ++++++++++++++++++++++++++++++++
 +           Examples           +
 ++++++++++++++++++++++++++++++++
+
 CUI:
-------------------------------------------------------------------------
+--------------------------------------------------------------------------
   timespan,'1994-05-03' & iug_load_aws_rish, site='sgk'
   timespan,'2006-12-01' & iug_load_blr_rish, site='ktb'
   timespan,'2003-03-25' & iug_load_ear
@@ -97,7 +103,7 @@ CUI:
   timespan,'2007-06-21' & iug_load_sdfit, site='hok'
   timespan,'2005-08-03/05:00',3,/minute & iug_load_smart,filter='p00'
   timespan,'2006-04-01' & iug_load_wpr_rish, site='sgk'
-------------------------------------------------------------------------
+--------------------------------------------------------------------------
 
 GUI:
 --------------------------------------------------------------------------
@@ -133,9 +139,11 @@ GUI:
                         ionosphere      *(all)          *       1989-03-06
                         mesosphere      *(all)          *       1990-05-18
 - Radiosonde            DAWEX           drw             *       2001-10-15
+                        misc            sgk             *       2008-07-15
 - SuperDARN             ionosphere      hok             *       2006-12-15
 - Wind_Prof._Radar      troposphere     sgk             *       2006-04-01
 --------------------------------------------------------------------------
+
 
 ++++++++++++++++++++++++++++++++
 +        !!! NOTICE !!!        +
@@ -156,25 +164,20 @@ only to MAGDAS 1-minute averaged data observed during recent WHI campaign
 http://magdas.serc.kyushu-u.ac.jp/whi/index.php
 Future data release is a work in progress.
 
-3. Procedures "iug_load_iprt" and "iug_load_smart" need the additional 
-FITS library, such as fits_read, sxpar, fits_open, fits_close, gettok, 
-sxdelpar, sxaddpar, valid_num, and readfits. For the use of these procedures, 
-get FITS I/O procedures from the IDL Astronomy Library 
-(http://idlastro.gsfc.nasa.gov/fitsio.html).
-You can download these procedures by running "get_fitslib".
-
-4. You can get useful information of our data (ex., data availability, 
+3. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database:
 http://search.iugonet.org/iugonet/.
 
-5. For some kinds of data, it may be difficult to load more than one 
+4. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
+
 
 ++++++++++++++++++++++++++++++++
 +       Acknowledgements       +
 ++++++++++++++++++++++++++++++++
   We acknowledge the cooperation and generosity of the THEMIS Science Support 
 Team in allowing us to use TDAS for our analysis software. 
+
 
 ++++++++++++++++++++++++++++++++
 +            Contact           +
