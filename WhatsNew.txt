@@ -10,7 +10,11 @@
 4) Added "bik" and "sgk" to the sites for the load procedure of the 
 meteor radar.
 
-5) Added the statistical analysis package.
+5) Added "sgk" to the sites for the load procedure of the radiosonde.
+
+6) Added "iug_plot2d_radiosonde.pro" for 2d-plot of the radiosonde data.
+
+7) Added the statistical analysis package.
 
 ------------------------------------------------------
 ; What's new in udas_2_01_1             April 16, 2013
