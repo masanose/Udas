@@ -5,7 +5,7 @@
 ;   To load STEL induction magnetometer data from the STEL ERG-SC site 
 ;
 ; NOTE: 
-;   This procedure is a simple alias to "iug_load_gmag_stel_induction"
+;   This procedure is a simple alias to "erg_load_gmag_stel_induction"
 ;   and calls the original one by just providing the same
 ;   arguments/keywords given.
 ;   Some load procedures for the ground-based observational data
