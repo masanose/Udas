@@ -39,11 +39,13 @@
 ;-
 
 pro iug_load_gmag_stel_induction, site=site, $
-      downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
-      trange=trange, frequency_dependent=frequency_dependent, time_pulse=time_pulse
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange, timeclip=timeclip, $
+        frequency_dependent=frequency_dependent, time_pulse=time_pulse
 
 erg_load_gmag_stel_induction, site=site, $
-    downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
-    trange=trange, frequency_dependent=frequency_dependent, time_pulse=time_pulse
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange, timeclip=timeclip, $
+        frequency_dependent=frequency_dependent, time_pulse=time_pulse
 
 end
