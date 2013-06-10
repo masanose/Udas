@@ -6,8 +6,8 @@
 ;   Search granule at the IUGONET metadata database.
 ;
 ; Example:
-;   iug_get_obsinfo, nlat=40, slat=35, elon=140, wlon=130, $
-;             ts='2005-1-1', te=2005-1-2', query='Kyoto', data=data
+;   iug_get_datainfo, nlat=60, slat=40, elon=15, wlon=0, $
+;            ts='2005-1-1', te='2005-1-2', query='Kyoto', data=data 
 ;
 ; KEYWORDS:
 ;   nlat: the northernmost latitude (degree)
