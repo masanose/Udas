@@ -3,19 +3,20 @@
 ;NAME:
 ;  trend_test
 ;PURPOSE:
-;  データの傾向性を検定。
+;  Test the trend of the data.
 ;SYNTAX:
 ;  trend_test,y
 ;KEYWORDS:
-;    y:データ
-;    Z:統計検定量
-;    sl:有意水準指定用 (Default is 0.05)
+;    y:Input data
+;    Z:Statistical test value.
+;    sl:Significant level. The default is 0.05.
 ;
 ;CODE:
 ; R. Hamaguchi, 17/01/2013.
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 01/05/2013.
+; A. Shinbori, 10/07/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $

@@ -41,7 +41,8 @@
 ; A. Shinbori, 06/10/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 17/12/2012.
-;
+; A. Shinbori, 08/07/2013.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -70,7 +71,8 @@ if (not keyword_set(datatype)) then datatype='fai'
 ;parameters1:
 ;************
 ;--- all parameters1 (default)
-parameter1_all = strsplit('vb3p4a 150p8c8b2a 150p8c8b2b 150p8c8b2c 150p8c8b2d 150p8c8b2e 150p8c8b2f',' ', /extract)
+parameter1_all = strsplit('vb3p4a 150p8c8a 150p8c8b 150p8c8c 150p8c8d 150p8c8e 150p8c8b2a 150p8c8b2b '+$
+                          '150p8c8b2c 150p8c8b2d 150p8c8b2e 150p8c8b2f',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter1)) then parameter1='all'

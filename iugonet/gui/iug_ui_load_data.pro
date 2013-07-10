@@ -15,6 +15,7 @@
 ;A. Shinbori, 12/06/2012
 ;A. Shinbori, 24/10/2012
 ;A. Shinbori, 14/12/2012
+;A. Shinbori, 08/07/2013
 ;
 ;--------------------------------------------------------------------------------
 pro iug_ui_load_data_event,event
@@ -394,14 +395,18 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[2])[1] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
   (*paramArray[2])[2] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
   (*paramArray[3])[0] = ptr_new(['*(all)'])
-  (*paramArray[3])[1] = ptr_new(['*(all)','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a','eb3p2b','eb3p4a','eb3p4b','eb3p4c',$
-                                 'eb3p4d','eb3p4e','eb3p4f','eb3p4g','eb3p4h','eb4p2c','eb4p2d','eb4p4','eb4p4a','eb4p4b','eb4p4d','eb5p4a'])
+  (*paramArray[3])[1] = ptr_new(['*(all)','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a',$
+                                 'eb3p2b','eb3p4a','eb3p4b','eb3p4d','eb3p4e','eb3p4f',$
+                                 'eb3p4g','eb3p4h','eb4p2c','eb4p2d','eb4p4','eb4p4a',$
+                                 'eb4p4b','eb4p4d','eb5p4a'])
   (*paramArray[3])[2] = ptr_new(['*(all)','efb1p16','efb1p16a','efb1p16b'])                               
   (*paramArray[3])[3] = ptr_new(['*(all)','vb3p4a','150p8c8a','150p8c8b','150p8c8c','150p8c8d','150p8c8e','150p8c8b2a','150p8c8b2b','150p8c8b2c','150p8c8b2d','150p8c8b2e','150p8c8b2f'])
-  (*paramArray[3])[4] = ptr_new(['*(all)','fb1p16a','fb1p16b','fb1p16c','fb1p16d','fb1p16e','fb1p16f','fb1p16g','fb1p16h','fb1p16i',$
-                                 'fb1p16j1','fb1p16j2','fb1p16j3','fb1p16j4','fb1p16j5','fb1p16j6','fb1p16j7','fb1p16j8','fb1p16j9',$
-                                 'fb1p16j10','fb1p16j11','fb1p16k1','fb1p16k2','fb1p16k3','fb1p16k4','fb1p16k5','fb1p16m2','fb1p16m3',$
-                                 'fb1p16m4','fb8p16','fb8p16k1','fb8p16k2','fb8p16k3','fb8p16k4','fb8p16m1','fb8p16m2'])
+  (*paramArray[3])[4] = ptr_new(['*(all)','fb1p16a','fb1p16b','fb1p16c','fb1p16d','fb1p16e','fb1p16f',$
+                                 'fb1p16g','fb1p16h','fb1p16i','fb1p16j1','fb1p16j2','fb1p16j3','fb1p16j4',$
+                                 'fb1p16j5','fb1p16j6','fb1p16j7','fb1p16j8','fb1p16j9',$
+                                 'fb1p16j10','fb1p16j11','fb1p16k1','fb1p16k2','fb1p16k3','fb1p16k4','fb1p16k5',$
+                                 'fb8p16','fb8p16k1','fb8p16k2','fb8p16k3','fb8p16k4','fb1p16m2','fb1p16m3',$
+                                 'fb1p16m4','fb8p16m1','fb8p16m2'])
   (*paramArray[4])[0] = ptr_new(['*(all)','anc','asb','cmd','cst','dav','daw','dvs','eus','her', $
                                  'hob','ilr','kuj','lkw','mcq','mgd','mlb','mnd','mut', $
                                  'onw','prp','ptk','roc','sma','tir','twv','wad','yap'])

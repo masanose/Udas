@@ -3,24 +3,32 @@
 ;　　udifference_test
 ;
 ;PURPOSE:
-;  平均値検定を行うプログラム。
-;  χ二乗検定によって正規分布との適合を検定する。
-;  どちらも正規分布に従う場合はWelch検定
-;  どちらかが正規分布に従わない場合はマンホイットニー検定のみを用いる。
+;  Perform the difference test for two pairs of time-series data sets and
+;  test the fit of a normal distribution by χ-square test
+;  If both data sets obey the normal distribution, the Welch test is applied.
+;  If both data sets do not obey the normal distribution, 
+;  only the Mann-Whitney test is used.
 ;  
 ;SYNTAX:
-;  difference_test,vname1,vname2,sl=**
+;  difference_test,vname1,vname2,sl=sl,test_sel=test_sel
 ;  
 ;KEYWORDS:
-;  result:検定結果を'0'：ウェルチ検定使用-判定は異,'1'：ウェルチ検定使用-判定は同,'2'：マンホイットニー-異,'3'：マンホイットニー-同、で返す
-;  sl:有意水準。指定しない場合はsl=0.05で検定。
-;  test_sel：行う検定を指定。'2'はマンホイットニー検定、'1'はウェルチ検定、'0'はχ二乗検定によって正規分布との適合を検定
+;  result:Test result.
+;         The values '0' and '1' mean that the judgement of the Welch test is different
+;         and same, respectively. Moreover, the values '2' and '3' mean that the judgement 
+;         of the Mann-Whitney test is different and same, respectively.
+;  sl:Significant level. 
+;     The default is 0.05.
+;  test_sel：Specify the test to be performed. The value '2' is the Mann-Whitney test, 
+;           '1' is the Welch test, and '0' is to test the fit of a normal distribution 
+;           by χ-square test
 ;  
 ;CODE:
 ;R. Hamaguchi, 13/02/2012.
 ;
 ;MODIFICATIONS:
 ;A. Shinbori, 01/05/2013.
+;A. Shinbori, 10/07/2013.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $

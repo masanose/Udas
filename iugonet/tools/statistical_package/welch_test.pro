@@ -2,21 +2,31 @@
 ;NAME:
 ;  welch_test
 ;PURPOSE:
-;  2つのデータ間の平均値が同一かを検定する。仮定は両分布とも正規分布かつ異分散。
+;  Test whether two pairs of average value of time series data is the same or. 
+;  It is assumed that both distibutions of the data sets are normal distribution 
+;  and have different variance.
+;  
 ;SYNTAX:
-;  result=Welch_test(x,y,sl=**,mv=**)
+;  result=Welch_test(x,y,sl=sl,mv=mv)
+;
 ;KEYWORDS:
-;  sl:有意水準。設定しなければ5%で検定。
-;  mv:欠損値。設定しなければNaNのみを処理する。
-;結果は同一ならば「1」を、異なれば「0」を返す。
-;z:検定統計量
-;t_sl:有意水準におけるt分布の臨界値
+;  sl:Significant level. 
+;     The default is 0.05.
+;  mv:Missing value.
+;     If not set, Only the NaN value is dealt with.
+;  z:Statistical test value
+;  t_sl:Critical value of t-distribution in the significant level.
+;
+;NOTES:
+;  The test result is output as a value of 1 and 0 if the average value is the same
+;  and different, respectively.
 ;
 ;CODE:
 ; R. Hamaguchi, 13/12/2012.
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 01/05/2013.
+; A. Shinbori, 10/07/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $

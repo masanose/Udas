@@ -27,7 +27,8 @@
 ; A. Shinbori, 26/12/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 19/12/2012.
-; 
+; A. Shinbori, 08/07/2013.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -72,7 +73,7 @@ if ~size(fns,/type) then begin
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/nc/'
-   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807_1.01/'
+   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/data/data/ver01.0807_1.01/'
     
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================

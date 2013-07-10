@@ -1,23 +1,31 @@
 ;+
-;name
+;NAME
 ; normality_test
-;purpose
-; カイ二乗適合度検定を用いて、正規分布に従っているか検定する
-;syntax
+;
+;PURPOSE
+; Test whether time-series data obey the normal distribution or not 
+; with the chi-square goodness-of-fit test. 
+; 
+;SYNTAX
 ; result=normality_test(x,sl=sl,mv=mv)
-;Keywords:
-;  x:検定を行う観測データ
-;  sl:有意水準
-;     入力しなければ５％で検定
-;  mv:欠損値
-;     入力しなければNaNのみを欠損値として処理;
-;結果は、正規分布に従っている場合は0、従っていない場合は1を返す
+; 
+;KEYWORDS:
+;  x:Input data
+;  sl:Significant level
+;     The default is 0.05.
+;  mv:Missing value.
+;     If not set, only the NaN value is dealt with.
+;
+;NOTES:
+;  Output the value '0' if the input data obey the normal distribution and
+;  '1' if not obey.
 ;
 ;CODE:
 ;R. Hamaguchi, 13/02/2012.
 ;
 ;MODIFICATIONS:
 ;A. Shinbori, 01/05/2013.
+;A. Shinbori, 10/07/2013.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -47,9 +55,10 @@ x_max=max(c)
 x_min=min(c)
 x_mean=mean(c)
 x_stddev=stddev(c)
-
+;The number of intervals is （data points/40）. 
+;If the data points is less than 400, the number of intervals is fixed as 10.
 if nc ge 400 then begin
-    nK=round(nc/40.0)             ;区間の数は（データ点数÷40） データ点数が400点未満であれば、区間は10固定
+    nK=round(nc/40.0)             
 endif else begin
     nK=10.0
 endelse
@@ -58,7 +67,7 @@ x_d=(x_max-x_min)/nK
 for j=0L,nK-2 do begin
     r1=where(c ge (x_min+x_d*j) and c lt (x_min+x_d*(j+1)))
     if r1(0) ne -1 then begin
-        append_array,y,n_elements(r1)             ;実測度数
+        append_array,y,n_elements(r1)             ;Actually measured frequency
     endif else begin
         append_array,y,0
     endelse
@@ -76,10 +85,10 @@ endfor
 
 
 for i=0L,nK-1 do begin
-    append_array,z3,(z2[i+1]-z2[i])*nc          ;期待度数
+    append_array,z3,(z2[i+1]-z2[i])*nc          ;Expected frequency
 endfor
 
-if nK ge 15 then begin                       ;区間が15以上は誤差の大きい両端をカット
+if nK ge 15 then begin                       ;Section is cut the ends of large errors more than 15.
     for i=round(nK/20.0),nK-round(nK/20.0)-1 do begin           
         append_array,z4,((y[i]-z3[i])^2.0)/z3[i]
     endfor

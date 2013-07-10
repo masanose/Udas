@@ -34,6 +34,7 @@
 ; A. Shinbori, 26/12/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 19/12/2012.
+; A. Shinbori, 08/07/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -102,7 +103,7 @@ for ii=0,n_elements(parameters)-1 do begin
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/mu/troposphere/csv/'
-      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/data/data/ver01.0807/'
+      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/data/data/ver01.0807_1.02/'
     
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
@@ -134,7 +135,6 @@ for ii=0,n_elements(parameters)-1 do begin
      ;============= 
      ;Loop on files: 
      ;==============
-
       for h=jj,n_elements(local_paths)-1 do begin
          file= local_paths[h]
          if file_test(/regular,file) then  dprint,'Loading MU file: ',file $
@@ -181,6 +181,7 @@ for ii=0,n_elements(parameters)-1 do begin
               ;====Convert time from local time to unix time      
                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                       -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
+               
               ;
               ;Enter the missing value:
                for j=0,n_elements(h_data)-2 do begin
@@ -196,9 +197,16 @@ for ii=0,n_elements(parameters)-1 do begin
                append_array, mu_data, data2
             endif
          endwhile 
-         free_lun,lun  
+         free_lun,lun
+        ;==============================
+        ;Append array of time and data:
+        ;==============================
+         append_array, mu_time2, mu_time
+         append_array, mu_data2, mu_data 
+         mu_time=0
+         mu_data=0 
       endfor
-      
+
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
@@ -213,10 +221,10 @@ for ii=0,n_elements(parameters)-1 do begin
                        + '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '$
                        + 'Sports, Science and Technology (MEXT), Japan.'
        o=0
-       if time ne 0 then begin
+       if size(mu_data2,/type) eq 4 then 0 then begin
           if strmid(parameters[ii],0,2) eq 'pw' then o=1
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
-          store_data,'iug_mu_trop_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+          store_data,'iug_mu_trop_'+parameters[ii],data={x:mu_time2, y:mu_data2, v:altitude},dlimit=dlimit
           new_vars=tnames('iug_mu_trop_*')
           if new_vars[0] ne '' then begin          
              options,'iug_mu_trop_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'

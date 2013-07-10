@@ -3,24 +3,27 @@
 ;  Mann_Whitney_test
 ;  
 ;PURPOSE:
-;   2データ間の分布の差を検定する。　母集団の分布は問わない　
+;   Test the difference for distributions between two data sets.
+;   Distribution of the population does not matter.
 ;   
 ;KEYWORDS:
 ;  sl:significance level 
 ;     If you don't set sl, sl = 0.05 
 ;  mv:missing value
 ;     If you don't set mv, mv = only NaN 
+;  z:Statistical test value.
+;  Z0:Critical value of the standard normal distribution at significance level
+;  c:Comment
 ;
-;結果は分布が同じと判定されれば「3」、異なっていれば「2」を返す。
-;z:検定統計量
-;Z0:有意水準における標準正規分布の臨界値
-;c:コメント
-;
+;NOTES:
+;  The output result is 3 or 2 if both distributions is same or different.
+;  
 ;CODE:
 ;R. Hamaguchi, 13/02/2012.
 ;
 ;MODIFICATIONS:
 ;A. Shinbori, 01/05/2013.
+;A. Shinbori, 10/07/2013.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $

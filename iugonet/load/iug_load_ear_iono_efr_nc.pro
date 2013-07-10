@@ -38,6 +38,7 @@
 ; A. Shinbori, 09/07/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 17/12/2012.
+; A. Shinbori, 08/07/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -213,6 +214,7 @@ for ii=0,n_elements(parameters)-1 do begin
          pwr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
          wdt1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
          dpl1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
+         snr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
          pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
          for i=0, n_elements(time)-1 do begin
@@ -247,6 +249,16 @@ for ii=0,n_elements(parameters)-1 do begin
          endfor
          ncdf_close,cdfid  ; done
        
+        ;Calculation of SNR
+         snr=fltarr(n_elements(time),n_elements(range),n_elements(beam)) 
+         for i=0,n_elements(time)-1 do begin
+            for l=0,n_elements(beam)-1 do begin
+               for k=0,n_elements(range)-1 do begin
+                  snr1_ear[i,k,l]=pwr1_ear[i,k,l]-(pnoise1_ear[i,l]+alog10(nfft))
+              endfor 
+            endfor
+         endfor
+       
         ;=============================
         ;Append data of time and data:
         ;=============================
@@ -255,6 +267,7 @@ for ii=0,n_elements(parameters)-1 do begin
          append_array, wdt1, wdt1_ear
          append_array, dpl1, dpl1_ear
          append_array, pn1, pnoise1_ear
+         append_array, snr1, snr1_ear
       endfor
 
      ;==============================
@@ -275,6 +288,7 @@ for ii=0,n_elements(parameters)-1 do begin
          pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
          wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
          dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
+         snr2_ear=fltarr(n_elements(ear_time),n_elements(range))
          pnoise2_ear=fltarr(n_elements(ear_time)) 
     
          if size(pwr1,/type) eq 4 then begin
@@ -323,6 +337,18 @@ for ii=0,n_elements(parameters)-1 do begin
                   options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
                endif
+               for i=0, n_elements(ear_time)-1 do begin
+                  for k=0, n_elements(range)-1 do begin
+                     snr2_ear[i,k]=snr1[i,k,l]
+                  endfor
+               endfor
+               store_data,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],data={x:ear_time, y:snr2_ear, v:height2},dlimit=dlimit
+               new_vars=tnames('iug_ear_fai'+parameters[ii]+'_snr'+bname[l])
+               if new_vars[0] ne '' then begin
+                  options,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='snr'+bname[l]+'!C[dB]'
+                  options,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],'spec',1
+                  tdegap, 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l], /overwrite
+               endif 
                for i=0, n_elements(time)-1 do begin
                   pnoise2_ear[i]=pn1[i,l]
                endfor
@@ -351,7 +377,8 @@ for ii=0,n_elements(parameters)-1 do begin
    wdt1 = 0
    dpl1 = 0
    pn1 = 0
-
+   snr1 = 0
+   
    jj=n_elements(local_paths)
 endfor
 
