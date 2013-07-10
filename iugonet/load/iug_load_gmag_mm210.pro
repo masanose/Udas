@@ -41,9 +41,11 @@
 ;-
 
 pro iug_load_gmag_mm210, site=site, datatype=datatype, $
-        downloadonly=downloadonly, trange=trange
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange, timeclip=timeclip
 
 erg_load_gmag_mm210, site=site, datatype=datatype, $
-        downloadonly=downloadonly, trange=trange
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange, timeclip=timeclip
 
 end

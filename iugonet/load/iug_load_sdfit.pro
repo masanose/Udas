@@ -52,11 +52,15 @@
 ;-
 
 pro iug_load_sdfit, sites=sites, cdffn=cdffn, $
-        downloadonly=downloadonly, trange=trange, no_download=no_download, $
-        get_support_data=get_support_data
+  get_support_data=get_support_data, $
+  noacknowledgment=noacknowledgment, trange=trange, $
+  downloadonly=downloadonly, no_download=no_download, $
+  compact=compact
 
 erg_load_sdfit, sites=sites, cdffn=cdffn, $
-        downloadonly=downloadonly, trange=trange, no_download=no_download, $
-        get_support_data=get_support_data
+  get_support_data=get_support_data, $
+  noacknowledgment=noacknowledgment, trange=trange, $
+  downloadonly=downloadonly, no_download=no_download, $
+  compact=compact
 
 end

@@ -5,7 +5,7 @@
 ;   To load STEL induction magnetometer data from the STEL ERG-SC site 
 ;
 ; NOTE: 
-;   This procedure is a simple alias to "iug_load_gmag_stel_induction"
+;   This procedure is a simple alias to "erg_load_gmag_stel_induction"
 ;   and calls the original one by just providing the same
 ;   arguments/keywords given.
 ;   Some load procedures for the ground-based observational data
@@ -39,11 +39,13 @@
 ;-
 
 pro iug_load_gmag_stel_induction, site=site, $
-      downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
-      trange=trange, frequency_dependent=frequency_dependent, time_pulse=time_pulse
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange, timeclip=timeclip, $
+        frequency_dependent=frequency_dependent, time_pulse=time_pulse
 
 erg_load_gmag_stel_induction, site=site, $
-    downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
-    trange=trange, frequency_dependent=frequency_dependent, time_pulse=time_pulse
+        downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
+        trange=trange, timeclip=timeclip, $
+        frequency_dependent=frequency_dependent, time_pulse=time_pulse
 
 end

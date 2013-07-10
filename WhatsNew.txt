@@ -10,6 +10,13 @@
 4) Added "bik" and "sgk" to the sites for the load procedure of the 
 meteor radar.
 
+5) Added "sgk" to the sites for the load procedure of the radiosonde.
+
+6) Added "iug_plot2d_radiosonde.pro" for 2d-plot of the radiosonde data.
+
+7) Added the statistical analysis package.
+
+
 ------------------------------------------------------
 ; What's new in udas_2_01_1             April 16, 2013
 ------------------------------------------------------
@@ -35,12 +42,14 @@ Windows of GUI.
 4) Added some new functions to get the information of data from the IUGONET 
 metadata database (MDDB).
 
+
 ------------------------------------------------------
 ; What's new in udas_2_00_2         Novermber 29, 2012
 ------------------------------------------------------
 1) Modified some procudures for GUI.
 
 New functions were added to show data policy for each IUGONET data.
+
 
 ------------------------------------------------------
 ; What's new in udas_2_00_1             April 16, 2012
@@ -158,3 +167,4 @@ and "nicoh" were added in the netCDF data.
 "plot_map_sdfit" calls internally "sd_map_set", "overlay_map_sdfit", 
 and "overlay_map_coast" to generate a SuperDARN 2-D plot by itself. 
 Please see the header document for details of the options. 
+

@@ -18,7 +18,8 @@ see the project website at http://www.iugonet.org/en/.
 - Research Institute for Sustainable Humanosphere, Kyoto University
 - World Data Center for Geomagnetism, Kyoto University
 - Kwasan and Hida Observatories, Kyoto University
-- International Center for Space Weather Science and Education, Kyushu University (the former Space Environment Research Center, Kyushu University)
+- International Center for Space Weather Science and Education, Kyushu University 
+  (the former Space Environment Research Center, Kyushu University)
 
 
 ++++++++++++++++++++++++++++++++
@@ -42,8 +43,8 @@ Load procedures for IUGONET data:
 - iug_load_blr_rish     ; Boundary layer radar data from RISH
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
-- iug_load_gmag_nipr    ; Alias for "erg_load_gmag_nipr"
-- iug_load_gmag_serc    ; Fluxgate magnetometer data from NIPR
+- iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
+- iug_load_gmag_serc    ; MAGDAS magnetometer data from ICSWSE, Kyushu Univ
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
 - iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
 - iug_load_hf_tohokuu   ; Jupiter's/solar wide band spectral data in HF-band
@@ -70,7 +71,7 @@ Procudures in this directory are used to customize TDAS-GUI for
 IUGONET/ERG data
 
 <tools>
-Convenient functions to 
+Convenient functions to plot and analyze data.
 ------------------------------------------------------------
 
 
