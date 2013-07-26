@@ -1,4 +1,3 @@
-
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the standard observation data of the 
@@ -27,7 +26,7 @@
 ; A. Shinbori, 26/12/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 19/12/2012.
-; A. Shinbori, 08/07/2013.
+; A. Shinbori, 27/07/2013.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -51,6 +50,28 @@ if (not keyword_set(verbose)) then verbose=2
 ;****************************************
 if (not keyword_set(datatype)) then datatype='troposphere'
 
+;*******************
+;defition of height:
+;*******************
+height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,3.475,3.623,3.770,3.918,4.066,4.213,4.361,4.509,4.657,4.804,'+$
+                   '4.952,5.100,5.248,5.395,5.543,5.691,5.838,5.986,6.134,6.282,6.429,6.577,6.725,6.872,7.020,7.168,7.316,7.463,7.611,7.759,'+$
+                   '7.907,8.054,8.202,8.350,8.497,8.645,8.793,8.941,9.088,9.236,9.384,9.531,9.679,9.827,9.975,10.122,10.270,10.418,10.565,'+$
+                   '10.713,10.861,11.009,11.156,11.304,11.452,11.600,11.747,11.895,12.043,12.190,12.338,12.486,12.634,12.781,12.929,13.077,'+$
+                   '13.224,13.372,13.520,13.668,13.815,13.963,14.111,14.259,14.406,14.554,14.702,14.849,14.997,15.145,15.293,15.440,15.588,'+$
+                   '15.736,15.883,16.031,16.179,16.327,16.474,16.622,16.770,16.917,17.065,17.213,17.361,17.508,17.656,17.804,17.952,18.099,'+$
+                   '18.247,18.395,18.542,18.690,18.838,18.986,19.133,19.281,19.429,19.576',',',/extract)
+                   
+ height_v=strsplit('2.025,2.175,2.325,2.475,2.625,2.775,2.925,3.075,3.225,3.375,3.525,3.675,3.825,3.975,4.125,4.275,4.425,4.575,4.725,4.875,'+$
+                   '5.025,5.175,5.325,5.475,5.625,5.775,5.925,6.075,6.225,6.375,6.525,6.675,6.825,6.975,7.125,7.275,7.425,7.575,7.725,7.875,'+$
+                   '8.025,8.175,8.325,8.475,8.625,8.775,8.925,9.075,9.225,9.375,9.525,9.675,9.825,9.975,10.125,10.275,10.425,10.575,10.725,'+$
+                   '10.875,11.025,11.175,11.325,11.475,11.625,11.775,11.925,12.075,12.225,12.375,12.525,12.675,12.825,12.975,13.125,13.275,'+$
+                   '13.425,13.575,13.725,13.875,14.025,14.175,14.325,14.475,14.625,14.775,14.925,15.075,15.225,15.375,15.525,15.675,15.825,'+$
+                   '15.975,16.125,16.275,16.425,16.575,16.725,16.875,17.025,17.175,17.325,17.475,17.625,17.775,17.925,18.075,18.225,18.375,'+$
+                   '18.525,18.675,18.825,18.975,19.125,19.275,19.425,19.575,19.725,19.875',',',/extract)
+
+;data list which applies the above height data:
+f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
+
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
@@ -73,7 +94,7 @@ if ~size(fns,/type) then begin
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/nc/'
-   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/data/data/ver01.0807_1.01/'
+   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/data/data/ver01.0807_1.02/'
     
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
@@ -187,19 +208,37 @@ if (downloadonly eq 0) then begin
       day = fix(strmid(strtrim(string(date),1),6,2))
                            
      ;Definition of arrary names
+      data_point=120
       unix_time = dblarr(n_elements(time))
-      height2 = fltarr(n_elements(range))
-      uwind_mu=fltarr(n_elements(time),n_elements(range))
-      vwind_mu=fltarr(n_elements(time),n_elements(range))
-      wwind_mu=fltarr(n_elements(time),n_elements(range))
-      pwr1_mu=fltarr(n_elements(time),n_elements(range),n_elements(beam))
-      wdt1_mu=fltarr(n_elements(time),n_elements(range),n_elements(beam))
-      dpl1_mu=fltarr(n_elements(time),n_elements(range),n_elements(beam))
-      pnoise1_mu=fltarr(n_elements(time),n_elements(beam)) 
+      height2 = fltarr(n_elements(data_point))
+      uwind_mu=fltarr(n_elements(time),data_point)+!values.f_nan
+      vwind_mu=fltarr(n_elements(time),data_point)+!values.f_nan
+      wwind_mu=fltarr(n_elements(time),data_point)+!values.f_nan
+      pwr1_mu=fltarr(n_elements(time),data_point,n_elements(beam))+!values.f_nan
+      wdt1_mu=fltarr(n_elements(time),data_point,n_elements(beam))+!values.f_nan
+      dpl1_mu=fltarr(n_elements(time),data_point,n_elements(beam))+!values.f_nan
+      pnoise1_mu=fltarr(n_elements(time),n_elements(beam))+!values.f_nan
+
+     ;File search:
+      fname=strsplit(strmid(file,10,13,/REVERSE_OFFSET),'.',/extract)
+      idx=where(fname[0] eq f_list)
+     
+     ;Definition of altitude and data arraies:     
+      altitude = fltarr(120)
+    
+     ;Enter the altitude information:
+      if idx eq -1 then begin
+         height_vw = float(height_v)
+         height_mwzw = float(height_zm)
+         height2 = float(height_v)
+      endif
     
       for i=0, n_elements(time)-1 do begin
         ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
-         unix_time[i] = double(time[i]) +time_double(syymmdd+'/'+shhmmss)-time_diff2                        
+         unix_time[i] = double(time[i]) +time_double(syymmdd+'/'+shhmmss)-time_diff2 
+        ;Enter the missing value:
+         d_num=n_elements(range)
+         st_num=120-d_num                       
          for k=0, n_elements(range)-1 do begin
             a = uwind[k,i]            
             wbad = where(a eq 10000000000,nbad)
@@ -213,9 +252,9 @@ if (downloadonly eq 0) then begin
             wbad = where(c eq 10000000000,nbad)
             if nbad gt 0 then c[wbad] = !values.f_nan
             wwind[k,i] =c              
-            uwind_mu[i,k]=uwind[k,i]
-            vwind_mu[i,k]=vwind[k,i]
-            wwind_mu[i,k]=wwind[k,i]           
+            uwind_mu[i,st_num+k]=uwind[k,i]
+            vwind_mu[i,st_num+k]=vwind[k,i]
+            wwind_mu[i,st_num+k]=wwind[k,i]           
             for l=0, n_elements(beam)-1 do begin           
                e = pwr[k,i,l]            
                wbad = where(e eq 10000000000,nbad)
@@ -233,13 +272,15 @@ if (downloadonly eq 0) then begin
                wbad = where(d eq 10000000000,nbad)
                if nbad gt 0 then d[wbad] = !values.f_nan
                pnoise[i,l] =d
-               pwr1_mu[i,k,l]=pwr[k,i,l]
-               wdt1_mu[i,k,l]=width[k,i,l]
-               dpl1_mu[i,k,l]=dpl[k,i,l]
+               pwr1_mu[i,st_num+k,l]=pwr[k,i,l]
+               wdt1_mu[i,st_num+k,l]=width[k,i,l]
+               dpl1_mu[i,st_num+k,l]=dpl[k,i,l]
                pnoise1_mu[i,l]=pnoise[i,l]
             endfor 
          endfor
       endfor
+
+
      ;==============================
      ;Append array of time and data:
      ;==============================
@@ -259,9 +300,9 @@ if (downloadonly eq 0) then begin
      ;Definition of arrary names
       bname2=strarr(n_elements(beam))
       bname=strarr(n_elements(beam))
-      pwr2_mu=fltarr(n_elements(mu_time),n_elements(range))
-      wdt2_mu=fltarr(n_elements(mu_time),n_elements(range))
-      dpl2_mu=fltarr(n_elements(mu_time),n_elements(range))
+      pwr2_mu=fltarr(n_elements(mu_time),120)
+      wdt2_mu=fltarr(n_elements(mu_time),120)
+      dpl2_mu=fltarr(n_elements(mu_time),120)
       pnoise2_mu=fltarr(n_elements(mu_time)) 
    
      ;==============================
@@ -306,11 +347,11 @@ if (downloadonly eq 0) then begin
          for l=0, n_elements(beam)-1 do begin
             bname2[l]=string(beam[l]+1)
             bname[l]=strsplit(bname2[l],' ', /extract)
-            for k=0, n_elements(range)-1 do begin
-               height2[k]=height[k,l]
-            endfor
+          ;  for k=0, n_elements(range)-1 do begin
+          ;     height2[k]=height[k,l]
+          ;  endfor
             for i=0, n_elements(mu_time)-1 do begin
-               for k=0, n_elements(range)-1 do begin
+               for k=0, 119 do begin
                   pwr2_mu[i,k]=pwr1[i,k,l]
                endfor
             endfor
@@ -322,7 +363,7 @@ if (downloadonly eq 0) then begin
                tdegap, 'iug_mu_trop_pwr'+bname[l],/overwrite
             endif  
             for i=0, n_elements(mu_time)-1 do begin
-               for k=0, n_elements(range)-1 do begin
+               for k=0, 119 do begin
                   wdt2_mu[i,k]=wdt1[i,k,l]
                endfor
             endfor
@@ -334,7 +375,7 @@ if (downloadonly eq 0) then begin
                tdegap, 'iug_mu_trop_wdt'+bname[l],/overwrite 
             endif
             for i=0, n_elements(mu_time)-1 do begin
-               for k=0, n_elements(range)-1 do begin
+               for k=0, 119 do begin
                   dpl2_mu[i,k]=dpl1[i,k,l]
                endfor
             endfor             
