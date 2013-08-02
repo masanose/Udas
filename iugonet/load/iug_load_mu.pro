@@ -40,6 +40,7 @@
 ; A. Shinbori, 08/08/2012.
 ; A. Shinbori, 04/10/2012.
 ; A. Shinbori, 12/11/2012.
+; A. Shinbori, 02/08/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -48,7 +49,8 @@
 ; $URL $
 ;-
   
-pro iug_load_mu, datatype = datatype, level = level, length=length, parameter = parameter, downloadonly=downloadonly, $
+pro iug_load_mu, datatype = datatype, level = level, length=length, $
+                 parameter1 = parameter1, parameter2 = parameter2, downloadonly=downloadonly, $
                  trange=trange, verbose=verbose
 
 ;******************
@@ -81,16 +83,28 @@ level_all = strsplit('org scr',' ', /extract)
 if (not keyword_set(level)) then level='all'
 levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
 
-;****************
-;Parameter check:
-;****************
+;*******************
+;Parameter-1 check:
+;*******************
 
 ;--- all parameters (default)
-parameter_all = strsplit('h1t60min00 h1t60min30 h2t60min00 h2t60min30',' ', /extract)
+parameter_all_1 = strsplit('h1t60min00 h1t60min30 h2t60min00 h2t60min30 iemdc3',' ', /extract)
 
 ;--- check parameters
-if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+if(not keyword_set(parameter1)) then parameter1='all'
+parameters_1 = thm_check_valid_name(parameter1, parameter_all_1, /ignore_case, /include_all)
+
+;*******************
+;Parameter-2 check:
+;*******************
+
+;--- all parameters (default)
+parameter_all_2 = strsplit('uwnd vwnd wwnd temp pwr1 pwr2 pwr3 pwr4 pwr5 dpl1 dpl2 dpl3 dpl4 dpl5 '+$
+                           'wdt1 wdt2 wdt3 wdt4 wdt5 pn1 pn2 pn3 pn4 pn5',' ', /extract)
+
+;--- check parameters
+if(not keyword_set(parameter2)) then parameter2='all'
+parameters_2 = thm_check_valid_name(parameter2, parameter_all_2, /ignore_case, /include_all)
                  
   ;===============================
   ;======Load data of MU=========
@@ -116,7 +130,19 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
    
   ;load of MU meteor data  
    if datatypes[i] eq 'meteor' then begin
-      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, length=length, trange = trange, downloadonly=downloadonly, verbose = verbose
+      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters_1, length=length, trange = trange, downloadonly=downloadonly, verbose = verbose
+   endif
+   
+  ;load of MU RASS data  
+   if datatypes[i] eq 'rass' then begin
+      iug_load_mu_rass_txt, datatype = datatypes[i], parameter =parameters_2, $
+                            trange = trange, downloadonly=downloadonly, verbose = verbose
+   endif
+
+  ;load of MU FAI data  
+   if datatypes[i] eq 'fai' then begin
+      iug_load_mu_fai_txt, datatype = datatypes[i], parameter1 =parameters_1, parameter2 =parameters_2, $
+                           trange = trange, downloadonly=downloadonly, verbose = verbose
    endif
    endfor  
    

@@ -1,0 +1,271 @@
+;+
+;
+;NAME:
+;iug_load_mu_rass_txt
+;
+;PURPOSE:
+;  Queries the Kyoto_RISH servers for the special observation data of the 
+;  RASS in the CSV format taken by the Middle and 
+;  Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
+;
+;SYNTAX:
+; iug_load_mu_rass_txt, datatype = datatype, parameter=parameter, $
+;                        downloadonly=downloadonly, trange=trange, verbose=verbose
+;
+;KEYWOARDS:
+;  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
+;            The default is 'troposphere'. 
+;  parameter = parameter name of MU troposphere standard obervation data.  
+;          For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
+;          The default is 'all', i.e., load all available parameters.
+;  trange = (Optional) Time range of interest  (2 element array), if
+;          this is not set, the default is to prompt the user. Note
+;          that if the input time range is not a full day, a full
+;          day's data is loaded.
+;  /downloadonly, if set, then only download the data, do not load it
+;                 into variables.
+;
+;CODE:
+; A. Shinbori, 22/06/2013.
+;
+;MODIFICATIONS:
+; 
+;ACKNOWLEDGEMENT:
+; $LastChangedBy:  $
+; $LastChangedDate:  $
+; $LastChangedRevision:  $
+; $URL $
+;-
+
+pro iug_load_mu_rass_txt, datatype = datatype, $
+  parameter=parameter, $
+  downloadonly=downloadonly, $
+  trange=trange, $
+  verbose=verbose
+
+;**************
+;keyword check:
+;**************
+if (not keyword_set(verbose)) then verbose=2
+ 
+;************************************
+;Load 'toroposphere' data by default:
+;************************************
+if (not keyword_set(datatype)) then datatype='troposphere'
+
+;***********
+;parameters:
+;***********
+;--- all parameters (default)
+parameter_all = strsplit('uwnd vwnd wwnd temp',' ', /extract)
+
+;--- check site codes
+if(not keyword_set(parameter)) then parameter='all'
+parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+
+print, parameters
+
+;*****************
+;defition of unit:
+;*****************
+;--- all parameters (default)
+unit_all = strsplit('m/s degree',' ', /extract)
+
+;******************************************************************
+;Loop on downloading files
+;******************************************************************
+;Get timespan, define FILE_NAMES, and load data:
+;===============================================
+;
+;===================================================================
+;Download files, read data, and create tplot vars at each component:
+;===================================================================
+;Definition of parameter:
+jj=0
+
+for ii=0,n_elements(parameters)-1 do begin
+   if ~size(fns,/type) then begin
+
+     ;Get files for ith component:
+     ;***************************
+      file_names = file_dailynames( $
+      file_format='YYYY/YYYYMMDD/YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[ii]+'.csv'
+     ;
+     ;Define FILE_RETRIEVE structure:
+     ;===============================
+      source = file_retrieve(/struct)
+      source.verbose=verbose
+      source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/mu/rass/csv/'
+      source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/rass/data/csv/'
+    
+     ;Get files and local paths, and concatenate local paths:
+     ;=======================================================
+      local_paths=file_retrieve(file_names,_extra=source)
+      local_paths_all = ~(~size(local_paths_all,/type)) ? $
+                        [local_paths_all, local_paths] : local_paths
+      if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
+   endif else file_names=fns
+
+  ;--- Load data into tplot variables
+   if (not keyword_set(downloadonly)) then downloadonly=0
+
+   if (downloadonly eq 0) then begin
+
+     ;===========================================================
+     ;Loop on read data, and create tplot vars at each parameter
+     ;===========================================================
+     ;Read the files:
+     ;===============
+   
+     ;Definition of parameters and array:
+      s=''
+      u=''
+
+     ;Initialize data and time buffer
+      mu_time=0
+      mu_data=0
+     
+     ;============= 
+     ;Loop on files: 
+     ;==============
+
+      for h=jj,n_elements(local_paths)-1 do begin
+         file= local_paths[h]
+         if file_test(/regular,file) then  dprint,'Loading MU file: ',file $
+         else begin
+            dprint,'MU file',file,'not found. Skipping'
+            continue
+         endelse
+            
+         openr,lun,file,/get_lun    
+        ;
+        ;Read information of altitude:
+        ;=============================
+         readf, lun, s
+    
+        ;Definition of altitude and data arraies:
+         h_data = strsplit(s,',',/extract)     
+         altitude = fltarr(n_elements(h_data)-1)
+    
+        ;Enter the altitude information:
+         for j=0,n_elements(h_data)-2 do begin
+            altitude[j] = float(h_data[j+1])
+         endfor
+                  
+        ;
+        ;Loop on readdata:
+        ;=================
+         while(not eof(lun)) do begin
+            readf,lun,s
+            ok=1
+            if strmid(s,0,1) eq '[' then ok=0
+            if ok && keyword_set(s) then begin
+               dprint,s ,dlevel=5
+               data = strsplit(s,',',/extract)
+               data2 = fltarr(1,n_elements(data)-1)
+               
+              ;Calculate time:
+              ;==============
+               u=strsplit(data(0),' ',/extract)
+               date=strsplit(u[0],'-',/extract)
+               year = date[2]
+               month = date[1]
+               day = date[0]
+               if month eq 'JAN' then month =1
+               if month eq 'FEB' then month =2
+               if month eq 'MAR' then month =3
+               if month eq 'APR' then month =4
+               if month eq 'MAY' then month =5
+               if month eq 'JUN' then month =6
+               if month eq 'JUL' then month =7
+               if month eq 'AUG' then month =8
+               if month eq 'SEP' then month =9
+               if month eq 'OCT' then month =10
+               if month eq 'NOV' then month =11
+               if month eq 'DEC' then month =12 
+                
+              ;====Convert time from local time to unix time      
+               time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+u[1]) $
+                      -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
+              ;
+              ;Enter the missing value:
+               for j=0,n_elements(h_data)-2 do begin
+                  a = float(data[j+1])
+                  wbad = where(a eq 999,nbad)
+                  if nbad gt 0 then a[wbad] = !values.f_nan
+                  data2[0,j]=a
+               endfor
+              ;==============================
+              ;Append array of time and data:
+              ;==============================
+               append_array, mu_time, time
+               append_array, mu_data, data2
+            endif
+         endwhile 
+         free_lun,lun  
+      endfor
+      
+     ;==============================
+     ;Store data in TPLOT variables:
+     ;==============================
+     ;Acknowlegment string (use for creating tplot vars)
+      acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
+                       + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
+                       + 'including text such as the MU data provided by Research Institute ' $
+                       + 'for Sustainable Humanosphere of Kyoto University. We would also ' $
+                       + 'appreciate receiving a copy of the relevant publications. '$
+                       + 'The distribution of MU radar data has been partly supported by the IUGONET '$
+                       + '(Inter-university Upper atmosphere Global Observation NETwork) project '$
+                       + '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '$
+                       + 'Sports, Science and Technology (MEXT), Japan.'
+       o=0
+       if size(mu_data,/type) eq 4 then begin
+          if strmid(parameters[ii],0,4) eq 'temp' then o=1
+          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'J. Furumoto'))
+          store_data,'iug_mu_rass_'+parameters[ii],data={x:mu_time, y:mu_data, v:altitude/1000.0},dlimit=dlimit
+          new_vars=tnames('iug_mu_rass_*')
+          if new_vars[0] ne '' then begin          
+             options,'iug_mu_rass_'+parameters[ii],ytitle='MU-rass!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
+             options,'iug_mu_rass_'+parameters[ii], labels='MU-rass [km]'
+          endif
+       endif   
+   
+       new_vars=tnames('iug_mu_rass_*')
+       ; Add options
+       if new_vars[0] ne '' then options, 'iug_mu_rass_'+parameters[ii], 'spec', 1
+    
+      ;Clear time and data buffer:
+       mu_time=0
+       mu_data=0
+       
+      ;Add tdegap
+       if new_vars[0] ne '' then tdegap, 'iug_mu_rass_'+parameters[ii],/overwrite
+   endif
+  jj=n_elements(local_paths)
+endfor
+
+new_vars=tnames('iug_mu_rass_*')
+if new_vars[0] ne '' then begin
+   print,'*****************************
+   print,'Data loading is successful!!'
+   print,'*****************************
+endif
+
+;*************************
+;print of acknowledgement:
+;*************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire the middle and upper atmosphere (MU) radar data,'
+print, 'we ask that you acknowledge us in your use of the data.' 
+print, 'This may be done by including text such as MU data provided' 
+print, 'by Research Institute for Sustainable Humanosphere of Kyoto University.' 
+print, 'We would also appreciate receiving a copy of the relevant publications.'
+print, 'The distribution of MU radar data has been partly supported by the IUGONET'
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
+print, 'Sports, Science and Technology (MEXT), Japan.' 
+
+end
+

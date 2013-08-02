@@ -41,7 +41,7 @@
 ; A. Shinbori, 06/10/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 17/12/2012.
-; A. Shinbori, 08/07/2013.
+; A. Shinbori, 01/08/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -197,7 +197,8 @@ for ii=0,n_elements(parameters)-1 do begin
                if ok && keyword_set(s) then begin
                   dprint,s ,dlevel=5
                   data = strsplit(s,',',/extract)
-         
+                  data2 = fltarr(1,n_elements(data)-1)+!values.f_nan
+                  
                  ;Calculate time:
                  ;==============
                   u=data(0)
@@ -216,7 +217,7 @@ for ii=0,n_elements(parameters)-1 do begin
                      a = float(data[j+1])
                      wbad = where(a eq -999,nbad)
                      if nbad gt 0 then a[wbad] = !values.f_nan
-                     data[k,j]=a
+                     data2[0,j]=a
                   endfor
                  ;=============================
                  ;Append data of time and data:

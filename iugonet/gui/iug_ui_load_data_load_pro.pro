@@ -278,7 +278,7 @@ pro iug_ui_load_data_load_pro,    $
 
       ;----- Middle Upper atmosphere radar -----;
       'Middle_Upper_atmosphere_radar' : begin
-          iug_load_mu, datatype =datatype, level=site_or_param, parameter = parameters, trange = timeRange
+          iug_load_mu, datatype =datatype, level=site_or_param, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
           if site_or_param[0] eq '*' then begin
               lvl='*'
           endif else begin
@@ -294,6 +294,8 @@ pro iug_ui_load_data_load_pro,    $
               'mesosphere': par_names=tnames('iug_mu_meso_'+vns+'_*')
               'ionosphere': par_names=tnames('iug_mu_iono_'+vns)
               'meteor': par_names=tnames('iug_mu_meteor_*')
+              'rass': par_names=tnames('iug_mu_rass_'+vns)
+              'fai': par_names=tnames('iug_mu_fai_'+lvl+'_'+vns)
           endcase
       end
 

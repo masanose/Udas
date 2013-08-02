@@ -1,25 +1,24 @@
 ;+
 ;
 ;NAME:
-;iug_load_ear_iono_er_txt
+;iug_load_mu_fai_txt
 ;
 ;PURPOSE:
 ;  Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
-;  taken by the equatorial atmosphere radar (EAR) and loads data into
-;  tplot format.
+;  taken by the MU radar and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_ear_iono_er_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+; iug_load_mu_fai_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_ear_iono_er_txt, datatype = 'ionosphere'.
+;  datatype = Observation data type. For example, iug_load_mu_fai_txt, datatype = 'ionosphere'.
 ;            The default is 'ionosphere'. 
-;  parameter1 = first parameter name of EAR FAI obervation data.  
-;          For example, iug_load_ear_iono_er_txt, parameter = 'eb1p2a'.
+;  parameter1 = first parameter name of MU FAI obervation data.  
+;          For example, iug_load_mu_fai_txt, parameter = 'eb1p2a'.
 ;          The default is 'all', i.e., load all available parameters.
-;  parameter2 = second parameter name of EAR FAI obervation data.  
-;          For example, iug_load_ear_iono_er_txt, parameter = 'dpl1'.
+;  parameter2 = second parameter name of MU FAI obervation data.  
+;          For example, iug_load_mu_fai_txt, parameter = 'dpl1'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -28,20 +27,12 @@
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
 ;
-;DATA AVAILABILITY:
-;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
-;  before you analyze the FAI data using this software. 
-;  http://www.rish.kyoto-u.ac.jp/ear/data-fai/index.html#data
 ;
 ;CODE:
-; A. Shinbori, 19/09/2010.
+; A. Shinbori, 01/08/2013.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 24/03/2011.
-; A. Shinbori, 06/10/2011.
-; A. Shinbori, 31/01/2012.
-; A. Shinbori, 17/12/2012.
-; A. Shinbori, 01/08/2013.
+;
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -50,7 +41,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_iono_er_txt, datatype = datatype, $
+pro iug_load_mu_fai_txt, datatype = datatype, $
   parameter1=parameter1, $
   parameter2=parameter2, $
   downloadonly=downloadonly, $
@@ -71,10 +62,7 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;************
 ;--- all parameters1 (default)
-parameter1_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
-                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb3p4g eb3p4h eb4p2c eb4p2d '+$
-                          'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a ',$
-                          ' ', /extract)
+parameter1_all = strsplit('iemdc3',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter1)) then parameter1='all'
@@ -119,15 +107,15 @@ for ii=0,n_elements(parameters)-1 do begin
         ;Get files for ith component:
         ;***************************
          file_names = file_dailynames( $
-         file_format='YYYY/'+$
-                     'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.'+parameters2[iii]+'.csv'
+         file_format='YYYY/YYYYMMDD/'+$
+                     'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[ii]+'.'+parameters2[iii]+'.csv'
         ;
         ;Define FILE_RETRIEVE structure:
         ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/ionosphere/e_region/csv/'
-         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/csv/'
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/fai/csv/'
+         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/fai/data/'
     
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
@@ -153,17 +141,17 @@ for ii=0,n_elements(parameters)-1 do begin
          u=''
 
         ;Initialize data and time buffer
-         ear_time=0
-         ear_data=0
+         mu_time=0
+         mu_data=0
          
         ;==============
         ;Loop on files: 
         ;==============
          for h=jj,n_elements(local_paths)-1 do begin
             file= local_paths[h]
-            if file_test(/regular,file) then  dprint,'Loading EAR file: ',file $
+            if file_test(/regular,file) then  dprint,'Loading MU-FAI file: ',file $
             else begin
-               dprint,'EAR file ',file,' not found. Skipping'
+               dprint,'MU-FAI file ',file,' not found. Skipping'
                continue
             endelse  
             
@@ -213,7 +201,7 @@ for ii=0,n_elements(parameters)-1 do begin
                  
                  ;====Convert time from local time to unix time:      
                   time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                          -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
+                          -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                  ;
                  ;Enter the missing value:
                   for j=0,n_elements(data)-2 do begin
@@ -225,8 +213,8 @@ for ii=0,n_elements(parameters)-1 do begin
                  ;
                  ;Append data of time and data:
                  ;=============================
-                  append_array, ear_time, time
-                  append_array, ear_data, data2
+                  append_array, mu_time, time
+                  append_array, mu_data, data2
                endif
             endwhile 
             free_lun,lun  
@@ -236,38 +224,40 @@ for ii=0,n_elements(parameters)-1 do begin
         ;Store data in TPLOT variables:
         ;==============================
         ;Acknowlegment string (use for creating tplot vars)
-         acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for ' $
-                          + 'Sustainable Humanosphere (RISH), Kyoto University and is operated by ' $
-                          + 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. ' $
-                          + 'Distribution of the data has been partly supported by the IUGONET ' $
-                          + '(Inter-university Upper atmosphere Global Observation NETwork) project ' $
-                          + '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, ' $
-                          + 'Sports, Science and Technology (MEXT), Japan.'
+      acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
+                       + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
+                       + 'including text such as the MU data provided by Research Institute ' $
+                       + 'for Sustainable Humanosphere of Kyoto University. We would also ' $
+                       + 'appreciate receiving a copy of the relevant publications. '$
+                       + 'The distribution of MU radar data has been partly supported by the IUGONET '$
+                       + '(Inter-university Upper atmosphere Global Observation NETwork) project '$
+                       + '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '$
+                       + 'Sports, Science and Technology (MEXT), Japan.'
                    
-         if size(ear_data,/type) eq 4 then begin
+         if size(mu_data,/type) eq 4 then begin
             if strmid(parameters2[iii],0,2) eq 'dp' then o=0
             if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
             if strmid(parameters2[iii],0,2) eq 'pw' then o=1
             if strmid(parameters2[iii],0,2) eq 'pn' then o=1
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
-            store_data,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
-            new_vars=tnames('iug_ear_fai'+parameters[ii]+'_'+parameters2[iii])
+            store_data,'iug_mu_fai_'+parameters[ii]+'_'+parameters2[iii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+            new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_'+parameters2[iii])
             if new_vars[0] ne '' then begin
-                options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
-                options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI E-region [km]'         
+                options,'iug_mu_fai_'+parameters[ii]+'_'+parameters2[iii],ytitle='MU-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
+                options,'iug_mu_fai_'+parameters[ii]+'_'+parameters2[iii], labels='MU-FAI [km]'         
                ;Add options
-                if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
+                if strmid(parameters2[iii],0,2) ne 'pn' then options, 'iug_mu_fai_'+parameters[ii]+'_'+parameters2[iii], 'spec', 1         
             endif       
          endif 
      
         ;Clear time and data buffer:
-         ear_time=0
-         ear_data=0
+         mu_time=0
+         mu_data=0
      
-         new_vars=tnames('iug_ear_fai*')
+         new_vars=tnames('iug_mu_fai_*')
          if new_vars[0] ne '' then begin    
            ;Add tdegap
-            tdegap, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],/overwrite
+            tdegap, 'iug_mu_fai_'+parameters[ii]+'_'+parameters2[iii],/overwrite
          endif
       endif
       jj=n_elements(local_paths)
@@ -275,7 +265,7 @@ for ii=0,n_elements(parameters)-1 do begin
    jj=n_elements(local_paths)
 endfor
   
-new_vars=tnames('iug_ear_fai*')
+new_vars=tnames('iug_mu_fai_*')
 if new_vars[0] ne '' then begin  
    print,'*****************************
    print,'Data loading is successful!!'
@@ -288,12 +278,14 @@ endif
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'The Equatorial Atmosphere Radar belongs to Research Institute for '
-print, 'Sustainable Humanosphere (RISH), Kyoto University and is operated by '
-print, 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. '
-print, 'Distribution of the data has been partly supported by the IUGONET '
-print, '(Inter-university Upper atmosphere Global Observation NETwork) project '
-print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, '
+print, 'If you acquire the middle and upper atmosphere (MU) radar data,'
+print, 'we ask that you acknowledge us in your use of the data.' 
+print, 'This may be done by including text such as MU data provided' 
+print, 'by Research Institute for Sustainable Humanosphere of Kyoto University.' 
+print, 'We would also appreciate receiving a copy of the relevant publications.'
+print, 'The distribution of MU radar data has been partly supported by the IUGONET'
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
 print, 'Sports, Science and Technology (MEXT), Japan.'
 
 end
