@@ -11,7 +11,8 @@
 ;SYNTAX:
 ;  iug_load_mu [ ,DATATYPE = string ]
 ;              [ ,LEVEL = string ]
-;              [ ,PARAMETER = string ]
+;              [ ,PARAMETER1 = string ]
+;              [ ,PARAMETER2 = string ]
 ;              [ ,TRANGE = [min,max] ]
 ;              [ ,FILENAMES = string scalar or array ]
 ;              [ ,<and data keywords below> ]
@@ -21,8 +22,10 @@
 ;             DATATYPEs are 'troposphere' etc.
 ;  LEVEL = The level of mesospheric data to be loaded. In this load program,
 ;             LEVELs are 'org' and 'scr'.
-;  PARAMETER = The parameter of meteor data to be loaded. In this load program,
-;             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00' and 'h2t60min30'.
+;  PARAMETER1 = The parameter of meteor and fai data to be loaded. In this load program,
+;             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00','h2t60min30' and 'iemdc3'.
+;  PARAMETER2 = The parameter of rass and fai data to be loaded. In this load program,
+;             PARAMETERs are 'uwnd','pwr1','wdt1' 'dpl1','pn1' and so on.
 ;  LENGTH = The file type of meteor data to be loaded.
 ;             LENGTHs are '1-day' and '1-month'. Default is 1-day.
 ;  TRANGE (In):

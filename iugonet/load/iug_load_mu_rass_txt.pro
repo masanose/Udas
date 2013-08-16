@@ -171,18 +171,18 @@ for ii=0,n_elements(parameters)-1 do begin
                year = date[2]
                month = date[1]
                day = date[0]
-               if month eq 'JAN' then month =1
-               if month eq 'FEB' then month =2
-               if month eq 'MAR' then month =3
-               if month eq 'APR' then month =4
-               if month eq 'MAY' then month =5
-               if month eq 'JUN' then month =6
-               if month eq 'JUL' then month =7
-               if month eq 'AUG' then month =8
-               if month eq 'SEP' then month =9
-               if month eq 'OCT' then month =10
-               if month eq 'NOV' then month =11
-               if month eq 'DEC' then month =12 
+               if month eq 'JAN' then month ='01'
+               if month eq 'FEB' then month ='02'
+               if month eq 'MAR' then month ='03'
+               if month eq 'APR' then month ='04'
+               if month eq 'MAY' then month ='05'
+               if month eq 'JUN' then month ='06'
+               if month eq 'JUL' then month ='07'
+               if month eq 'AUG' then month ='08'
+               if month eq 'SEP' then month ='09'
+               if month eq 'OCT' then month ='10'
+               if month eq 'NOV' then month ='11'
+               if month eq 'DEC' then month ='12' 
                 
               ;====Convert time from local time to unix time      
                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+u[1]) $
@@ -239,7 +239,7 @@ for ii=0,n_elements(parameters)-1 do begin
        mu_data=0
        
       ;Add tdegap
-       if new_vars[0] ne '' then tdegap, 'iug_mu_rass_'+parameters[ii],/overwrite
+       if new_vars[0] ne '' then tdegap, 'iug_mu_rass_'+parameters[ii],dt=600, /overwrite
    endif
   jj=n_elements(local_paths)
 endfor

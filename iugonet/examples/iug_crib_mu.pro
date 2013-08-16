@@ -7,7 +7,7 @@
 ;        .run iug_crib_mu
 ;
 ;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  DEC 03, 2011
+;Last Updated:  A. Shinbori,  AUG 16, 2013
 ;-
 
 ;Initializes system variables for themis:
@@ -92,13 +92,37 @@ timespan,'1990-05-18',5,/day
 ;  vwndsig = standard deviation of meridional wind
 ;  mwnum = number of meteors used to derive the horizontal wind
 ;===============================================================================
-iug_load_mu, datatype = 'meteor',parameter = 'h1t60min00'
+iug_load_mu, datatype = 'meteor',parameter1 = 'h1t60min00'
 
 ;Plot time-height distribution of zonal and meridional winds, standard deviation of
 ;zonal and meridional winds and number of meteors used to derive the horizontal wind:
 ;=====================================================================================
 tplot,['iug_mu_meteor_uwnd_h1t60min00','iug_mu_meteor_vwnd_h1t60min00','iug_mu_meteor_uwndsig_h1t60min00',$
        'iug_mu_meteor_vwndsig_h1t60min00', 'iug_mu_meteor_mwnum_h1t60min00']
+
+stop
+
+;==========================RASS=======================================
+;Specify timespan:
+;=================
+timespan,'1996-10-27',10,/day
+
+;Load all the special observation data of RASS
+;taken by the MU radar in timespan:
+;Tplot variables are 'iug_mu_rass_uwnd', 'iug_mu_rass_vwnd',
+;'iug_mu_rass_wwnd', 'iug_mu_rass_temp':
+;  uwnd = zonal wind:
+;  vwnd = meridional wind
+;  wwnd = vertical wind
+;  temp = air temperature
+;===============================================================================
+iug_load_mu, datatype = 'rass'
+
+;Plot time-height distribution of zonal and meridional winds, standard deviation of
+;zonal and meridional winds and number of meteors used to derive the horizontal wind:
+;=====================================================================================
+tplot,['iug_mu_rass_wwnd','iug_mu_rass_vwnd','iug_mu_rass_wwnd',$
+       'iug_mu_rass_temp']
 
 stop
 
