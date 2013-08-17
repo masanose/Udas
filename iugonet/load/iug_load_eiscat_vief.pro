@@ -22,6 +22,11 @@
 ;           into variables.
 ;   /no_download: use only files which are online locally.
 ;
+; OUTPUT
+;   Vi and E vectors have 3 components, i.e.,
+;   Vi = [Ve, Vn, Vu] and E = [Ee, En, Eu], where
+;   [e, n, u] corresponds to [eastward, n:northward, u:upward].
+;
 ; EXAMPLE:
 ;   iug_load_eiscat_vief, site='kst', $
 ;                 trange=['2011-2-1/00:00:00','2011-2-3/00:00:00']
