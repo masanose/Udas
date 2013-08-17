@@ -22,6 +22,7 @@
 ;A. Shinbori, 24/10/2012
 ;A. Shinbori, 14/12/2012
 ;A. Shinbori, 18/02/2013
+;Y.-M. Tanaka, 16/08/2013
 ;-
 ;--------------------------------------------------------------------------------
 
@@ -74,8 +75,15 @@ pro iug_ui_load_data_load_pro,    $
 
       ;----- EISCAT radar -----;
       'EISCAT_radar' : begin
-          vns=strmid(datatype,0,3)
-          iug_load_eiscat, site=site_or_param, ydatatype=vns, trange = timeRange
+	  case datatype of
+              'Vi_E_vectors': begin
+                  iug_load_eiscat_vief, site=site_or_param, trange = timeRange
+              end
+              else: begin
+                  vns=strmid(datatype,0,3)
+                  iug_load_eiscat, site=site_or_param, ydatatype=vns, trange = timeRange
+              end
+          endcase
           if parameters[0] eq '*' then begin
               par_names=tnames('eiscat_*')
           endif else begin

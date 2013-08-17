@@ -16,6 +16,7 @@
 ;A. Shinbori, 24/10/2012
 ;A. Shinbori, 14/12/2012
 ;A. Shinbori, 08/07/2013
+;Y.-M. Tanaka, 16/08/2013
 ;
 ;--------------------------------------------------------------------------------
 pro iug_ui_load_data_event,event
@@ -330,7 +331,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   
   typeArray[0] = ptr_new(['troposphere']) 
   typeArray[1] = ptr_new(['troposphere'])
-  typeArray[2] = ptr_new(['altitude_prof','latitude_prof','longitude_prof'])
+  typeArray[2] = ptr_new(['altitude_prof','latitude_prof','longitude_prof','Vi_E_vectors'])
   typeArray[3] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
   typeArray[4] = ptr_new(['magdas','210mm#','WDC_kyoto','NIPR_mag#'])
   typeArray[5] = ptr_new(['NIPR_mag#','STEL#'])
@@ -371,7 +372,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   paramArray = ptrarr(19)
   paramArray[0] = ptr_new(ptrarr(1))
   paramArray[1] = ptr_new(ptrarr(1))
-  paramArray[2] = ptr_new(ptrarr(3))
+  paramArray[2] = ptr_new(ptrarr(4))
   paramArray[3] = ptr_new(ptrarr(5))
   paramArray[4] = ptr_new(ptrarr(4))
   paramArray[5] = ptr_new(ptrarr(2))
@@ -394,6 +395,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[2])[0] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
   (*paramArray[2])[1] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
   (*paramArray[2])[2] = ptr_new(['*(all)','esr_32m','esr_42m','tro_vhf','tro_uhf','kir_uhf','sod_uhf'])
+  (*paramArray[2])[3] = ptr_new(['*(all)','kst'])
   (*paramArray[3])[0] = ptr_new(['*(all)'])
   (*paramArray[3])[1] = ptr_new(['*(all)','eb1p2a','eb1p2b','eb1p2c','eb2p1a','eb3p2a',$
                                  'eb3p2b','eb3p4a','eb3p4b','eb3p4d','eb3p4e','eb3p4f',$
@@ -438,7 +440,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
                                  'tsu','ttb','tuc','tun','uba','ujj','ups','val','vic','vla','vlj','vna','vos','vqs',$
                                  'vsk','vss','wat','whn','whs','wik','wil','wit','wmq','wng','yak','ycb','ykc','yss'])
   (*paramArray[4])[3] = ptr_new(['*(all)','aed','hus','isa','syo','tjo'])
-  (*paramArray[5])[0] = ptr_new(['*(all)','syo'])
+  (*paramArray[5])[0] = ptr_new(['*(all)','aed','hus','isa','syo','tjo'])
   (*paramArray[5])[1] = ptr_new(['*(all)','ath','mgd','ptk','msr','sta'])
   (*paramArray[6])[0] = ptr_new(['*(all)','WDC_kyoto'])
   (*paramArray[6])[1] = ptr_new(['*(all)','WDC_kyoto'])
@@ -484,7 +486,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   param2Array = ptrarr(19)
   param2Array[0] = ptr_new(ptrarr(1))
   param2Array[1] = ptr_new(ptrarr(1))
-  param2Array[2] = ptr_new(ptrarr(3))
+  param2Array[2] = ptr_new(ptrarr(4))
   param2Array[3] = ptr_new(ptrarr(5))
   param2Array[4] = ptr_new(ptrarr(4))
   param2Array[5] = ptr_new(ptrarr(2))
@@ -505,11 +507,12 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*param2Array[0])[0] = ptr_new(['*','press','precipi','rh','sr','temp','uwnd','vwnd','wnddir','wndspd'])
   (*param2Array[1])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2','wdt3','wdt4','wdt5'])
   (*param2Array[2])[0] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
-                                   'lat','long','alt','colf','comp','q','qflag'])
+                                   'lat','long','alt','range','colf','comp','q','qflag'])
   (*param2Array[2])[1] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
-                                   'lat','long','alt','colf','comp','q','qflag'])
+                                   'lat','long','alt','range','colf','comp','q','qflag'])
   (*param2Array[2])[2] = ptr_new(['*','ne','neerr','te','teerr','ti','tierr','vi','vierr','pulse','inttim',$
-                                   'lat','long','alt','colf','comp','q','qflag'])
+                                   'lat','long','alt','range','colf','comp','q','qflag'])
+  (*param2Array[2])[3] = ptr_new(['*','vi','vierr','E','Eerr','pulse','inttim','lat','long','alt','q'])
   (*param2Array[3])[0] = ptr_new(['*','uwnd','vwnd','wwnd','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
                                   'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])
   (*param2Array[3])[1] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','pwr1','pwr2','pwr3','pwr4','pwr5',$
