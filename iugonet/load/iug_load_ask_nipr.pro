@@ -8,6 +8,7 @@
 ;
 ;KEYWORDS:
 ;  site  = Observatory name.  For example, iug_load_ask_nipr, site = 'tro'.
+;          Available sites: 'tro', 'lyr'
 ;          The default is 'all', i.e., load all available stations.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -73,15 +74,12 @@ keodata=reverse(keodata[0:i-1, *], 2)
 END
 
 
-;**************************
-;***** Procedure name *****
-;**************************
+;************************************************************
+;***** Load procedure for keogram data obtained by NIPR *****
+;************************************************************
 pro iug_load_ask_nipr, site = site, downloadonly=downloadonly
 
-;*************************
-;***** Keyword check *****
-;*************************
-; verbose
+; keyword
 if ~keyword_set(verbose) then verbose=0
 
 ; list of sites
@@ -111,24 +109,20 @@ acknowledgstring = 'The optical data are the intellectual property of National '
 
 instr='ask'
 
-;*************************************************************************
-;***** Download files, read data, and create tplot vars at each site *****
-;*************************************************************************
 ;=================================
 ;=== Loop on downloading files ===
 ;=================================
-; make remote path, local path, and download files
 for i=0, nsites-1 do begin
   ; define file names
-  pathformat= strupcase(sites[i]) + '_AWI/ascii/YYYYMM/' + $
-              strlowcase(sites[i]) + '_awi_YYYYMMDD_hh.txt'
+  pathformat= sites[i] + '/awi/ascii/YYYYMM/' + $
+              sites[i] + '_awi_YYYYMMDD_hh.txt'
   relpathnames = file_dailynames(file_format=pathformat, trange=trange, /hour_res)
 
   ; define remote and local path information
   source = file_retrieve(/struct)
   source.verbose = verbose
   source.local_data_dir = root_data_dir() + 'iugonet/nipr/'+instr+'/'
-  source.remote_data_dir = 'http://polaris.nipr.ac.jp/~eiscat/optical/'
+  source.remote_data_dir = 'http://pc115.seg20.nipr.ac.jp/www/optical/watec/'
 
   ; download data
   local_files = file_retrieve(relpathnames, _extra=source)
@@ -188,7 +182,8 @@ for i=0, nsites-1 do begin
     store_data, tplot_name, data={x:timebuf, y:databuf, v:vdata}, dlimit=dlimit
 
     ; add options
-    options, tplot_name, ytitle = 'Keogram ' + strupcase(sites[i]), spec=1
+    options, tplot_name, ytitle = sites[i]+'!CN-S Keogram', ysubtitle='[deg]', $
+	spec=1, ztitle = '[Counts]'
     case sites[i] of 
       'tro' : begin
         ylim, tplot_name, -90, 90, 0
