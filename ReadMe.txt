@@ -43,6 +43,7 @@ Load procedures for IUGONET data:
 - iug_load_blr_rish     ; Boundary layer radar data from RISH
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
+- iug_load_eiscat_vief  ; EISCAT ion velocity and electric field vetor data
 - iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
 - iug_load_gmag_serc    ; MAGDAS magnetometer data from ICSWSE, Kyushu Univ
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
@@ -85,6 +86,7 @@ CUI:
   timespan,'2006-12-01' & iug_load_blr_rish, site='ktb'
   timespan,'2003-03-25' & iug_load_ear
   timespan,'2011-02-03' & iug_load_eiscat
+  timespan,'2011-02-04' & iug_load_eiscat_vief
   timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
   timespan,'2006-12-01' & iug_load_gmag_nipr, site='syo'
   timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
@@ -113,6 +115,7 @@ GUI:
 - Auto._Weather_Station troposphere     sgk             *       1994-05-03
 - Boundary_Layer_Radar  troposphere     ktb             *       2006-12-01
 - EISCAT_radar          altitude_prof   esr_32m         *       2011-02-03
+                        Vi_E_vectors    kst             *       2011-02-04
 - Eq._Atom._Radar       troposphere     *(all)          *       2003-03-25
                         e_region        eb1p2a          *       2009-04-22
                         ef_region       efb1p16         *       2001-07-30
@@ -138,7 +141,9 @@ GUI:
 - Mid._Upper_atm._radar troposphere     *(all)          *       2003-03-10
                         mesosphere      *(all)          *       2003-03-10
                         ionosphere      *(all)          *       1989-03-06
-                        mesosphere      *(all)          *       1990-05-18
+                        meteor          *(all)          *       1990-05-18
+                        rass            *(all)          *       1990-05-18
+                        meteor          *(all)          *       1990-05-18
 - Radiosonde            DAWEX           drw             *       2001-10-15
                         misc            sgk             *       2008-07-15
 - SuperDARN             ionosphere      hok             *       2006-12-15

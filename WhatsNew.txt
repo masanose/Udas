@@ -1,17 +1,21 @@
 ------------------------------------------------------
-; What's new in udas_3_00_2           August 21, 2013
+; What's new in udas_3_00_2            August 18, 2013
 ------------------------------------------------------
-1) Added 2 new load procedures:
-- iug_load_mu_rass_txt  ; RASS observation data of the MU radar
-- iug_load_mu_fai_txt  ; FAI observation data of the MU radar
+1) Added 4 new load procedures:
+- iug_load_mu_rass_txt : RASS observation data of the MU radar
+- iug_load_mu_fai_txt  : FAI observation data of the MU radar
+- iug_load_kyushugcm   : Kyushu GCM simulation data
+- iug_load_eiscat_vief : EISCAT ion velocity and electric field vectors
 
 2) Added "iug_plot2d_ear.pro" for 2d-plot of the EAR-FAI data.
 
+3) Added range data to EISCAT CDF data files.
+
 3) Modified some procedures for the GUI.
 
-4) Modified "iug_loar_ear.pro" and "iug_loar_mu.pro" slightly.
+4) Modified "iug_loar_ear.pro" and "iug_load_mu.pro" slightly.
 
-5) Modified several comments of the statistical analysis package 
+5) Modified several comments of the statistical analysis package
     from Japanese to English.
 
 ------------------------------------------------------
