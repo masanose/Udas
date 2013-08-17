@@ -36,12 +36,19 @@ if n_params() eq 0 then begin
     return
 endif
 
-if ~keyword_set(selparam_idx) then selparam_idx=[0, 0, 1]
-if ~keyword_set(selparam_dat) then selparam_dat=[0., 0., 0]
-if ~keyword_set(newname) then newname=tvar3d
+if ~keyword_set(selparam_idx) or ~keyword_set(selparam_dat) then begin
+    message,'selparam_idx and selparam_dat are not defined.'
+    return
+endif
 
 tplot_tmp=tnames(tvar3d)
 len=strlen(tplot_tmp)
+
+if keyword_set(newname) then begin
+    tvar_new=newname
+endif else begin
+    tvar_new=tvar3d
+endelse
 
 if len eq 0 then begin
     print, 'No such tplot variables.'
@@ -64,7 +71,7 @@ endif else begin
                     iv3=where(abs(v3 - selparam_dat[2]) eq min(abs(v3 - selparam_dat[2])), cnt)
                     if cnt gt 1 then igv3=igv3[0]
                     dy=reform(d.y[*, *, iv2, iv3])
-                    store_data, newname, data={x:d.x, y:dy, v:d.v1}, lim=lim, dlim=dlim
+                    store_data, tvar_new, data={x:d.x, y:dy, v:d.v1}, lim=lim, dlim=dlim
                 end
                 1: begin
                     iv1=where(abs(v1 - selparam_dat[0]) eq min(abs(v1 - selparam_dat[0])), cnt)
@@ -72,7 +79,7 @@ endif else begin
                     iv3=where(abs(v3 - selparam_dat[2]) eq min(abs(v3 - selparam_dat[2])), cnt)
                     if cnt gt 1 then igv3=igv3[0]
                     dy=reform(d.y[*, iv1, *, iv3])
-                    store_data, newname, data={x:d.x, y:dy, v:d.v2}, lim=lim, dlim=dlim
+                    store_data, tvar_new, data={x:d.x, y:dy, v:d.v2}, lim=lim, dlim=dlim
                 end
                 2: begin
                     iv1=where(abs(v1 - selparam_dat[0]) eq min(abs(v1 - selparam_dat[0])), cnt)
@@ -80,7 +87,7 @@ endif else begin
                     iv2=where(abs(v2 - selparam_dat[1]) eq min(abs(v2 - selparam_dat[1])), cnt)
                     if cnt gt 1 then iv2=iv2[0]
                     dy=reform(d.y[*, iv1, iv2, *])
-                    store_data, newname, data={x:d.x, y:dy, v:d.v3}, lim=lim, dlim=dlim
+                    store_data, tvar_new, data={x:d.x, y:dy, v:d.v3}, lim=lim, dlim=dlim
                 end
             endcase
         end
@@ -90,19 +97,19 @@ endif else begin
                     iv3=where(abs(v3 - selparam_dat[2]) eq min(abs(v3 - selparam_dat[2])), cnt)
                     if cnt gt 1 then igv3=igv3[0]
                     dy=reform(d.y[*, *, *, iv3])
-                    store_data, newname, data={x:d.x, y:dy, v1:d.v1, v2:d.v2}, lim=lim, dlim=dlim
+                    store_data, tvar_new, data={x:d.x, y:dy, v1:d.v1, v2:d.v2}, lim=lim, dlim=dlim
                 end
                 2: begin
                     iv2=where(abs(v2 - selparam_dat[1]) eq min(abs(v2 - selparam_dat[1])), cnt)
                     if cnt gt 1 then iv2=iv2[0]
                     dy=reform(d.y[*, *, iv2, *])
-                    store_data, newname, data={x:d.x, y:dy, v1:d.v1, v2:d.v3}, lim=lim, dlim=dlim
+                    store_data, tvar_new, data={x:d.x, y:dy, v1:d.v1, v2:d.v3}, lim=lim, dlim=dlim
                 end
                 3: begin
                     iv1=where(abs(v1 - selparam_dat[0]) eq min(abs(v1 - selparam_dat[0])), cnt)
                     if cnt gt 1 then iv1=iv1[0]
                     dy=reform(d.y[*, iv1, *, *])
-                    store_data, newname, data={x:d.x, y:dy, v1:d.v2, v2:d.v3}, lim=lim, dlim=dlim
+                    store_data, tvar_new, data={x:d.x, y:dy, v1:d.v2, v2:d.v3}, lim=lim, dlim=dlim
                 end
             endcase
         end

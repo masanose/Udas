@@ -31,7 +31,7 @@
 ;   /downloadonly: if set, then only download the data, do not load it 
 ;           into variables.
 ;   /no_download: use only files which are online locally.
-;   selparam_idx: a vector with 3 elements to identify the loaded variables
+;   selparam_idx: a vector with 3 elements to identify the loaded component
 ;           when converting 3D data to 2D or 1D data.
 ;           1st element: geographic latitude
 ;           2nd: geographic longitude
@@ -39,12 +39,12 @@
 ;           For example, a vector [0, 0, 1] means that the altitude profile 
 ;           is loaded.
 ;   selparam_dat: a vector with 3 elements to identify the position 
-;           when converting 3D data to 2D or 1D data. 
+;           when converting 3D data to 2D or 1D data.
 ;           1st element: geographic latitude
 ;           2nd: geographic longitude
 ;           3rd: altitude
-;           For example, [35., 135., 0.]  means that the altitude profile 
-;           at glat=35 and glon=135 is loaded.
+;           For example, if selparam_idx=[0,0,1], selparam_dat=[35., 135., 0.] 
+;           means that an altitude profile at glat=35 and glon=135 is loaded.
 ;   newname: if set, then the loaded tplot variable is renamed to newname.
 ;           This keyword is available only when selparam_idx is set.
 ;
@@ -70,10 +70,10 @@ if ~keyword_set(downloadonly) then downloadonly=0
 
 ;----- datatype -----;
 datatype_all=strsplit('T U V W', /extract)
-if(not keyword_set(datatype)) then datatype='all'
+if(not keyword_set(datatype)) then datatype='T'
 if size(datatype,/type) eq 7 then begin
   datatype=thm_check_valid_name(datatype,datatype_all, $
-                                /ignore_case, /include_all)
+                                /ignore_case)
   if datatype[0] eq '' then return
 endif else begin
   message,'DATATYPE must be of string type.',/info
@@ -87,14 +87,31 @@ calmethod_all=strsplit('j3 s1 s2 s3 d1 d2 d3', /extract)
 if(not keyword_set(calmethod)) then calmethod='j3'
 if size(calmethod,/type) eq 7 then begin
   calmethod=thm_check_valid_name(calmethod,calmethod_all, $
-                                /ignore_case)
+                                 /ignore_case, /include_all)
   if calmethod[0] eq '' then return
 endif else begin
   message,'CALMETHOD must be of string type.',/info
   return
 endelse
-calmethod=strlowcase(calmethod)
+calmethod=calmethod[0] ; Select the 1st one only
 print, calmethod
+
+;----- selparam_idx -----;
+if keyword_set(selparam_idx) or keyword_set(selparam_dat) then begin
+  if keyword_set(selparam_idx) xor keyword_set(selparam_dat) then begin
+    message, 'Both selparam_idx and selparam_dat are required, if either one is set.'
+    return
+  endif else begin
+    if n_elements(selparam_idx) ne 3 then begin
+        message,'selparam_idx must be a integer vector with 3 elements.'
+        return
+    endif
+    if n_elements(selparam_dat) ne 3 then begin
+        message,'selparam_dat must be a vector with 3 elements.'
+        return
+    endif
+  endelse
+endif
 
 ;===== Download files, read data, and create tplot vars at each site =====
 ;----- Loop -----
@@ -205,15 +222,6 @@ for i=0,n_elements(datatype)-1 do begin
 
           ;----- Convert 3D data to 2D or 1D data -----;
           if keyword_set(selparam_idx) then begin
-            if n_elements(selparam_idx) ne 3 then begin
-                message,'selparam_idx must be a integer vector with 3 elements.'
-                return
-            endif
-            if n_elements(selparam_dat) ne 3 then begin
-                message,'selparam_dat must be a vector with 3 elements.'
-                return
-            endif
-
             conv3d, tplot_name_new, selparam_idx=selparam_idx, selparam_dat=selparam_dat, $
 		newname=newname
 
@@ -221,16 +229,20 @@ for i=0,n_elements(datatype)-1 do begin
                 store_data, tplot_name_new, /delete
             endif 
 
-            if ~keyword_set(newname) then newname=tplot_name_new
+            if keyword_set(newname) then begin
+                tvar_new=newname
+            endif else begin
+                tvar_new=tplot_name_new
+            endelse
 
             idx1=where(selparam_idx eq 1)
             if n_elements(idx1) eq 1 then begin
               case idx1 of
-                0: options, newname, ysubtitle='Latitude [degree]', spec=1
-                1: options, newname, ysubtitle='Longitude [degree]', spec=1
+                0: options, tvar_new, ysubtitle='Latitude [degree]', spec=1
+                1: options, tvar_new, ysubtitle='Longitude [degree]', spec=1
                 2: begin
-                   options, newname, ysubtitle=ysubstr, spec=1, ylog=ylog
-                   ylim, newname, yrng
+                   options, tvar_new, ysubtitle=ysubstr, spec=1, ylog=ylog
+                   ylim, tvar_new, yrng
                 end
               endcase
             endif
