@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Jun 10 10:37:11 2013.<P>
+<STRONG>Last modified: </STRONG>Mon Aug 19 05:30:10 2013.<P>
  
 <HR>
  
@@ -23,7 +23,7 @@ This page was created by the IDL library routine
 <LI><A HREF="#IUG_CRIB_BLR_RISH">IUG_CRIB_BLR_RISH</A>
 <LI><A HREF="#IUG_CRIB_EAR">IUG_CRIB_EAR</A>
 <LI><A HREF="#IUG_CRIB_EISCAT">IUG_CRIB_EISCAT</A>
-<LI><A HREF="#IUG_CRIB_EISCAT_VECVEL">IUG_CRIB_EISCAT_VECVEL</A>
+<LI><A HREF="#IUG_CRIB_EISCAT_VIEF">IUG_CRIB_EISCAT_VIEF</A>
 <LI><A HREF="#IUG_CRIB_GMAG_NIPR">IUG_CRIB_GMAG_NIPR</A>
 <LI><A HREF="#IUG_CRIB_GMAG_NIPR_INDUCTION">IUG_CRIB_GMAG_NIPR_INDUCTION</A>
 <LI><A HREF="#IUG_CRIB_GMAG_SERC">IUG_CRIB_GMAG_SERC</A>
@@ -32,6 +32,7 @@ This page was created by the IDL library routine
 <LI><A HREF="#IUG_CRIB_IONOSONDE_RISH">IUG_CRIB_IONOSONDE_RISH</A>
 <LI><A HREF="#IUG_CRIB_IPRT">IUG_CRIB_IPRT</A>
 <LI><A HREF="#IUG_CRIB_IRIO_NIPR">IUG_CRIB_IRIO_NIPR</A>
+<LI><A HREF="#IUG_CRIB_KYUSHUGCM">IUG_CRIB_KYUSHUGCM</A>
 <LI><A HREF="#IUG_CRIB_LFRTO">IUG_CRIB_LFRTO</A>
 <LI><A HREF="#IUG_CRIB_LTR_RISH">IUG_CRIB_LTR_RISH</A>
 <LI><A HREF="#IUG_CRIB_MDDB">IUG_CRIB_MDDB</A>
@@ -106,7 +107,7 @@ Last Updated:  A. Shinbori,  Decq 02, 2011
 <A NAME="IUG_CRIB_EISCAT">
 <H2>IUG_CRIB_EISCAT</H2></A>
 <A HREF="#IUG_CRIB_EAR">[Previous Routine]</A>
-<A HREF="#IUG_CRIB_EISCAT_VECVEL">[Next Routine]</A>
+<A HREF="#IUG_CRIB_EISCAT_VIEF">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: IUG_CRIB_EISCAT
@@ -127,27 +128,32 @@ Last Updated:  A. Shinbori,  Decq 02, 2011
 <STRONG>(See <A href="examples/iug_crib_eiscat.pro">iugonet/examples/iug_crib_eiscat.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_CRIB_EISCAT_VECVEL">
-<H2>IUG_CRIB_EISCAT_VECVEL</H2></A>
+<A NAME="IUG_CRIB_EISCAT_VIEF">
+<H2>IUG_CRIB_EISCAT_VIEF</H2></A>
 <A HREF="#IUG_CRIB_EISCAT">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_GMAG_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
-PROCEDURE: IUG_CRIB_METEOR_NIPR.PRO
-    A sample crib sheet that explains how to use the "<A href="iugonet/examples_udas_doc_list.html#IUG_CRIB_METEOR_NIPR">IUG_CRIB_METEOR_NIPR</A>.pro" 
+ PROCEDURE: IUG_CRIB_EISCAT_VIEF
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_EISCAT_VIEF">IUG_LOAD_EISCAT_VIEF</A>" 
     procedure. You can run this crib sheet by copying & pasting each 
     command below (except for stop and end) into the IDL command line. 
     Or alternatively compile and run using the command:
-        .run iug_crib_meteor_nipr
+        .run iug_crib_eiscat_vief
 
-Written by: Y.-M. Tanaka, Aug. 2, 2012
+ NOTE: See the rules of the road.
+       For more information, see:
+           http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
+ Written by: Y.-M. Tanaka, August 16, 2013
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
 </PRE><P>
-<STRONG>(See <A href="examples/iug_crib_eiscat_vecvel.pro">iugonet/examples/iug_crib_eiscat_vecvel.pro</A>)</STRONG><P>
+<STRONG>(See <A href="examples/iug_crib_eiscat_vief.pro">iugonet/examples/iug_crib_eiscat_vief.pro</A>)</STRONG><P>
 <HR>
  
 <A NAME="IUG_CRIB_GMAG_NIPR">
 <H2>IUG_CRIB_GMAG_NIPR</H2></A>
-<A HREF="#IUG_CRIB_EISCAT_VECVEL">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_EISCAT_VIEF">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_GMAG_NIPR_INDUCTION">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -308,7 +314,7 @@ PROCEDURE: IUG_CRIB_IPRT
 <A NAME="IUG_CRIB_IRIO_NIPR">
 <H2>IUG_CRIB_IRIO_NIPR</H2></A>
 <A HREF="#IUG_CRIB_IPRT">[Previous Routine]</A>
-<A HREF="#IUG_CRIB_LFRTO">[Next Routine]</A>
+<A HREF="#IUG_CRIB_KYUSHUGCM">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: IUG_CRIB_IRIO_NIPR
@@ -329,9 +335,34 @@ PROCEDURE: IUG_CRIB_IPRT
 <STRONG>(See <A href="examples/iug_crib_irio_nipr.pro">iugonet/examples/iug_crib_irio_nipr.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_CRIB_KYUSHUGCM">
+<H2>IUG_CRIB_KYUSHUGCM</H2></A>
+<A HREF="#IUG_CRIB_IRIO_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_LFRTO">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: IUG_CRIB_KYUSHUGCM
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_KYUSHUGCM">IUG_LOAD_KYUSHUGCM</A>" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_kyushugcm
+
+ NOTE: See the rules of the road.
+       The simulation data are 3D and have a large file size (about 100MB).
+       The large file size may cause long download time and out of memory 
+       depending on the situation.
+
+ Written by: Y.-M. Tanaka, August, 2013
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_kyushugcm.pro">iugonet/examples/iug_crib_kyushugcm.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_CRIB_LFRTO">
 <H2>IUG_CRIB_LFRTO</H2></A>
-<A HREF="#IUG_CRIB_IRIO_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_KYUSHUGCM">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_LTR_RISH">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -461,7 +492,7 @@ PROCEDURE: IUG_CRIB_MU.PRO
         .run iug_crib_mu
 
 Written by: A. Shinbori,  Feb 18, 2011
-Last Updated:  A. Shinbori,  DEC 03, 2011
+Last Updated:  A. Shinbori,  AUG 16, 2013
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_mu.pro">iugonet/examples/iug_crib_mu.pro</A>)</STRONG><P>
 <HR>

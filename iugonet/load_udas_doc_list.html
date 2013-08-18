@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Jun 10 10:37:11 2013.<P>
+<STRONG>Last modified: </STRONG>Mon Aug 19 05:30:10 2013.<P>
  
 <HR>
  
@@ -19,6 +19,8 @@ This page was created by the IDL library routine
 <H1>Directory Listing of Routines</H1></A>
 <UL>
 <H1>iugonet/load</H1>
+<LI><A HREF="#CONV3D">CONV3D</A>
+<br>Convert 3D data to 2D or 1D data
 <LI><A HREF="#FILE_DAILYNAMES_IUG">FILE_DAILYNAMES_IUG</A>
 <LI><A HREF="#IUG_LOAD_ASK_NIPR">IUG_LOAD_ASK_NIPR</A>
 <br>Loads keogram data obtained with AWI by NIPR.
@@ -56,8 +58,8 @@ This page was created by the IDL library routine
 <br>Queries the Kyoto_RISH servers for the standard observation data of troposphere and stratsoohere
 <LI><A HREF="#IUG_LOAD_EISCAT">IUG_LOAD_EISCAT</A>
 <br>loads the EISCAT radar data.
-<LI><A HREF="#IUG_LOAD_EISCAT_VECVEL">IUG_LOAD_EISCAT_VECVEL</A>
-<br>Loads 3D ion velocity data obtained with EISCAT UHF radar/ESR.
+<LI><A HREF="#IUG_LOAD_EISCAT_VIEF">IUG_LOAD_EISCAT_VIEF</A>
+<br>loads the EISCAT vector Vi and E field data.
 <LI><A HREF="#IUG_LOAD_GMAG_MM210">IUG_LOAD_GMAG_MM210</A>
 <LI><A HREF="#IUG_LOAD_GMAG_NIPR">IUG_LOAD_GMAG_NIPR</A>
 <br>Loads the fluxgate magnetometer data obtained by NIPR.
@@ -84,6 +86,8 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <LI><A HREF="#IUG_LOAD_IPRT">IUG_LOAD_IPRT</A>
 <LI><A HREF="#IUG_LOAD_IRIO_NIPR">IUG_LOAD_IRIO_NIPR</A>
 <br>Loads the imaging riometer data obtained by NIPR.
+<LI><A HREF="#IUG_LOAD_KYUSHUGCM">IUG_LOAD_KYUSHUGCM</A>
+<br>Loads the Kyushu GCM simulation data.
 <LI><A HREF="#IUG_LOAD_LFRTO">IUG_LOAD_LFRTO</A>
 <br>To load the Low Frequency Radio Transmitter Observation data from the Tohoku University site
 <LI><A HREF="#IUG_LOAD_LTR_RISH">IUG_LOAD_LTR_RISH</A>
@@ -119,6 +123,10 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <LI><A HREF="#IUG_LOAD_MF_RISH_PON_TXT">IUG_LOAD_MF_RISH_PON_TXT</A>
 <LI><A HREF="#IUG_LOAD_MU">IUG_LOAD_MU</A>
 <br>Queries the Kyoto_RISH servers for all the observation data taken by
+<LI><A HREF="#IUG_LOAD_MU_FAI_NC">IUG_LOAD_MU_FAI_NC</A>
+<br>Queries the Kyoto_RISH servers for the FAI observation data in the netCDF format
+<LI><A HREF="#IUG_LOAD_MU_FAI_TXT">IUG_LOAD_MU_FAI_TXT</A>
+<br>Queries the Kyoto_RISH servers for the FAI observation data in the CSV format
 <LI><A HREF="#IUG_LOAD_MU_IONO_DRIFT_NC">IUG_LOAD_MU_IONO_DRIFT_NC</A>
 <br>Queries the Kyoto_RISH servers for ionospheric plasma drift velocity in netCDF format
 <LI><A HREF="#IUG_LOAD_MU_IONO_DRIFT_TXT">IUG_LOAD_MU_IONO_DRIFT_TXT</A>
@@ -141,6 +149,8 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <br>Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
 <LI><A HREF="#IUG_LOAD_MU_METEOR_TXT">IUG_LOAD_MU_METEOR_TXT</A>
 <br>Queries the Kyoto_RISH servers for the horizontal wind data (uwnd, vwnd, uwndsig, vwndsig, mwnum)
+<LI><A HREF="#IUG_LOAD_MU_RASS_TXT">IUG_LOAD_MU_RASS_TXT</A>
+<br>Queries the Kyoto_RISH servers for the special observation data of the
 <LI><A HREF="#IUG_LOAD_MU_TROP_TXT">IUG_LOAD_MU_TROP_TXT</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of the
 <LI><A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_NC">IUG_LOAD_RADIOSONDE_DAWEX_NC</A>
@@ -156,6 +166,8 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <LI><A HREF="#IUG_LOAD_WPR_RISH">IUG_LOAD_WPR_RISH</A>
 <br>Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
 <LI><A HREF="#IUG_MOVIE_SMART">IUG_MOVIE_SMART</A>
+<LI><A HREF="#IUG_PLOT2D_EAR_FAI">IUG_PLOT2D_EAR_FAI</A>
+<br>Generate several 2-D plots from the FAI f-region observation data taken by the EAR.
 <LI><A HREF="#IUG_PLOT2D_IONOGRAM">IUG_PLOT2D_IONOGRAM</A>
 <br>Generate several ionogram plots from the ionogram data taken by the ionosonde.
 <LI><A HREF="#IUG_PLOT2D_IRIO">IUG_PLOT2D_IRIO</A>
@@ -167,8 +179,44 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <HR>
  
 <H1>Routine Descriptions</H1>
+<A NAME="CONV3D">
+<H2>CONV3D</H2></A>
+<A HREF="#FILE_DAILYNAMES_IUG">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: CONV3D
+   conv3d, tvar3d, $
+           selparam_idx=selparam_idx, $
+           selparam_dat=selparam_dat, $
+           newname=newname
+
+ PURPOSE:
+   Convert 3D data to 2D or 1D data
+
+ KEYWORDS:
+   tvar3d: tplot variables for 3D data
+   selparam_idx: a vector with 3 elements to identify the loaded variables
+           when converting 3D data to 2D or 1D data.
+   selparam_dat: a vector with 3 elements to identify the coordinate.
+           when converting 3D data to 2D or 1D data.
+   newname: if set, then name of the converted data will be newname.
+           This keyword is available only when selparam_idx is set.
+
+ EXAMPLE:
+   conv3d, 'kyushugcm_T', selparam_idx=[0,0,1], selparam_dat=[30., 50., 0]
+       loads 1D data along z-axis at (x,y)=(30.,50.).
+
+   conv3d, 'kyushugcm_T', selparam_idx=[1,1,0], selparam_dat=[0., 0., 100.]
+       loads 2D data on the x-y plane at z=100.
+
+ Written by Y.-M. Tanaka, Dec.24, 2012 (ytanaka at nipr.ac.jp)
+</PRE><P>
+<STRONG>(See <A href="load/conv3d.pro">iugonet/load/conv3d.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="FILE_DAILYNAMES_IUG">
 <H2>FILE_DAILYNAMES_IUG</H2></A>
+<A HREF="#CONV3D">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_ASK_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -193,6 +241,7 @@ PURPOSE:
 
 KEYWORDS:
   site  = Observatory name.  For example, iug_load_ask_nipr, site = 'tro'.
+          Available sites: 'tro', 'lyr'
           The default is 'all', i.e., load all available stations.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
@@ -552,6 +601,7 @@ MODIFICATIONS:
  A. Shinbori, 09/07/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
+ A. Shinbori, 08/07/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -609,7 +659,7 @@ MODIFICATIONS:
  A. Shinbori, 24/03/2011.
  A. Shinbori, 06/10/2011.
  A. Shinbori, 31/01/2012.
- A. Shinbori, 17/12/2012.
+ A. Shinbori, 01/08/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -665,7 +715,8 @@ MODIFICATIONS:
  A. Shinbori, 09/07/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
- 
+ A. Shinbori, 08/07/2013.
+  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -723,6 +774,7 @@ MODIFICATIONS:
  A. Shinbori, 06/10/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
+ A. Shinbori, 01/08/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -837,7 +889,8 @@ MODIFICATIONS:
  A. Shinbori, 06/10/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
- 
+ A. Shinbori, 01/08/2013.
+  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -950,7 +1003,8 @@ MODIFICATIONS:
  A. Shinbori, 06/10/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
-
+ A. Shinbori, 01/08/2013.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -1060,7 +1114,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_EISCAT">
 <H2>IUG_LOAD_EISCAT</H2></A>
 <A HREF="#IUG_LOAD_EAR_TROP_TXT">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_EISCAT_VECVEL">[Next Routine]</A>
+<A HREF="#IUG_LOAD_EISCAT_VIEF">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: IUG_LOAD_EISCAT
@@ -1077,8 +1131,9 @@ ACKNOWLEDGEMENT:
 
  KEYWORDS:
    site  = Combination of observatory and antenna, example, 
-           erg_load_eiscat, site='esr_42m',
+           iug_load_eiscat, site='esr_42m',
            the default is 'all', i.e., load all available sites.
+           Available sites: 'tro_uhf', 'tro_vhf', 'esr_32m', 'esr_42m'.
            This can be an array of strings, e.g., ['esr_32m', 'esr_42m']
            or a single string delimited by spaces, e.g., 'esr_32m esr_42m'.
    ydatatype = data type of y-axis. Default is 'alt', i.e., altitude.
@@ -1105,41 +1160,61 @@ ACKNOWLEDGEMENT:
  Modified by: Y.-M. Tanaka, June 6, 2012
    Integragted all pulse_code and integration_time data for one day 
    into a CDF file
+ Modified by: Y.-M. Tanaka, August 16, 2013
+   Added range data to CDF files. 
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_eiscat.pro">iugonet/load/iug_load_eiscat.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_LOAD_EISCAT_VECVEL">
-<H2>IUG_LOAD_EISCAT_VECVEL</H2></A>
+<A NAME="IUG_LOAD_EISCAT_VIEF">
+<H2>IUG_LOAD_EISCAT_VIEF</H2></A>
 <A HREF="#IUG_LOAD_EISCAT">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_GMAG_MM210">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
-PROCEDURE: IUG_LOAD_EISCAT_VECVEL,
-  iug_load_eiscat_vecvel, site = site, trange = trange, 
-         verbose = verbose, downloadonly = downloadonly
+ PROCEDURE: IUG_LOAD_EISCAT_VIEF
+   iug_load_eiscat_vief, site=site, $
+                         get_support_data=get_support_data, $
+                         trange=trange, $
+                         verbose=verbose, $
+                         downloadonly=downloadonly, $
+                         no_download=no_download
 
-PURPOSE:
-  Loads 3D ion velocity data obtained with EISCAT UHF radar/ESR.
+ PURPOSE:
+   loads the EISCAT vector Vi and E field data.
 
-KEYWORDS:
-  site  = Observatory name.  For example, serc_load_gmag_sample, site = 'tro'.
-          The default is 'all', i.e., load all available stations.
-  /verbose, if set, then output some useful info
-  /downloadonly, if set, then only download the data, do not load it
-                 into variables.
+ KEYWORDS:
+   site  = site code, example, 
+           iug_load_eiscat_vief, site='kst',
+           the default is 'all', i.e., load all available sites.
+           Available sites: 'kst' (kst means Kiruna, Sodankyla, Tromso.)
+   trange = (Optional) Time range of interest  (2 element array).
+   /get_support_data : turn this on to load the supporting data.
+   /verbose: set to output some useful info
+   /downloadonly: if set, then only download the data, do not load it 
+           into variables.
+   /no_download: use only files which are online locally.
 
-EXAMPLE:
-  iug_load_eiscat_vecvel, site = 'tro_uhf'
+ OUTPUT
+   Vi and E vectors have 3 components, i.e.,
+   Vi = [Ve, Vn, Vu] and E = [Ee, En, Eu], where
+   [e, n, u] corresponds to [eastward, n:northward, u:upward].
 
- Written by: Y. Ogawa, Feb. 25, 2012 (yogawa at nipr.ac.jp)
+ EXAMPLE:
+   iug_load_eiscat_vief, site='kst', $
+                 trange=['2011-2-1/00:00:00','2011-2-3/00:00:00']
+
+   For more information, see http://www.iugonet.org/en/ 
+                         and http://polaris.nipr.ac.jp/~eiscat/eiscatdata/
+
+ Written by: Y.-M. Tanaka, August 16, 2013 (ytanaka at nipr.ac.jp)
 </PRE><P>
-<STRONG>(See <A href="load/iug_load_eiscat_vecvel.pro">iugonet/load/iug_load_eiscat_vecvel.pro</A>)</STRONG><P>
+<STRONG>(See <A href="load/iug_load_eiscat_vief.pro">iugonet/load/iug_load_eiscat_vief.pro</A>)</STRONG><P>
 <HR>
  
 <A NAME="IUG_LOAD_GMAG_MM210">
 <H2>IUG_LOAD_GMAG_MM210</H2></A>
-<A HREF="#IUG_LOAD_EISCAT_VECVEL">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_EISCAT_VIEF">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_GMAG_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1352,7 +1427,7 @@ ACKNOWLEDGMENT:
    To load STEL induction magnetometer data from the STEL ERG-SC site 
 
  NOTE: 
-   This procedure is a simple alias to "iug_load_gmag_stel_induction"
+   This procedure is a simple alias to "erg_load_gmag_stel_induction"
    and calls the original one by just providing the same
    arguments/keywords given.
    Some load procedures for the ground-based observational data
@@ -1822,7 +1897,7 @@ Acknowledgment:
 <A NAME="IUG_LOAD_IRIO_NIPR">
 <H2>IUG_LOAD_IRIO_NIPR</H2></A>
 <A HREF="#IUG_LOAD_IPRT">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_LFRTO">[Next Routine]</A>
+<A HREF="#IUG_LOAD_KYUSHUGCM">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: IUG_LOAD_IRIO_NIPR
@@ -1859,9 +1934,77 @@ Acknowledgment:
 <STRONG>(See <A href="load/iug_load_irio_nipr.pro">iugonet/load/iug_load_irio_nipr.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_KYUSHUGCM">
+<H2>IUG_LOAD_KYUSHUGCM</H2></A>
+<A HREF="#IUG_LOAD_IRIO_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_LFRTO">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: IUG_LOAD_KYUSHUGCM
+   iug_load_kyushugcm, datatype=datatype, $
+                     calmethod=calmethod, $
+                     altitutde=altitude, $
+                     trange=trange, $
+                     verbose=verbose, $
+                     downloadonly=downloadonly, $
+                     no_download=no_download, $
+                     selparam_idx=selparam_idx, $
+                     selparam_dat=selparam_dat, $
+                     newname=newname
+
+ PURPOSE:
+   Loads the Kyushu GCM simulation data.
+
+ KEYWORDS:
+   datatype = output physical quantity. 
+           T: temperature
+           U: zonal wind
+           V: meridional wind
+           W: Vertical wind
+   calmethod = option of the calculation method.
+           j3: use JRA data as the boundary condition and 
+               the number of altitude grid is 150.
+               Now, only j3 is available.
+
+   altitude: If set, altitude is in km. Otherwise, pressure (in hPa) is used.
+   trange = (Optional) Time range of interest  (2 element array).
+   /verbose: set to output some useful info
+   /downloadonly: if set, then only download the data, do not load it 
+           into variables.
+   /no_download: use only files which are online locally.
+   selparam_idx: a vector with 3 elements to identify the loaded component
+           when converting 3D data to 2D or 1D data.
+           1st element: geographic latitude
+           2nd: geographic longitude
+           3rd: altitude
+           For example, a vector [0, 0, 1] means that the altitude profile 
+           is loaded.
+   selparam_dat: a vector with 3 elements to identify the position 
+           when converting 3D data to 2D or 1D data.
+           1st element: geographic latitude
+           2nd: geographic longitude
+           3rd: altitude
+           For example, if selparam_idx=[0,0,1], selparam_dat=[35., 135., 0.] 
+           means that an altitude profile at glat=35 and glon=135 is loaded.
+   newname: if set, then the loaded tplot variable is renamed to newname.
+           This keyword is available only when selparam_idx is set.
+
+ EXAMPLE:
+   iug_load_kyushugcm, datatype='t'
+
+ NOTE: See the rules of the road.
+       The simulation data are 3D and have a large file size (about 100MB).
+       The large file size may cause long download time and out of memory 
+       depending on the situation.
+
+ Written by Y.-M. Tanaka, Aug.16, 2013 (ytanaka at nipr.ac.jp)
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_kyushugcm.pro">iugonet/load/iug_load_kyushugcm.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_LFRTO">
 <H2>IUG_LOAD_LFRTO</H2></A>
-<A HREF="#IUG_LOAD_IRIO_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_KYUSHUGCM">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_LTR_RISH">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -2704,7 +2847,7 @@ Acknowledgment:
 <A NAME="IUG_LOAD_MU">
 <H2>IUG_LOAD_MU</H2></A>
 <A HREF="#IUG_LOAD_MF_RISH_PON_TXT">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_MU_IONO_DRIFT_NC">[Next Routine]</A>
+<A HREF="#IUG_LOAD_MU_FAI_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -2719,7 +2862,8 @@ PURPOSE:
 SYNTAX:
   iug_load_mu [ ,DATATYPE = string ]
               [ ,LEVEL = string ]
-              [ ,PARAMETER = string ]
+              [ ,PARAMETER1 = string ]
+              [ ,PARAMETER2 = string ]
               [ ,TRANGE = [min,max] ]
               [ ,FILENAMES = string scalar or array ]
               [ ,<and data keywords below> ]
@@ -2729,8 +2873,10 @@ KEYWOARDS:
              DATATYPEs are 'troposphere' etc.
   LEVEL = The level of mesospheric data to be loaded. In this load program,
              LEVELs are 'org' and 'scr'.
-  PARAMETER = The parameter of meteor data to be loaded. In this load program,
-             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00' and 'h2t60min30'.
+  PARAMETER1 = The parameter of meteor and fai data to be loaded. In this load program,
+             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00','h2t60min30' and 'iemdc3'.
+  PARAMETER2 = The parameter of rass and fai data to be loaded. In this load program,
+             PARAMETERs are 'uwnd','pwr1','wdt1' 'dpl1','pn1' and so on.
   LENGTH = The file type of meteor data to be loaded.
              LENGTHs are '1-day' and '1-month'. Default is 1-day.
   TRANGE (In):
@@ -2748,6 +2894,7 @@ MODIFICATIONS:
  A. Shinbori, 08/08/2012.
  A. Shinbori, 04/10/2012.
  A. Shinbori, 12/11/2012.
+ A. Shinbori, 02/08/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2758,9 +2905,109 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_mu.pro">iugonet/load/iug_load_mu.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_MU_FAI_NC">
+<H2>IUG_LOAD_MU_FAI_NC</H2></A>
+<A HREF="#IUG_LOAD_MU">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_FAI_TXT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_mu_fai_nc
+
+PURPOSE:
+  Queries the Kyoto_RISH servers for the FAI observation data in the netCDF format 
+  taken by the MU radar and loads data into tplot format.
+
+SYNTAX:
+ iug_load_mu_fai_nc, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+                          downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  datatype = Observation data type. For example, iug_load_mu_fai_nc, datatype = 'ionosphere'.
+            The default is 'ionosphere'. 
+  parameter1 = first parameter name of MU FAI obervation data.  
+          For example, iug_load_mu_fai_nc, parameter = 'iemdc3'.
+          The default is 'all', i.e., load all available parameters.
+  parameter2 = second parameter name of MU FAI obervation data.  
+          For example, iug_load_mu_fai_nc, parameter = 'dpl1'.
+          The default is 'all', i.e., load all available parameters.
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+
+
+CODE:
+ A. Shinbori, 18/08/2013.
+
+MODIFICATIONS:
+
+ 
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_mu_fai_nc.pro">iugonet/load/iug_load_mu_fai_nc.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_MU_FAI_TXT">
+<H2>IUG_LOAD_MU_FAI_TXT</H2></A>
+<A HREF="#IUG_LOAD_MU_FAI_NC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_IONO_DRIFT_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_mu_fai_txt
+
+PURPOSE:
+  Queries the Kyoto_RISH servers for the FAI observation data in the CSV format 
+  taken by the MU radar and loads data into tplot format.
+
+SYNTAX:
+ iug_load_mu_fai_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+                          downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  datatype = Observation data type. For example, iug_load_mu_fai_txt, datatype = 'ionosphere'.
+            The default is 'ionosphere'. 
+  parameter1 = first parameter name of MU FAI obervation data.  
+          For example, iug_load_mu_fai_txt, parameter = 'iemdc3'.
+          The default is 'all', i.e., load all available parameters.
+  parameter2 = second parameter name of MU FAI obervation data.  
+          For example, iug_load_mu_fai_txt, parameter = 'dpl1'.
+          The default is 'all', i.e., load all available parameters.
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+
+
+CODE:
+ A. Shinbori, 01/08/2013.
+
+MODIFICATIONS:
+
+ 
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_mu_fai_txt.pro">iugonet/load/iug_load_mu_fai_txt.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_MU_IONO_DRIFT_NC">
 <H2>IUG_LOAD_MU_IONO_DRIFT_NC</H2></A>
-<A HREF="#IUG_LOAD_MU">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_FAI_TXT">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_MU_IONO_DRIFT_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -3233,7 +3480,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_MU_METEOR_TXT">
 <H2>IUG_LOAD_MU_METEOR_TXT</H2></A>
 <A HREF="#IUG_LOAD_MU_METEOR_NC">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_MU_TROP_TXT">[Next Routine]</A>
+<A HREF="#IUG_LOAD_MU_RASS_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -3279,9 +3526,55 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_mu_meteor_txt.pro">iugonet/load/iug_load_mu_meteor_txt.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_MU_RASS_TXT">
+<H2>IUG_LOAD_MU_RASS_TXT</H2></A>
+<A HREF="#IUG_LOAD_MU_METEOR_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_TROP_TXT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_mu_rass_txt
+
+PURPOSE:
+  Queries the Kyoto_RISH servers for the special observation data of the 
+  RASS in the CSV format taken by the Middle and 
+  Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
+
+SYNTAX:
+ iug_load_mu_rass_txt, datatype = datatype, parameter=parameter, $
+                        downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
+            The default is 'troposphere'. 
+  parameter = parameter name of MU troposphere standard obervation data.  
+          For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
+          The default is 'all', i.e., load all available parameters.
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+
+CODE:
+ A. Shinbori, 22/06/2013.
+
+MODIFICATIONS:
+ 
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_mu_rass_txt.pro">iugonet/load/iug_load_mu_rass_txt.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_MU_TROP_TXT">
 <H2>IUG_LOAD_MU_TROP_TXT</H2></A>
-<A HREF="#IUG_LOAD_MU_METEOR_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_RASS_TXT">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -3320,6 +3613,7 @@ MODIFICATIONS:
  A. Shinbori, 26/12/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 19/12/2012.
+ A. Shinbori, 27/07/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3664,7 +3958,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_MOVIE_SMART">
 <H2>IUG_MOVIE_SMART</H2></A>
 <A HREF="#IUG_LOAD_WPR_RISH">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_IONOGRAM">[Next Routine]</A>
+<A HREF="#IUG_PLOT2D_EAR_FAI">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  :PROCEDURE:
@@ -3686,9 +3980,59 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_movie_smart.pro">iugonet/load/iug_movie_smart.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_PLOT2D_EAR_FAI">
+<H2>IUG_PLOT2D_EAR_FAI</H2></A>
+<A HREF="#IUG_MOVIE_SMART">[Previous Routine]</A>
+<A HREF="#IUG_PLOT2D_IONOGRAM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+  iug_plot2d_ear_fai
+
+PURPOSE:
+  Generate several 2-D plots from the FAI f-region observation data taken by the EAR. 
+
+SYNTAX:
+  iug_plot2d_ear_fai, datatype = datatype, valuename=valuename
+
+KEYWOARDS:
+  datatype = Observation data type. For example, iug_plot2d_ear_fai, datatype = 'fai'.
+            The default is 'fai'. 
+  valuename = tplot variable names of ionosonde observation data.  
+         For example, iug_plot2d_ear_fai,valuename = 'faifb8p16m1'.
+         The default is 'faifb8p16m1'.
+  stime = Start time of 2-D plot of the EAR-FAI observations.
+         For example, iug_plot2d_ear_fai, stime = '2012-03-23/15:00:00'.
+         The default is '2012-03-23/15:00:00'.
+  minimum = Minimum value of color plot. For example, iug_plot2d_ear_fai, min = 0.
+         The default is 0.
+  maximum = Maximum value of color plot. For example, iug_plot2d_ear_fai, max = 60.
+         The default is 60.
+  zticks = Number of zticks to divide the bar into. There will be (zticks + 1) annotations. 
+         The default is 6.
+         
+NOTES:
+  Before you examine this procedure, the EAR-FAI data are necceary to load.
+
+CODE:
+  A. Shinbori, 08/07/2013.
+  
+MODIFICATIONS:
+
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_plot2d_ear_fai.pro">iugonet/load/iug_plot2d_ear_fai.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_PLOT2D_IONOGRAM">
 <H2>IUG_PLOT2D_IONOGRAM</H2></A>
-<A HREF="#IUG_MOVIE_SMART">[Previous Routine]</A>
+<A HREF="#IUG_PLOT2D_EAR_FAI">[Previous Routine]</A>
 <A HREF="#IUG_PLOT2D_IRIO">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
