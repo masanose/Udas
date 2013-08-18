@@ -15,7 +15,7 @@
 ;  datatype = Observation data type. For example, iug_load_mu_fai_txt, datatype = 'ionosphere'.
 ;            The default is 'ionosphere'. 
 ;  parameter1 = first parameter name of MU FAI obervation data.  
-;          For example, iug_load_mu_fai_txt, parameter = 'eb1p2a'.
+;          For example, iug_load_mu_fai_txt, parameter = 'iemdc3'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  parameter2 = second parameter name of MU FAI obervation data.  
 ;          For example, iug_load_mu_fai_txt, parameter = 'dpl1'.
@@ -62,7 +62,7 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;************
 ;--- all parameters1 (default)
-parameter1_all = strsplit('iemdc3',' ', /extract)
+parameter1_all = strsplit('iesp01 iemdc3 ifmf16 ifmyc1 ifmyc2 ifmyc3 ifmyc4 ifmyc5',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter1)) then parameter1='all'
@@ -115,7 +115,7 @@ for ii=0,n_elements(parameters)-1 do begin
          source = file_retrieve(/struct)
          source.verbose=verbose
          source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/fai/csv/'
-         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/fai/data/'
+         source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/fai/data/csv/'
     
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
