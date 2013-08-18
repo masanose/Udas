@@ -74,8 +74,11 @@ print, parameters
 ;parameters2:
 ;************
 ;--- all parameters2 (default)
-parameter2_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 pwr1 pwr2 pwr3 pwr4 pwr5 '+$
-                          'wdt1 wdt2 wdt3 wdt4 wdt5 pn1 pn2 pn3 pn4 pn5',' ', /extract)
+parameter2_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 dpl6 dpl7 dpl8 dpl9 dpl10 dpl11 dpl12 dpl13 dpl14 dpl15 dpl16 '+$
+                          'pwr1 pwr2 pwr3 pwr4 pwr5 pwr6 pwr7 pwr8 pwr9 pwr10 pwr11 pwr12 pwr13 pwr14 pwr15 pwr16 '+$
+                          'wdt1 wdt2 wdt3 wdt4 wdt5 wdt6 wdt7 wdt8 wdt9 wdt10 wdt11 wdt12 wdt13 wdt14 wdt15 wdt16 '+$
+                          'snr1 snr2 snr3 snr4 snr5 snr6 snr7 snr8 snr9 snr10 snr11 snr12 snr13 snr14 snr15 snr16 '+$
+                          'pn1 pn2 pn3 pn4 pn5 pn6 pn7 pn8 pn9 pn10 pn11 pn12 pn13 pn14 pn15 pn16',' ', /extract)
 
 ;--- check parameters
 if(not keyword_set(parameter2)) then parameter2='all'
@@ -318,57 +321,57 @@ for ii=0,n_elements(parameters)-1 do begin
                   endfor
                endfor
               ;print, pwr2_ear
-               store_data,'iug_mu_fai'+parameters[ii]+'_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
-               new_vars=tnames('iug_mu_fai'+parameters[ii]+'_pwr'+bname[l])
+               store_data,'iug_mu_fai_'+parameters[ii]+'_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
+               new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_pwr'+bname[l])
                if new_vars[0] ne '' then begin                 
-                  options,'iug_mu_fai'+parameters[ii]+'_pwr'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
-                  options,'iug_mu_fai'+parameters[ii]+'_pwr'+bname[l],'spec',1
-                  tdegap, 'iug_mu_fai'+parameters[ii]+'_pwr'+bname[l], /overwrite
+                  options,'iug_mu_fai_'+parameters[ii]+'_pwr'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
+                  options,'iug_mu_fai_'+parameters[ii]+'_pwr'+bname[l],'spec',1
+                  tdegap, 'iug_mu_fai_'+parameters[ii]+'_pwr'+bname[l], /overwrite
                endif               
                for i=0, n_elements(mu_time)-1 do begin
                   for k=0, n_elements(range)-1 do begin
                      wdt2_mu[i,k]=wdt1[i,k,l]
                   endfor
                endfor
-               store_data,'iug_mu_fai'+parameters[ii]+'_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
-               new_vars=tnames('iug_mu_fai'+parameters[ii]+'_wdt'+bname[l])
+               store_data,'iug_mu_fai_'+parameters[ii]+'_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
+               new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_wdt'+bname[l])
                if new_vars[0] ne '' then begin 
-                  options,'iug_mu_fai'+parameters[ii]+'_wdt'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
-                  options,'iug_mu_fai'+parameters[ii]+'_wdt'+bname[l],'spec',1
-                  tdegap, 'iug_mu_fai'+parameters[ii]+'_wdt'+bname[l], /overwrite
+                  options,'iug_mu_fai_'+parameters[ii]+'_wdt'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
+                  options,'iug_mu_fai_'+parameters[ii]+'_wdt'+bname[l],'spec',1
+                  tdegap, 'iug_mu_fai_'+parameters[ii]+'_wdt'+bname[l], /overwrite
                endif               
                for i=0, n_elements(mu_time)-1 do begin
                   for k=0, n_elements(range)-1 do begin
                      dpl2_mu[i,k]=dpl1[i,k,l]
                   endfor
                endfor
-               store_data,'iug_mu_fai'+parameters[ii]+'_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
-               new_vars=tnames('iug_mu_fai'+parameters[ii]+'_dpl'+bname[l])
+               store_data,'iug_mu_fai_'+parameters[ii]+'_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
+               new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_dpl'+bname[l])
                if new_vars[0] ne '' then begin 
-                  options,'iug_mu_fai'+parameters[ii]+'_dpl'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
-                  options,'iug_mu_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
-                  tdegap, 'iug_mu_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
+                  options,'iug_mu_fai_'+parameters[ii]+'_dpl'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
+                  options,'iug_mu_fai_'+parameters[ii]+'_dpl'+bname[l],'spec',1
+                  tdegap, 'iug_mu_fai_'+parameters[ii]+'_dpl'+bname[l], /overwrite
                endif
                for i=0, n_elements(mu_time)-1 do begin
                   for k=0, n_elements(range)-1 do begin
                      snr2_mu[i,k]=snr1[i,k,l]
                   endfor
                endfor
-               store_data,'iug_mu_fai'+parameters[ii]+'_snr'+bname[l],data={x:mu_time, y:snr2_mu, v:height2},dlimit=dlimit
-               new_vars=tnames('iug_mu_fai'+parameters[ii]+'_snr'+bname[l])
+               store_data,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],data={x:mu_time, y:snr2_mu, v:height2},dlimit=dlimit
+               new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_snr'+bname[l])
                if new_vars[0] ne '' then begin
-                  options,'iug_mu_fai'+parameters[ii]+'_snr'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='snr'+bname[l]+'!C[dB]'
-                  options,'iug_mu_fai'+parameters[ii]+'_snr'+bname[l],'spec',1
-                  tdegap, 'iug_mu_fai'+parameters[ii]+'_snr'+bname[l], /overwrite
+                  options,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='snr'+bname[l]+'!C[dB]'
+                  options,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],'spec',1
+                  tdegap, 'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l], /overwrite
                endif             
                for i=0, n_elements(mu_time)-1 do begin
                   pnoise2_mu[i]=pn1[i,l]
                end
-               store_data,'iug_mu_fai'+parameters[ii]+'_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
-               new_vars=tnames('iug_mu_fai'+parameters[ii]+'_pn'+bname[l])
+               store_data,'iug_mu_fai_'+parameters[ii]+'_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
+               new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_pn'+bname[l])
                if new_vars[0] ne '' then begin 
-                  options,'iug_mu_fai'+parameters[ii]+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
-                  tdegap, 'iug_mu_fai'+parameters[ii]+'_pn'+bname[l], /overwrite    
+                  options,'iug_mu_fai_'+parameters[ii]+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
+                  tdegap, 'iug_mu_fai_'+parameters[ii]+'_pn'+bname[l], /overwrite    
                endif      
             endfor
          endif

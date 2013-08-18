@@ -287,7 +287,7 @@ pro iug_ui_load_data_load_pro,    $
       ;----- Middle Upper atmosphere radar -----;
       'Middle_Upper_atmosphere_radar' : begin
           iug_load_mu, datatype =datatype, level=site_or_param, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
-          if site_or_param[0] eq '*' then begin
+          if site_or_param[0] eq '*(all)' then begin
               lvl='*'
           endif else begin
               lvl=site_or_param

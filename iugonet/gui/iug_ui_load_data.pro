@@ -460,7 +460,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[15])[2] = ptr_new(['*(all)'])
   (*paramArray[15])[3] = ptr_new(['*(all)'])
   (*paramArray[15])[4] = ptr_new(['*(all)'])
-  (*paramArray[15])[5] = ptr_new(['*(all)','iemdc3'])
+  (*paramArray[15])[5] = ptr_new(['*(all)','iesp01','iemdc3','ifmf16','ifmyc1','ifmyc2','ifmyc3','ifmyc4','ifmyc5'])
   (*paramArray[16])[0] = ptr_new(['*(all)','drw','gpn','ktr'])
   (*paramArray[16])[1] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[17])[0] = ptr_new(['*(all)','hok','sye','sys'])
@@ -520,8 +520,8 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*param2Array[3])[2] = ptr_new(['*','dpl1','pwr1','wdt1','pn1'])
   (*param2Array[3])[3] = ptr_new(['*','dpl1','dpl2','dpl3','pwr1','pwr2','pwr3','wdt1','wdt2','wdt3','pn1','pn2','pn3'])
   (*param2Array[3])[4] = ptr_new(['*','dpl1','dpl2','dpl3','dpl4','dpl5','dpl6','dpl7','dpl8','pwr1','pwr2','pwr3','pwr4','pwr5',$
-                                  'pwr6','pwr7','pwr8','wdt1','wdt2','wdt3','wdt4','wdt5','wdt6','wdt7','wdt8','pn1',$
-                                  'pn2','pn3','pn4','pn5','pn6','pn7','pn8']) 
+                                  'pwr6','pwr7','pwr8','wdt1','wdt2','wdt3','wdt4','wdt5','wdt6','wdt7','wdt8','snr1','snr2','snr3',$
+                                  'snr4','snr5','snr6','snr7','snr','pn1','pn2','pn3','pn4','pn5','pn6','pn7','pn8']) 
   (*param2Array[4])[0] = ptr_new(['*'])
   (*param2Array[4])[1] = ptr_new(['*','1min','1h'])
   (*param2Array[4])[2] = ptr_new(['*','min','hour'])
@@ -548,8 +548,11 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*param2Array[15])[2] = ptr_new(['*','Vperp_e','Vperp_n','Vpara_u','Vz_ew','Vz_ns','Vd_b','pwr1','pwr2','pwr3','pwr4','te','ti','er_te','er_ti','er_tr','snr'])
   (*param2Array[15])[3] = ptr_new(['*','h1t60min00','h1t60min30','h2t60min00','h2t60min30']) 
   (*param2Array[15])[4] = ptr_new(['*','uwnd','vwnd','wwnd','temp'])
-  (*param2Array[15])[5] = ptr_new(['*','pwr1','pwr2','pwr3','pwr4','pwr5','wdt1','wdt2',$
-                                  'wdt3','wdt4','wdt5','dpl1','dpl2','dpl3','dpl4','dpl5','pn1','pn2','pn3','pn4','pn5'])                               
+  (*param2Array[15])[5] = ptr_new(['*','pwr1','pwr2','pwr3','pwr4','pwr5','pwr6','pwr7','pwr8','pwr9','pwr10','pwr11','pwr12','pwr13','pwr14','pwr15','pwr16',$
+                                   'wdt1','wdt2','wdt3','wdt4','wdt5','wdt6','wdt7','wdt8','wdt9','wdt10','wdt11','wdt12','wdt13','wdt14','wdt15','wdt16',$
+                                   'dpl1','dpl2','dpl3','dpl4','dpl5','dpl6','dpl7','dpl8','dpl9','dpl10','dpl11','dpl12','dpl13','dpl14','dpl15','dpl16',$
+                                   'snr1','snr2','snr3','snr4','snr5','snr6','snr7','snr8','snr9','snr10','snr11','snr12','snr13','snr14','snr15','snr16',$
+                                   'pn1','pn2','pn3','pn4','pn5','pn6','pn7','pn8','pn9','pn10','pn11','pn12','pn13','pn14','pn15','pn16'])                               
   (*param2Array[16])[0] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
   (*param2Array[16])[1] = ptr_new(['*','press','temp','rh','dewp','uwnd','vwnd'])
   (*param2Array[17])[0] = ptr_new(['*','azim_no','pwr','pwr_err','spec_width','spec_width_err','vlos','vlos_err',$

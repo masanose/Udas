@@ -91,7 +91,7 @@ levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
 ;*******************
 
 ;--- all parameters (default)
-parameter_all_1 = strsplit('h1t60min00 h1t60min30 h2t60min00 h2t60min30 iemdc3',' ', /extract)
+parameter_all_1 = strsplit('h1t60min00 h1t60min30 h2t60min00 h2t60min30 iesp01 iemdc3 ifmf16 ifmyc1 ifmyc2 ifmyc3 ifmyc4 ifmyc5',' ', /extract)
 
 ;--- check parameters
 if(not keyword_set(parameter1)) then parameter1='all'
@@ -144,7 +144,7 @@ parameters_2 = thm_check_valid_name(parameter2, parameter_all_2, /ignore_case, /
 
   ;load of MU FAI data  
    if datatypes[i] eq 'fai' then begin
-      iug_load_mu_fai_txt, datatype = datatypes[i], parameter1 =parameters_1, parameter2 =parameters_2, $
+      iug_load_mu_fai_nc, datatype = datatypes[i], parameter1 =parameters_1, $
                            trange = trange, downloadonly=downloadonly, verbose = verbose
    endif
    endfor  
