@@ -1,6 +1,6 @@
 ==================================================================
-; UDAS plug-in software package for tdas_8_00
-;                                                     June 7, 2013
+; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.1)
+;                                                  August 20, 2013
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -142,8 +142,8 @@ GUI:
                         mesosphere      *(all)          *       2003-03-10
                         ionosphere      *(all)          *       1989-03-06
                         meteor          *(all)          *       1990-05-18
-                        rass            *(all)          *       1990-05-18
-                        meteor          *(all)          *       1990-05-18
+                        rass            *(all)          *       1996-10-27
+                        fai             *(all)          *       2012-09-10
 - Radiosonde            DAWEX           drw             *       2001-10-15
                         misc            sgk             *       2008-07-15
 - SuperDARN             ionosphere      hok             *       2006-12-15
