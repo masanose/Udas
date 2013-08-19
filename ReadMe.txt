@@ -1,5 +1,5 @@
 ==================================================================
-; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.1)
+; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.2)
 ;                                                  August 20, 2013
 ==================================================================
 
