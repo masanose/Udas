@@ -39,6 +39,7 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 17/12/2012.
 ; A. Shinbori, 08/07/2013.
+; A. Shinbori, 18/08/2013.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -101,7 +102,7 @@ for ii=0,n_elements(parameters)-1 do begin
      ;Get files for ith component:
      ;***************************
       file_names = file_dailynames( $
-      file_format='YYYY/'+$
+      file_format='YYYY/YYYYMMDD/'+$
                   'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.nc'
      ;
      ;Define FILE_RETRIEVE structure:
