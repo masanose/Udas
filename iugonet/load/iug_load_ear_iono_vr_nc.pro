@@ -100,7 +100,7 @@ for ii=0,n_elements(parameters)-1 do begin
      ;Get files for ith component:
      ;***************************
       file_names = file_dailynames( $
-      file_format='YYYY/'+$
+      file_format='YYYY/YYYYMMDD/'+$
                   'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.nc'
      ;
      ;Define FILE_RETRIEVE structure:
