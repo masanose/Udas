@@ -17,6 +17,7 @@
 ;A. Shinbori, 14/12/2012
 ;A. Shinbori, 08/07/2013
 ;Y.-M. Tanaka, 16/08/2013
+;A. Shinbori, 25/09/2013
 ;
 ;--------------------------------------------------------------------------------
 pro iug_ui_load_data_event,event
@@ -460,7 +461,18 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[15])[2] = ptr_new(['*(all)'])
   (*paramArray[15])[3] = ptr_new(['*(all)'])
   (*paramArray[15])[4] = ptr_new(['*(all)'])
-  (*paramArray[15])[5] = ptr_new(['*(all)','iesp01','iemdc3','ifmf16','ifmyc1','ifmyc2','ifmyc3','ifmyc4','ifmyc5'])
+  (*paramArray[15])[5] = ptr_new(['*(all)','iesp01','iecob3','ieimga','ieimgb','ieimgm','ieimgt','ieis01','iemb5i','iemcb3',$
+                                  'iemdb5','iemdc3','iemy3a','iemy3b','iemy3c','iemyb5','iepbr1','iepbr2','iepbr3','iepbr5',$
+                                  'iepbrt','ieper1','ieper2','ieper3','ieper4','ieper5','ieper6','ieper7','ieper8','iepsi5',$
+                                  'iepsit','iesp01','iess01','iess02','iess03','iess04','iess05','iess2l','iess3l','iess4l',$
+                                  'iessb5','iesst2','iesst3','iet101','iet102','ieto02','ieto03','ieto16','ietob3','ietob4',$
+                                  'ietob5','iey4ch','iey4ct','ieyo4a','ieyo4b','ieyo4c','ieyo4d','ieyo4e','ieyo4f','ieyo4g',$
+                                  'ieyo5a','ieyo5b','ieyo5c','ieyo5d','ieyo5e','ieyo5f','ieyo5m','ifco02','ifco03','ifco04',$
+                                  'ifco16','ifim16','ifmb16','ifmc16','ifmd16','ifmf16','ifmy01','ifmy02','ifmy03','ifmy04',$
+                                  'ifmy05','ifmyc1','ifmyc2','ifmyc3','ifmyc4','ifmyc5','ifmyc6','ifmyc7','ifmyca','ifmycb',$
+                                  'ifmyt1','ifmyt2','ifmyt3','ifmyt4','ifmyt5','ifmyu1','ifmyu2','ifmyu3','ifmyu4','ifmyu5',$
+                                  'ifmyv1','ifpsi1','ifpsit','ifss02','iftes1','iftes2','iftes3','iftes5','iftes6','iftes7',$
+                                  'iftes8','ifts01','ifts02','ifts03','ifts04','ifts05','ifts06','ifts07'])
   (*paramArray[16])[0] = ptr_new(['*(all)','drw','gpn','ktr'])
   (*paramArray[16])[1] = ptr_new(['*(all)','ktb','sgk','srp'])
   (*paramArray[17])[0] = ptr_new(['*(all)','hok','sye','sys'])
