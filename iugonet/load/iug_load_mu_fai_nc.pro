@@ -30,7 +30,8 @@
 ;
 ;CODE:
 ; A. Shinbori, 18/08/2013.
-;
+; A. Shinbori, 10/10/2013.
+; 
 ;MODIFICATIONS:
 ;
 ; 
@@ -62,14 +63,14 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;************
 ;--- all parameters1 (default)
-parameter1_all = strsplit('iecob3 ieimga ieimgb ieimgm ieimgt ieis01 iemb5i iemcb3 iemdb5 '+$
-                          'iemdc3 iemy3a iemy3b iemy3c iemyb5 iepbr1 iepbr2 iepbr3 iepbr5 '+$
+parameter1_all = strsplit('iecob3 ieewb5 ieimga ieimgb ieimgm ieimgt ieis01 iemb5i iemcb3 iemdb3 iemdb5 '+$
+                          'iemdc3 iemy3a iemy3b iemy3c iemyb5 iensb5 iepbr1 iepbr2 iepbr3 iepbr4 iepbr5 '+$
                           'iepbrt ieper1 ieper2 ieper3 ieper4 ieper5 ieper6 ieper7 ieper8 '+$
                           'iepsi5 iepsit iesp01 iess01 iess02 iess03 iess04 iess05 iess2l '+$
-                          'iess3l iess4l iessb5 iesst2 iesst3 iet101 iet102 ieto02 ieto03 '+$
+                          'iess3l iess4l iess8c iessb5 iesst2 iesst3 iet101 iet102 ieto02 ieto03 '+$
                           'ieto16 ietob3 ietob4 ietob5 iey4ch iey4ct ieyo4a ieyo4b ieyo4c '+$
                           'ieyo4d ieyo4e ieyo4f ieyo4g ieyo5a ieyo5b ieyo5c ieyo5d ieyo5e '+$
-                          'ieyo5f ieyo5m ifco02 ifco03 ifco04 ifco16 ifim16 ifmb16 ifmc16 '+$
+                          'ieyo5f ieyo5g ieyo5m ifco02 ifco03 ifco04 ifco16 ifim16 ifmb16 ifmc16 '+$
                           'ifmd16 ifmf16 ifmy01 ifmy02 ifmy03 ifmy04 ifmy05 ifmyc1 ifmyc2 '+$
                           'ifmyc3 ifmyc4 ifmyc5 ifmyc6 ifmyc7 ifmyca ifmycb ifmyt1 ifmyt2 '+$
                           'ifmyt3 ifmyt4 ifmyt5 ifmyu1 ifmyu2 ifmyu3 ifmyu4 ifmyu5 ifmyv1 '+$
