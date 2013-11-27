@@ -8,7 +8,7 @@
 ;  taken by the MU radar and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_fai_nc, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+; iug_load_mu_fai_nc, datatype = datatype, parameter1=parameter1, $
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
@@ -16,9 +16,6 @@
 ;            The default is 'ionosphere'. 
 ;  parameter1 = first parameter name of MU FAI obervation data.  
 ;          For example, iug_load_mu_fai_nc, parameter = 'iemdc3'.
-;          The default is 'all', i.e., load all available parameters.
-;  parameter2 = second parameter name of MU FAI obervation data.  
-;          For example, iug_load_mu_fai_nc, parameter = 'dpl1'.
 ;          The default is 'all', i.e., load all available parameters.
 ;  trange = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
@@ -33,7 +30,7 @@
 ; A. Shinbori, 10/10/2013.
 ; 
 ;MODIFICATIONS:
-;
+; A. Shinbori, 17/11/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -63,19 +60,31 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 ;parameters1:
 ;************
 ;--- all parameters1 (default)
-parameter1_all = strsplit('iecob3 ieewb5 ieimga ieimgb ieimgm ieimgt ieis01 iemb5i iemcb3 iemdb3 iemdb5 '+$
-                          'iemdc3 iemy3a iemy3b iemy3c iemyb5 iensb5 iepbr1 iepbr2 iepbr3 iepbr4 iepbr5 '+$
-                          'iepbrt ieper1 ieper2 ieper3 ieper4 ieper5 ieper6 ieper7 ieper8 '+$
-                          'iepsi5 iepsit iesp01 iess01 iess02 iess03 iess04 iess05 iess2l '+$
-                          'iess3l iess4l iess8c iessb5 iesst2 iesst3 iet101 iet102 ieto02 ieto03 '+$
-                          'ieto16 ietob3 ietob4 ietob5 iey4ch iey4ct ieyo4a ieyo4b ieyo4c '+$
-                          'ieyo4d ieyo4e ieyo4f ieyo4g ieyo5a ieyo5b ieyo5c ieyo5d ieyo5e '+$
-                          'ieyo5f ieyo5g ieyo5m ifco02 ifco03 ifco04 ifco16 ifim16 ifmb16 ifmc16 '+$
-                          'ifmd16 ifmf16 ifmy01 ifmy02 ifmy03 ifmy04 ifmy05 ifmyc1 ifmyc2 '+$
-                          'ifmyc3 ifmyc4 ifmyc5 ifmyc6 ifmyc7 ifmyca ifmycb ifmyt1 ifmyt2 '+$
-                          'ifmyt3 ifmyt4 ifmyt5 ifmyu1 ifmyu2 ifmyu3 ifmyu4 ifmyu5 ifmyv1 '+$
-                          'ifpsi1 ifpsit ifss02 iftes1 iftes2 iftes3 iftes5 iftes6 iftes7 '+$
-                          'iftes8 ifts01 ifts02 ifts03 ifts04 ifts05 ifts06 ifts07',' ', /extract)
+parameter1_all = strsplit('ie2e4b ie2e4c ie2e4d ie2rea ie2mya ie2myb ie2rta ie2trb iecob3 '+$
+                          'ied101 ied103 ied108 ied110 ied201 ied202 ied203 iedb4a iedb4b '+$
+                          'iedb4c iedc4a iedc4b iedc4c iede4a iede4b iede4c iede4d iedp01 '+$
+                          'iedp02 iedp03 iedp08 iedp10 iedp11 iedp12 iedp13 iedp1s iedpaa '+$
+                          'iedpbb iedpcc iedpdd iedpee iedpff iedpgg iedphh iedpii iedpjj '+$
+                          'iedpkk iedpl2 iedpll iedpmm iedptt iedpyy iedpzz ieewb5 ieimga '+$
+                          'ieimgb ieimgm ieimgt ieis01 iefai1 iefdi2 ieggmt iemb5i iemcb3 '+$
+                          'iemdb3 iemdb5 iemdc3 iemy3a iemy3b iemy3c iemyb5 iensb5 iepbr1 '+$
+                          'iepbr2 iepbr3 iepbr4 iepbr5 iepbrt ieper1 ieper2 ieper3 ieper4 '+$
+                          'ieper5 ieper6 ieper7 ieper8 ieps3a ieps3b ieps3c ieps4a ieps4b '+$
+                          'ieps4c ieps4d ieps4e ieps5a ieps5b ieps5c ieps6a ieps6b iepsb3 '+$
+                          'iepsb4 iepsb5 iepsi1 iepsi5 iepsit iesp01 iess01 iess02 iess03 '+$
+                          'iess04 iess05 iess2l iess3l iess4l iess8c iessb5 iesst2 iesst3 '+$
+                          'iet101 iet102 ietest ietst2 ieto02 ieto03 ieto16 ietob3 ietob4 '+$
+                          'ietob5 iey4ch iey4ct ieyo4a ieyo4b ieyo4c ieyo4d ieyo4e ieyo4f '+$
+                          'ieyo4g ieyo5a ieyo5b ieyo5c ieyo5d ieyo5e ieyo5f ieyo5g ieyo5m '+$
+                          'ifco02 ifco03 ifco04 ifco16 if5bd1 if5bd2 if5bd3 if5bd4 if5bd5 '+$
+                          'if5be1 if5be2 if5be3 if5be4 if5be5 ifchk1 ifdp00 ifdp01 ifdp02 '+$
+                          'ifdp03 ifdp0a ifdp0b ifdp0c ifdp0d ifdp1u ifdp1s ifdp1t ifdpll '+$
+                          'ifdq01 ifdq02 ifim16 ifmb16 ifmc16 ifmd16 ifmf16 ifmy01 ifmy02 '+$
+                          'ifmy03 ifmy04 ifmy05 ifmy99 ifmyc1 ifmyc2 ifmyc3 ifmyc4 ifmyc5 '+$
+                          'ifmyc6 ifmyc7 ifmyca ifmycb ifmyt1 ifmyt2 ifmyt3 ifmyt4 ifmyt5 '+$
+                          'ifmyu1 ifmyu2 ifmyu3 ifmyu4 ifmyu5 ifmyv1 ifpsi1 ifpsit ifss02 '+$
+                          'iftes1 iftes2 iftes3 iftes5 iftes6 iftes7 iftes8 ifts01 ifts02 '+$
+                          'ifts03 ifts04 ifts05 ifts06 ifts07',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter1)) then parameter1='all'
@@ -162,7 +171,7 @@ for ii=0,n_elements(parameters)-1 do begin
      ;============== 
       for j=jj,n_elements(local_paths)-1 do begin
          file= local_paths[j]
-         if file_test(/regular,file) then  dprint,'Loading the FAI observation data taken by the EAR: ',file $
+         if file_test(/regular,file) then  dprint,'Loading the FAI observation data taken by the MU radar: ',file $
          else begin
             dprint,'The FAI observation data taken by the MU radar ',file,' not found. Skipping'
             continue
@@ -200,7 +209,7 @@ for ii=0,n_elements(parameters)-1 do begin
                if (info.name eq 'time') and (attname eq 'units') then time_data=string(attvalue)
             endfor
          endfor
-
+         print, info.natts
         ;Calculation the start time infomation from the attribute data:
          time_info=strsplit(time_data,' ',/extract)
          syymmdd=time_info[2]
@@ -224,7 +233,10 @@ for ii=0,n_elements(parameters)-1 do begin
          ncdf_varget, cdfid, 'ze', ze
          ncdf_varget, cdfid, 'date', date
          ncdf_varget, cdfid, 'time', time
-         ncdf_varget, cdfid, 'height', height
+         if glob.NVARS eq 20 then begin
+            ncdf_varget, cdfid, 'height', height
+            range=height
+         endif
          ncdf_varget, cdfid, 'pwr', pwr
          ncdf_varget, cdfid, 'width', width
          ncdf_varget, cdfid, 'dpl', dpl
@@ -246,8 +258,8 @@ for ii=0,n_elements(parameters)-1 do begin
     
          for i=0, n_elements(time)-1 do begin
            ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)      
-            unix_time[i] = double(time[i]) +time_double(string(syymmdd)+'/'+string(shhmmss))-double(time_diff2)            
-            for k=0, n_elements(range)-1 do begin
+            unix_time[i] = double(time[i])+time_double(string(syymmdd)+'/'+string(shhmmss))-double(time_diff2)            
+            for k=0, n_elements(range[*,0])-1 do begin
                for l=0, n_elements(beam)-1 do begin           
                   a = pwr[k,i,l]            
                   wbad = where(a eq 10000000000,nbad)
@@ -314,10 +326,10 @@ for ii=0,n_elements(parameters)-1 do begin
       if n_elements(mu_time) gt 1 then begin
          bname2=strarr(n_elements(beam))
          bname=strarr(n_elements(beam))
-         pwr2_mu=fltarr(n_elements(mu_time),n_elements(range))
-         wdt2_mu=fltarr(n_elements(mu_time),n_elements(range))
-         dpl2_mu=fltarr(n_elements(mu_time),n_elements(range))
-         snr2_mu=fltarr(n_elements(mu_time),n_elements(range))
+         pwr2_mu=fltarr(n_elements(mu_time),n_elements(range[*,0]))
+         wdt2_mu=fltarr(n_elements(mu_time),n_elements(range[*,0]))
+         dpl2_mu=fltarr(n_elements(mu_time),n_elements(range[*,0]))
+         snr2_mu=fltarr(n_elements(mu_time),n_elements(range[*,0]))
          pnoise2_mu=fltarr(n_elements(mu_time))       
          if size(pwr1,/type) eq 4 then begin
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))         
@@ -325,11 +337,11 @@ for ii=0,n_elements(parameters)-1 do begin
             for l=0, n_elements(beam)-1 do begin
                bname2[l]=string(beam[l]+1)
                bname[l]=strsplit(bname2[l],' ', /extract)
-               for k=0, n_elements(range)-1 do begin
-                  height2[k]=height[k,l]
-               endfor
+               ss=size(range)
+               if ss[0] ne 1 then height2=range[*,l]
+               if ss[0] eq 1 then height2=range
                for i=0, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0, n_elements(height2)-1 do begin
                      pwr2_mu[i,k]=pwr1[i,k,l]
                   endfor
                endfor
@@ -342,7 +354,7 @@ for ii=0,n_elements(parameters)-1 do begin
                   tdegap, 'iug_mu_fai_'+parameters[ii]+'_pwr'+bname[l], /overwrite
                endif               
                for i=0, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0, n_elements(height2)-1 do begin
                      wdt2_mu[i,k]=wdt1[i,k,l]
                   endfor
                endfor
@@ -354,7 +366,7 @@ for ii=0,n_elements(parameters)-1 do begin
                   tdegap, 'iug_mu_fai_'+parameters[ii]+'_wdt'+bname[l], /overwrite
                endif               
                for i=0, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0, n_elements(height2)-1 do begin
                      dpl2_mu[i,k]=dpl1[i,k,l]
                   endfor
                endfor
@@ -366,14 +378,16 @@ for ii=0,n_elements(parameters)-1 do begin
                   tdegap, 'iug_mu_fai_'+parameters[ii]+'_dpl'+bname[l], /overwrite
                endif
                for i=0, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0, n_elements(height2)-1 do begin
                      snr2_mu[i,k]=snr1[i,k,l]
                   endfor
                endfor
                store_data,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],data={x:mu_time, y:snr2_mu, v:height2},dlimit=dlimit
                new_vars=tnames('iug_mu_fai_'+parameters[ii]+'_snr'+bname[l])
                if new_vars[0] ne '' then begin
-                  options,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],ytitle='MU-FAI!CHeight!C[km]',ztitle='snr'+bname[l]+'!C[dB]'
+                  options,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],ytitle='MU-FAI!CHeight!C[km]'$
+                         ,ztitle='SNR [dB]!CBeam-'+bname[l];+'!C(Az: '+strtrim(string(az[l],format='(f10.1)'),2)+$
+                  if glob.nvars eq 19 then options,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],ytitle='MU-FAI!CRange!C[km]'         ; ', Ze: '+strtrim(string(ze[l],format='(f10.1)'),2)+')'
                   options,'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l],'spec',1
                   tdegap, 'iug_mu_fai_'+parameters[ii]+'_snr'+bname[l], /overwrite
                endif             
@@ -396,6 +410,8 @@ for ii=0,n_elements(parameters)-1 do begin
          endif
       endif
    endif
+   time1=time_string(mu_time[0])
+   time2=time_string(mu_time[n_elements(mu_time)-1])
   ;Clear time and data buffer:
    mu_time=0
    pwr1 = 0
@@ -403,7 +419,7 @@ for ii=0,n_elements(parameters)-1 do begin
    dpl1 = 0
    snr1 = 0
    pn1 = 0
-   
+   print,time1, time2
    jj=n_elements(local_paths)
 endfor
 
