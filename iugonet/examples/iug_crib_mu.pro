@@ -121,7 +121,7 @@ iug_load_mu, datatype = 'rass'
 ;Plot time-height distribution of zonal and meridional winds, standard deviation of
 ;zonal and meridional winds and number of meteors used to derive the horizontal wind:
 ;=====================================================================================
-tplot,['iug_mu_rass_wwnd','iug_mu_rass_vwnd','iug_mu_rass_wwnd',$
+tplot,['iug_mu_rass_uwnd','iug_mu_rass_vwnd','iug_mu_rass_wwnd',$
        'iug_mu_rass_temp']
 
 stop

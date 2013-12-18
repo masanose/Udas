@@ -31,6 +31,7 @@
 ; 
 ;MODIFICATIONS:
 ; A. Shinbori, 17/11/2013.
+; A. Shinbori, 18/12/2013.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -410,8 +411,7 @@ for ii=0,n_elements(parameters)-1 do begin
          endif
       endif
    endif
-   time1=time_string(mu_time[0])
-   time2=time_string(mu_time[n_elements(mu_time)-1])
+   
   ;Clear time and data buffer:
    mu_time=0
    pwr1 = 0
@@ -419,7 +419,6 @@ for ii=0,n_elements(parameters)-1 do begin
    dpl1 = 0
    snr1 = 0
    pn1 = 0
-   print,time1, time2
    jj=n_elements(local_paths)
 endfor
 
