@@ -31,6 +31,7 @@ iug_load_ear, datatype = 'e_region',  parameter = 'eb3p4b'
 
 ;Plot time-height distribution of radial Doppler velocity and echo intensity for beam 1:
 ;=======================================================================================
+zlim,'iug_ear_faieb3p4b_dpl*',-100,100
 tplot,['iug_ear_faieb3p4b_dpl1','iug_ear_faieb3p4b_pwr1','iug_ear_faieb3p4b_wdt1','iug_ear_faieb3p4b_pn1']
 
 stop
