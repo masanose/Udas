@@ -135,6 +135,8 @@ for i=0, n_elements(site_code)-1 do begin
       timevec = dblarr(ntime)
 
       ;----- Read data -----;
+      itime=0
+      beftime=-1
       data=''
       while (not EOF(lun)) do begin
         readf, lun, data
@@ -142,9 +144,13 @@ for i=0, n_elements(site_code)-1 do begin
 ;        doy=fix(strmid(data,4,3))
         hour=fix(strmid(data,7,2))
         minute=fix(strmid(data,9,2))
-        itime=round(2.0*(hour+minute/60.))
         alt=fix(strmid(data,11,4))
         ialt=(alt-fix(vdat(0)))/2
+        nowtime=hour+minute*0.5
+        
+        if (beftime ne -1) and (nowtime ne beftime) then begin
+          itime=itime+1
+        endif
 
         uwind(itime, ialt)=float(strmid(data,15,4))
         vwind(itime, ialt)=float(strmid(data,19,4))
@@ -156,7 +162,18 @@ for i=0, n_elements(site_code)-1 do begin
         adif3(itime, ialt)=float(strmid(data,40,3))
         timevec(itime)=time_double(stryear+'-'+strmon+'-'+strday+'/'+$
 	  	string(hour)+':'+string(minute))
+        beftime=nowtime
       endwhile
+
+      uwind=uwind(0:itime-1, *)
+      vwind=vwind(0:itime-1, *)
+      uerr=uerr(0:itime-1, *)
+      verr=verr(0:itime-1, *)
+      nw=nw(0:itime-1, *)
+      adif1=adif1(0:itime-1, *)
+      adif2=adif2(0:itime-1, *)
+      adif3=adif3(0:itime-1, *)
+      timevec=timevec(0:itime-1)
 
       ;----- Append data -----;
       append_array, uwind_buf, uwind
