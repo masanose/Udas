@@ -25,7 +25,7 @@
 ;   /no_download: use only files which are online locally.
 ;
 ; EXAMPLE:
-;   iug_load_gmag_nipr, site='syo', $
+;   iug_load_irio_nipr, site='syo', $
 ;                 trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
 ;
 ; Written by Y.-M. Tanaka, December, 2012 (ytanaka at nipr.ac.jp)
