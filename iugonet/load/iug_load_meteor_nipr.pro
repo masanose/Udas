@@ -18,7 +18,11 @@
 ; EXAMPLE:
 ;   iug_load_meteor_nipr, site = 'tro', trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 ;
+; NOTE:
+;   The meteor radar data obtained by NIPR is now not online.
+;
 ; Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+; Revised by: Y.-M. Tanaka, December 19, 2013 (ytanaka at nipr.ac.jp)
 ;-
 
 ;**************************
