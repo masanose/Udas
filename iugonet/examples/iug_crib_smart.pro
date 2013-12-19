@@ -28,10 +28,10 @@ tplot_names
 iug_plot2d_smart,'smart_t1_p00',3,3
 
 ; Stop
-print,'Enter ".c" to continue.'
-stop
+;print,'Enter ".c" to continue.'
+;stop
 
 ; Show movie
-iug_movie_smart,'smart_t1_m08'
+;iug_movie_smart,'smart_t1_m08'
 
 end
