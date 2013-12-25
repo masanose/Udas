@@ -303,7 +303,7 @@ pro iug_ui_load_data_load_pro,    $
               'ionosphere': par_names=tnames('iug_mu_iono_'+vns)
               'meteor': par_names=tnames('iug_mu_meteor_*')
               'rass': par_names=tnames('iug_mu_rass_'+vns)
-              'fai': par_names=tnames('iug_mu_fai_'+lvl+'_'+vns)
+              'fai': par_names=tnames('iug_mu_fai_*_'+vns)
           endcase
       end
 
