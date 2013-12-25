@@ -1,6 +1,6 @@
 ==================================================================
-; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.2)
-;                                                  August 20, 2013
+; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.3)
+;                                                  December 25, 2013
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -52,6 +52,7 @@ Load procedures for IUGONET data:
 - iug_load_ionosonde_rish ; Ionogram data taken by the ionosonde at Shigaraki
 - iug_load_iprt	        ; Iitate Planetary Ratio Telescope data from Tohoku Univ
 - iug_load_irio_nipr    ; Imaging Riometer data from NIPR
+- iug_load_kyushugcm    ; Kyushu GCM simulation data
 - iug_load_lfrto        ; Low Frequency Radio Transmitter data from Tohoku Univ
 - iug_load_ltr_rish     ; Lower troposphere radar from RISH
 - iug_load_meteor_rish  ; Meteor wind radar data from RISH
