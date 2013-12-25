@@ -50,6 +50,8 @@
 ; Added new keyword "fproton" by Y.-M. Tanaka, August 22, 2011
 ; Changed from the alias to the original load procudure, by Y.-M
 ;         Tanaka, July 24, 2012.
+; Added six automated magnetometer network stations to site, by by Y.-M
+;         Tanaka, December 25, 2013.
 ;-
 
 pro iug_load_gmag_nipr, site=site, datatype=datatype, fproton=fproton, $
@@ -64,7 +66,7 @@ if ~keyword_set(downloadonly) then downloadonly=0
 if ~keyword_set(no_download) then no_download=0
 
 ;----- site -----;
-site_code_all = strsplit('syo hus tjo aed isa', /extract)
+site_code_all = strsplit('syo hus tjo aed isa h57 amb srm ihd skl h68', /extract)
 if(not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 if site_code[0] eq '' then return
@@ -95,25 +97,30 @@ for i=0,n_elements(site_code)-1 do begin
   tr=timerange(trange)
   tr0=tr(0)
   if strlowcase(datatype) eq '1sec' then begin
-    if site_code[i] eq 'syo' then begin
-      crttime=time_double('1998-1-1')
-      if tr0 lt crttime then tres='2sec' else tres='1sec'
-    endif
-    if site_code[i] eq 'hus' then begin
-      crttime=time_double('2001-09-08')
-      if tr0 lt crttime then tres='2sec' else tres='02hz'
-    endif
-    if site_code[i] eq 'tjo' then begin
-      crttime=time_double('2001-9-12')
-      if tr0 lt crttime then tres='2sec' else tres='02hz'
-    endif
-    if site_code[i] eq 'aed' then begin
-      crttime=time_double('2001-9-27')
-      if tr0 lt crttime then tres='2sec' else tres='02hz'
-    endif
-    if site_code[i] eq 'isa' then begin
-      tres='2sec'
-    endif
+    case site_code[i] of
+      'syo': begin
+        crttime=time_double('1998-1-1')
+        if tr0 lt crttime then tres='2sec' else tres='1sec'
+      end
+      'hus': begin
+        crttime=time_double('2001-09-08')
+        if tr0 lt crttime then tres='2sec' else tres='02hz'
+      end
+      'tjo': begin
+        crttime=time_double('2001-9-12')
+        if tr0 lt crttime then tres='2sec' else tres='02hz'
+      end
+      'aed': begin
+        crttime=time_double('2001-9-27')
+        if tr0 lt crttime then tres='2sec' else tres='02hz'
+      end
+      'isa': begin
+        tres='2sec'
+      end
+      else: begin
+        tres='1sec'
+      end
+    endcase
   endif else begin
     tres=datatype
   endelse
