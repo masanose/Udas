@@ -1,4 +1,14 @@
 ------------------------------------------------------
+; What's new in udas_3_00_3          December 25, 2013
+------------------------------------------------------
+1) Added some choices of parameter of the FAI mode observation 
+to the load procedure of the MU radar data (iug_load_mu.pro).
+
+2) Added "h57","amb","srm","ihd","skl", and "h68" to the sites for
+"iug_load_gmag_nipr.pro". They belong to the automated magnetometer 
+network near the Syowa Station, Antarctica.
+
+------------------------------------------------------
 ; What's new in udas_3_00_2            August 18, 2013
 ------------------------------------------------------
 1) Added 4 new load procedures:
@@ -11,11 +21,11 @@
 
 3) Added range data to EISCAT CDF data files.
 
-3) Modified some procedures for the GUI.
+4) Modified some procedures for the GUI.
 
-4) Modified "iug_loar_ear.pro" and "iug_load_mu.pro" slightly.
+5) Modified "iug_loar_ear.pro" and "iug_load_mu.pro" slightly.
 
-5) Modified several comments of the statistical analysis package
+6) Modified several comments of the statistical analysis package
     from Japanese to English.
 
 ------------------------------------------------------
