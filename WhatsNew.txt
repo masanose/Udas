@@ -4,14 +4,14 @@
 1) Added some choices of parameter of the FAI observation mode
 to the load procedure of the MU radar data (iug_load_mu.pro).
 
-2) Added "h57","amb","srm","ihd","skl", and "h68" to the sites for
-"iug_load_gmag_nipr.pro". They belong to the automated magnetometer 
-network near the Syowa Station, Antarctica.
-
-3) Added 1 new load procedure:
+2) Added 1 new load procedure:
 - iug_load_mu_fai_nc  : NetCDF data of the MU-FAI observation.
 
-4) Added "iug_plot2d_mu_fai.pro" for 2d-plot of the MU-FAI data.
+3) Added "iug_plot2d_mu_fai.pro" for 2d-plot of the MU-FAI data.
+
+4) Added "h57","amb","srm","ihd","skl", and "h68" to the sites for
+"iug_load_gmag_nipr.pro". They belong to the automated magnetometer 
+network near the Syowa Station, Antarctica.
 
 5) Modified some procedures for the GUI.
 
