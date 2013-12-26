@@ -1,6 +1,6 @@
 ==================================================================
 ; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.3)
-;                                                  December 25, 2013
+;                                                December 25, 2013
 ==================================================================
 
   UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
@@ -98,6 +98,7 @@ CUI:
   timespan,'2002-07-01',1,/hour & iug_load_ionosonde_rish
   timespan,'2010-11-01',5,/hour & iug_load_iprt
   timespan,'2004-04-07' & iug_load_irio_nipr, site='syo'
+  timespan,'2009-01-01' & iug_load_kyushugcm, datatype='t'
   timespan,'2010-05-29' & iug_load_lfrto,site='nal'
   timespan,'2004-10-01' & iug_load_ltr_rish, site='sgk'
   timespan,'2005-03-20' & iug_load_meteor_rish, site = 'ktb'
@@ -171,11 +172,18 @@ only to MAGDAS 1-minute averaged data observed during recent WHI campaign
 http://magdas.serc.kyushu-u.ac.jp/whi/index.php
 Future data release is a work in progress.
 
-3. You can get useful information of our data (ex., data availability, 
+3. Kyushu GCM data are prepared for the Research Project No.3 (Atmospheric 
+studies on Arctic change and its global impacts) in the Green Network of 
+Excellence" Program (GRENE Program) Arctic Climate Change Research Project 
+'Rapid Change of the Arctic Climate System and its Global Influences'.
+Database construction of the Kyushu GCM data is financially supported by 
+the GRENE Arctic Climate Change Research Project.
+
+4. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database:
 http://search.iugonet.org/iugonet/.
 
-4. For some kinds of data, it may be difficult to load more than one 
+5. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
 
 
