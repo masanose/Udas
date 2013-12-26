@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Mon Aug 19 17:16:17 2013.<P>
+<STRONG>Last modified: </STRONG>Thu Dec 26 13:09:33 2013.<P>
  
 <HR>
  
@@ -171,6 +171,8 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <LI><A HREF="#IUG_PLOT2D_IONOGRAM">IUG_PLOT2D_IONOGRAM</A>
 <br>Generate several ionogram plots from the ionogram data taken by the ionosonde.
 <LI><A HREF="#IUG_PLOT2D_IRIO">IUG_PLOT2D_IRIO</A>
+<LI><A HREF="#IUG_PLOT2D_MU_FAI">IUG_PLOT2D_MU_FAI</A>
+<br>Generate several 2-D plots from the FAI f-region observation data taken by the MU radar.
 <LI><A HREF="#IUG_PLOT2D_RADIOSONDE">IUG_PLOT2D_RADIOSONDE</A>
 <br>Generate several height profiles from the radiosonde data.
 <LI><A HREF="#IUG_PLOT2D_SMART">IUG_PLOT2D_SMART</A>
@@ -1325,6 +1327,8 @@ ACKNOWLEDGEMENT:
  Added new keyword "fproton" by Y.-M. Tanaka, August 22, 2011
  Changed from the alias to the original load procudure, by Y.-M
          Tanaka, July 24, 2012.
+ Added six automated magnetometer network stations to site, by by Y.-M
+         Tanaka, December 25, 2013.
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_gmag_nipr.pro">iugonet/load/iug_load_gmag_nipr.pro</A>)</STRONG><P>
 <HR>
@@ -1933,7 +1937,7 @@ Acknowledgment:
    /no_download: use only files which are online locally.
 
  EXAMPLE:
-   iug_load_gmag_nipr, site='syo', $
+   iug_load_irio_nipr, site='syo', $
                  trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
 
  Written by Y.-M. Tanaka, December, 2012 (ytanaka at nipr.ac.jp)
@@ -2351,7 +2355,11 @@ ACKNOWLEDGEMENT:
  EXAMPLE:
    iug_load_meteor_nipr, site = 'tro', trange = ['2007-01-22/00:00:00','2007-01-24/00:00:00']
 
+ NOTE:
+   The meteor radar data obtained by NIPR is now not online.
+
  Written by: Y.-M. Tanaka, July 25, 2011 (ytanaka at nipr.ac.jp)
+ Revised by: Y.-M. Tanaka, December 19, 2013 (ytanaka at nipr.ac.jp)
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_meteor_nipr.pro">iugonet/load/iug_load_meteor_nipr.pro</A>)</STRONG><P>
 <HR>
@@ -2902,6 +2910,8 @@ MODIFICATIONS:
  A. Shinbori, 04/10/2012.
  A. Shinbori, 12/11/2012.
  A. Shinbori, 02/08/2013.
+ A. Shinbori, 25/09/2013.
+ A. Shinbori, 27/11/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2927,7 +2937,7 @@ PURPOSE:
   taken by the MU radar and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_fai_nc, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+ iug_load_mu_fai_nc, datatype = datatype, parameter1=parameter1, $
                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
@@ -2935,9 +2945,6 @@ KEYWOARDS:
             The default is 'ionosphere'. 
   parameter1 = first parameter name of MU FAI obervation data.  
           For example, iug_load_mu_fai_nc, parameter = 'iemdc3'.
-          The default is 'all', i.e., load all available parameters.
-  parameter2 = second parameter name of MU FAI obervation data.  
-          For example, iug_load_mu_fai_nc, parameter = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
@@ -2949,9 +2956,11 @@ KEYWOARDS:
 
 CODE:
  A. Shinbori, 18/08/2013.
-
+ A. Shinbori, 10/10/2013.
+ 
 MODIFICATIONS:
-
+ A. Shinbori, 17/11/2013.
+ A. Shinbori, 18/12/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2999,9 +3008,10 @@ KEYWOARDS:
 
 CODE:
  A. Shinbori, 01/08/2013.
-
+ A. Shinbori, 10/10/2013.
+ 
 MODIFICATIONS:
-
+ A. Shinbori, 27/11/2013.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -4078,7 +4088,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_PLOT2D_IRIO">
 <H2>IUG_PLOT2D_IRIO</H2></A>
 <A HREF="#IUG_PLOT2D_IONOGRAM">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_RADIOSONDE">[Next Routine]</A>
+<A HREF="#IUG_PLOT2D_MU_FAI">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  :PROCEDURE:
@@ -4111,9 +4121,59 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_plot2d_irio.pro">iugonet/load/iug_plot2d_irio.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_PLOT2D_MU_FAI">
+<H2>IUG_PLOT2D_MU_FAI</H2></A>
+<A HREF="#IUG_PLOT2D_IRIO">[Previous Routine]</A>
+<A HREF="#IUG_PLOT2D_RADIOSONDE">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+  iug_plot2d_mu_fai
+
+PURPOSE:
+  Generate several 2-D plots from the FAI f-region observation data taken by the MU radar. 
+
+SYNTAX:
+  iug_plot2d_mu_fai, datatype = datatype, valuename=valuename
+
+KEYWOARDS:
+  datatype = Observation data type. For example, iug_plot2d_mu_fai, datatype = 'fai'.
+            The default is 'fai'. 
+  valuename = tplot variable names of ionosonde observation data.  
+         For example, iug_plot2d_mu_fai,valuename = 'ifco16'.
+         The default is 'ifco16'.
+  stime = Start time of 2-D plot of the EAR-FAI observations.
+         For example, iug_plot2d_mu_fai, stime = '2007-01-09/15:00:00'.
+         The default is '2007-01-09/15:00:00'.
+  minimum = Minimum value of color plot. For example, iug_plot2d_mu_fai, min = 0.
+         The default is 0.
+  maximum = Maximum value of color plot. For example, iug_plot2d_mu_fai, max = 50.
+         The default is 50.
+  zticks = Number of zticks to divide the bar into. There will be (zticks + 1) annotations. 
+         The default is 5.
+         
+NOTES:
+  Before you examine this procedure, the EAR-FAI data are necceary to load.
+
+CODE:
+  A. Shinbori, 08/07/2013.
+  
+MODIFICATIONS:
+
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_plot2d_mu_fai.pro">iugonet/load/iug_plot2d_mu_fai.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_PLOT2D_RADIOSONDE">
 <H2>IUG_PLOT2D_RADIOSONDE</H2></A>
-<A HREF="#IUG_PLOT2D_IRIO">[Previous Routine]</A>
+<A HREF="#IUG_PLOT2D_MU_FAI">[Previous Routine]</A>
 <A HREF="#IUG_PLOT2D_SMART">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
