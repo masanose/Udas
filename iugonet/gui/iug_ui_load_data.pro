@@ -442,7 +442,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
                                  'thy','tik','tir','tkh','tkt','tmk','tnd','tng','tok','tol','too','trd','tro','trw',$
                                  'tsu','ttb','tuc','tun','uba','ujj','ups','val','vic','vla','vlj','vna','vos','vqs',$
                                  'vsk','vss','wat','whn','whs','wik','wil','wit','wmq','wng','yak','ycb','ykc','yss'])
-  (*paramArray[4])[3] = ptr_new(['*(all)','aed','hus','isa','syo','tjo'])
+  (*paramArray[4])[3] = ptr_new(['*(all)','aed','amb','hus','h57','h68','ihd','isa','skl','srm','syo','tjo'])
   (*paramArray[5])[0] = ptr_new(['*(all)','aed','hus','isa','syo','tjo'])
   (*paramArray[5])[1] = ptr_new(['*(all)','ath','mgd','ptk','msr','sta'])
   (*paramArray[6])[0] = ptr_new(['*(all)','WDC_kyoto'])
