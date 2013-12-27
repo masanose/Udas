@@ -90,6 +90,12 @@ case instrument of
         'NIPR_mag#': begin
             case site_or_param of
                 'syo': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'amb': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'h57': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'h68': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'ihd': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'skl': iug_var = !iugonet.data_policy.gmag_nipr_syo
+                'srm': iug_var = !iugonet.data_policy.gmag_nipr_syo
                 'aed': iug_var = !iugonet.data_policy.gmag_nipr_ice
                 'hus': iug_var = !iugonet.data_policy.gmag_nipr_ice
                 'isa': iug_var = !iugonet.data_policy.gmag_nipr_ice
@@ -241,6 +247,12 @@ endif else begin
             'NIPR_mag#': begin
                 case site_or_param of
                     'syo': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'amb': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'h57': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'h68': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'ihd': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'skl': !iugonet.data_policy.gmag_nipr_syo = iug_var
+                    'srm': !iugonet.data_policy.gmag_nipr_syo = iug_var
                     'aed': !iugonet.data_policy.gmag_nipr_ice = iug_var
                     'hus': !iugonet.data_policy.gmag_nipr_ice = iug_var
                     'isa': !iugonet.data_policy.gmag_nipr_ice = iug_var
