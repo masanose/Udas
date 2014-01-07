@@ -340,7 +340,7 @@ pro iug_ui_load_data_load_pro,    $
                endif else begin
                   vns=parameters
                endelse
-               par_names=tnames('iug_mu_fai_'+site_or_param+'_'+vns)
+               par_names=tnames('iug_mu_fai_*_'+vns)
             end 
          endcase     
       end
