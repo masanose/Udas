@@ -7,7 +7,7 @@
 ;        .run iug_crib_mu
 ;
 ;Written by: A. Shinbori,  Feb 18, 2011
-;Last Updated:  A. Shinbori,  AUG 16, 2013
+;Last Updated:  A. Shinbori,  Jan 07, 2014
 ;-
 
 ;Initializes system variables for themis:
@@ -92,7 +92,7 @@ timespan,'1990-05-18',5,/day
 ;  vwndsig = standard deviation of meridional wind
 ;  mwnum = number of meteors used to derive the horizontal wind
 ;===============================================================================
-iug_load_mu, datatype = 'meteor',parameter1 = 'h1t60min00'
+iug_load_mu, datatype = 'meteor',parameter = 'h1t60min00'
 
 ;Plot time-height distribution of zonal and meridional winds, standard deviation of
 ;zonal and meridional winds and number of meteors used to derive the horizontal wind:
@@ -125,6 +125,25 @@ tplot,['iug_mu_rass_uwnd','iug_mu_rass_vwnd','iug_mu_rass_wwnd',$
        'iug_mu_rass_temp']
 
 stop
+
+;==========================FAI=======================================
+;Specify timespan:
+;=================
+timespan,'1986-08-05',10,/day
+
+;Load all the special observation data of FAI
+;taken by the MU radar in timespan:
+;Tplot variables are 'iug_mu_fai_ifdp1t_dpl1', 'iug_mu_fai_ifdp1t_pwr1',
+;'iug_mu_fai_ifdp1t_wdt1', 'iug_mu_fai_ifdp1t_snr1', 'iug_mu_fai_ifdp1t_pn1', and so on:
+
+;===============================================================================
+iug_load_mu, datatype = 'fai', parameter = 'ifdp1t'
+
+;Plot time-height distribution of zonal and meridional winds, standard deviation of
+;zonal and meridional winds and number of meteors used to derive the horizontal wind:
+;=====================================================================================
+tplot,['iug_mu_fai_ifdp1t_dpl1','iug_mu_fai_ifdp1t_pwr1','iug_mu_fai_ifdp1t_wdt1',$
+       'iug_mu_fai_ifdp1t_snr1','iug_mu_fai_ifdp1t_pn1']
 
 end
 

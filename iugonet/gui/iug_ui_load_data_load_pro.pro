@@ -23,6 +23,7 @@
 ;A. Shinbori, 14/12/2012
 ;A. Shinbori, 18/02/2013
 ;Y.-M. Tanaka, 16/08/2013
+;A. Shinbori, 07/01/2014
 ;-
 ;--------------------------------------------------------------------------------
 
@@ -286,25 +287,62 @@ pro iug_ui_load_data_load_pro,    $
 
       ;----- Middle Upper atmosphere radar -----;
       'Middle_Upper_atmosphere_radar' : begin
-          iug_load_mu, datatype =datatype, level=site_or_param, parameter1 = site_or_param, parameter2 = parameters, trange = timeRange
-          if site_or_param[0] eq '*(all)' then begin
-              lvl='*'
-          endif else begin
-              lvl=site_or_param
-          endelse 
-          if parameters[0] eq '*' then begin
-              vns='*'
-          endif else begin
-              vns=parameters
-          endelse
-          case datatype of
-              'troposphere': par_names=tnames('iug_mu_trop_'+vns)
-              'mesosphere': par_names=tnames('iug_mu_meso_'+vns+'_*')
-              'ionosphere': par_names=tnames('iug_mu_iono_'+vns)
-              'meteor': par_names=tnames('iug_mu_meteor_*')
-              'rass': par_names=tnames('iug_mu_rass_'+vns)
-              'fai': par_names=tnames('iug_mu_fai_*_'+vns)
-          endcase
+         case datatype of
+           'troposphere': begin
+               iug_load_mu, datatype =datatype, trange = timeRange
+               if parameters[0] eq '*' then begin
+                  vns='*'
+               endif else begin
+                  vns=parameters
+               endelse
+               par_names=tnames('iug_mu_trop_'+vns)
+            end
+           'mesosphere': begin
+               iug_load_mu, datatype =datatype, level = site_or_param, trange = timeRange
+               if parameters[0] eq '*' then begin
+                  vns='*'
+               endif else begin
+                  vns=parameters
+               endelse
+               par_names=tnames('iug_mu_meso_'+vns+'_*')
+            end
+           'ionosphere': begin
+               iug_load_mu, datatype =datatype, trange = timeRange
+               if parameters[0] eq '*' then begin
+                  vns='*'
+               endif else begin
+                  vns=parameters
+               endelse
+               par_names=tnames('iug_mu_iono_'+vns)
+            end  
+           'meteor': begin
+               iug_load_mu, datatype = datatype, parameter = parameters, trange = timeRange
+               if parameters[0] eq '*' then begin
+                  vns='*'
+               endif else begin
+                  vns=parameters
+               endelse
+               par_names=tnames('iug_mu_meteor_*_'+vns)
+            end 
+           'rass': begin
+               iug_load_mu, datatype = datatype, parameter = parameters, trange = timeRange
+               if parameters[0] eq '*' then begin
+                  vns='*'
+               endif else begin
+                  vns=parameters
+               endelse
+               par_names=tnames('iug_mu_rass_'+vns)
+            end   
+           'fai': begin
+               iug_load_mu, datatype = datatype, parameter = site_or_param, trange = timeRange
+               if parameters[0] eq '*' then begin
+                  vns='*'
+               endif else begin
+                  vns=parameters
+               endelse
+               par_names=tnames('iug_mu_fai_'+site_or_param+'_'+vns)
+            end 
+         endcase     
       end
 
       ;----- Radiosonde -----;
