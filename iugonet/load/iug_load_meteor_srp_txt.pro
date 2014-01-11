@@ -8,24 +8,23 @@
 ;  the meteor wind radar (MWR) at Serpong and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_meteor_srp_txt, datatype = datatype, parameter = parameter, length=length, downloadonly = downloadonly, $
+; iug_load_meteor_srp_txt, parameter = parameter, length=length, downloadonly = downloadonly, $
 ;                          trange = trange, verbose=verbose
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_meteor_srp_txt, datatype = 'thermosphere'.
-;            The default is 'thermosphere'. 
-;  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_txt, length = '1_day'.
+;KEYWOARDS: 
+;  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_txt, length = '1_day'.
 ;           A kind of parameters is 2 types of '1_day', and '1_month'.
-;  parameter = Data parameter. For example, iug_load_meteor_srp_txt, parameter = 'h2t60min00'. 
+;  PARAMETER = Data parameter. For example, iug_load_meteor_srp_txt, parameter = 'h2t60min00'. 
 ;              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
 ;              The default is 'all'.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 19/09/2010.
 ;
@@ -39,6 +38,7 @@
 ; A. Shinbori, 28/05/2012.
 ; A. Shinbori, 12/06/2012.
 ; A. Shinbori, 18/12/2012.
+; A. Shinbori, 08/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -47,8 +47,7 @@
 ; $URL $
 ;-
 
-pro iug_load_meteor_srp_txt, datatype = datatype, $
-   parameter = parameter, $
+pro iug_load_meteor_srp_txt, parameter = parameter, $
    length=length, $
    downloadonly=downloadonly, $
    trange=trange, $
@@ -59,30 +58,10 @@ pro iug_load_meteor_srp_txt, datatype = datatype, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
- 
-;************************************
-;Load 'thermosphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='thermosphere'
-
-
 ;*****************************
 ;Load '1_day' data by default:
 ;*****************************
 if (not keyword_set(length)) then length='1_day'
-
-;****************
-;Site code check:
-;****************
-;--- all sites (default)
-site_code_all = strsplit('ktb',' ', /extract)
-
-;--- check site codes
-if (not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-
-print, site_code
-
 
 ;****************
 ;Parameter check:
@@ -121,22 +100,17 @@ endfor
 jj=0
 for iii=0,n_elements(parameters)-1 do begin 
    if ~size(fns,/type) then begin
-      if length eq '1_day' then begin 
-      
-        ;Get files for ith component:
-        ;***************************       
-         file_names = file_dailynames( $
-                      file_format='YYYY/jkt'+$
+     ;****************************    
+     ;Get files for ith component:
+     ;****************************
+      case length of
+         '1_day':file_names = file_dailynames(file_format='YYYY/jkt'+$
                       'YYYYMMDD',trange=trange,times=times,/unique)+'.'+site_data_lastmane[iii]+'.txt'
-      endif else if length eq '1_month' then begin
-      
-        ;Get files for ith component:
-        ;***************************       
-         file_names = file_dailynames( $
-                      file_format='YYYY/jkt'+$
+         '1_month':file_names = file_dailynames(file_format='YYYY/jkt'+$
                       'YYYYMM',trange=trange,times=times,/unique)+'.'+site_data_lastmane[iii]+'.txt'
-      endif
-     ;        
+      endcase
+      
+     ;===============================        
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
@@ -144,6 +118,7 @@ for iii=0,n_elements(parameters)-1 do begin
       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/srp/meteor/text/ver1_0/'+length+'/'+site_data_dir[iii]
       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/text/ver1_0/'+site_data_dir[iii]
 
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source, /last_version)
@@ -156,13 +131,13 @@ for iii=0,n_elements(parameters)-1 do begin
    if (not keyword_set(downloadonly)) then downloadonly=0
 
    if (downloadonly eq 0) then begin
-     
+     ;===============
      ;Read the files:
      ;===============   
-     ;Definition of parameter:
+     ;---Definition of string variable:
       s=''
        
-     ;Determination of array number, height and time invervals:
+     ;---Determination of array number, height and time invervals:
       if (site_data_lastmane[iii] eq 'h2t60min00') or (site_data_lastmane[iii] eq 'h2t60min30') then begin
          arr_num=22
          dh=2
@@ -175,7 +150,7 @@ for iii=0,n_elements(parameters)-1 do begin
          dt=14400
       endif    
        
-     ;Definition of array and its number:
+     ;---Definition of array and its number:
       height = fltarr(arr_num)
       zon_wind_data = fltarr(1,arr_num)
       mer_wind_data = fltarr(1,arr_num)
@@ -196,8 +171,11 @@ for iii=0,n_elements(parameters)-1 do begin
             dprint,'Meteor wind radar data file',file,' not found. Skipping'
             continue
          endelse
-         openr,lun,file,/get_lun    
-        ;
+         
+        ;---Open read file: 
+         openr,lun,file,/get_lun
+             
+        ;=================
         ;Loop on readdata:
         ;=================
          n=0
@@ -208,29 +186,30 @@ for iii=0,n_elements(parameters)-1 do begin
             if ok && keyword_set(s) then begin
                dprint,s ,dlevel=5      
               
-              ;Calculate time:
-              ;===============
+              ;---Get date and time information:
                if fix(strmid(s,0,2)) gt 70 then year = fix(strmid(s,0,2))+1900
                if fix(strmid(s,0,2)) lt 70 then year = fix(strmid(s,0,2))+2000
                day_of_year = fix(strmid(s,2,3))
                doy_to_month_date, year, day_of_year, month, day
                hour = strmid(s,5,2)
                minute = strmid(s,7,2)
-          
+               
+              ;==================
               ;Get altitude data:
-              ;=================
+              ;==================
                alt = fix(strmid(s,9,3))
                idx = (alt-70)/dh
-                
+              
+              ;=======================================================  
               ;Get data of U, V, sigma-u, sigma-v, N-of-m, int1, int2:
               ;=======================================================
                data =  float(strsplit(strmid(s,12,55), ' ', /extract))
                
-              ;====Convert time from local time to unix time  
+              ;---Convert time from local time to unix time  
                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
                       -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))                                
                 
-              ;Insert data of zonal and meridional winds etc.
+              ;---Insert data of zonal and meridional winds etc.
                if n eq 0 then begin
                   time_val3 = time
                   zon_wind_data(0,idx)= data(0)
@@ -241,7 +220,7 @@ for iii=0,n_elements(parameters)-1 do begin
                endif
                time_diff=time-time_val
                if n eq 0 then time_diff=dt
-               
+                ;=============================================================
                 ;Appned time and meteor data if time_val is not equal to time:
                 ;=============================================================
                  if time_val ne time then begin
@@ -278,6 +257,7 @@ for iii=0,n_elements(parameters)-1 do begin
              endif 
           endwhile 
           free_lun,lun
+          
          ;===========================================================================
          ;Append array of time and meteor observations at the last time in each file:
          ;===========================================================================
@@ -298,7 +278,7 @@ for iii=0,n_elements(parameters)-1 do begin
           append_array, mer_thermal2, mer_thermal
           append_array, meteor_num2, meteor_num
 
-         ;
+         ;=====================================================
          ;Initiarizatin of old parameters (time and wind data):
          ;=====================================================                            
           site_time=0
@@ -315,54 +295,59 @@ for iii=0,n_elements(parameters)-1 do begin
       ;==============================
       ;Store data in TPLOT variables:
       ;==============================
-      ;Acknowlegment string (use for creating tplot vars)
+      ;---Acknowlegment string (use for creating tplot vars)
        acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and keep the DATA USE POLICY '+ $
                           '(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html '+ $ 
                           'The distribution of meteor wind radar data has been partly supported by the IUGONET (Inter-university Upper '+ $
                           'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '+ $
                           'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
        if size(zon_wind2,/type) eq 4 then begin
+         ;---Create the tplot variable and options for zonal wind: 
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-         ;Store data of zonal wind: 
           store_data,'iug_meteor_srp_uwnd_'+site_data_lastmane[iii],data={x:srp_time, y:zon_wind2, v:height},dlimit=dlimit
           new_vars=tnames('iug_meteor_srp_uwnd_'+site_data_lastmane[iii])
           if new_vars[0] ne '' then begin           
              options,'iug_meteor_srp_uwnd_'+site_data_lastmane[iii],ytitle='MW-srp!CHeight!C[km]',ztitle='uwnd!C[m/s]'
           endif
-         ;Store data of meridional wind: 
+          
+         ;---Create the tplot variable and options for meridional wind: 
           store_data,'iug_meteor_srp_vwnd_'+site_data_lastmane[iii],data={x:srp_time, y:mer_wind2, v:height},dlimit=dlimit
           new_vars=tnames('iug_meteor_srp_vwnd_'+site_data_lastmane[iii])
           if new_vars[0] ne '' then begin
              options,'iug_meteor_srp_vwnd_'+site_data_lastmane[iii],ytitle='MW-srp!CHeight!C[km]',ztitle='vwnd!C[m/s]'
           endif
-         ;Store data of standard deviation of zonal wind:    
+          
+         ;---Create the tplot variable and options for standard deviation of zonal wind:   
           store_data,'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii],data={x:srp_time, y:zon_thermal2, v:height},dlimit=dlimit
           new_vars=tnames('iug_meteor_srp_uwndsig_'+site_data_lastmane[iii])
           if new_vars[0] ne '' then begin
              options,'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii],ytitle='MW-srp!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
           endif
-         ;Store data of standard deviation of meridional wind:          
+          
+         ;---Create the tplot variable and options for standard deviation of meridional wind:        
           store_data,'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii],data={x:srp_time, y:mer_thermal2, v:height},dlimit=dlimit
           new_vars=tnames('iug_meteor_srp_vwndsig_'+site_data_lastmane[iii])
           if new_vars[0] ne '' then begin
              options,'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii],ytitle='MW-srp!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
           endif
-         ;Store data of number of meteors used for the weighted average:       
+          
+         ;---Create the tplot variable and options for meteor echoes:      
           store_data,'iug_meteor_srp_mwnum_'+site_data_lastmane[iii],data={x:srp_time, y:meteor_num2, v:height},dlimit=dlimit
           new_vars=tnames('iug_meteor_srp_mwnum_'+site_data_lastmane[iii])
           if new_vars[0] ne '' then begin
              options,'iug_meteor_srp_mwnum_'+site_data_lastmane[iii],ytitle='MW-srp!CHeight!C[km]',ztitle='mwnum'
           endif
        endif   
+      
+      ;---Add options
        new_vars=tnames('iug_meteor_srp_*')
        if new_vars[0] ne '' then begin
-         ;Add options
           options, ['iug_meteor_srp_uwnd_'+site_data_lastmane[iii],'iug_meteor_srp_vwnd_'+site_data_lastmane[iii],$
                     'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii],'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii],$
                     'iug_meteor_srp_mwnum_'+site_data_lastmane[iii]], 'spec', 1
        endif
 
-      ;Clear time and data buffer:
+      ;---Clear time and data buffer:
        srp_time=0
        zon_wind2=0
        mer_wind2=0
@@ -372,19 +357,21 @@ for iii=0,n_elements(parameters)-1 do begin
 
        new_vars=tnames('iug_meteor_srp_*')
        if new_vars[0] ne '' then begin       
-         ;Add tdegap
+         ;---Add tdegap
           tdegap, 'iug_meteor_srp_uwnd_'+site_data_lastmane[iii],/overwrite
           tdegap, 'iug_meteor_srp_vwnd_'+site_data_lastmane[iii],/overwrite
           tdegap, 'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii],/overwrite
           tdegap, 'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii],/overwrite
-          tdegap, 'iug_meteor_srp_mwnum_'+site_data_lastmane[iii],/overwrite       
-         ;Add tclip
+          tdegap, 'iug_meteor_srp_mwnum_'+site_data_lastmane[iii],/overwrite 
+                
+         ;---Add tclip
           tclip, 'iug_meteor_srp_uwnd_'+site_data_lastmane[iii],-200,200,/overwrite
           tclip, 'iug_meteor_srp_vwnd_'+site_data_lastmane[iii],-200,200,/overwrite
           tclip, 'iug_meteor_srp_uwndsig_'+site_data_lastmane[iii],0,400,/overwrite
           tclip, 'iug_meteor_srp_vwndsig_'+site_data_lastmane[iii],0,400,/overwrite
-        ; tclip, 'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],,0,800,/overwrite
-         ;Add zlim
+         ;tclip, 'iug_meteor_srp_mwnum_'+site_data_lastmane[kk],,0,800,/overwrite
+        
+         ;---Add zlim
           zlim, 'iug_meteor_srp_uwnd_*',-100,100
           zlim, 'iug_meteor_srp_vwnd_*',-100,100
        endif 
@@ -400,7 +387,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

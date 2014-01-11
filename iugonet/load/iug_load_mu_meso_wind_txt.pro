@@ -9,24 +9,23 @@
 ;  and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_meso_wind_txt, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mu_meso_wind_txt,downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_wind_meso_txt, datatype = 'mesosphere'.
-;            The default is 'mesosphere'.
-;  parameter = parameter name of wind data in the mesosphere.  
+;  PARAMETER = parameter name of wind data in the mesosphere.  
 ;          For example, iug_load_mu_meso_wind_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
-;  level = Observation data level. For example, iug_load_mu_wind_meso_txt, level = 'org'.
+;  LEVEL = Observation data level. For example, iug_load_mu_wind_meso_txt, level = 'org'.
 ;            The default is 'all', i.e., load all available levels.
 ;            When you set the level of 'org', the original data are stored in tplot variables.
 ;            When you set the level of 'scr', the screening data are stored in tplot variables.            
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.                
 ;
 ;CODE:
 ; A. Shinbori, 25/07/2012.
@@ -34,6 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
+; A. Shinbori, 10/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -42,8 +42,7 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_meso_wind_txt, datatype = datatype, $
-   parameter=parameter, $ 
+pro iug_load_mu_meso_wind_txt, parameter=parameter, $ 
    level=level, $
    downloadonly=downloadonly, $
    trange=trange, $
@@ -53,13 +52,6 @@ pro iug_load_mu_meso_wind_txt, datatype = datatype, $
 ;Verbose keyword check:
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
-
- 
-;**********************************
-;Load 'mesosphere' data by default:
-;**********************************
-if (not keyword_set(datatype)) then datatype='mesosphere'
-
 
 ;*****************
 ;Parameter check:
@@ -77,10 +69,10 @@ print, parameters
 ;*************
 ;Level check:
 ;*************
-;--- all parameters2 (default)
+;--- all levels (default)
 level_all = strsplit('org scr',' ', /extract)
 
-;--- check parameters
+;--- check level
 if (not keyword_set(level)) then level='all'
 levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
 
@@ -105,7 +97,8 @@ for ii=0,n_elements(levels)-1 do begin
          file_names = file_dailynames( $
          file_format='YYYY/YYYYMM/'+$
                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[iii]+'.csv'
-        ;
+        
+        ;===============================
         ;Define FILE_RETRIEVE structure:
         ;===============================
          source = file_retrieve(/struct)
@@ -113,6 +106,7 @@ for ii=0,n_elements(levels)-1 do begin
          source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/wind/csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/text/'
     
+        ;=======================================================
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
          local_paths=file_retrieve(file_names,_extra=source)
@@ -132,11 +126,10 @@ for ii=0,n_elements(levels)-1 do begin
         ;Read the files:
         ;===============
    
-        ;Definition of parameters:
+        ;---Definition of parameters:
          s=''
-         u=''
 
-        ;Initialize data and time buffer
+        ;---Initialize data and time buffer
          mu_time=0
          mu_data=0
       
@@ -149,25 +142,28 @@ for ii=0,n_elements(levels)-1 do begin
             else begin
                dprint,'MU mesosphere file ',file,' not found. Skipping'
                continue
-            endelse  
-            openr,lun,file,/get_lun    
-           ;
+            endelse
+           
+           ;---Open read file:  
+            openr,lun,file,/get_lun  
+              
+           ;===========================
            ;Read information of height:
-           ;=============================  
-       
+           ;===========================  
             readf, lun, s
           
-           ;Definition of altitude and data arraies:
+           ;---Definition of altitude and data arraies:
             h_data = strsplit(s,',',/extract)
             altitude = fltarr(n_elements(h_data)-1)
           
-           ;Enter the altitude information:
+           ;---Enter the altitude information:
             for j=0,n_elements(h_data)-2 do begin
                altitude[j] = float(h_data[j+1])
             endfor
-           ;
-           ;Loop on readdata:
-           ;=================
+            
+           ;==================
+           ;Loop on read data:
+           ;==================
             while(not eof(lun)) do begin
                readf,lun,s
                ok=1
@@ -176,22 +172,19 @@ for ii=0,n_elements(levels)-1 do begin
                   dprint,s ,dlevel=5
                   data = strsplit(s,',',/extract)
                   data2 = fltarr(1,(n_elements(data)-1)/2)
-                 ;=============== 
-                 ;Calculate time:
-                 ;===============
-                  u=data(0)
-                  year = strmid(u,0,4)
-                  month = strmid(u,5,2)
-                  day = strmid(u,8,2)
-                  hour = strmid(u,11,2)
-                  minute = strmid(u,14,2) 
+                 
+                 ;---Get date and time information:
+                  year = strmid(data(0),0,4)
+                  month = strmid(data(0),5,2)
+                  day = strmid(data(0),8,2)
+                  hour = strmid(data(0),11,2)
+                  minute = strmid(data(0),14,2) 
                 
-                 ;====Convert time from local time to unix time:      
+                 ;---Convert time from local time to unix time:      
                   time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
 
-                 ;
-                 ;Enter the missing value:
+                 ;Replace missing value by NaN:
                   for j=0,(n_elements(data)-2)/2 do begin
                      data2[0,j]=float(data[2*j+1])
                      a = float(data[2*j+1])
@@ -221,7 +214,7 @@ for ii=0,n_elements(levels)-1 do begin
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
-        ;Acknowlegment string (use for creating tplot vars)
+        ;---Acknowlegment string (use for creating tplot vars)
          acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for '+$
                             'Sustainable Humanosphere (RISH), Kyoto University and is operated by '+$
                             'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. '+$
@@ -231,18 +224,32 @@ for ii=0,n_elements(levels)-1 do begin
                             'Sports, Science and Technology (MEXT), Japan.'
          
          if (size(mu_data,/type) eq 4) then begin
+           ;Create tplot variable for wind data:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
             store_data,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+           
+           ;---Add options:
             new_vars=tnames('iug_mu_meso_'+parameters[iii]+'_'+levels[ii])
             if new_vars[0] ne '' then begin
                options,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii],ytitle='MUR-meso!CHeight!C[km]',ztitle=parameters[iii]+'!C[m/s]'
                options,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii], labels='MUR-meso [km]'         
-              ;Add options
                options, 'iug_mu_meso_'+parameters[iii]+'_'+levels[ii], 'spec', 1        
-            endif       
+            endif  
+             
+           ;---Add tdegap:
+            new_vars=tnames('iug_mu_meso_*')
+            if new_vars[0] ne '' then begin
+               tdegap,'iug_mu_meso_*',/overwrite
+            endif 
+            
+           ;---Add ylim:
+            new_vars=tnames('iug_mu_meso_*')
+            if new_vars[0] ne '' then begin
+               ylim,'iug_mu_meso_*',60,100
+            endif     
          endif
                  
-        ;Clear time and data buffer:
+        ;---Clear time and data buffer:
          mu_time=0
          mu_data=0
      
@@ -260,7 +267,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

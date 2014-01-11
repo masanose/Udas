@@ -9,20 +9,17 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_mf_rish_pam_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mf_rish_pam_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mf_rish_pam_nc, datatype = 'thermosphere'.
-;            The default is 'thermosphere'. 
-;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_nc, site = 'pam'.
-;          The default is 'all', i.e., load all available stations.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;                 
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;                   
 ;CODE:
 ; A. Shinbori, 09/19/2010.
 ;
@@ -31,6 +28,7 @@
 ; A. Shinbori, 27/12/2011.
 ; A. Shinbori, 31/10/2012.
 ; A. Shinbori, 24/12/2012.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -39,9 +37,7 @@
 ; $URL $
 ;-
 
-pro iug_load_mf_rish_pam_nc, datatype = datatype, $
-  site=site, $
-  downloadonly=downloadonly, $
+pro iug_load_mf_rish_pam_nc, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
@@ -49,25 +45,6 @@ pro iug_load_mf_rish_pam_nc, datatype = datatype, $
 ;keyword check:
 ;**************
 if ~keyword_set(verbose) then verbose=2
-
-;************************************
-;Load 'thermosphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='thermosphere'
-
-;***********
-;site codes:
-;***********
-if (not keyword_set(site)) then site='pam'
-
-;--- all sites (default)
-site_code_all = site
-
-;--- check site codes
-if(not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-
-print, site_code
 
 ;******************************************************************
 ;Loop on downloading files
@@ -79,19 +56,21 @@ print, site_code
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 if ~size(fns,/type) then begin
-
+  ;****************************
   ;Get files for ith component:
-  ;***************************
+  ;****************************
    file_names = file_dailynames( $
    file_format='YYYY/YYYYMMDD',trange=trange,times=times,/unique)+'_pam.nc'
-  ;            
+  
+  ;===============================            
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
-   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/nc/'
+   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/pam/mf/nc/'
    source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mf/pameungpeuk/nc/ver1_0_1/'
-    
+  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -105,7 +84,7 @@ if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
  
- ; Initialize data and time buffer
+  ;---Initialize data and time buffer
    pam_time=0
    zon_wind=0
    mer_wind=0
@@ -123,8 +102,7 @@ if (downloadonly eq 0) then begin
       cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
       glob = ncdf_inquire( cdfid )    ; Find out general info
 
-     ; Show user the size of each dimension
-
+     ;---Show user the size of each dimension
       print,'Dimensions', glob.ndims
       for i=0,glob.ndims-1 do begin
          ncdf_diminq, cdfid, i, name,size
@@ -134,19 +112,18 @@ if (downloadonly eq 0) then begin
             print,'    ', name, size  
       endfor
 
-     ; Now tell user about the variables
-
+     ;---Now tell user about the variables
       print
       print, 'Variables'
       for m=0,glob.nvars-1 do begin
 
-        ;Get information about the variable
+        ;---Get information about the variable
          info = ncdf_varinq(cdfid, m)
          FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
          print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
          print, ']'
 
-        ;Get attributes associated with the variable
+        ;---Get attributes associated with the variable
          for l=0,info.natts-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
@@ -154,39 +131,38 @@ if (downloadonly eq 0) then begin
          endfor
       endfor
     
-     ;Get the variable
+     ;---Get the variable
       ncdf_varget, cdfid, 'time', time
       ncdf_varget, cdfid, 'range', range
       ncdf_varget, cdfid, 'uwind', uwind
       ncdf_varget, cdfid, 'vwind', vwind
       ncdf_varget, cdfid, 'wwind', wwind
     
-     ;Definition of arrary names
+     ;---Definition of arrary names
       uwind_pam=fltarr(n_elements(time),n_elements(range))
       vwind_pam=fltarr(n_elements(time),n_elements(range))
       wwind_pam=fltarr(n_elements(time),n_elements(range))
 
-      for i=0, n_elements(time)-1 do begin
-         for k=0, 35 do begin
-            height[k]=range[k]/1000
-            uwind_pam[i,k]=uwind[0,k,i]
-            vwind_pam[i,k]=vwind[0,k,i]
-            wwind_pam[i,k]=wwind[0,k,i]
-            a = uwind_pam[i,k]            
-            wbad = where(a eq -9999,nbad)
-            if nbad gt 0 then a[wbad] = !values.f_nan
-            uwind_pam[i,k] =a
-            b = vwind_pam[i,k]            
-            wbad = where(b eq -9999,nbad)
-            if nbad gt 0 then b[wbad] = !values.f_nan
-            vwind_pam[i,k] =b
-            c = wwind_pam[i,k]            
-            wbad = where(c eq -9999,nbad)
-            if nbad gt 0 then c[wbad] = !values.f_nan
-            wwind_pam[i,k] =c
-         endfor
+      height = range/1000 ;m -> km
+      for i=0, n_elements(time)-1 do begin         
+         uwind_pam[i,*]=uwind[0,*,i]
+         vwind_pam[i,*]=vwind[0,*,i]
+         wwind_pam[i,*]=wwind[0,*,i]
+        ;---Replace missing value by NaN:
+         a = uwind_pam[i,*]            
+         wbad = where(a eq -9999,nbad)
+         if nbad gt 0 then a[wbad] = !values.f_nan
+         uwind_pam[i,*] =a
+         b = vwind_pam[i,*]            
+         wbad = where(b eq -9999,nbad)
+         if nbad gt 0 then b[wbad] = !values.f_nan
+         vwind_pam[i,*] =b
+         c = wwind_pam[i,*]            
+         wbad = where(c eq -9999,nbad)
+         if nbad gt 0 then c[wbad] = !values.f_nan
+         wwind_pam[i,*] =c
       endfor
-    
+
      ;==============================
      ;Append array of time and data:
      ;==============================
@@ -202,7 +178,7 @@ if (downloadonly eq 0) then begin
  ;==============================
  ;Store data in TPLOT variables:
  ;==============================
- ;Acknowlegment string (use for creating tplot vars)
+ ;---Acknowlegment string (use for creating tplot vars)
   acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and follow the DATA USE POLICY '$
                    +'(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html '$ 
                    +'The distribution of MF radar data has been partly supported by the IUGONET (Inter-university Upper '$
@@ -210,59 +186,61 @@ if (downloadonly eq 0) then begin
                    + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.' 
   
    if size(zon_wind,/type) eq 4 then begin
+     ;---Create tplot variables and options for zonal wind:
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-      
-      store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
-      new_vars=tnames('iug_mf_'+site_code[0]+'_uwnd')
+      store_data,'iug_mf_pam_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
+      new_vars=tnames('iug_mf_pam_uwnd')
       if new_vars[0] ne '' then begin       
-         options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uwnd!C[m/s]'
+         options,'iug_mf_pam_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uwnd!C[m/s]'
       endif
-
-      store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
-      new_vars=tnames('iug_mf_'+site_code[0]+'_vwnd')
+     
+     ;---Create tplot variables and options for meridional wind:
+      store_data,'iug_mf_pam_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
+      new_vars=tnames('iug_mf_pam_vwnd')
       if new_vars[0] ne '' then begin 
-         options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='vwnd!C[m/s]'
+         options,'iug_mf_pam_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='vwnd!C[m/s]'
       endif
-      
-      store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
-      new_vars=tnames('iug_mf_'+site_code[0]+'_wwnd')
+     
+     ;---Create tplot variables and options for vertical wind: 
+      store_data,'iug_mf_pam_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
+      new_vars=tnames('iug_mf_pam_wwnd')
       if new_vars[0] ne '' then begin 
-         options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='wwnd!C[m/s]'
+         options,'iug_mf_pam_wwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='wwnd!C[m/s]'
       endif
-      
-      new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+    
+     ;---Add options     
+      new_vars=tnames('iug_mf_pam_*')
       if new_vars[0] ne '' then begin 
-        ;add options
-         options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd'], 'spec', 1
+         options, ['iug_mf_pam_uwnd','iug_mf_pam_vwnd','iug_mf_pam_wwnd'], 'spec', 1
   
-        ;add tclip
-        ;Definition of the upper and lower limit of wind data:
+        ;---Add tclip
+        ;---Definition of the upper and lower limit of wind data:
          low_en=-100
          high_en=100
          low_v=-20
          high_v=20
    
-         tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
-         tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
-         tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite   
+         tclip, 'iug_mf_pam_uwnd',low_en,high_en,/overwrite
+         tclip, 'iug_mf_pam_vwnd',low_en,high_en,/overwrite
+         tclip, 'iug_mf_pam_wwnd',low_v,high_v,/overwrite   
    
-        ;add tdegap
-        ;Definition of time interval to enter NaN:
+        ;---Add tdegap
+        ;---Definition of time interval to enter NaN:
          DT=1800
-         tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
-         tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
-         tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
+         tdegap, 'iug_mf_pam_uwnd',dt=DT,/overwrite
+         tdegap, 'iug_mf_pam_vwnd',dt=DT,/overwrite
+         tdegap, 'iug_mf_pam_wwnd',dt=DT,/overwrite
       endif
    endif 
   
-  ;Clear data and time buffer
+  ;---Clear data and time buffer
    pam_time=0
    zon_wind=0
    mer_wind=0
    ver_wind=0
 endif
 
-new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+new_vars=tnames('iug_mf_pam_*')
 if new_vars[0] ne '' then begin 
    print,'******************************
    print, 'Data loading is successful!!'
@@ -270,7 +248,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

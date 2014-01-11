@@ -9,25 +9,24 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_ear_iono_vr_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+; iug_load_ear_iono_vr_txt, parameter1=parameter1, parameter2=parameter2 $
 ;                          downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_ear_iono_vr_txt, datatype = 'fai'.
-;            The default is 'fai'. 
-;  parameter1 = first parameter name of EAR FAI obervation data.  
+;  PARAMETER1 = first parameter name of EAR FAI obervation data.  
 ;          For example, iug_load_ear_iono_vr_txt, parameter1 = 'vb3p4a'.
 ;          The default is 'all', i.e., load all available parameters.
-;  parameter2 = second parameter name of EAR FAI obervation data.  
+;  PARAMETER2 = second parameter name of EAR FAI obervation data.  
 ;          For example, iug_load_ear_iono_vr_txt, parameter2 = 'dpl1'.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;DATA AVAILABILITY:
 ;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
 ;  before you analyze the FAI data using this software. 
@@ -43,6 +42,7 @@
 ; A. Shinbori, 17/12/2012.
 ; A. Shinbori, 01/08/2013.
 ; A. Shinbori, 18/08/2013.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -51,22 +51,16 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_iono_vr_txt, datatype = datatype, $
-   parameter1=parameter1, $
+pro iug_load_ear_iono_vr_txt, parameter1=parameter1, $
    parameter2=parameter2, $
    downloadonly=downloadonly, $
    trange=trange, $
    verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;**********************************
-;Load 'ionosphere' data by default:
-;**********************************
-if (not keyword_set(datatype)) then datatype='fai'
 
 ;************
 ;parameters1:
@@ -75,7 +69,7 @@ if (not keyword_set(datatype)) then datatype='fai'
 parameter1_all = strsplit('vb3p4a 150p8c8a 150p8c8b 150p8c8c 150p8c8d 150p8c8e 150p8c8b2a 150p8c8b2b '+$
                           '150p8c8b2c 150p8c8b2d 150p8c8b2e 150p8c8b2f',' ', /extract)
 
-;--- check site codes
+;--- check parameters1
 if(not keyword_set(parameter1)) then parameter1='all'
 parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
 
@@ -88,16 +82,16 @@ print, parameters
 parameter2_all = strsplit('dpl1 dpl2 dpl3 pwr1 pwr2 pwr3 wdt1 wdt2 wdt3 '+$
                           'pn1 pn2 pn3',' ', /extract)
 
-;--- check parameters
+;--- check parameters2
 if(not keyword_set(parameter2)) then parameter2='all'
 parameters2 = thm_check_valid_name(parameter2, parameter2_all, /ignore_case, /include_all)
 
 print, parameters2
 
 ;*****************
-;defition of unit:
+;Defition of unit:
 ;*****************
-;--- all parameters2 (default)
+;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;******************************************************************
@@ -113,20 +107,22 @@ jj=0
 for ii=0,n_elements(parameters)-1 do begin
    for iii=0,n_elements(parameters2)-1 do begin
       if ~size(fns,/type) then begin
-        
+        ;****************************
         ;Get files for ith component:
-        ;***************************
+        ;****************************
          file_names = file_dailynames( $
          file_format='YYYY/YYYYMMDD/'+$
                      'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.'+parameters2[iii]+'.csv'
-        ;
+                     
+        ;===============================
         ;Define FILE_RETRIEVE structure:
         ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
          source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/fai/v_region/csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/csv/'
-    
+         
+        ;=======================================================
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
          local_paths=file_retrieve(file_names,_extra=source)
@@ -145,12 +141,11 @@ for ii=0,n_elements(parameters)-1 do begin
         ;===========================================================
         ;Read the files:
         ;===============
-   
-        ;Definition of parameters:  
+  
+        ;---Definition of parameters:  
          s=''
-         u=''
 
-        ;Initialize data and time buffer
+        ;---Initialize data and time buffer
          ear_time=0
          ear_data=0
          
@@ -165,30 +160,37 @@ for ii=0,n_elements(parameters)-1 do begin
                continue
             endelse  
             
+           ;---Open read file: 
             openr,lun,file,/get_lun  
+            
+           ;==========================
+           ;Read information of range:
+           ;==========================            
             readf, lun, s  
-           ;
+            
+           ;=============================
            ;Read information of altitude:
            ;============================= 
             readf, lun, s
           
-           ;Definition of altitude and data arraies:
+           ;---Definition of altitude and data arraies:
             h_data = strsplit(s,',',/extract)
             altitude = fltarr(n_elements(h_data)-1)
           
-           ;Enter the altitude information:
+           ;---Enter the altitude information:
             for j=0,n_elements(h_data)-2 do begin
                altitude[j] = float(h_data[j+1])
             endfor
           
-           ;Enter the missing value:
+           ;---Replace missing value by NaN:
             for j=0,n_elements(altitude)-1 do begin
                b = altitude[j]
                wbad = where(b eq 0,nbad)
                if nbad gt 0 then b[wbad] = !values.f_nan
                altitude[j]=b
             endfor
-           ;
+            
+           ;=================
            ;Loop on readdata:
            ;=================
             while(not eof(lun)) do begin
@@ -200,26 +202,25 @@ for ii=0,n_elements(parameters)-1 do begin
                   data = strsplit(s,',',/extract)
                   data2 = fltarr(1,n_elements(data)-1)+!values.f_nan
                   
-                 ;Calculate time:
-                 ;==============
-                  u=data(0)
-                  year = strmid(u,0,4)
-                  month = strmid(u,5,2)
-                  day = strmid(u,8,2)
-                  hour = strmid(u,11,2)
-                  minute = strmid(u,14,2) 
+                 ;---Get date and time information:
+                  year = strmid(data(0),0,4)
+                  month = strmid(data(0),5,2)
+                  day = strmid(data(0),8,2)
+                  hour = strmid(data(0),11,2)
+                  minute = strmid(data(0),14,2) 
                  
-                 ;====Convert time from local time to unix time      
+                 ;---Convert time from local time to unix time      
                   time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                            -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))
                  ;
-                 ;Enter the missing value:
+                 ;Replace missing value by NaN:
                   for j=0,n_elements(data)-2 do begin
                      a = float(data[j+1])
                      wbad = where(a eq -999,nbad)
                      if nbad gt 0 then a[wbad] = !values.f_nan
                      data2[0,j]=a
                   endfor
+                  
                  ;=============================
                  ;Append data of time and data:
                  ;=============================
@@ -233,7 +234,7 @@ for ii=0,n_elements(parameters)-1 do begin
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
-        ;Acknowlegment string (use for creating tplot vars)
+        ;---Acknowlegment string (use for creating tplot vars)
          acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for ' $
                           + 'Sustainable Humanosphere (RISH), Kyoto University and is operated by ' $
                           + 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. ' $
@@ -247,24 +248,27 @@ for ii=0,n_elements(parameters)-1 do begin
             if strmid(parameters2[iii],0,2) eq 'wd' then o=0 
             if strmid(parameters2[iii],0,2) eq 'pw' then o=1
             if strmid(parameters2[iii],0,2) eq 'pn' then o=1
+           
+           ;---Create tplot variables for each parameter:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
             store_data,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+           
+           ;---Add options
             new_vars=tnames('iug_ear_fai'+parameters[ii]+'_'+parameters2[iii])
             if new_vars[0] ne '' then begin
                options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],ytitle='EAR-FAI!CHeight!C[km]',ztitle=parameters2[iii]+'!C['+unit_all[o]+']'
                options,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], labels='EAR-FAI V-region [km]'      
-              ;Add options
                if strmid(parameters2[iii],0,2) ne 'np' then options, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], 'spec', 1
             endif         
          endif 
     
-        ;Clear time and data buffer:
+        ;---Clear time and data buffer:
          ear_time=0
          ear_data=0
       
+        ;---Add tdegap
          new_vars=tnames('iug_ear_fai*')
          if new_vars[0] ne '' then begin    
-           ;Add tdegap
             tdegap, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],/overwrite
          endif
       endif
@@ -281,7 +285,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

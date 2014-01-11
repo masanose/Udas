@@ -8,27 +8,23 @@
 ;  tplot format.
 ;
 ;Syntax:
-; iug_load_mf_rish_pon_txt, datatype = datatype, site = site, downloadonly = downloadonly, trange = trange, verbose = verbose
+; iug_load_mf_rish_pon_txt, downloadonly = downloadonly, trange = trange, verbose = verbose
 ;
 ;Keywords:
-;  datatype = Observation data type. For example, iug_load_mf_rish_pon_txt, datatype = 'thermosphere'.
-;            The default is 'thermosphere'. 
-;   site  = Observatory code name.  For example, iug_load_mf_rish_pon_txt, site = 'pon'.
-;          The default is 'all', i.e., load all available stations.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;Code:
 ;  A. Shinbori, 10/09/2010.
 ;
 ;Modifications:
 ;  A. Shinbori, 05/06/2011.
-;
+;  A. Shinbori, 08/01/2014.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -37,31 +33,14 @@
 ; $URL $
 ;-
 
-pro iug_load_mf_rish_pon_txt, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_mf_rish_pon_txt, downloadonly=downloadonly, $
+   trange=trange, $
+   verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 if ~keyword_set(verbose) then verbose=2
-
-;**************
-;dataype check:
-;**************
-if (not keyword_set(dataype)) then datatype='thermosphere'
-
-;***********
-;site codes:
-;***********
-if (not keyword_set(site)) then site='pon'
-
-;--- all sites (default)
-site_code_all = site
-
-;--- check site codes
-if(not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-
-print, site_code
 
 ;******************************************************************
 ;Loop on downloading files
@@ -73,20 +52,22 @@ print, site_code
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 if ~size(fns,/type) then begin
-   
+  ;**************************** 
   ;Get files for ith component:
-  ;***************************
+  ;****************************
    file_names = file_dailynames( $
       file_format='YYYY/'+$
       'YYYYMMDD',trange=trange,times=times,/unique)+'_fca.txt'
-  ;        
+  
+  ;===============================        
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
-   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/text/
+   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/pon/mf/text/
    source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mf/pontianak/text/'
-    
+  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -102,14 +83,16 @@ if (downloadonly eq 0) then begin
   ;===============
   ;Read the files:
   ;===============
+  ;---Definition of string variable:
    s=''
 
-  ; Initialize data and time buffer
+  ;---Initialize data and time buffer
    pon_time=0
    zon_wind=0
    mer_wind=0
    ver_wind=0
   
+  ;==============
   ;Loop on files: 
   ;==============
    for j=0,n_elements(local_paths)-1 do begin
@@ -119,26 +102,31 @@ if (downloadonly eq 0) then begin
          dprint,'Pontianak file ',file,' not found. Skipping'
          continue
       endelse
+      
+     ;---Open the read file:
       openr,lun,file,/get_lun    
-     ;
-     ;Loop on readdata:
-     ;=================
+     
+     ;==================
+     ;Loop on read data:
+     ;==================
       while(not eof(lun)) do begin
 
-        ;Definition of height and wind arrays:
+        ;---Definition of height and wind arrays:
          height = fltarr(21)
          zon_wind_data = fltarr(1,21)
          mer_wind_data = fltarr(1,21)
          ver_wind_data = fltarr(1,21)
         
+        ;==============
         ;Read data set:
         ;==============
          for k=0,n_elements(height)-1 do begin
             readf,lun,s
             data1 = strsplit(s,' ',/EXTRACT)
            
-           ;Calcurate time:
-           ;===============
+           ;=================================
+           ;Get information of date and time:
+           ;=================================
             if k eq 0 then begin
                year = fix(data1[0])
                month = fix(data1[1])
@@ -147,12 +135,14 @@ if (downloadonly eq 0) then begin
                minute = fix(data1[4])
                second=0               
             endif
+           
+           ;---Get information of height and winds: 
             height[k] = float(data1[5])
             zon_wind_data[0,k] = float(data1[6])
             mer_wind_data[0,k] = float(data1[7])
             ver_wind_data[0,k] = float(data1[8])
            
-           ;Replace the missing value (-9999.00) into NaN:
+           ;---Replace the missing value (-9999.00) into NaN:
             a = zon_wind_data[0,k]            
             wbad = where(a eq -9999.00,nbad)
             if nbad gt 0 then a[wbad] = !values.f_nan
@@ -167,7 +157,7 @@ if (downloadonly eq 0) then begin
             mer_wind_data[0,k]=c                     
          endfor
            
-        ;====Convert time from universal time to unix time:   
+        ;---Convert time from universal time to unix time:   
          time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)+':'+string(second))
            
         ;=============================
@@ -180,18 +170,21 @@ if (downloadonly eq 0) then begin
       endwhile 
       free_lun,lun
      
-     ;Clear buffer: 
+     ;---Clear buffer: 
       time=0
       zon_wind_data=0
       mer_wind_data=0
       ver_wind_data=0
-      
+
+     ;=============================
+     ;Append data of time and data:
+     ;=============================       
       append_array, pon_time, pon_time_1
       append_array, zon_wind, zon_wind_1
       append_array, mer_wind, mer_wind_1 
       append_array, ver_wind, ver_wind_1
      
-     ;Clear buffer: 
+     ;---Clear buffer: 
       pon_time_1=0
       zon_wind_1=0
       mer_wind_1=0
@@ -201,7 +194,7 @@ if (downloadonly eq 0) then begin
   ;==============================
   ;Store data in TPLOT variables:
   ;==============================
-  ;Acknowlegment string (use for creating tplot vars)
+  ;---Acknowlegment string (use for creating tplot vars)
    acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and follow the DATA USE POLICY '$
                     +'(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html '$ 
                     +'The distribution of MF radar data has been partly supported by the IUGONET (Inter-university Upper '$
@@ -209,49 +202,64 @@ if (downloadonly eq 0) then begin
                     + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.' 
 
    if size(zon_wind,/type) eq 4 then begin
-      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-      store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pon_time, y:zon_wind, v:height},dlimit=dlimit
-     ; options,'iug_mf_'+site_code[0]+'_uwnd',title= 'Zonal, meridional and vertical winds estimated from the Pontianak MF radar', ytitle='MFR-Pon!CHeight!C[km]',ztitle='Zonal Wind!C[m/s]'
-      options,'iug_mf_'+site_code[0]+'_uwnd', ytitle='MF-pon!CHeight!C[km]',ztitle='uwnd!C[m/s]'
-      store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pon_time, y:mer_wind, v:height},dlimit=dlimit
-     ; options,'iug_mf_'+site_code[0]+'_vwnd', ytitle='MFR-Pon!CHeight!C[km]',ztitle='Meridional Wind!C[m/s]'
-      options,'iug_mf_'+site_code[0]+'_vwnd', ytitle='MF-pon!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-      store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pon_time, y:ver_wind, v:height},dlimit=dlimit
-     ; options,'iug_mf_'+site_code[0]+'_wwnd', xtitle = 'Universal Time',ytitle='MFR-Pon!CHeight!C[km]',ztitle='Vertical Wind!C[m/s]'  
-      options,'iug_mf_'+site_code[0]+'_wwnd', ytitle='MF-pon!CHeight!C[km]',ztitle='wwnd!C[m/s]'
+     ;---Create tplot variables and options for zonal wind:
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))      
+      store_data,'iug_mf_pon_uwnd',data={x:pon_time, y:zon_wind, v:height},dlimit=dlimit
+      new_vars=tnames('iug_mf_pon_uwnd')
+      if new_vars[0] ne '' then begin       
+         options,'iug_mf_pon_uwnd',ytitle='MF-pon!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+      endif
       
-    ; add options
-      options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd'], 'spec', 1
-  
-    ; add options of setting lanels
-      options, 'iug_mf_'+site_code[0]+'_uwnd', labels='MFR-pon [km]'
-      options, 'iug_mf_'+site_code[0]+'_vwnd', labels='MFR-pon [km]'
-      options, 'iug_mf_'+site_code[0]+'_wwnd', labels='MFR-pon [km]'
+     ;---Create tplot variables and options for meridional wind: 
+      store_data,'iug_mf_pon_vwnd',data={x:pon_time, y:mer_wind, v:height},dlimit=dlimit
+      new_vars=tnames('iug_mf_pon_vwnd')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_pon_vwnd',ytitle='MF-pon!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+      endif
      
-    ; add tdegap: 
-      tdegap,'iug_mf_'+site_code[0]+'_uwnd',dt=240,/overwrite
-      tdegap,'iug_mf_'+site_code[0]+'_vwnd',dt=240,/overwrite
-      tdegap,'iug_mf_'+site_code[0]+'_wwnd',dt=240,/overwrite
+     ;---Create tplot variables and options for vertical wind:  
+      store_data,'iug_mf_pon_wwnd',data={x:pon_time, y:ver_wind, v:height},dlimit=dlimit
+      new_vars=tnames('iug_mf_pon_wwnd')
+      if new_vars[0] ne '' then begin 
+         options,'iug_mf_pon_wwnd',ytitle='MF-pon!CHeight!C[km]',ztitle='wwnd!C[m/s]'
+      endif
+     
+     
+      new_vars=tnames('iug_mf_pon_*')
+      if new_vars[0] ne '' then begin      
+        ;---Add options
+         options, ['iug_mf_pon_uwnd','iug_mf_pon_vwnd','iug_mf_pon_wwnd'], 'spec', 1
+  
+        ;---Add options of setting lanels
+         options, 'iug_mf_pon_uwnd', labels='MFR-pon [km]'
+         options, 'iug_mf_pon_vwnd', labels='MFR-pon [km]'
+         options, 'iug_mf_pon_wwnd', labels='MFR-pon [km]'
+     
+        ;---Add tdegap: 
+         tdegap,'iug_mf_pon_uwnd',dt=240,/overwrite
+         tdegap,'iug_mf_pon_vwnd',dt=240,/overwrite
+         tdegap,'iug_mf_pon_wwnd',dt=240,/overwrite
       
-    ; add tclip:  
-      tclip,'iug_mf_'+site_code[0]+'_uwnd',-200,200,/overwrite
-      tclip,'iug_mf_'+site_code[0]+'_vwnd',-200,200,/overwrite
-      tclip,'iug_mf_'+site_code[0]+'_wwnd',-200,200,/overwrite
+        ;---Add tclip:  
+         tclip,'iug_mf_pon_uwnd',-200,200,/overwrite
+         tclip,'iug_mf_pon_vwnd',-200,200,/overwrite
+         tclip,'iug_mf_pon_wwnd',-200,200,/overwrite
     
-    ; add zlim:  
-      zlim,'iug_mf_'+site_code[0]+'_uwnd',-100,100
-      zlim,'iug_mf_'+site_code[0]+'_vwnd',-100,100
-      zlim,'iug_mf_'+site_code[0]+'_wwnd',-100,100
+        ;---Add zlim:  
+         zlim,'iug_mf_pon_uwnd',-100,100
+         zlim,'iug_mf_pon_vwnd',-100,100
+         zlim,'iug_mf_pon_wwnd',-100,100
+      endif
    endif
     
-  ;Clear time and data buffer:
+  ;---Clear time and data buffer:
    pon_time=0
    zon_wind=0
    mer_wind=0
    ver_wind=0
 endif
           
-new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+new_vars=tnames('iug_mf_pon_*')
 if new_vars[0] ne '' then begin 
    print,'******************************
    print, 'Data loading is successful!!'
@@ -259,7 +267,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

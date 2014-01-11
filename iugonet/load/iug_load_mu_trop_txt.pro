@@ -9,22 +9,21 @@
 ;  Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $
+; iug_load_ear_trop_txt, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;  parameter = parameter name of MU troposphere standard obervation data.  
+;KEYWOARDS: 
+;  PARAMETER = parameter name of MU troposphere standard obervation data.  
 ;          For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 19/09/2010.
 ;
@@ -35,6 +34,7 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 19/12/2012.
 ; A. Shinbori, 27/07/2013.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -43,21 +43,15 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_trop_txt, datatype = datatype, $
-  parameter=parameter, $
+pro iug_load_mu_trop_txt, parameter=parameter, $
   downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;************************************
-;Load 'toroposphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;***********
 ;parameters:
@@ -72,13 +66,13 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 print, parameters
 
 ;*****************
-;defition of unit:
+;Defition of unit:
 ;*****************
-;--- all parameters (default)
+;--- all unites (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;*******************
-;defition of height:
+;Defition of height:
 ;*******************
 height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,3.475,3.623,3.770,3.918,4.066,4.213,4.361,4.509,4.657,4.804,'+$
                    '4.952,5.100,5.248,5.395,5.543,5.691,5.838,5.986,6.134,6.282,6.429,6.577,6.725,6.872,7.020,7.168,7.316,7.463,7.611,7.759,'+$
@@ -96,7 +90,7 @@ height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,
                    '15.975,16.125,16.275,16.425,16.575,16.725,16.875,17.025,17.175,17.325,17.475,17.625,17.775,17.925,18.075,18.225,18.375,'+$
                    '18.525,18.675,18.825,18.975,19.125,19.275,19.425,19.575,19.725,19.875',',',/extract)
 
-;data list which applies the above height data:
+;---Data list which applies the above height data:
 f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 
 ;******************************************************************
@@ -113,20 +107,22 @@ jj=0
 
 for ii=0,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
-
+     ;****************************
      ;Get files for ith component:
-     ;***************************
+     ;****************************
       file_names = file_dailynames( $
       file_format='YYYYMM/YYYYMMDD/'+$
                    'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[ii]+'.csv'
-     ;
+                   
+     ;===============================
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/mu/troposphere/csv/'
       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/data/data/ver01.0807_1.02/'
-    
+      
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source)
@@ -146,11 +142,10 @@ for ii=0,n_elements(parameters)-1 do begin
      ;Read the files:
      ;===============
    
-     ;Definition of parameters and array:
+     ;---Definition of string variable:
       s=''
-      u=''
 
-     ;Initialize data and time buffer
+     ;---Initialize data and time buffer
       mu_time=0
       mu_data=0
      
@@ -164,21 +159,24 @@ for ii=0,n_elements(parameters)-1 do begin
             dprint,'MU file',file,'not found. Skipping'
             continue
          endelse
-        ;File search:
+         
+        ;---File search:
          fname=strsplit(strmid(file,16,17,/REVERSE_OFFSET),'.',/extract)
          idx=where(fname[0] eq f_list)
 
+        ;---Open read file:
          openr,lun,file,/get_lun    
-        ;
+         
+        ;=============================
         ;Read information of altitude:
         ;=============================
          readf, lun, s
     
-        ;Definition of altitude and data arraies:
+        ;---Definition of altitude and data arraies:
          h_data = strsplit(s,',',/extract)     
          altitude = fltarr(120)
     
-        ;Enter the altitude information:
+        ;---Enter the altitude information:
          if idx eq -1 then begin
             for j=0,n_elements(h_data)-2 do begin
                altitude[j] = float(h_data[j+1])
@@ -190,7 +188,8 @@ for ii=0,n_elements(parameters)-1 do begin
                altitude = height_zm
             endelse
          endelse
-        ;
+         
+        ;=================
         ;Loop on readdata:
         ;=================
          while(not eof(lun)) do begin
@@ -202,21 +201,18 @@ for ii=0,n_elements(parameters)-1 do begin
                data = strsplit(s,',',/extract)
                data2 = fltarr(1,120)+!values.f_nan
                
-              ;Calculate time:
-              ;==============
-               u=data(0)
-               year = strmid(u,0,4)
-               month = strmid(u,5,2)
-               day = strmid(u,8,2)
-               hour = strmid(u,11,2)
-               minute = strmid(u,14,2)  
+              ;---Get date and time information:
+               year = strmid(data(0),0,4)
+               month = strmid(data(0),5,2)
+               day = strmid(data(0),8,2)
+               hour = strmid(data(0),11,2)
+               minute = strmid(data(0),14,2)  
                 
-              ;====Convert time from local time to unix time      
+              ;---Convert time from local time to unix time      
                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                       -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                
-              ;
-              ;Enter the missing value:
+              ;---Replace missing value by NaN:
                d_num=n_elements(data)-1
                st_num=120-d_num
                for j=0,n_elements(data)-2 do begin
@@ -225,6 +221,7 @@ for ii=0,n_elements(parameters)-1 do begin
                   if nbad gt 0 then a[wbad] = !values.f_nan
                   data2[0,st_num+j]=a
                endfor
+               
               ;==============================
               ;Append array of time and data:
               ;==============================
@@ -233,6 +230,7 @@ for ii=0,n_elements(parameters)-1 do begin
             endif
          endwhile 
          free_lun,lun
+         
         ;==============================
         ;Append array of time and data:
         ;==============================
@@ -245,7 +243,7 @@ for ii=0,n_elements(parameters)-1 do begin
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
-     ;Acknowlegment string (use for creating tplot vars)
+     ;---Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
                        + 'including text such as the MU data provided by Research Institute ' $
@@ -258,24 +256,28 @@ for ii=0,n_elements(parameters)-1 do begin
       o=0
       if size(mu_data2,/type) eq 4 then begin
          if strmid(parameters[ii],0,2) eq 'pw' then o=1
+         
+        ;---Create tplot variables for each parameter:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
          store_data,'iug_mu_trop_'+parameters[ii],data={x:mu_time2, y:mu_data2, v:altitude},dlimit=dlimit
+        
+        ;---Add options
          new_vars=tnames('iug_mu_trop_*')
          if new_vars[0] ne '' then begin          
             options,'iug_mu_trop_'+parameters[ii],ytitle='MU-trop!CHeight!C[km]',ztitle=parameters[ii]+'!C['+unit_all[o]+']'
             options,'iug_mu_trop_'+parameters[ii], labels='MU-trop [km]'
          endif
-      endif   
-   
+      endif  
+       
+     ;---Add options
       new_vars=tnames('iug_mu_trop_*')
-     ;Add options
       if new_vars[0] ne '' then options, 'iug_mu_trop_'+parameters[ii], 'spec', 1
     
-     ;Clear time and data buffer:
+     ;---Clear time and data buffer:
       mu_time=0
       mu_data=0
        
-     ;Add tdegap
+     ;---Add tdegap
       if new_vars[0] ne '' then tdegap, 'iug_mu_trop_'+parameters[ii],/overwrite
    endif
    jj=n_elements(local_paths)
@@ -289,7 +291,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

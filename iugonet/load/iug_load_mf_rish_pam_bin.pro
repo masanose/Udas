@@ -9,20 +9,17 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_mf_rish_pam_bin, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mf_rish_pam_bin, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mf_rish_pam_bin, datatype = 'thermosphere'.
-;            The default is 'thermosphere'.
-;   site  = Observatory code name.  For example, iug_load_mf_rish_pam_bin, site = 'pam'.
-;          The default is 'all', i.e., load all available stations.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 09/19/2010.
 ;
@@ -30,6 +27,7 @@
 ; A. Shinbori, 03/24/2011.
 ; A. Shinbori, 27/12/2011.
 ; A. Shinbori, 24/12/2011.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -38,9 +36,7 @@
 ; $URL $
 ;-
 
-pro iug_load_mf_rish_pam_bin, datatype = datatype, $
-  site=site, $
-  downloadonly=downloadonly, $
+pro iug_load_mf_rish_pam_bin, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
@@ -48,25 +44,6 @@ pro iug_load_mf_rish_pam_bin, datatype = datatype, $
 ;keyword check:
 ;**************
 if ~keyword_set(verbose) then verbose=2
-
-;************************************
-;Load 'thermosphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='thermosphere'
-
-;***********
-;site codes:
-;***********
-if (not keyword_set(site)) then site='pam'
-
-;--- all sites (default)
-site_code_all = site
-
-;--- check site codes
-if(not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
-
-print, site_code
 
 ;******************************************************************
 ;Loop on downloading files
@@ -78,19 +55,21 @@ print, site_code
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 if ~size(fns,/type) then begin
-
+  ;****************************
   ;Get files for ith component:
-  ;***************************
+  ;****************************
    file_names = file_dailynames( $
    file_format='YYYY/pameungpeuk.YYYYMMDD',trange=trange,times=times,/unique)+'.sswma'
-  ;            
+   
+  ;===============================            
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
-   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/mf/binary/'
+   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/pam/mf/binary/'
    source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mf/pameungpeuk/binary/'
-    
+  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -103,9 +82,10 @@ endif else file_names=fns
 if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
-  
+  ;===============
   ;Read the files:
   ;===============
+  ;---Definition of arrays and variables:
    height = fltarr(36)
    analysis_status_data = fltarr(1,36)
    zon_wind_data = fltarr(1,36)
@@ -151,30 +131,34 @@ if (downloadonly eq 0) then begin
    sea_scatter_relative_power1=0
    sea_scatter_relative_power2=0
    sea_scatter_relative_power3=0
-         
+  
+  ;==============       
   ;Loop on files: 
   ;==============
    for j=0,n_elements(local_paths)-1 do begin
       file= local_paths[j]
-      if file_test(/regular,file) then  dprint,'Loading pameungpeuk file: ',file $
+      if file_test(/regular,file) then  dprint,'Loading pameungpeuk sswma file: ',file $
       else begin
-         dprint,'pameungpeuk file ',file,' not found. Skipping'
+         dprint,'pameungpeuk sswma file ',file,' not found. Skipping'
          continue
       endelse
+      
+     ;---Open the read file:
       openr,lun,file,/get_lun 
-     ;
-     ;Determine year, month, day:
-     ;===========================
+   
+     ;---Information of year, month and day:
       year = strmid(file,42,4)
       month = strmid(file,46,2)
       day = strmid(file,48,2)
-     ;
-     ;readdata:
-     ;=========
+     
+     ;==========
+     ;Read data:
+     ;==========
       readf,lun
-     ;
-     ; read file header:
-     ;==================
+     
+     ;=================
+     ;Read file header:
+     ;=================
       file_header_bytes = assoc(lun, lonarr(1))
       file_header_names = ["File magic number (0x23110001)", $
                            "No.of SSWMA records in this file (0 or more)", $
@@ -187,31 +171,34 @@ if (downloadonly eq 0) then begin
       endfor
       offset = 48L
 
-     ;
-     ; read record header:
-     ;==================== 
+     ;===================
+     ;Read record header:
+     ;=================== 
       m=0 
       for k = 1L, sswma_records[0] do begin
-        ;
-        ;read UNIX time:
-        ;================
+        ;===============
+        ;Read UNIX time:
+        ;===============
          epoch_time_stamp = assoc(lun, lonarr(1), offset+16)
          millisecond_time_stamp = assoc(lun, lonarr(1), offset+20)
         ;print, epoch_time_stamp[0], millisecond_time_stamp[0]
         ;
+        ;===============
         ;Read UNIX time:
-        ;================ 
-         epoch_time = float(epoch_time_stamp[0]) + float(millisecond_time_stamp[0])/1000      
-        ;
+        ;=============== 
+         epoch_time = float(epoch_time_stamp[0]) + float(millisecond_time_stamp[0])/1000  
+             
+        ;===============================
         ;Read the number of range gates:
-        ;================================ 
+        ;=============================== 
          offset += 116
          record_header_bytes3 = assoc(lun, lonarr(1), offset)
          number_of_range_gates_sampled = record_header_bytes3[0]
          offset += 132
-        ;
+         
+        ;========================
         ;Enter the missing value:
-        ;=========================
+        ;========================
          for mm=0, 35 do begin   
             analysis_status_data[*,mm]= !values.f_nan        
             zon_wind_data[*,mm]= !values.f_nan
@@ -235,8 +222,10 @@ if (downloadonly eq 0) then begin
             sea_scatter_relative_power2_data[*,mm]=!values.f_nan
             sea_scatter_relative_power3_data[*,mm]=!values.f_nan
          endfor
+        
+        ;=============== 
         ;Results Header:
-        ;================
+        ;===============
          n=0
          fill_value=-9999
          for l = 1L, number_of_range_gates_sampled[0] do begin
@@ -414,7 +403,7 @@ if (downloadonly eq 0) then begin
    ;==============================
    ;Store data in TPLOT variables:
    ;==============================
-   ;Acknowlegment string (use for creating tplot vars)
+   ;---Acknowlegment string (use for creating tplot vars)
     acknowledgstring = 'Note: If you would like to use following data for scientific purpose, please read and keep the DATA USE POLICY '$
                      +'(http://database.rish.kyoto-u.ac.jp/arch/iugonet/data_policy/Data_Use_Policy_e.html '$ 
                      +'The distribution of MF radar data has been partly supported by the IUGONET (Inter-university Upper '$
@@ -422,125 +411,126 @@ if (downloadonly eq 0) then begin
                      + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'  
     
     if size(zon_wind,/type) eq 4 then begin
+      ;---Create tplot variables and options
        dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))     
-       store_data,'iug_mf_'+site_code[0]+'_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_uwnd')
+       store_data,'iug_mf_pam_uwnd',data={x:pam_time, y:zon_wind, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_uwnd')
        if new_vars[0] ne '' then begin 
-          options,'iug_mf_'+site_code[0]+'_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uwnd!C[m/s]'
+          options,'iug_mf_pam_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uwnd!C[m/s]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_uwnd')
+       store_data,'iug_mf_pam_vwnd',data={x:pam_time, y:mer_wind, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_uwnd')
        if new_vars[0] ne '' then begin      
-          options,'iug_mf_'+site_code[0]+'_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='vwnd!C[m/s]'
+          options,'iug_mf_pam_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='vwnd!C[m/s]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_wwnd')
+       store_data,'iug_mf_pam_wwnd',data={x:pam_time, y:ver_wind, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_wwnd')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_wwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='wwnd!C[m/s]'
+          options,'iug_mf_pam_wwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='wwnd!C[m/s]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_uncorrected_uwnd',data={x:pam_time, y:uncorrected_zon_wind, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_uncorrected_uwnd')
+       store_data,'iug_mf_pam_uncorrected_uwnd',data={x:pam_time, y:uncorrected_zon_wind, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_uncorrected_uwnd')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_uncorrected_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected uwnd!C[m/s]'
+          options,'iug_mf_pam_uncorrected_uwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected uwnd!C[m/s]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_uncorrected_vwnd',data={x:pam_time, y:uncorrected_mer_wind, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_uncorrected_vwnd')
+       store_data,'iug_mf_pam_uncorrected_vwnd',data={x:pam_time, y:uncorrected_mer_wind, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_uncorrected_vwnd')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_uncorrected_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected vwnd!C[m/s]'
+          options,'iug_mf_pam_uncorrected_vwnd',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected vwnd!C[m/s]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_fading_time',data={x:pam_time, y:corrected_fading_time, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_fading_time')
+       store_data,'iug_mf_pam_fading_time',data={x:pam_time, y:corrected_fading_time, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_fading_time')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_fading_time',ytitle='MF-pam!Cheight!C[km]',ztitle='fading time!C[sec]' 
+          options,'iug_mf_pam_fading_time',ytitle='MF-pam!Cheight!C[km]',ztitle='fading time!C[sec]' 
        endif
-       store_data,'iug_mf_'+site_code[0]+'_uncorrected_fading_time',data={x:pam_time, y:uncorrected_fading_time, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_uncorrected_fading_time')
+       store_data,'iug_mf_pam_uncorrected_fading_time',data={x:pam_time, y:uncorrected_fading_time, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_uncorrected_fading_time')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_uncorrected_fading_time',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected fading time!C[sec]' 
+          options,'iug_mf_pam_uncorrected_fading_time',ytitle='MF-pam!Cheight!C[km]',ztitle='uncorrected fading time!C[sec]' 
        endif
-       store_data,'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',data={x:pam_time, y:normalized_time_discrepacy, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_normalized_time_discrepacy')
+       store_data,'iug_mf_pam_normalized_time_discrepacy',data={x:pam_time, y:normalized_time_discrepacy, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_normalized_time_discrepacy')
        if new_vars[0] ne '' then begin      
-          options,'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',ytitle='MF-pam!Cheight!C[km]',ztitle='normalized time discrepacy!C[%]'
+          options,'iug_mf_pam_normalized_time_discrepacy',ytitle='MF-pam!Cheight!C[km]',ztitle='normalized time discrepacy!C[%]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',data={x:pam_time, y:ellipse_major_axis_length, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_ellipse_major_axis_length')
+       store_data,'iug_mf_pam_ellipse_major_axis_length',data={x:pam_time, y:ellipse_major_axis_length, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_ellipse_major_axis_length')
        if new_vars[0] ne '' then begin 
-          options,'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse major axis length'
+          options,'iug_mf_pam_ellipse_major_axis_length',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse major axis length'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',data={x:pam_time, y:ellipse_axial_ratio, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_ellipse_axial_ratio')
+       store_data,'iug_mf_pam_ellipse_axial_ratio',data={x:pam_time, y:ellipse_axial_ratio, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_ellipse_axial_ratio')
        if new_vars[0] ne '' then begin 
-          options,'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse axial ratio'
+          options,'iug_mf_pam_ellipse_axial_ratio',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse axial ratio'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_ellipse_orientation',data={x:pam_time, y:ellipse_orientation, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_ellipse_orientation')
+       store_data,'iug_mf_pam_ellipse_orientation',data={x:pam_time, y:ellipse_orientation, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_ellipse_orientation')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_ellipse_orientation',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse orientation!C[deg]'
+          options,'iug_mf_pam_ellipse_orientation',ytitle='MF-pam!Cheight!C[km]',ztitle='ellipse orientation!C[deg]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_receiver_snr1',data={x:pam_time, y:receiver_snr1, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_receiver_snr1')
+       store_data,'iug_mf_pam_receiver_snr1',data={x:pam_time, y:receiver_snr1, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_receiver_snr1')
        if new_vars[0] ne '' then begin 
-          options,'iug_mf_'+site_code[0]+'_receiver_snr1',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr1!C[dB]'
+          options,'iug_mf_pam_receiver_snr1',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr1!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_receiver_snr2',data={x:pam_time, y:receiver_snr2, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_receiver_snr2')
+       store_data,'iug_mf_pam_receiver_snr2',data={x:pam_time, y:receiver_snr2, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_receiver_snr2')
        if new_vars[0] ne '' then begin 
-          options,'iug_mf_'+site_code[0]+'_receiver_snr2',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr2!C[dB]'
+          options,'iug_mf_pam_receiver_snr2',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr2!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_receiver_snr3',data={x:pam_time, y:receiver_snr3, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_receiver_snr3')
+       store_data,'iug_mf_pam_receiver_snr3',data={x:pam_time, y:receiver_snr3, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_receiver_snr3')
        if new_vars[0] ne '' then begin 
-          options,'iug_mf_'+site_code[0]+'_receiver_snr3',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr3!C[dB]'
+          options,'iug_mf_pam_receiver_snr3',ytitle='MF-pam!Cheight!C[km]',ztitle='receiver snr3!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_cross_channel_nsr1',data={x:pam_time, y:cross_channel_nsr1, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_cross_channel_nsr1')
+       store_data,'iug_mf_pam_cross_channel_nsr1',data={x:pam_time, y:cross_channel_nsr1, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_cross_channel_nsr1')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_cross_channel_nsr1',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr1!C[dB]'
+          options,'iug_mf_pam_cross_channel_nsr1',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr1!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_cross_channel_nsr2',data={x:pam_time, y:cross_channel_nsr2, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_cross_channel_nsr2')
+       store_data,'iug_mf_pam_cross_channel_nsr2',data={x:pam_time, y:cross_channel_nsr2, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_cross_channel_nsr2')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_cross_channel_nsr2',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr2!C[dB]'
+          options,'iug_mf_pam_cross_channel_nsr2',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr2!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_cross_channel_nsr3',data={x:pam_time, y:cross_channel_nsr3, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_cross_channel_nsr3')
+       store_data,'iug_mf_pam_cross_channel_nsr3',data={x:pam_time, y:cross_channel_nsr3, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_cross_channel_nsr3')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_cross_channel_nsr3',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr3!C[dB]' 
+          options,'iug_mf_pam_cross_channel_nsr3',ytitle='MF-pam!Cheight!C[km]',ztitle='cross channel nsr3!C[dB]' 
        endif
-       store_data,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',data={x:pam_time, y:sea_scatter_relative_power1, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_sea_scatter_relative_power1')
+       store_data,'iug_mf_pam_sea_scatter_relative_power1',data={x:pam_time, y:sea_scatter_relative_power1, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_sea_scatter_relative_power1')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power1!C[dB]'
+          options,'iug_mf_pam_sea_scatter_relative_power1',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power1!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',data={x:pam_time, y:sea_scatter_relative_power2, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_sea_scatter_relative_power2')
+       store_data,'iug_mf_pam_sea_scatter_relative_power2',data={x:pam_time, y:sea_scatter_relative_power2, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_sea_scatter_relative_power2')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power2!C[dB]'
+          options,'iug_mf_pam_sea_scatter_relative_power2',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power2!C[dB]'
        endif
-       store_data,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',data={x:pam_time, y:sea_scatter_relative_power3, v:height},dlimit=dlimit
-       new_vars=tnames('iug_mf_'+site_code[0]+'_sea_scatter_relative_power3')
+       store_data,'iug_mf_pam_sea_scatter_relative_power3',data={x:pam_time, y:sea_scatter_relative_power3, v:height},dlimit=dlimit
+       new_vars=tnames('iug_mf_pam_sea_scatter_relative_power3')
        if new_vars[0] ne '' then begin
-          options,'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power3!C[dB]'  
+          options,'iug_mf_pam_sea_scatter_relative_power3',ytitle='MF-pam!Cheight!C[km]',ztitle='sea scatter relative power3!C[dB]'  
        endif     
             
-      ;add options
-       new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+      ;---Add options
+       new_vars=tnames('iug_mf_pam_*')
        if new_vars[0] ne '' then begin
-          options, ['iug_mf_'+site_code[0]+'_uwnd','iug_mf_'+site_code[0]+'_vwnd','iug_mf_'+site_code[0]+'_wwnd',$
-                    'iug_mf_'+site_code[0]+'_uncorrected_uwnd','iug_mf_'+site_code[0]+'_uncorrected_vwnd', $
-                    'iug_mf_'+site_code[0]+'_fading_time','iug_mf_'+site_code[0]+'_uncorrected_fading_time', $
-                    'iug_mf_'+site_code[0]+'_normalized_time_discrepacy','iug_mf_'+site_code[0]+'_ellipse_major_axis_length',$
-                    'iug_mf_'+site_code[0]+'_ellipse_axial_ratio','iug_mf_'+site_code[0]+'_ellipse_orientation',$
-                    'iug_mf_'+site_code[0]+'_receiver_snr1','iug_mf_'+site_code[0]+'_receiver_snr2',$
-                    'iug_mf_'+site_code[0]+'_receiver_snr3','iug_mf_'+site_code[0]+'_cross_channel_nsr1',$
-                    'iug_mf_'+site_code[0]+'_cross_channel_nsr2','iug_mf_'+site_code[0]+'_cross_channel_nsr3',$
-                    'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1','iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',$
-                    'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3'], 'spec', 1
+          options, ['iug_mf_pam_uwnd','iug_mf_pam_vwnd','iug_mf_pam_wwnd',$
+                    'iug_mf_pam_uncorrected_uwnd','iug_mf_pam_uncorrected_vwnd', $
+                    'iug_mf_pam_fading_time','iug_mf_pam_uncorrected_fading_time', $
+                    'iug_mf_pam_normalized_time_discrepacy','iug_mf_pam_ellipse_major_axis_length',$
+                    'iug_mf_pam_ellipse_axial_ratio','iug_mf_pam_ellipse_orientation',$
+                    'iug_mf_pam_receiver_snr1','iug_mf_pam_receiver_snr2',$
+                    'iug_mf_pam_receiver_snr3','iug_mf_pam_cross_channel_nsr1',$
+                    'iug_mf_pam_cross_channel_nsr2','iug_mf_pam_cross_channel_nsr3',$
+                    'iug_mf_pam_sea_scatter_relative_power1','iug_mf_pam_sea_scatter_relative_power2',$
+                    'iug_mf_pam_sea_scatter_relative_power3'], 'spec', 1
        endif
     endif
 
-   ;Clear data and time buffer
+   ;---Clear data and time buffer
     pam_time=0
     zon_wind=0
     mer_wind=0
@@ -563,50 +553,50 @@ if (downloadonly eq 0) then begin
     sea_scatter_relative_power2=0
     sea_scatter_relative_power3=0
     
-   ;add tclip  
-   ;Definition of the upper and lower limit of wind data:
+   ;---Add tclip  
+   ;---Definition of the upper and lower limit of wind data:
     low_en=-100000
     high_en=100000
     low_v=-20000
     high_v=20000
     
-    new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+    new_vars=tnames('iug_mf_pam_*')
     if new_vars[0] ne '' then begin
-       tclip, 'iug_mf_'+site_code[0]+'_uwnd',low_en,high_en,/overwrite
-       tclip, 'iug_mf_'+site_code[0]+'_vwnd',low_en,high_en,/overwrite
-       tclip, 'iug_mf_'+site_code[0]+'_wwnd',low_v,high_v,/overwrite  
-       tclip, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd',low_en,high_en,/overwrite
-       tclip, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd',low_en,high_en,/overwrite
+       tclip, 'iug_mf_pam_uwnd',low_en,high_en,/overwrite
+       tclip, 'iug_mf_pam_vwnd',low_en,high_en,/overwrite
+       tclip, 'iug_mf_pam_wwnd',low_v,high_v,/overwrite  
+       tclip, 'iug_mf_pam_uncorrected_uwnd',low_en,high_en,/overwrite
+       tclip, 'iug_mf_pam_uncorrected_vwnd',low_en,high_en,/overwrite
     endif
               
-   ;add tdegap
-   ;Definition of time interval to enter NaN:
+   ;---Add tdegap
+   ;---Definition of time interval to enter NaN:
     DT=1800
     if new_vars[0] ne '' then begin   
-       tdegap, 'iug_mf_'+site_code[0]+'_uwnd',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_vwnd',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_wwnd',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_uwnd',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_vwnd',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_fading_time',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_uncorrected_fading_time',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_normalized_time_discrepacy',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_ellipse_major_axis_length',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_ellipse_axial_ratio',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_ellipse_orientation',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr1',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr2',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_receiver_snr3',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr1',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr2',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_cross_channel_nsr3',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power1',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power2',dt=DT,/overwrite
-       tdegap, 'iug_mf_'+site_code[0]+'_sea_scatter_relative_power3',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_uwnd',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_vwnd',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_wwnd',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_uncorrected_uwnd',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_uncorrected_vwnd',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_fading_time',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_uncorrected_fading_time',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_normalized_time_discrepacy',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_ellipse_major_axis_length',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_ellipse_axial_ratio',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_ellipse_orientation',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_receiver_snr1',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_receiver_snr2',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_receiver_snr3',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_cross_channel_nsr1',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_cross_channel_nsr2',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_cross_channel_nsr3',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_sea_scatter_relative_power1',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_sea_scatter_relative_power2',dt=DT,/overwrite
+       tdegap, 'iug_mf_pam_sea_scatter_relative_power3',dt=DT,/overwrite
     endif
  endif
 
- new_vars=tnames('iug_mf_'+site_code[0]+'_*')
+ new_vars=tnames('iug_mf_pam_*')
  if new_vars[0] ne '' then begin 
     print,'**********************************************************************************
     print,'Data loading is successful!!'
@@ -614,7 +604,7 @@ if (downloadonly eq 0) then begin
  endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

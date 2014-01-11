@@ -8,27 +8,25 @@
 ;  station (AWS) at Shigaraki and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_aws_sgk, datatype = datatype, site=site, $
-;                    downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_aws_sgk, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_aws_sgk, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;  site = AWS observation site.  
+;KEYWOARDS: 
+;  SITE = AWS observation site.  
 ;         For example, iug_load_aws_sgk, site = 'sgk'.
 ;         The default is 'all', i.e., load all available observation points.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+; 
 ;CODE:
 ;  A. Shinbori, 28/02/2013.
 ;  
 ;MODIFICATIONS:
-;
+;  A. Shinbori, 08/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -37,8 +35,7 @@
 ; $URL $
 ;-
 
-pro iug_load_aws_sgk, datatype = datatype, $
-  site=site, $
+pro iug_load_aws_sgk, site=site, $
   downloadonly=downloadonly, $
   trange=trange, verbose=verbose
 
@@ -46,13 +43,6 @@ pro iug_load_aws_sgk, datatype = datatype, $
 ;Verbose keyword check:
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
-
-
-;***************
-;Datatype check:
-;***************
-if (not keyword_set(datatype)) then datatype= 'troposphere'
-
 
 ;****************
 ;Site code check:
@@ -63,6 +53,13 @@ site_code_all = strsplit('sgk',' ', /extract)
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
+
+if n_elements(site_code) eq 1 then begin
+   if site_code eq '' then begin
+      print, 'This station code is not valid. Please input the allowed keywords, all, and sgk.'
+      return
+   endif
+endif
 
 print, site_code
 
@@ -83,14 +80,15 @@ if ~size(fns,/type) then begin
    file_format='YYYY/YYYYMM/'+$
                'YYYYMMDD',trange=trange,times=times,/unique)+'.csv'
                      
-  ;
+  ;===============================
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/aws/csv/'
    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/surface/shigaraki/aws/csv/'
-    
+  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -103,14 +101,14 @@ endif else file_names=fns
 if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
-    
+   ;=============== 
    ;Read the files:
    ;===============
       
-   ;Definition of string variable:
+   ;---Definition of string variable:
     s=''
 
-   ;Initialize data and time buffer
+   ;---Initialize data and time buffer
     aws_time = 0
     aws_press = 0
     aws_temp = 0
@@ -129,38 +127,40 @@ if (downloadonly eq 0) then begin
           continue
        endelse
        
-      ;Check file line:   
+      ;---Check file line:   
        lines = file_lines(file)
-            
+      
+      ;---Open the read file:      
        openr,lun,file,/get_lun    
-      ;
+       
+      ;=============================
       ;Read information of altitude:
       ;=============================
        readf, lun, s
        header_data = strsplit(s,',',/extract)
              
-      ;Definition of altitude and data arraies:
+      ;---Definition of altitude and data arraies:
        date = header_data[0]
        time_zone = header_data[1]
        data_arr = strarr(7,lines-1)
             
-      ;Read the data:
+      ;---Read the data:
        readf,lun, data_arr, format='(a8,a1,1x,a7,1x,a7,1x,a7,1x,a7,1x,a7)'
        data_arr = transpose(data_arr)       
         
-      ;Convert time from LT to UT
+      ;---Convert time from LT to UT
        yymmdd = strsplit(date,'/',/extract)     
        time = time_double(string(yymmdd[0])+'-'+string(yymmdd[1])+'-'+string(yymmdd[2])+'/'+string(data_arr[*,0])) $
                    -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
 
-      ;Substitute each parameter:            
+      ;---Substitute each parameter:            
        press = data_arr[*,2]
        temp = data_arr[*,3]
        rh = data_arr[*,4]
        uwnd = data_arr[*,5]
        vwnd = data_arr[*,6]
 
-      ;Enter the missing value:
+      ;---Enter the missing value:
        a = float(press)
        wbad = where(a eq -999,nbad)
        if nbad gt 0 then a[wbad] = !values.f_nan
@@ -182,7 +182,7 @@ if (downloadonly eq 0) then begin
        if nbad gt 0 then e[wbad] = !values.f_nan
        vwnd=e            
 
-      ;
+      ;=====================================
       ;Append data of time and observations:
       ;=====================================
        append_array, aws_time, time
@@ -197,7 +197,7 @@ if (downloadonly eq 0) then begin
    ;==============================
    ;Store data in TPLOT variables:
    ;==============================
-   ;Acknowlegment string (use for creating tplot vars)
+   ;---Acknowlegment string (use for creating tplot vars)
     acknowledgstring = 'If you acquire the surface meteorological data, '+ $
                        'we ask that you acknowledge us in your use of the data. This may be done by'+ $
                        'including text such as the surface meteorological data provided by Research Institute'+ $
@@ -208,12 +208,15 @@ if (downloadonly eq 0) then begin
                        'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.' 
  
    if size(aws_press,/type) eq 4 then begin 
+     ;---Create tplot variables
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))            
       store_data,'iug_aws_sgk_press',data={x:aws_time, y:aws_press},dlimit=dlimit
       store_data,'iug_aws_sgk_temp',data={x:aws_time, y:aws_temp},dlimit=dlimit
       store_data,'iug_aws_sgk_rh',data={x:aws_time, y:aws_rh},dlimit=dlimit
       store_data,'iug_aws_sgk_uwnd',data={x:aws_time, y:aws_uwnd},dlimit=dlimit
       store_data,'iug_aws_sgk_vwnd',data={x:aws_time, y:aws_vwnd},dlimit=dlimit
+      
+     ;---Options of each tplot variable 
       new_vars=tnames('iug_aws_sgk_press')
       if new_vars[0] ne '' then begin 
          options,'iug_aws_sgk_press',ytitle='AWS-sgk!CPress.!C[hPa]'
@@ -223,17 +226,18 @@ if (downloadonly eq 0) then begin
          options,'iug_aws_sgk_vwnd',ytitle='AWS-sgk!Cvwnd!C[m/s]'
       endif 
    endif
-  ;Clear time and data buffer:
+   
+  ;---Clear time and data buffer:
    aws_time = 0
    aws_press = 0
    aws_temp = 0
    aws_rh = 0
    aws_uwnd = 0
    aws_vwnd = 0
-      
+
+  ;---Add tdegap      
    new_vars=tnames('iug_aws_sgk_press')
    if new_vars[0] ne '' then begin          
-     ;Add tdegap
       tdegap, 'iug_aws_sgk_press',/overwrite
       tdegap, 'iug_aws_sgk_temp',/overwrite
       tdegap, 'iug_aws_sgk_rh',/overwrite
@@ -242,7 +246,6 @@ if (downloadonly eq 0) then begin
    endif
 endif
  
-
 new_vars=tnames('iug_aws_*')
 if new_vars[0] ne '' then begin    
    print,'*****************************
@@ -251,7 +254,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

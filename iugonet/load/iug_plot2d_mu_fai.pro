@@ -7,23 +7,23 @@
 ;  Generate several 2-D plots from the FAI f-region observation data taken by the MU radar. 
 ;
 ;SYNTAX:
-;  iug_plot2d_mu_fai, datatype = datatype, valuename=valuename
+;  iug_plot2d_mu_fai, valuename=valuename
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_plot2d_mu_fai, datatype = 'fai'.
-;            The default is 'fai'. 
-;  valuename = tplot variable names of ionosonde observation data.  
+;  VALUENAME = tplot variable names of ionosonde observation data.  
 ;         For example, iug_plot2d_mu_fai,valuename = 'ifco16'.
 ;         The default is 'ifco16'.
-;  stime = Start time of 2-D plot of the EAR-FAI observations.
+;  STIME = Start time of 2-D plot of the EAR-FAI observations.
 ;         For example, iug_plot2d_mu_fai, stime = '2007-01-09/15:00:00'.
 ;         The default is '2007-01-09/15:00:00'.
-;  minimum = Minimum value of color plot. For example, iug_plot2d_mu_fai, min = 0.
+;  MINIMUM = Minimum value of color plot. For example, iug_plot2d_mu_fai, min = 0.
 ;         The default is 0.
-;  maximum = Maximum value of color plot. For example, iug_plot2d_mu_fai, max = 50.
+;  MAXIMUM = Maximum value of color plot. For example, iug_plot2d_mu_fai, max = 50.
 ;         The default is 50.
-;  zticks = Number of zticks to divide the bar into. There will be (zticks + 1) annotations. 
+;  ZTICKS = Number of zticks to divide the bar into. There will be (zticks + 1) annotations. 
 ;         The default is 5.
+;  CHARSIZE = Select of character size. For example, iug_plot2d_ear_fai, charsize = 1.5.
+;         The default is 1.5.
 ;         
 ;NOTES:
 ;  Before you examine this procedure, the EAR-FAI data are necceary to load.
@@ -32,7 +32,7 @@
 ;  A. Shinbori, 08/07/2013.
 ;  
 ;MODIFICATIONS:
-;
+;  A. Shinbori, 09/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -41,13 +41,12 @@
 ; $URL $
 ;-
 
-pro iug_plot2d_mu_fai,datatype=datatype, valuename = valuename, stime=stime, $
-                       minimum=minimum, maximum=maximum, zticks=zticks, charsize=charsize
-
-;***************
-;Datatype check:
-;***************
-if not keyword_set(datatype) then datatype='fai'
+pro iug_plot2d_mu_fai, valuename = valuename, $
+   stime=stime, $
+   minimum=minimum, $
+   maximum=maximum, $
+   zticks=zticks, $
+   charsize=charsize
 
 ;*****************
 ;Value name check:

@@ -9,30 +9,30 @@
 ;  and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_meteor_nc, datatype = datatype, parameter = parameter,length = length,downloadonly = downloadonly, $
+; iug_load_mu_meteor_nc, parameter = parameter,length = length,downloadonly = downloadonly, $
 ;                           trange = trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_meteor_nc, datatype = 'thermosphere'.
-;            The default is 'thermosphere'.
-;  length = Data length '1-day' or '1-month'. For example, iug_load_mu_meteor_nc, length = '1_day'.
+;  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_mu_meteor_nc, length = '1_day'.
 ;           A kind of parameters is 2 types of '1_day', and '1_month'.   
-;  parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h1t60min00'. 
+;  PARAMETER = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h1t60min00'. 
 ;             A kind of parameters is 2 types of 'h1t60min00', 'h1t30min00'.
 ;             The default is 'all'.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 06/07/2012.
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 08/08/2012.
 ; A. Shinbori, 24/12/2012.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -41,22 +41,16 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_meteor_nc, datatype = datatype, $
-   parameter = parameter, $
+pro iug_load_mu_meteor_nc, parameter = parameter, $
    length=length, $
    downloadonly = downloadonly, $
    trange = trange, $
    verbose = verbose
    
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;************************************
-;Load 'thermosphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='thermosphere'
 
 ;*****************************
 ;Load '1_day' data by default:
@@ -66,7 +60,6 @@ if (not keyword_set(length)) then length='1_day'
 ;***********
 ;parameters:
 ;***********
-
 ;--- all parameters (default)
 parameter_all = strsplit('h1t60min00 h1t60min30 h2t60min00 h2t60min30',' ', /extract)
 
@@ -98,23 +91,18 @@ endfor
 ;===================================================================
 jj=0
 for iii=0,n_elements(parameters)-1 do begin
-   if ~size(fns,/type) then begin     
-      if length eq '1_day' then begin 
-        ;
-        ;Get files for ith component:
-        ;***************************       
-         file_names = file_dailynames( $
-                      file_format='YYYY/W'+$
+   if ~size(fns,/type) then begin 
+     ;****************************
+     ;Get files for ith component:
+     ;****************************     
+      case length of
+         '1_day':file_names = file_dailynames(file_format='YYYY/W'+$
                       'YYYYMMDD',trange=trange,times=times,/unique)+'.'+site_data_lastmane[iii]+'.nc'
-      endif else if length eq '1_month' then begin
-        ;
-        ;Get files for ith component:
-        ;***************************       
-         file_names = file_dailynames( $
-                      file_format='YYYY/W'+$
+         '1_month':file_names = file_dailynames(file_format='YYYY/W'+$
                       'YYYYMM',trange=trange,times=times,/unique)+'.'+site_data_lastmane[iii]+'.nc'
-      endif
-     ;        
+      endcase
+      
+     ;===============================        
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
@@ -122,6 +110,7 @@ for iii=0,n_elements(parameters)-1 do begin
       source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/mu/meteor/nc/'+length+'/'+site_data_dir[iii]
       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/meteor/data/netcdf/'+length+'/'+site_data_dir[iii]
     
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source, /last_version)
@@ -134,7 +123,7 @@ for iii=0,n_elements(parameters)-1 do begin
    if (not keyword_set(downloadonly)) then downloadonly=0
 
    if (downloadonly eq 0) then begin
-      
+     ;====================================== 
      ;Loop on files (read the NetCDF files): 
      ;======================================
       for j=jj,n_elements(local_paths)-1 do begin
@@ -148,8 +137,7 @@ for iii=0,n_elements(parameters)-1 do begin
          cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
          glob = ncdf_inquire( cdfid )    ; Find out general info
 
-        ;Show user the size of each dimension
-
+        ;---Show user the size of each dimension
          print,'Dimensions', glob.ndims
          for i=0,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
@@ -159,19 +147,18 @@ for iii=0,n_elements(parameters)-1 do begin
                print,'    ', name, size  
          endfor
    
-        ;Now tell user about the variables
-   
+        ;---Now tell user about the variables
           print
           print, 'Variables'
           for m=0,glob.nvars-1 do begin
    
-            ;Get information about the variable
+            ;---Get information about the variable
              info = ncdf_varinq(cdfid, m)
              FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
              print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
              print, ']'
 
-            ;Get attributes associated with the variable
+            ;---Get attributes associated with the variable
              for l=0,info.natts-1 do begin
                 attname = ncdf_attname(cdfid,m,l)
                 ncdf_attget,cdfid,m,attname,attvalue
@@ -180,14 +167,14 @@ for iii=0,n_elements(parameters)-1 do begin
              endfor
           endfor
 
-         ;Calculation the start time infomation from the attribute data:
+         ;---Get time information:
           time_info=strsplit(time_data,' ',/extract)
           syymmdd=time_info[2]
           shhmmss=time_info[3]
           time_diff=strsplit(time_info[4],':',/extract)
           time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
 
-         ;Get the variable
+         ;---Get the variable
           ncdf_varget, cdfid, 'time', time
           ncdf_varget, cdfid, 'range', range
           ncdf_varget, cdfid, 'uwind', uwind
@@ -196,7 +183,7 @@ for iii=0,n_elements(parameters)-1 do begin
           ncdf_varget, cdfid, 'sig_vwind', sig_vwind
           ncdf_varget, cdfid, 'num', num
 
-         ;Definition of arrary names
+         ;---Definition of arrary names
           unix_time = dblarr(n_elements(time))
           height=fltarr(n_elements(range))
           uwind_data=fltarr(n_elements(time),n_elements(range))
@@ -206,39 +193,37 @@ for iii=0,n_elements(parameters)-1 do begin
           num_data=fltarr(n_elements(time),n_elements(range))
 
           for i=0, n_elements(time)-1 do begin
-            ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
+            ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
              unix_time[i] = double(time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2 
-            ;Replace the missing value by NAN for meteor observations: 
-             for k=0, n_elements(range)-1 do begin
-       
-                uwind_data[i,k]=uwind[0,k,i]
-                vwind_data[i,k]=vwind[0,k,i]
-                sig_uwind_data[i,k]=sig_uwind[0,k,i]
-                sig_vwind_data[i,k]=sig_vwind[0,k,i]
-                num_data[i,k]=num[0,k,i]
-                height[k]= range[k]/1000
+             
+            ;Replace missing value by NAN: 
+             uwind_data[i,*]=uwind[0,*,i]
+             vwind_data[i,*]=vwind[0,*,i]
+             sig_uwind_data[i,*]=sig_uwind[0,*,i]
+             sig_vwind_data[i,*]=sig_vwind[0,*,i]
+             num_data[i,*]=num[0,*,i]
+             height= range/1000
                   
-                a = uwind_data[i,k]            
-                wbad = where(a eq -9999,nbad)
-                if nbad gt 0 then a[wbad] = !values.f_nan
-                uwind_data[i,k] =a
-                b = vwind_data[i,k]            
-                wbad = where(b eq -9999,nbad)
-                if nbad gt 0 then b[wbad] = !values.f_nan
-                vwind_data[i,k] =b
-                c = sig_uwind_data[i,k]            
-                wbad = where(c eq -9999,nbad)
-                if nbad gt 0 then c[wbad] = !values.f_nan
-                sig_uwind_data[i,k] =c
-                d = sig_vwind_data[i,k]            
-                wbad = where(d eq -9999,nbad)
-                if nbad gt 0 then d[wbad] = !values.f_nan
-                sig_vwind_data[i,k] =d
-                e = num_data[i,k]            
-                wbad = where(e eq -9999,nbad)
-                if nbad gt 0 then e[wbad] = !values.f_nan
-                num_data[i,k] =e
-             endfor
+             a = uwind_data[i,*]            
+             wbad = where(a eq -9999,nbad)
+             if nbad gt 0 then a[wbad] = !values.f_nan
+             uwind_data[i,*] =a
+             b = vwind_data[i,*]            
+             wbad = where(b eq -9999,nbad)
+             if nbad gt 0 then b[wbad] = !values.f_nan
+             vwind_data[i,*] =b
+             c = sig_uwind_data[i,*]            
+             wbad = where(c eq -9999,nbad)
+             if nbad gt 0 then c[wbad] = !values.f_nan
+             sig_uwind_data[i,*] =c
+             d = sig_vwind_data[i,*]            
+             wbad = where(d eq -9999,nbad)
+             if nbad gt 0 then d[wbad] = !values.f_nan
+             sig_vwind_data[i,*] =d
+             e = num_data[i,*]            
+             wbad = where(e eq -9999,nbad)
+             if nbad gt 0 then e[wbad] = !values.f_nan
+             num_data[i,*] =e
           endfor
           
          ;==============================    
@@ -257,7 +242,7 @@ for iii=0,n_elements(parameters)-1 do begin
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
-     ;Acknowlegment string (use for creating tplot vars)
+     ;---Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by' $
                        + 'including text such as the MU data provided by Research Institute' $
@@ -265,28 +250,37 @@ for iii=0,n_elements(parameters)-1 do begin
                        + 'appreciate receiving a copy of the relevant publications.'
 
       if size(zon_wind,/type) eq 4 then begin
+        ;---Create tplot variable and add options for zonal wind:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
          store_data,'iug_mu_meteor_uwnd_'+parameters[iii],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
          options,'iug_mu_meteor_uwnd_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='uwnd!C[m/s]'
+        
+        ;---Create tplot variable and add options for meridional wind:
          store_data,'iug_mu_meteor_vwnd_'+parameters[iii],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
          options,'iug_mu_meteor_vwnd_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='vwnd!C[m/s]'
+         
+        ;---Create tplot variable and add options for standard deviation of zonal wind:
          store_data,'iug_mu_meteor_uwndsig_'+parameters[iii],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
          options,'iug_mu_meteor_uwndsig_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
+        
+        ;---Create tplot variable and add options for standard deviation of meridional wind:
          store_data,'iug_mu_meteor_vwndsig_'+parameters[iii],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
          options,'iug_mu_meteor_vwndsig_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
+         
+        ;---Create tplot variable and add options for meteor echoes:
          store_data,'iug_mu_meteor_mwnum_'+parameters[iii],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
          options,'iug_mu_meteor_mwnum_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='mwnum'
 
+        ;---Add options
          new_vars=tnames('iug_mu_meteor_*')
          if new_vars[0] ne '' then begin
-           ;Add options
             options, ['iug_mu_meteor_uwnd_'+parameters[iii],'iug_mu_meteor_vwnd_'+parameters[iii],$
                       'iug_mu_meteor_uwndsig_'+parameters[iii],'iug_mu_meteor_vwndsig_'+parameters[iii],$
                       'iug_mu_meteor_mwnum_'+parameters[iii]], 'spec', 1
          endif
       endif
   
-     ;Clear time and data buffer:
+     ;---Clear time and data buffer:
       site_time=0
       zon_wind=0
       mer_wind=0
@@ -296,14 +290,14 @@ for iii=0,n_elements(parameters)-1 do begin
 
       new_vars=tnames('iug_mu_meteor_*')
       if new_vars[0] ne '' then begin  
-        ;Add tdegap
+        ;---Add tdegap
          tdegap, 'iug_mu_meteor_uwnd_'+parameters[iii],dt=3600,/overwrite
          tdegap, 'iug_mu_meteor_vwnd_'+parameters[iii],dt=3600,/overwrite
          tdegap, 'iug_mu_meteor_uwndsig_'+parameters[iii],dt=3600,/overwrite
          tdegap, 'iug_mu_meteor_vwndsig_'+parameters[iii],dt=3600,/overwrite
          tdegap, 'iug_mu_meteor_mwnum_'+parameters[iii],dt=3600,/overwrite
    
-        ;Add tclip
+        ;---Add tclip
          tclip, 'iug_mu_meteor_uwnd_'+parameters[iii],-400,400,/overwrite
          tclip, 'iug_mu_meteor_vwnd_'+parameters[iii],-400,400,/overwrite
          tclip, 'iug_mu_meteor_uwndsig_'+parameters[iii],0,800,/overwrite
@@ -322,7 +316,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

@@ -5,18 +5,17 @@
 ;  and Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mu_trop_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_trop_nc, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 19/09/2010.
 ;
@@ -27,6 +26,7 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 19/12/2012.
 ; A. Shinbori, 27/07/2013.
+; A. Shinbori, 08/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -35,23 +35,17 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_trop_nc, datatype = datatype, $
-  downloadonly=downloadonly, $
+pro iug_load_mu_trop_nc, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;****************************************
-;Load 'troposphere_wind' data by default:
-;****************************************
-if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;*******************
-;defition of height:
+;Defition of height:
 ;*******************
 height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,3.475,3.623,3.770,3.918,4.066,4.213,4.361,4.509,4.657,4.804,'+$
                    '4.952,5.100,5.248,5.395,5.543,5.691,5.838,5.986,6.134,6.282,6.429,6.577,6.725,6.872,7.020,7.168,7.316,7.463,7.611,7.759,'+$
@@ -69,7 +63,7 @@ height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,
                    '15.975,16.125,16.275,16.425,16.575,16.725,16.875,17.025,17.175,17.325,17.475,17.625,17.775,17.925,18.075,18.225,18.375,'+$
                    '18.525,18.675,18.825,18.975,19.125,19.275,19.425,19.575,19.725,19.875',',',/extract)
 
-;data list which applies the above height data:
+;---Data list which applies the above height data:
 f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 
 ;******************************************************************
@@ -82,20 +76,22 @@ f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 if ~size(fns,/type) then begin
-
+  ;****************************
   ;Get files for ith component:
-  ;***************************
+  ;****************************
    file_names = file_dailynames( $
    file_format='YYYYMM/YYYYMMDD/'+$
                    'YYYYMMDD',trange=trange,times=times,/unique)+'.nc'
-  ;
+                   
+  ;===============================
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/troposphere/nc/'
    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/data/data/ver01.0807_1.02/'
-    
+   
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -109,7 +105,7 @@ if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
 
-  ;Definition of parameter:
+  ;---Definition of parameter:
    mu_time=0
    zon_wind=0
    mer_wind=0
@@ -133,8 +129,7 @@ if (downloadonly eq 0) then begin
       cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
       glob = ncdf_inquire( cdfid )    ; Find out general info
 
-     ;Show user the size of each dimension
-
+     ;---Show user the size of each dimension
       print,'Dimensions', glob.ndims
       for i=0,glob.ndims-1 do begin
          ncdf_diminq, cdfid, i, name,size
@@ -144,19 +139,18 @@ if (downloadonly eq 0) then begin
             print,'    ', name, size  
       endfor
 
-     ;Now tell user about the variables
-
+     ;---Now tell user about the variables
       print
       print, 'Variables'
       for m=0,glob.nvars-1 do begin
 
-        ;Get information about the variable
+        ;---Get information about the variable
          info = ncdf_varinq(cdfid, m)
          FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
          print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
          print, ']'
 
-        ;Get attributes associated with the variable
+        ;---Get attributes associated with the variable
          for l=0,info.natts-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
@@ -165,14 +159,14 @@ if (downloadonly eq 0) then begin
          endfor
       endfor
 
-     ;Calculation the start time infomation from the attribute data:
+     ;---Get time infomation:
       time_info=strsplit(time_data,' ',/extract)
       syymmdd=time_info[2]
       shhmmss=time_info[3]
       time_diff=strsplit(time_info[4],':',/extract)
       time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
      
-     ;Get the variable
+     ;---Get the variable
       ncdf_varget, cdfid, 'lat', lat
       ncdf_varget, cdfid, 'lon', lon
       ncdf_varget, cdfid, 'sealvl', sealvl
@@ -202,12 +196,12 @@ if (downloadonly eq 0) then begin
       ncdf_varget, cdfid, 'ndpl', ndpl
       ncdf_varget, cdfid, 'pnoise', pnoise
 
-     ;Calculation of unix time:
+     ;---Get dat information:
       year = fix(strmid(strtrim(string(date),1),0,4))
       month = fix(strmid(strtrim(string(date),1),4,2))
       day = fix(strmid(strtrim(string(date),1),6,2))
                            
-     ;Definition of arrary names
+     ;---Definition of arrary names
       data_point=120
       unix_time = dblarr(n_elements(time))
       height2 = fltarr(n_elements(data_point))
@@ -219,14 +213,14 @@ if (downloadonly eq 0) then begin
       dpl1_mu=fltarr(n_elements(time),data_point,n_elements(beam))+!values.f_nan
       pnoise1_mu=fltarr(n_elements(time),n_elements(beam))+!values.f_nan
 
-     ;File search:
+     ;---File search:
       fname=strsplit(strmid(file,10,13,/REVERSE_OFFSET),'.',/extract)
       idx=where(fname[0] eq f_list)
      
-     ;Definition of altitude and data arraies:     
+     ;---Definition of altitude and data arraies:     
       altitude = fltarr(120)
     
-     ;Enter the altitude information:
+     ;---Enter the altitude information:
       if idx eq -1 then begin
          height_vw = float(height_v)
          height_mwzw = float(height_zm)
@@ -234,9 +228,10 @@ if (downloadonly eq 0) then begin
       endif
     
       for i=0, n_elements(time)-1 do begin
-        ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
+        ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
          unix_time[i] = double(time[i]) +time_double(syymmdd+'/'+shhmmss)-time_diff2 
-        ;Enter the missing value:
+        
+        ;---Replace missing value by NaN:
          d_num=n_elements(range)
          st_num=120-d_num                       
          for k=0, n_elements(range)-1 do begin
@@ -297,7 +292,7 @@ if (downloadonly eq 0) then begin
    endfor
 
    if n_elements(mu_time) gt 1 then begin
-     ;Definition of arrary names
+     ;---Definition of arrary names
       bname2=strarr(n_elements(beam))
       bname=strarr(n_elements(beam))
       pwr2_mu=fltarr(n_elements(mu_time),120)
@@ -308,7 +303,7 @@ if (downloadonly eq 0) then begin
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
-     ;Acknowlegment string (use for creating tplot vars)
+     ;---Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
                        + 'including text such as the MU data provided by Research Institute ' $
@@ -320,42 +315,54 @@ if (downloadonly eq 0) then begin
                        + 'Sports, Science and Technology (MEXT), Japan.'
                     
       if size(pwr1,/type) eq 4 then begin
+        ;---Create tplot variable for zonal wind:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))        
-        ;Store data of wind velocity
          store_data,'iug_mu_trop_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
+         
+        ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_uwnd')
          if new_vars[0] ne '' then begin         
             options,'iug_mu_trop_uwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
             options, 'iug_mu_trop_uwnd','spec',1
             tdegap, 'iug_mu_trop_uwnd',/overwrite
-         endif  
+         endif 
+          
+        ;---Create tplot variable for meridional wind:
          store_data,'iug_mu_trop_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
+        
+        ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_vwnd')
          if new_vars[0] ne '' then begin           
             options,'iug_mu_trop_vwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
             options, 'iug_mu_trop_vwnd','spec',1
             tdegap, 'iug_mu_trop_vwnd',/overwrite
          endif       
+         
+        ;---Create tplot variable for vertical wind:
          store_data,'iug_mu_trop_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
+        
+        ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_wwnd')
          if new_vars[0] ne '' then begin         
             options,'iug_mu_trop_wwnd',ytitle='MUR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
             options, 'iug_mu_trop_wwnd','spec',1
             tdegap, 'iug_mu_trop_wwnd',/overwrite
          endif           
-        ;Store data of echo intensity, spectral width, and niose level:
+        
+        ;Create tplot variables for echo intensity, spectral width, Doppler velocity and niose level:
          for l=0, n_elements(beam)-1 do begin
             bname2[l]=string(beam[l]+1)
             bname[l]=strsplit(bname2[l],' ', /extract)
-          ;  for k=0, n_elements(range)-1 do begin
-          ;     height2[k]=height[k,l]
-          ;  endfor
             for i=0, n_elements(mu_time)-1 do begin
                for k=0, 119 do begin
                   pwr2_mu[i,k]=pwr1[i,k,l]
                endfor
             endfor
+          
+           ;---Create tplot variable for echo power:
             store_data,'iug_mu_trop_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
+          
+           ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_pwr*')
             if new_vars[0] ne '' then begin
                options,'iug_mu_trop_pwr'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
@@ -367,7 +374,11 @@ if (downloadonly eq 0) then begin
                   wdt2_mu[i,k]=wdt1[i,k,l]
                endfor
             endfor
+            
+           ;---Create tplot variable for spectral width: 
             store_data,'iug_mu_trop_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
+           
+           ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_wdt*')
             if new_vars[0] ne '' then begin
                options,'iug_mu_trop_wdt'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
@@ -378,8 +389,12 @@ if (downloadonly eq 0) then begin
                for k=0, 119 do begin
                   dpl2_mu[i,k]=dpl1[i,k,l]
                endfor
-            endfor             
+            endfor   
+            
+           ;---Create tplot variable for Doppler velocity:          
             store_data,'iug_mu_trop_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
+            
+           ;---Add options and tdegap: 
             new_vars=tnames('iug_mu_trop_dpl*')
             if new_vars[0] ne '' then begin
                options,'iug_mu_trop_dpl'+bname[l],ytitle='MUR-trop!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
@@ -389,7 +404,11 @@ if (downloadonly eq 0) then begin
             for i=0, n_elements(mu_time)-1 do begin
                pnoise2_mu[i]=pn1[i,l]
             endfor
+           
+           ;---Create tplot variable for noise level:
             store_data,'iug_mu_trop_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
+            
+           ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_pn*')
             if new_vars[0] ne '' then begin
                options,'iug_mu_trop_pn'+bname[l],ytitle='MUR-trop!Cpn'+bname[l]+'!C[dB]'
@@ -406,7 +425,7 @@ if (downloadonly eq 0) then begin
    endif
 endif
 
-;Clear time and data buffer:
+;---Clear time and data buffer:
 mu_time=0
 zon_wind=0
 mer_wind=0
@@ -417,7 +436,7 @@ dpl1 = 0
 pn1 = 0
       
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

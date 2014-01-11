@@ -7,12 +7,10 @@
 ;  Generate several ionogram plots from the ionogram data taken by the ionosonde. 
 ;
 ;SYNTAX:
-;  iug_plot2d_ionogram, datatype = datatype, valuename=valuename
+;  iug_plot2d_ionogram, valuename=valuename
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, plot_iug_ionogram, datatype = 'ionosphere'.
-;            The default is 'ionosphere'. 
-;  valuename = tplot variable names of ionosonde observation data.  
+;  VALUENAME = tplot variable names of ionosonde observation data.  
 ;         For example, iug_plot2d_ionogram,valuename = 'iug_ionosonde_sgk_ionogram'.
 ;         The default is 'iug_ionosonde_sgk_ionogram'.
 ;
@@ -20,7 +18,7 @@
 ;  A. Shinbori, 11/01/2013.
 ;  
 ;MODIFICATIONS:
-;
+;  A. Shinbori, 09/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -29,12 +27,7 @@
 ; $URL $
 ;-
 
-pro iug_plot2d_ionogram,datatype=datatype, valuename=valuename
-
-;***************
-;Datatype check:
-;***************
-if not keyword_set(datatype) then datatype='ionosphere'
+pro iug_plot2d_ionogram, valuename=valuename
 
 ;*****************
 ;Value name check:

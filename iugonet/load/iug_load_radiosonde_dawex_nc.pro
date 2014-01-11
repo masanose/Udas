@@ -9,29 +9,29 @@
 ;  and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_radiosonde_dawex_nc, datatype = datatype, site=site, $
+; iug_load_radiosonde_dawex_nc, site=site, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_radiosonde_dawex_nc, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;   site = DAWEX observation site.  
+;KEYWOARDS: 
+;   SITE = DAWEX observation site.  
 ;          For example, iug_load_radiosonde_dawex_nc, site = 'drw'.
 ;          The default is 'all', i.e., load all available observation points.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ;  A. Shinbori, 19/12/2012.
 ;  
 ;MODIFICATIONS:
 ;  A. Shinbori, 26/02/2013.
 ;  A. Shinbori, 30/05/2013.
+;  A. Shinbori, 08/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -40,25 +40,19 @@
 ; $URL $
 ;-
 
-pro iug_load_radiosonde_dawex_nc, datatype = datatype, $
-  site=site, $
+pro iug_load_radiosonde_dawex_nc, site=site, $
   downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;***********************************
-;Load 'troposphere' data by default:
-;***********************************
-if (not keyword_set(datatype)) then datatype='troposhere'
 
-;***********
-;site codes:
-;***********
+;****************
+;Site code check:
+;****************
 ;--- all sites (default)
 site_code_all = strsplit('drw gpn ktr',' ', /extract)
 
@@ -75,7 +69,7 @@ endif
 print, site_code
 
 ;*************
-;data premane:
+;Data premane:
 ;*************
 site_data_premane = strsplit('nD nG nK',' ', /extract)
 
@@ -96,49 +90,43 @@ endfor
 ;Define FILE_NAMES, and load data:
 ;=================================
 
-;Definition of parameter and array:
+;---Definition of parameter and array:
 h=0
 jj=0
-kk=0
-kkk=intarr(3)
+k=0
+n_site=intarr(3)
 
-;In the case that the parameters are except for all.'
+;---In the case that the parameters are except for all.'
 if n_elements(site_code) le 3 then begin
    h_max=n_elements(site_code)
    for i=0,n_elements(site_code)-1 do begin
-      if site_code[i] eq 'drw' then begin
-         kkk[i]=0 
-      endif
-      if site_code[i] eq 'gpn' then begin
-         kkk[i]=1 
-      endif
-      if site_code[i] eq 'ktr' then begin
-         kkk[i]=2 
-      endif
+      case site_code[i] of
+         'drw':n_site[i]=0 
+         'gpn':n_site[i]=1 
+         'ktr':n_site[i]=2 
+      endcase
    endfor
 endif
 
 for ii=0,n_elements(site_code)-1 do begin
-   kk=kkk[ii]
+   k=n_site[ii]
    if ~size(fns,/type) then begin
-     ;Definition of blr site names:
-      if site_code[ii] eq 'drw' then begin
-         site_code2='Dr'
-      endif
-      if site_code[ii] eq 'gpn' then begin
-         site_code2='Gp'
-      endif
-      if site_code[ii] eq 'ktr' then begin
-         site_code2='Kh'
-      endif       
+     ;---Definition of DAWEX radiosonde site names:
+      case site_code[ii] of
+         'drw':site_code2='Dr'
+         'gpn':site_code2='Gp'
+         'ktr':site_code2='Kh'
+      endcase     
+        
      ;****************************
      ;Get files for ith component:
      ;****************************     
       hour_res = 1  
       file_names = file_dailynames( $
-                   file_format='YYYY/'+site_data_premane[kk]+$
+                   file_format='YYYY/'+site_data_premane[k]+$
                    'MMDDhh',trange=trange,hour_res=hour_res,times=times,/unique)+'.nc'
-     ;        
+     
+     ;===============================        
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
@@ -146,6 +134,7 @@ for ii=0,n_elements(site_code)-1 do begin
       source.local_data_dir =  root_data_dir() + 'iugonet/rish/DAWEX/'+site_code[ii]+'/radiosonde/nc/'
       source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/DAWEX/data/'+site_code2+'/nc/'
     
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source, /last_version)
@@ -159,6 +148,7 @@ for ii=0,n_elements(site_code)-1 do begin
 
    if (downloadonly eq 0) then begin
 
+     ;=========================
      ;Definition of parameters:
      ;=========================
       sonde_time = 0
@@ -169,6 +159,7 @@ for ii=0,n_elements(site_code)-1 do begin
       sonde_uwind = 0
       sonde_vwind = 0
 
+     ;==============
      ;Loop on files: 
      ;==============
       for j=jj,n_elements(local_paths)-1 do begin
@@ -182,7 +173,7 @@ for ii=0,n_elements(site_code)-1 do begin
          cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
          glob = ncdf_inquire( cdfid )    ; Find out general info
 
-        ;Show user the size of each dimension
+        ;---Show user the size of each dimension
 
          print,'Dimensions', glob.ndims
          for i=0,glob.ndims-1 do begin
@@ -193,19 +184,19 @@ for ii=0,n_elements(site_code)-1 do begin
                print,'    ', name, size  
          endfor
 
-       ; Now tell user about the variables
+        ;---Now tell user about the variables
 
          print
          print, 'Variables'
          for m=0,glob.nvars-1 do begin
 
-          ; Get information about the variable
+           ;---Get information about the variable
             info = ncdf_varinq(cdfid, m)
             FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
             print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
             print, ']'
 
-           ; Get attributes associated with the variable
+           ;---Get attributes associated with the variable
             for l=0,info.natts-1 do begin
                attname = ncdf_attname(cdfid,m,l)
                ncdf_attget,cdfid,m,attname,attvalue
@@ -214,7 +205,7 @@ for ii=0,n_elements(site_code)-1 do begin
             endfor
          endfor
 
-        ; Calculation the start time infomation from the attribute data:
+        ;---Calculation the start time infomation from the attribute data:
          time_info=strsplit(time_data,' ',/extract)
          time_units = time_info[0]
          syymmdd=time_info[2]
@@ -226,7 +217,7 @@ for ii=0,n_elements(site_code)-1 do begin
          if time_units eq 'minutes' then dt = 60.0
          if time_units eq 'hours' then dt = 3600.0
          
-       ; Get the variable
+        ;---Get the variable
          ncdf_varget, cdfid, 'lat', lat
          ncdf_varget, cdfid, 'lon', lon
          ncdf_varget, cdfid, 'height', ht
@@ -240,7 +231,7 @@ for ii=0,n_elements(site_code)-1 do begin
 
          ncdf_close,cdfid  ; done
 
-        ;Definition of arraies:
+        ;---Definition of arraies:
          p = fltarr(1,400)
          temp = fltarr(1,400)
          rh = fltarr(1,400)
@@ -249,12 +240,14 @@ for ii=0,n_elements(site_code)-1 do begin
          vwnd = fltarr(1,400)
       
          for k=0, n_elements(ht)-1 do begin
+           ;========================
            ;Get height array number:
            ;========================
             h_num = ht[k]/100
 
-           ;get data of press., temp., rh, dewp, uwind, vwind:
-           ;=======================================================
+           ;==================================================
+           ;Get data of press., temp., rh, dewp, uwind, vwind:
+           ;==================================================
             p[0,h_num] = press[k]
             temp[0,h_num] = temperature[k]
             rh[0,h_num] = relative_humidity[k]
@@ -262,7 +255,7 @@ for ii=0,n_elements(site_code)-1 do begin
             uwnd[0,h_num] = uwind[k]
             vwnd[0,h_num] = vwind[k]     
          endfor   
-        ;Replace missing number by NaN
+        ;---Replace missing number by NaN
          for i=0, 399 do begin
             a = p[*,i]            
             wbad = where(a eq -999.0 || a eq 0.0,nbad)
@@ -305,7 +298,7 @@ for ii=0,n_elements(site_code)-1 do begin
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
-     ;Acknowlegment string (use for creating tplot vars)
+     ;---Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the dawin sonde campaine data, we ask that you' $
                        + 'acknowledge us in your use of the data. This may be done by' $
                        + 'including text such as the dawin donde campaine data provided by Research Institute' $
@@ -316,6 +309,7 @@ for ii=0,n_elements(site_code)-1 do begin
                        + 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
                        
       if size(sonde_press,/type) eq 4 then begin 
+        ;---Create tplot variables and options
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
          store_data,'iug_radiosonde_'+site_code[ii]+'_press',data={x:sonde_time, y:sonde_press, v:height},dlimit=dlimit
          options,'iug_radiosonde_'+site_code[ii]+'_press',ytitle='RSND-'+site_code[ii]+'!CHeight!C[km]',ztitle='Press.!C[hPa]'
@@ -329,14 +323,12 @@ for ii=0,n_elements(site_code)-1 do begin
          options,'iug_radiosonde_'+site_code[ii]+'_uwnd',ytitle='RSND-'+site_code[ii]+'!CHeight!C[km]',ztitle='uwnd!C[m/s]'
          store_data,'iug_radiosonde_'+site_code[ii]+'_vwnd',data={x:sonde_time, y:sonde_vwind, v:height},dlimit=dlimit
          options,'iug_radiosonde_'+site_code[ii]+'_vwnd',ytitle='RSND-'+site_code[ii]+'!CHeight!C[km]',ztitle='vwnd!C[m/s]'
-
-        ;Add options
          options, ['iug_radiosonde_'+site_code[ii]+'_press','iug_radiosonde_'+site_code[ii]+'_temp',$
                    'iug_radiosonde_'+site_code[ii]+'_rh','iug_radiosonde_'+site_code[ii]+'_dewp',$
                    'iug_radiosonde_'+site_code[ii]+'_uwnd','iug_radiosonde_'+site_code[ii]+'_vwnd'], 'spec', 1
       endif
 
-     ;Clear time and data buffer:
+     ;---Clear time and data buffer:
       sonde_time = 0
       sonde_press = 0
       sonde_temp = 0
@@ -345,7 +337,7 @@ for ii=0,n_elements(site_code)-1 do begin
       sonde_uwind = 0
       sonde_vwind = 0
        
-     ;Add tdegap
+     ;---Add tdegap
       new_vars=tnames('iug_radiosonde_*')
       if new_vars[0] ne '' then begin  
          tdegap, 'iug_radiosonde_'+site_code[ii]+'_press',/overwrite
@@ -367,7 +359,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;**************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;**************************
 print, '****************************************************************
 print, 'Acknowledgement'

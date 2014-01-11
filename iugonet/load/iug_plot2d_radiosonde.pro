@@ -7,12 +7,10 @@
 ;  Generate several height profiles from the radiosonde data. 
 ;
 ;SYNTAX:
-;  iug_plot2d_radiosonde, datatype = datatype, site=site
+;  iug_plot2d_radiosonde, site=site
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_plot2d_radiosonde, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;  site = Radiosonde observation sites.  
+;KEYWOARDS: 
+;  SITE = Radiosonde observation sites.  
 ;         For example, iug_plot2d_radiosonde,site = 'sgk'.
 ;         The default is 'sgk'.
 ;
@@ -20,7 +18,7 @@
 ;  A. Shinbori, 30/05/2013.
 ;  
 ;MODIFICATIONS:
-;
+;  A. Shinbori, 09/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -29,12 +27,7 @@
 ; $URL $
 ;-
 
-pro iug_plot2d_radiosonde,datatype=datatype, site=site
-
-;***************
-;Datatype check:
-;***************
-if not keyword_set(datatype) then datatype='troposphere'
+pro iug_plot2d_radiosonde, site=site
 
 ;****************
 ;Site code check:

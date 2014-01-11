@@ -9,21 +9,19 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_ear_iono_er_nc, datatype = datatype, parameter1=parameter1, $
-;                          downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_ear_iono_er_nc, parameter=parameter, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_ear_iono_er_nc, datatype = 'fai'.
-;            The default is 'fai'. 
-;  parameter1 = first parameter name of EAR FAI obervation data.  
+;  PARAMETER = first parameter name of EAR FAI obervation data.  
 ;          For example, iug_load_ear_iono_er_nc, parameter1 = 'eb1p2a'.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
+;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;                 
 ;DATA AVAILABILITY:
 ;  Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
@@ -40,7 +38,8 @@
 ; A. Shinbori, 17/12/2012.
 ; A. Shinbori, 08/07/2013.
 ; A. Shinbori, 18/08/2013.
-;  
+; A. Shinbori, 08/01/2014. 
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -49,41 +48,33 @@
 ;-
 
 
-pro iug_load_ear_iono_er_nc, datatype = datatype, $
-  parameter1=parameter1, $
+pro iug_load_ear_iono_er_nc, parameter=parameter, $
   downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;**********************************
-;Load 'ionosphere' data by default:
-;**********************************
-if (not keyword_set(datatype)) then datatype='fai'
 
 ;***********
-;parameters1:
+;parameters:
 ;***********
-;--- all parameters1 (default)
-parameter1_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a '+$
-                          'eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e eb3p4f eb3p4g eb3p4h eb4p2c eb4p2d '+$
-                          'eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a ',$
-                          ' ', /extract)
+;--- all parameters (default)
+parameter_all = strsplit('eb1p2a eb1p2b eb1p2c eb2p1a eb3p2a eb3p2b eb3p4a eb3p4b eb3p4c eb3p4d eb3p4e '+$
+                         'eb3p4f eb3p4g eb3p4h eb4p2c eb4p2d eb4p4 eb4p4a eb4p4b eb4p4d eb5p4a',' ', /extract)
 
-;--- check site codes
-if(not keyword_set(parameter1)) then parameter1='all'
-parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
+;--- check parameters
+if(not keyword_set(parameter)) then parameter='all'
+parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 
 ;*****************
-;defition of unit:
+;Defition of unit:
 ;*****************
-;--- all parameters2 (default)
+;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;******************************************************************
@@ -98,20 +89,22 @@ unit_all = strsplit('m/s dB',' ', /extract)
 jj=0
 for ii=0,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
-
+     ;****************************
      ;Get files for ith component:
-     ;***************************
+     ;****************************
       file_names = file_dailynames( $
       file_format='YYYY/YYYYMMDD/'+$
                   'YYYYMMDD',trange=trange,times=times,/unique)+'.fai'+parameters[ii]+'.nc'
-     ;
+                  
+     ;===============================
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/fai/e_region/nc/'
       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data-fai/data/nc/'
-    
+      
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source)
@@ -125,20 +118,20 @@ for ii=0,n_elements(parameters)-1 do begin
 
    if (downloadonly eq 0) then begin
 
-     ;===================================================
+      ;===========================================================
      ;read data, and create tplot vars at each parameter:
-     ;====================================================
+     ;===========================================================
      ;Read the files:
      ;===============
    
-     ;Definition of time and parameters:
+     ;---Definition of time and parameters:
       ear_time=0
       pwr1 = 0
       wdt1 = 0
       dpl1 = 0
       pn1 = 0
       
-     ;==============
+     ;============== 
      ;Loop on files: 
      ;==============    
       for j=jj,n_elements(local_paths)-1 do begin
@@ -152,44 +145,44 @@ for ii=0,n_elements(parameters)-1 do begin
          cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
          glob = ncdf_inquire( cdfid )    ; Find out general info
 
-        ;Show user the size of each dimension
+        ;---Show user the size of each dimension
          print,'Dimensions', glob.ndims
          for i=0,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
             if i eq glob.recdim then  $
                print,'    ', name, size, '(Unlimited dim)' $
-               else      $
+            else      $
                print,'    ', name, size  
-            endfor
-
-           ;Now tell user about the variables
-            print
-            print, 'Variables'
-            for m=0,glob.nvars-1 do begin
-
-              ;Get information about the variable
-               info = ncdf_varinq(cdfid, m)
-               FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
-               print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
-               print, ']'
-  
-              ;Get attributes associated with the variable
-               for l=0,info.natts-1 do begin
-                  attname = ncdf_attname(cdfid,m,l)
-                  ncdf_attget,cdfid,m,attname,attvalue
-                  print,' Attribute ', attname, '=', string(attvalue)
-                  if (info.name eq 'time') and (attname eq 'units') then time_data=string(attvalue)
-            endfor
          endfor
 
-        ;Calculation the start time infomation from the attribute data:
+        ;---Now tell user about the variables
+         print
+         print, 'Variables'
+         for m=0,glob.nvars-1 do begin
+           
+           ;---Get information about the variable
+            info = ncdf_varinq(cdfid, m)
+            FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
+            print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
+            print, ']'
+
+           ;---Get attributes associated with the variable
+            for l=0,info.natts-1 do begin
+               attname = ncdf_attname(cdfid,m,l)
+               ncdf_attget,cdfid,m,attname,attvalue
+               print,' Attribute ', attname, '=', string(attvalue)
+               if (info.name eq 'time') and (attname eq 'units') then time_data=string(attvalue)
+            endfor
+         endfor
+    
+        ;---Get time information:
          time_info=strsplit(time_data,' ',/extract)
          syymmdd=time_info[2]
          shhmmss=time_info[3]
          time_diff=strsplit(time_info[4],':',/extract)
          time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
      
-        ;Get the variable
+        ;---Get the variable
          ncdf_varget, cdfid, 'lat', lat
          ncdf_varget, cdfid, 'lon', lon
          ncdf_varget, cdfid, 'sealvl', sealvl
@@ -212,12 +205,12 @@ for ii=0,n_elements(parameters)-1 do begin
          ncdf_varget, cdfid, 'dpl', dpl
          ncdf_varget, cdfid, 'pnoise', pnoise
 
-        ;Calculation of unix time:
+        ;---Get date information:
          year = fix(strmid(strtrim(string(date),1),0,4))
          month = fix(strmid(strtrim(string(date),1),4,2))
          day = fix(strmid(strtrim(string(date),1),6,2))
-                                
-        ;Definition of arrary names
+                          
+        ;---Definition of arrary names
          height2 = fltarr(n_elements(range))
          unix_time = dblarr(n_elements(time))
          pwr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
@@ -227,10 +220,12 @@ for ii=0,n_elements(parameters)-1 do begin
          pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
          for i=0, n_elements(time)-1 do begin
-           ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)      
-            unix_time[i] = double(time[i]) +time_double(string(syymmdd)+'/'+string(shhmmss))-double(time_diff2)           
+           ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
+            unix_time[i] = double(time[i]) +time_double(string(syymmdd)+'/'+string(shhmmss))-double(time_diff2)
+           
+           ;---Replace missing value by NaN:                            
             for k=0, n_elements(range)-1 do begin
-               for l=0, n_elements(beam)-1 do begin            
+               for l=0, n_elements(beam)-1 do begin
                   a = pwr[k,i,l]            
                   wbad = where(a eq 10000000000,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
@@ -253,12 +248,12 @@ for ii=0,n_elements(parameters)-1 do begin
                wbad = where(d eq 10000000000,nbad)
                if nbad gt 0 then d[wbad] = !values.f_nan
                pnoise[i,l] =d
-               pnoise1_ear[i,l]=pnoise[i,l]     
+               pnoise1_ear[i,l]=pnoise[i,l]           
             endfor
          endfor
          ncdf_close,cdfid  ; done
- 
-        ;Calculation of SNR
+       
+        ;---Calculation of SNR
          snr=fltarr(n_elements(time),n_elements(range),n_elements(beam)) 
          for i=0,n_elements(time)-1 do begin
             for l=0,n_elements(beam)-1 do begin
@@ -282,27 +277,27 @@ for ii=0,n_elements(parameters)-1 do begin
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
-     ;Acknowlegment string (use for creating tplot vars)
+     ;---Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for ' $
                        + 'Sustainable Humanosphere (RISH), Kyoto University and is operated by ' $
                        + 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. ' $
-                       + 'Distribution of the data has been partly supported by the IUGONET ' $
+                       + 'Distribution of the data has been partly supported by the IUGONET '$
                        + '(Inter-university Upper atmosphere Global Observation NETwork) project ' $
                        + '(http://www.iugonet.org/) funded by the Ministry of Education, Culture, ' $
                        + 'Sports, Science and Technology (MEXT), Japan.'
-                   
+                       
       if n_elements(ear_time) gt 1 then begin
          bname2=strarr(n_elements(beam))
          bname=strarr(n_elements(beam))
          pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
          wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
          dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
-         pnoise2_ear=fltarr(n_elements(ear_time)) 
          snr2_ear=fltarr(n_elements(ear_time),n_elements(range))
+         pnoise2_ear=fltarr(n_elements(ear_time)) 
     
          if size(pwr1,/type) eq 4 then begin
-            dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))         
-           ;Store data of wind velocity
+           ;---Create tplot variable for each parameter:
+            dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))         
             for l=0, n_elements(beam)-1 do begin
                bname2[l]=string(beam[l]+1)
                bname[l]=strsplit(bname2[l],' ', /extract)
@@ -314,70 +309,92 @@ for ii=0,n_elements(parameters)-1 do begin
                      pwr2_ear[i,k]=pwr1[i,k,l]
                   endfor
                endfor
+              
+              ;---Create tplot variable for echo power: 
                store_data,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
+      
+              ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pwr'+bname[l])
-               if new_vars[0] ne '' then begin 
+               if new_vars[0] ne '' then begin
                   options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='pwr'+bname[l]+'!C[dB]'
                   options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], /overwrite
-               endif             
+               endif
                for i=0, n_elements(ear_time)-1 do begin
                   for k=0, n_elements(range)-1 do begin
                      wdt2_ear[i,k]=wdt1[i,k,l]
                   endfor
                endfor
+               
+              ;---Create tplot variable for spectral width: 
                store_data,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
+              
+              ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_wdt'+bname[l])
                if new_vars[0] ne '' then begin
                   options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='wdt'+bname[l]+'!C[m/s]'
                   options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], /overwrite
-               endif            
+               endif 
                for i=0, n_elements(ear_time)-1 do begin
                   for k=0, n_elements(range)-1 do begin
                      dpl2_ear[i,k]=dpl1[i,k,l]
                   endfor
                endfor
+              
+              ;---Create tplot variable for Doppler velocity:
                store_data,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
+              
+              ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_dpl'+bname[l])
                if new_vars[0] ne '' then begin
                   options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='dpl'+bname[l]+'!C[m/s]'
                   options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
-               endif  
+               endif
                for i=0, n_elements(ear_time)-1 do begin
                   for k=0, n_elements(range)-1 do begin
                      snr2_ear[i,k]=snr1[i,k,l]
                   endfor
                endfor
+              
+              ;---Create tplot variable for singal to noise ratio:
                store_data,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],data={x:ear_time, y:snr2_ear, v:height2},dlimit=dlimit
+              
+              ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_snr'+bname[l])
                if new_vars[0] ne '' then begin
                   options,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],ytitle='EAR-iono!CHeight!C[km]',ztitle='snr'+bname[l]+'!C[dB]'
                   options,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l], /overwrite
-               endif            
+               endif 
                for i=0, n_elements(time)-1 do begin
                   pnoise2_ear[i]=pn1[i,l]
-               end
+               endfor
+               
+              ;---Create tplot variable for noise level:
                store_data,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
+              
+              ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pn'+bname[l])
                if new_vars[0] ne '' then begin
                   options,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],ytitle='pn'+bname[l]+'!C[dB]' 
-                  tdegap, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], /overwrite          
-               endif
+                  tdegap, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], /overwrite  
+               endif        
             endfor
          endif
+      
          new_vars=tnames('iug_ear_fai*')
-         if new_vars[0] ne '' then begin   
-            print,'*****************************
+         if new_vars[0] ne '' then begin      
+            print,'**********************************************************************************
             print,'Data loading is successful!!'
-            print,'*****************************
+            print,'**********************************************************************************
          endif
       endif
    endif
  
-  ;Clear time and data buffer:
+ 
+  ;---Clear time and data buffer:
    ear_time=0
    pwr1 = 0
    wdt1 = 0
@@ -389,7 +406,7 @@ for ii=0,n_elements(parameters)-1 do begin
 endfor
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

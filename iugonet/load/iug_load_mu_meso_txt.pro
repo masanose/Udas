@@ -9,25 +9,23 @@
 ;  loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_meso_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
-;                          downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mu_meso_txt, level=level, parameter=parameter, $
+;                       downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_meso_txt, datatype = 'mesosphere'.
-;            The default is 'mesosphere'. 
-;  parameter1 = Parameter name of MU mesosphere obervation data.  
+;  PARAMETER = Parameter name of MU mesosphere obervation data.  
 ;          For example, iug_load_mu_meso_txt, parameter1 = 'dpl1'.
 ;          The default is 'all', i.e., load all available parameters.
-;  parameter2 = Choice of original and screening data of MU mesosphere obervation.  
+;  LEVEL = Choice of original and screening data of MU mesosphere obervation.  
 ;          For example, iug_load_mu_meso_txt, parameter2 = 'screening'.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;CODE:
 ; A. Shinbori, 25/07/2012.
@@ -35,6 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -43,9 +42,8 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_meso_txt, datatype = datatype, $
-   parameter1=parameter1, $
-   parameter2=parameter2, $
+pro iug_load_mu_meso_txt, parameter=parameter, $
+   level=level, $
    downloadonly=downloadonly, $
    trange=trange, $
    verbose=verbose
@@ -55,42 +53,36 @@ pro iug_load_mu_meso_txt, datatype = datatype, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
- 
-;**********************************
-;Load 'mesosphere' data by default:
-;**********************************
-if (not keyword_set(datatype)) then datatype='mesosphere'
-
-;******************
-;Parameter_1 check:
-;******************
-;--- all parameters1 (default)
-parameter1_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 pwr1 pwr2 pwr3 pwr4 pwr5 '+$
+;****************
+;Parameter check:
+;****************
+;--- all parameters (default)
+parameter_all = strsplit('dpl1 dpl2 dpl3 dpl4 dpl5 pwr1 pwr2 pwr3 pwr4 pwr5 '+$
                           'wdt1 wdt2 wdt3 wdt4 wdt5 pn1 pn2 pn3 pn4 pn5',' ', /extract)
 
 ;--- check site codes
-if (not keyword_set(parameter1)) then parameter1='all'
-parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
+if (not keyword_set(parameter)) then parameter='all'
+parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 
 
-;******************
-;Parameter_2 check:
-;******************
-;--- all parameters2 (default)
-parameter2_all = strsplit('org scr',' ', /extract)
+;************
+;Level check:
+;************
+;--- all levels (default)
+level_all = strsplit('org scr',' ', /extract)
 
 ;--- check parameters
-if (not keyword_set(parameter2)) then parameter2='all'
-parameters2 = thm_check_valid_name(parameter2, parameter2_all, /ignore_case, /include_all)
+if (not keyword_set(level)) then level='all'
+levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
 
-print, parameters2
+print, levels
 
 ;*****************
 ;Defition of unit:
 ;*****************
-;--- all parameters2 (default)
+;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;******************************************************************
@@ -103,7 +95,7 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 jj=0
-for ii=0,n_elements(parameters2)-1 do begin
+for ii=0,n_elements(levels)-1 do begin
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
         ;****************************
@@ -112,7 +104,8 @@ for ii=0,n_elements(parameters2)-1 do begin
          file_names = file_dailynames( $
          file_format='YYYY/YYYYMM/'+$
                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[iii]+'.csv'
-        ;
+        
+        ;===============================
         ;Define FILE_RETRIEVE structure:
         ;===============================
          source = file_retrieve(/struct)
@@ -120,6 +113,7 @@ for ii=0,n_elements(parameters2)-1 do begin
          source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/text/'
     
+        ;=======================================================
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
          local_paths=file_retrieve(file_names,_extra=source)
@@ -139,11 +133,10 @@ for ii=0,n_elements(parameters2)-1 do begin
         ;Read the files:
         ;===============
    
-        ;Definition of parameters:
+        ;---Definition of parameters:
          s=''
-         u=''
 
-        ;Initialize data and time buffer
+        ;---Initialize data and time buffer
          mu_time=0
          mu_data=0
          
@@ -157,23 +150,27 @@ for ii=0,n_elements(parameters2)-1 do begin
                dprint,'MU mesosphere file ',file,' not found. Skipping'
                continue
             endelse  
-            openr,lun,file,/get_lun    
-           ;
+            
+           ;---Open read file: 
+            openr,lun,file,/get_lun  
+              
+           ;===========================
            ;Read information of height:
-           ;=============================  
+           ;===========================  
             if (strmid(parameters[iii],0,2) ne 'pn') then begin        
                readf, lun, s
           
-              ;Definition of altitude and data arraies:
+              ;---Definition of altitude and data arraies:
                h_data = strsplit(s,',',/extract)
                altitude = fltarr(n_elements(h_data)-1)
           
-              ;Enter the altitude information:
+              ;---Enter the altitude information:
                for j=0,n_elements(h_data)-2 do begin
                   altitude[j] = float(h_data[j+1])
                endfor
             endif
-           ;
+           
+           ;=================
            ;Loop on readdata:
            ;=================
             while(not eof(lun)) do begin
@@ -184,27 +181,25 @@ for ii=0,n_elements(parameters2)-1 do begin
                   dprint,s ,dlevel=5
                   data = strsplit(s,',',/extract)
                   if (strmid(parameters[iii],0,2) ne 'pn') then data2 = fltarr(1,(n_elements(data)-1)/2)
-                 ;Calculate time:
-                 ;==============
-                  u=data(0)
-                  year = strmid(u,0,4)
-                  month = strmid(u,5,2)
-                  day = strmid(u,8,2)
-                  hour = strmid(u,11,2)
-                  minute = strmid(u,14,2) 
-                  second = strmid(u,17,2)
+              
+                 ;---Get date and time information:
+                  year = strmid(data(0),0,4)
+                  month = strmid(data(0),5,2)
+                  day = strmid(data(0),8,2)
+                  hour = strmid(data(0),11,2)
+                  minute = strmid(data(0),14,2) 
+                  second = strmid(data(0),17,2)
                 
-                 ;====Convert time from local time to unix time:      
+                 ;---Convert time from local time to unix time:      
                   time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute+':'+second) $
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
 
-                 ;
-                 ;Enter the missing value:
+                 ;Replace missing value by NaN:
                   if (strmid(parameters[iii],0,2) ne 'pn') then begin
                      for j=0,(n_elements(data)-2)/2 do begin
                         data2[0,j]=float(data[2*j+1])
                         a = float(data[2*j+1])
-                        if parameters2[ii] eq 'screening' then begin
+                        if levels[ii] eq 'scr' then begin
                            if_cond = fix(data[2*j+2])
                            wbad = where(if_cond ge 4,nbad)
                            if nbad gt 0 then a[wbad] = !values.f_nan
@@ -229,7 +224,7 @@ for ii=0,n_elements(parameters2)-1 do begin
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
-        ;Acknowlegment string (use for creating tplot vars)
+        ;---Acknowlegment string (use for creating tplot vars)
          acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for '+$
                             'Sustainable Humanosphere (RISH), Kyoto University and is operated by '+$
                             'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. '+$
@@ -244,33 +239,36 @@ for ii=0,n_elements(parameters2)-1 do begin
          if strmid(parameters[iii],0,2) eq 'pn' then o=1
          
          if (size(mu_data,/type) eq 4) and (strmid(parameters[iii],0,2) ne 'pn') then begin
+           ;---Create tplot variable for echo power, spectral width and Doppler velocity:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
-            store_data,'iug_mu_meso_'+parameters[iii]+'_'+parameters2[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
-            new_vars=tnames('iug_mu_meso_'+parameters[iii]+'_'+parameters2[ii])
+            store_data,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+           
+           ;---Add options;
+            new_vars=tnames('iug_mu_meso_'+parameters[iii]+'_'+levels[ii])
             if new_vars[0] ne '' then begin
-               options,'iug_mu_meso_'+parameters[iii]+'_'+parameters2[ii],ytitle='MUR-meso!CHeight!C[km]',ztitle=parameters[iii]+'!C['+unit_all[o]+']'
-               options,'iug_mu_meso_'+parameters[iii]+'_'+parameters2[ii], labels='MUR-meso [km]'         
-              ;Add options
-               options, 'iug_mu_meso_'+parameters[iii]+'_'+parameters2[ii], 'spec', 1        
+               options,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii],ytitle='MUR-meso!CHeight!C[km]',ztitle=parameters[iii]+'!C['+unit_all[o]+']'
+               options,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii], labels='MUR-meso [km]'         
+               options, 'iug_mu_meso_'+parameters[iii]+'_'+levels[ii], 'spec', 1        
             endif       
          endif
 
          if (size(mu_data,/type) eq 4) and (strmid(parameters[iii],0,2) eq 'pn') then begin
+           ;---Create tplot variable for noise level: 
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
             store_data,'iug_mu_meso_'+parameters[iii],data={x:mu_time, y:mu_data},dlimit=dlimit
+           
+           ;---Add options;
             new_vars=tnames('iug_mu_meso_'+parameters[iii])
             if new_vars[0] ne '' then begin
                options,'iug_mu_meso_'+parameters[iii],ytitle='MUR-meso!CNoise level!C[dB]'
                options,'iug_mu_meso_'+parameters[iii], labels='MUR-meso [km]'         
-              ;Add options
                options, 'iug_mu_meso_'+parameters[iii], 'spec', 0         
             endif       
          endif
                  
-        ;Clear time and data buffer:
+        ;---Clear time and data buffer:
          mu_time=0
          mu_data=0
-     
       endif
       jj=n_elements(local_paths)
    endfor
@@ -285,7 +283,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

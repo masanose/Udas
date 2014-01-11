@@ -12,7 +12,6 @@
 ;  iug_load_radiosonde_rish [ ,DATATYPE = string ]
 ;                           [ ,SITE = string ]
 ;                           [ ,TRANGE = [min,max] ]
-;                           [ ,FILENAMES = string scalar or array ]
 ;                           [ ,<and data keywords below> ]
 ;
 ;KEYWOARDS:
@@ -20,11 +19,10 @@
 ;             DATATYPEs are 'DAWEX' and 'misc'.
 ;  SITE = The observation site. In this load program,
 ;             defualt is 'sgk'.
-;  TRANGE (In):
-;    Pass a time range a la TIME_STRING.PRO.
-;  FILENAMES (In):
-;    *PRESENTLY DISABLED* Pass user-defined file names (full paths to local data files).  These will
-;      be read a la the RISH format, and the RISH server will not be queried.
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
+;          this is not set, the default is to prompt the user. Note
+;          that if the input time range is not a full day, a full
+;          day's data is loaded.
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;CODE:
@@ -32,6 +30,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 04/06/2013.
+; A. Shinbori, 08/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -68,11 +67,10 @@ print, datatypes
 ;***********
 ;site check:
 ;***********
-
-;--- all parameter (default)
+;--- all site codes (default)
 site_all = strsplit('drw gpn ktb ktr sgk srp',' ', /extract)
 
-;--- check parameters_1
+;--- check site code
 if (not keyword_set(site)) then site='all'
 site_code = thm_check_valid_name(site, site_all, /ignore_case, /include_all)
 
@@ -85,18 +83,15 @@ print, site_code
      ;load of DAWEX radiosonde data
       if strupcase(datatypes[i]) eq 'DAWEX' then begin
          for j=0, n_elements(site_code)-1 do begin
-            iug_load_radiosonde_dawex_nc, datatype = datatypes[i], site=site_code[j], $
+            iug_load_radiosonde_dawex_nc, site=site_code[j], $
                                           downloadonly=downloadonly, trange=trange, verbose=verbose
          endfor
       endif 
-     ;load of MU mesosphere data
+     ;load of Shigaraki radiosonde data
       if (datatypes[i] eq 'misc') then begin
          for j=0, n_elements(site_code)-1 do begin
-            iug_load_radiosonde_sgk_csv, datatype = datatypes[i], site=site_code[j], $
-                                         downloadonly=downloadonly, trange=trange, verbose=verbose
+            iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
          endfor
       endif 
    endfor  
 end
-
-

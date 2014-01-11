@@ -8,23 +8,22 @@
 ;  at Shigaraki and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_ionosonde_rish, datatype = datatype, site=site, $
+; iug_load_ionosonde_rish, site=site, fixed_freq = fixed_freq, $
 ;                    downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_ionosonde_rish, datatype = 'ionosphere'.
-;            The default is 'ionosphere'. 
-;  site = Ionosonde observation site.  
+;KEYWOARDS: 
+;  SITE = Ionosonde observation site.  
 ;         For example, iug_load_ionosonde_rish, site = 'sgk'.
 ;         The default is 'all', i.e., load all available observation points.
 ;  /fixed_freq, if set, then tplot variables for every fixed frequency (2-18 MHZ) are created.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ;  A. Shinbori, 24/10/2012.
 ;  
@@ -33,6 +32,7 @@
 ;  A. Shinbori, 18/12/2012.
 ;  A. Shinbori, 09/01/2013.
 ;  A. Shinbori, 18/02/2013.
+;  A. Shinbori, 08/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -41,8 +41,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ionosonde_rish, datatype = datatype, $
-  site=site, $
+pro iug_load_ionosonde_rish, site=site, $
   fixed_freq = fixed_freq, $
   downloadonly=downloadonly, $
   trange=trange, verbose=verbose
@@ -51,17 +50,6 @@ pro iug_load_ionosonde_rish, datatype = datatype, $
 ;Verbose keyword check:
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
-
-;***************
-;Datatype check:
-;***************
-;--- all datatype (default)
-datatype_all = strsplit('ionosphere',' ', /extract)
-
-if (not keyword_set(datatype)) then datatype= 'ionosphere'
-datatype_arr = strlowcase(thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_all))
-
-print, datatype_arr
 
 ;****************
 ;Site code check:
@@ -73,6 +61,12 @@ site_code_all = strsplit('sgk',' ', /extract)
 if (not keyword_set(site)) then site='all'
 site_code = strlowcase(thm_check_valid_name(site, site_code_all, /ignore_case, /include_all))
 
+if n_elements(site_code) eq 1 then begin
+   if site_code eq '' then begin
+      print, 'This station code is not valid. Please input the allowed keywords, all, and sgk.'
+      return
+   endif
+endif
 print, site_code
 
 ;******************************************************************
@@ -85,20 +79,22 @@ print, site_code
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 if ~size(fns,/type) then begin
-
+  ;****************************
   ;Get files for ith component:
-  ;***************************
+  ;****************************
    file_names = file_dailynames_iug( $
                 file_format='YYYY/YYYYMM/YYYYMMDD/'+$
                              'YYYYMMDDhhmm',trange=trange,times=times,/unique,/minute_res)+'_ionogram.txt'                       
-  ;            
+  
+  ;===============================            
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/'+site_code+'/ionosonde/text/'
    source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/mudb/data/ionosonde/text/'
-    
+  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -111,10 +107,10 @@ endif else file_names=fns
 if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
-   
+   ;===============
    ;Read the files:
    ;===============
-   ;Definition of parameters and array:
+   ;---Definition of parameters and array:
     s=''
     header_data = strarr(9)
 
@@ -129,11 +125,13 @@ if (downloadonly eq 0) then begin
           continue
        endelse
        
-      ;Check file line:   
+      ;---Check file line:   
        lines = file_lines(file)
-            
+       
+      ;---Open the read file:     
        openr,lun,file,/get_lun    
-      ;
+      
+      ;================================
       ;Read information of header data:
       ;================================
        for i=0, n_elements(header_data)-1 do begin
@@ -141,12 +139,12 @@ if (downloadonly eq 0) then begin
           header_data[i]=s
        endfor      
 
-      ;Date and hh:mm data and definition of data array:
+      ;---Date and hh:mm data and definition of data array:
        date = strmid(header_data[1],12,10)
        hhmm = strmid(header_data[1],23,5)
        time = time_double(string(date)+'/'+string(hhmm))-3600*9
       
-      ;Read the frequency data:
+      ;---Read the frequency data:
        readf,lun, s
        freq = float(strsplit(s,' ',/extract))
        intensity = fltarr(1,n_elements(freq))
@@ -177,14 +175,14 @@ if (downloadonly eq 0) then begin
        append_array, site_time, time
        append_array, intensity_all_f2,intensity_all_f
 
-      ;Clear the buffer:
+      ;---Clear the buffer:
        height2 = 0
        intensity2 = 0
     endfor
   ;==============================
   ;Store data in TPLOT variables:
   ;==============================
-  ;Acknowlegment string (use for creating tplot vars)
+  ;---Acknowlegment string (use for creating tplot vars)
    acknowledgstring = 'If you acquire the ionogram data, ' $
                      + 'we ask that you acknowledge us in your use of the data. This may be done by' $
                      + 'including text such as the ionogram data provided by Research Institute' $
@@ -212,7 +210,7 @@ if (downloadonly eq 0) then begin
             power[*,*] = intensity_all_f2[*,i,*]
             if (i mod 10) eq 0 then begin
                store_data,'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz',data={x:site_time,y:power,v:height3},dlimit=dlimit
-              ;Add options
+              ;---Add options
                options,'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz',ytitle = 'Height [km]', ztitle = 'Echo power at '+strtrim(string(i/10+2),2)+' [MHz]'
                options, 'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz', spec=1
             endif
@@ -221,7 +219,7 @@ if (downloadonly eq 0) then begin
    endif
 endif   
 
-;Clear time and data buffer:
+;---Clear time and data buffer:
 site_time = 0
 aintensity_all_f2 = 0
 height3 = 0
@@ -234,7 +232,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

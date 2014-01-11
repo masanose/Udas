@@ -9,18 +9,17 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_ear_trop_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_ear_trop_nc, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 19/09/2010.
 ;
@@ -29,6 +28,7 @@
 ; A. Shinbori, 13/11/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 18/12/2012.
+; A. Shinbori, 10/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -37,20 +37,14 @@
 ; $URL $
 ;-
 
-pro iug_load_ear_trop_nc, datatype = datatype, $
-  downloadonly=downloadonly, $
+pro iug_load_ear_trop_nc, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;****************************************
-;Load 'troposphere_wind' data by default:
-;****************************************
-if (not keyword_set(datatype)) then datatype='troposphere'
 
 ;******************************************************************
 ;Loop on downloading files
@@ -59,20 +53,22 @@ if (not keyword_set(datatype)) then datatype='troposphere'
 ;===============================================
 ;
 if ~size(fns,/type) then begin
-
+  ;****************************
   ;Get files for ith component:
-  ;***************************
+  ;****************************
    file_names = file_dailynames( $
    file_format='YYYYMM/YYYYMMDD/'+$
                    'YYYYMMDD',trange=trange,times=times,/unique)+'.nc'
-  ;
+  
+  ;===============================
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/ktb/ear/troposphere/nc/'
    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/ear/data/data/ver02.0212/'
-    
+  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source)
@@ -92,7 +88,7 @@ if (downloadonly eq 0) then begin
   ;Read the files:
   ;===============
 
-  ;Definition of time and parameters:
+  ;---Definition of time and parameters:
    ear_time=0
    zon_wind=0
    mer_wind=0
@@ -104,20 +100,19 @@ if (downloadonly eq 0) then begin
    
   ;==============      
   ;Loop on files: 
-  ;==============
+  ;==============  
+   for j=0,n_elements(local_paths)-1 do begin
+      file= local_paths[j]
+      if file_test(/regular,file) then  dprint,'Loading the troposphere and lower statrosphere observation data taken by the EAR: ',file $
+      else begin
+         dprint,'The troposphere and lower statrosphere observation data taken by the EAR ',file,' not found. Skipping'
+         continue
+      endelse
     
-    for j=0,n_elements(local_paths)-1 do begin
-       file= local_paths[j]
-       if file_test(/regular,file) then  dprint,'Loading the troposphere and lower statrosphere observation data taken by the EAR: ',file $
-       else begin
-          dprint,'The troposphere and lower statrosphere observation data taken by the EAR ',file,' not found. Skipping'
-          continue
-       endelse
-    
-       cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
-       glob = ncdf_inquire( cdfid )    ; Find out general info
+      cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
+      glob = ncdf_inquire( cdfid )    ; Find out general info
 
-      ;Show user the size of each dimension
+     ;---Show user the size of each dimension
       print,'Dimensions', glob.ndims
       for i=0,glob.ndims-1 do begin
          ncdf_diminq, cdfid, i, name,size
@@ -127,18 +122,18 @@ if (downloadonly eq 0) then begin
            print,'    ', name, size  
       endfor
 
-     ;Now tell user about the variables
+     ;---Now tell user about the variables
       print
       print, 'Variables'
       for m=0,glob.nvars-1 do begin
 
-        ; Get information about the variable
+        ;---Get information about the variable
          info = ncdf_varinq(cdfid, m)
          FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
          print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
          print, ']'
 
-        ;Get attributes associated with the variable
+        ;---Get attributes associated with the variable
          for l=0,info.natts-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
@@ -147,14 +142,14 @@ if (downloadonly eq 0) then begin
          endfor
       endfor
 
-     ;Calculation the start time infomation from the attribute data:
+     ;---Get time information:
       time_info=strsplit(time_data,' ',/extract)
       syymmdd=time_info[2]
       shhmmss=time_info[3]
       time_diff=strsplit(time_info[4],':',/extract)
       time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
 
-     ;Get the variable
+     ;---Get the variable
       ncdf_varget, cdfid, 'lat', lat
       ncdf_varget, cdfid, 'lon', lon
       ncdf_varget, cdfid, 'sealvl', sealvl
@@ -184,12 +179,12 @@ if (downloadonly eq 0) then begin
       ncdf_varget, cdfid, 'ndpl', ndpl
       ncdf_varget, cdfid, 'pnoise', pnoise
 
-     ;Calculation of unix time:
+     ;---Get date information:
       year = fix(strmid(strtrim(string(date),1),0,4))
       month = fix(strmid(strtrim(string(date),1),4,2))
       day = fix(strmid(strtrim(string(date),1),6,2))
                            
-     ;Definition of arrary names
+     ;---Definition of arrary names
       unix_time = dblarr(n_elements(time))
       height2 = fltarr(n_elements(range))
       uwind_ear=fltarr(n_elements(time),n_elements(range))
@@ -202,7 +197,9 @@ if (downloadonly eq 0) then begin
     
       for i=0, n_elements(time)-1 do begin
         ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
-         unix_time[i] =  double(time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2                            
+         unix_time[i] =  double(time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2     
+        
+        ;---Replace missing value by NaN:                        
          for k=0, n_elements(range)-1 do begin
             a = uwind[k,i]            
             wbad = where(a eq 10000000000,nbad)
@@ -263,7 +260,7 @@ endfor
 ;==============================
 ;Store data in TPLOT variables:
 ;==============================
-;Acknowlegment string (use for creating tplot vars)
+;---Acknowlegment string (use for creating tplot vars)
 acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institute for ' $
                  + 'Sustainable Humanosphere (RISH), Kyoto University and is operated by ' $
                  + 'RISH and National Institute of Aeronautics and Space (LAPAN) Indonesia. ' $
@@ -273,18 +270,20 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                  + 'Sports, Science and Technology (MEXT), Japan.'
                  
    if n_elements(ear_time) gt 1 then begin
-     ;Definition of arrary names
+     ;---Definition of arrary names
       bname2=strarr(n_elements(beam))
       bname=strarr(n_elements(beam))
       pwr2_ear=fltarr(n_elements(ear_time),n_elements(range))
       wdt2_ear=fltarr(n_elements(ear_time),n_elements(range))
       dpl2_ear=fltarr(n_elements(ear_time),n_elements(range))
       pnoise2_ear=fltarr(n_elements(ear_time)) 
+      
       if size(pwr1,/type) eq 4 then begin
-         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
-         
-        ;Store data of zonal wind
+        ;---Create tplot variable for zonal wind:
+         dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))   
          store_data,'iug_ear_trop_uwnd',data={x:ear_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
+        
+        ;---Add options and tdegap:
          new_vars=tnames('iug_ear_trop_uwnd')
          if new_vars[0] ne '' then begin
             options,'iug_ear_trop_uwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='uwnd!C[m/s]'
@@ -292,8 +291,10 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
             tdegap, 'iug_ear_trop_uwnd',/overwrite
          endif
          
-        ;Store data of meridional wind
+        ;---Create tplot variable for meridional wind:
          store_data,'iug_ear_trop_vwnd',data={x:ear_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
+        
+        ;---Add options and tdegap:
          new_vars=tnames('iug_ear_trop_vwnd')
          if new_vars[0] ne '' then begin
             options,'iug_ear_trop_vwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='vwnd!C[m/s]'
@@ -301,8 +302,10 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
             tdegap, 'iug_ear_trop_vwnd',/overwrite
          endif
          
-         ;Store data of vertical wind
+        ;---Create tplot variable for vertical wind:
          store_data,'iug_ear_trop_wwnd',data={x:ear_time, y:ver_wind, v:height_vw},dlimit=dlimit
+         
+        ;---Add options and tdegap:
          new_vars=tnames('iug_ear_trop_wwnd')
          if new_vars[0] ne '' then begin
             options,'iug_ear_trop_wwnd',ytitle='EAR-trop!CHeight!C[km]',ztitle='wwnd!C[m/s]'
@@ -310,7 +313,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
             tdegap, 'iug_ear_trop_wwnd',/overwrite
          endif
                   
-        ;Store data of echo intensity, spectral width, Doppler velocity and niose level for beam 1-5:
+        ;---Create tplot variable for echo intensity, spectral width, Doppler velocity and niose level for beam 1-5:
          for l=0, n_elements(beam)-1 do begin
              bname2[l]=string(beam[l]+1)
              bname[l]=strsplit(bname2[l],' ', /extract)
@@ -323,7 +326,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                  endfor
              endfor
              
-            ;Echo power (beam 1-5)
+            ;---Echo power (beam 1-5)
              store_data,'iug_ear_trop_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
              new_vars=tnames('iug_ear_trop_pwr*')
              if new_vars[0] ne '' then begin
@@ -337,7 +340,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                  endfor
              endfor
              
-            ;Spectral width (beam 1-5)
+            ;---Spectral width (beam 1-5)
              store_data,'iug_ear_trop_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
              new_vars=tnames('iug_ear_trop_wdt*')
              if new_vars[0] ne '' then begin             
@@ -352,7 +355,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                  endfor
              endfor
              
-            ;Doppler velocity (beam 1-5)             
+            ;---Doppler velocity (beam 1-5)             
              store_data,'iug_ear_trop_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
              new_vars=tnames('iug_ear_trop_dpl*')
              if new_vars[0] ne '' then begin  
@@ -365,7 +368,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                  pnoise2_ear[i]=pn1[i,l]
              endfor
              
-             ;Noise level (beam 1-5)
+            ;---Noise level (beam 1-5)
              store_data,'iug_ear_trop_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
              new_vars=tnames('iug_ear_trop_pn*')
              if new_vars[0] ne '' then begin 
@@ -384,7 +387,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
    endif
 endif
 
-;Clear time and data buffer:
+;---Clear time and data buffer:
 ear_time=0
 zon_wind=0
 mer_wind=0
@@ -395,7 +398,7 @@ dpl1 = 0
 pn1 = 0
       
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

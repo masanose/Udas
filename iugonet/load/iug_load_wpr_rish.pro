@@ -9,25 +9,24 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_wpr_rish, datatype = datatype, site=site, parameter=parameter, $
+; iug_load_wpr_rish, site=site, parameter=parameter, $
 ;                        downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_wpr_rish, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;   site = LTR observation site.  
+;   SITE = LTR observation site.  
 ;          For example, iug_load_wpr_rish, site = 'sgk'.
 ;          The default is 'all', i.e., load all available observation points.
-;  parameter = parameter name of WPR obervation data.  
+;  PARAMETER = parameter name of WPR obervation data.  
 ;          For example, iug_load_wpr_rish, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 06/10/2011.
 ;
@@ -37,6 +36,7 @@
 ; A. Shinbori, 10/02/2012.
 ; A. Shinbori, 04/03/2013.
 ; A. Shinbori, 08/04/2013.
+; A. Shinbori, 08/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -45,18 +45,16 @@
 ; $URL $
 ;-
 
-pro iug_load_wpr_rish, datatype = datatype, site=site, parameter=parameter, $
-                           downloadonly=downloadonly, trange=trange, verbose=verbose
+pro iug_load_wpr_rish, site=site, $
+   parameter=parameter, $
+   downloadonly=downloadonly, $
+   trange=trange, $
+   verbose=verbose
 
 ;**************
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
-
-;**************
-;datatype check:
-;**************
-if (not keyword_set(datatype)) then datatype= 'troposphere'
 
 ;***********
 ;site codes:
@@ -89,14 +87,14 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 print, parameters
 
 ;***************
-;data directory:
+;Data directory:
 ;***************
 site_data_dir = strsplit('bik/wpr/ mnd/wpr/ pon/wpr/ sgk/wpr/',' ', /extract)
 
 ;*****************
-;defition of unit:
+;Defition of unit:
 ;*****************
-;--- all parameters (default)
+;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 
@@ -118,46 +116,34 @@ unit_all = strsplit('m/s dB',' ', /extract)
 
 ;Definition of parameter
 jj=0
-kk=0
-kkk=intarr(n_elements(site_data_dir))
+k=0
+n_site=intarr(n_elements(site_data_dir))
 start_time=time_double('2006-3-30')
 
 ;In the case that the parameters are except for all.'
 if n_elements(site_code) le n_elements(site_data_dir) then begin
    h_max=n_elements(site_code)
    for i=0,n_elements(site_code)-1 do begin
-      if site_code[i] eq 'bik' then begin
-         kkk[i]=0 
-      endif
-      if site_code[i] eq 'mnd' then begin
-         kkk[i]=1 
-      endif
-      if site_code[i] eq 'pon' then begin
-         kkk[i]=2 
-      endif
-      if site_code[i] eq 'sgk' then begin
-         kkk[i]=3 
-      endif
+      case site_code[i] of
+         'bik':n_site[i]=0 
+         'mnd':n_site[i]=1 
+         'pon':n_site[i]=2 
+         'sgk':n_site[i]=3 
+      endcase
    endfor
 endif
 
 for ii=0,h_max-1 do begin
-   kk=kkk[ii]
+   k=n_site[ii]
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
         ;Definition of blr site names:
-         if site_code[ii] eq 'bik' then begin
-            site_code2='biak'
-         endif
-         if site_code[ii] eq 'mnd' then begin
-            site_code2='manado'
-         endif
-         if site_code[ii] eq 'pon' then begin
-            site_code2='pontianak'
-         endif
-         if site_code[ii] eq 'sgk' then begin
-            site_code2='shigaraki'
-         endif
+         case site_code[ii] of
+            'bik':site_code2='biak'
+            'mnd':site_code2='manado'
+            'pon':site_code2='pontianak'
+            'sgk':site_code2='shigaraki'
+         endcase
          
         ;****************************
         ;Get files for ith component:
@@ -171,14 +157,15 @@ for ii=0,h_max-1 do begin
          data_time = time_double(strmid(in_time,0,4)+'-'+strmid(in_time,4,2)+'-'+strmid(in_time,6,2))    
          if data_time[0] lt start_time then break    
            
-        ;
+        ;===============================
         ;Define FILE_RETRIEVE structure:
         ;===============================
          source = file_retrieve(/struct)
          source.verbose=verbose
-         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[kk]+'csv/'
+         source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[k]+'csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2+'/data/data/ver02.0212/'
     
+        ;=======================================================
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
          local_paths=file_retrieve(file_names,_extra=source)
@@ -191,15 +178,13 @@ for ii=0,h_max-1 do begin
       if (not keyword_set(downloadonly)) then downloadonly=0
 
       if (downloadonly eq 0) then begin  
-  
+        ;===============
         ;Read the files:
         ;===============      
-        ;Definition of parameters and array:
+        ;---Definition of parameters and array:
          s=''
-         u=''
-         time = dblarr(1)
 
-        ;Initialize data and time buffer:
+        ;---Initialize data and time buffer:
          wpr_data = 0
          wpr_time = 0
          
@@ -213,17 +198,24 @@ for ii=0,h_max-1 do begin
                dprint,'WPR-'+site_code2+' file ',file,' not found. Skipping'
                continue
             endelse
+            
+           ;---Open the read file: 
             openr,lun,file,/get_lun    
-           ;
+           
+           ;=============================
            ;Read information of altitude:
            ;=============================
             readf, lun, s
             height = strsplit(s,',',/extract)
             
-           ;Definition of time zone at each station:
-            if site_code2 eq 'pontianak' then time_zone = 7.0
-            if site_code2 eq 'manado' then time_zone = 8.0
-            if (site_code2 eq 'biak') or (site_code2 eq 'shigaraki') then time_zone = 9.0   
+           ;---Definition of time zone at each station:
+            case site_code2 of
+              'pontianak':time_zone = 7.0
+              'kototabang':time_zone = 7.0
+              'manado':time_zone = 8.0
+              'biak':time_zone = 9.0   
+              'shigaraki':time_zone = 9.0
+            endcase 
            
            ;Definition of altitude and data arraies:
             altitude = fltarr(n_elements(height)-1)
@@ -241,14 +233,13 @@ for ii=0,h_max-1 do begin
                wbad = where(b eq 0,nbad)
                if nbad gt 0 then b[wbad] = !values.f_nan
                data[j] = !values.f_nan
-               data2[j] = !values.f_nan
+               data2[0,j] = !values.f_nan
                altitude[j]=b
             endfor
 
-           ;
+           ;=================
            ;Loop on readdata:
            ;=================
-            k=0
             while(not eof(lun)) do begin
                readf,lun,s
                ok=1
@@ -256,26 +247,24 @@ for ii=0,h_max-1 do begin
                if ok && keyword_set(s) then begin
                   dprint,s ,dlevel=5
                   data = strsplit(s,',',/extract)
-         
-                 ;Calcurate time:
-                 ;==============
-                  u=data(0)
-                  year = strmid(u,0,4)
-                  month = strmid(u,5,2)
-                  day = strmid(u,8,2)
-                  hour = strmid(u,11,2)
-                  minute = strmid(u,14,2)  
+                
+                 ;---Definition of parameters for time convert from LT to UT:
+                  year = strmid(data(0),0,4)
+                  month = strmid(data(0),5,2)
+                  day = strmid(data(0),8,2)
+                  hour = strmid(data(0),11,2)
+                  minute = strmid(data(0),14,2)  
                   
-                 ;Convert time from LT to UT
+                 ;---Convert time from LT to UT
                   time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)+':'+string(0)) $
                         -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
-                 ;
-                 ;Enter the missing value:
+                 
+                 ;---Enter the missing value:
                   for j=0,n_elements(height)-2 do begin
                      a = float(data[j+1])
                      wbad = where(a eq 999, nbad)
                      if nbad gt 0 then a[wbad] = !values.f_nan
-                     data2[k,j]=a
+                     data2[0,j]=a
                   endfor
                  
                  ;=============================
@@ -291,7 +280,7 @@ for ii=0,h_max-1 do begin
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
-        ;Acknowlegment string (use for creating tplot vars)
+        ;---Acknowlegment string (use for creating tplot vars)
          if (site_code[ii] eq 'sgk') then begin
             acknowledgstring = 'If you acquire the Luneberg lens wind profiler radar (LL-WPR) data, ' $
                              + 'we ask that you acknowledge us in your use of the data. This may be done by' $
@@ -318,26 +307,28 @@ for ii=0,h_max-1 do begin
             if parameters[iii] eq 'pwr3' then o=1
             if parameters[iii] eq 'pwr4' then o=1
             if parameters[iii] eq 'pwr5' then o=1
- 
+            
+           ;---Create the tplot variables:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
             store_data,'iug_wpr_'+site_code[ii]+'_'+parameters[iii],data={x:wpr_time, y:wpr_data, v:altitude},dlimit=dlimit
+           
+           ;---Options of each tplot variable 
             new_vars=tnames('iug_wpr_'+site_code[ii]+'_'+parameters[iii])
             if new_vars[0] ne '' then begin                
                options,'iug_wpr_'+site_code[ii]+'_'+parameters[iii],ytitle='WPR-'+site_code[ii]+'!CHeight!C[km]',$
                        ztitle=parameters[iii]+'!C['+unit_all[o]+']'
                options,'iug_wpr_'+site_code[ii]+'_'+parameters[iii], labels='WPR-'+site_code[ii]+' [km]'
-              ;add options
                options, 'iug_wpr_'+site_code[ii]+'_'+parameters[iii], 'spec', 1    
             endif
          endif
 
-        ;Clear time and data buffer:
+        ;---Clear time and data buffer:
          wpr_data = 0
          wpr_time = 0
 
+        ;---Add tdegap
          new_vars=tnames('iug_wpr_'+site_code[ii]+'_'+parameters[iii])
          if new_vars[0] ne '' then begin             
-           ;add tdegap
             tdegap, 'iug_wpr_'+site_code[ii]+'_'+parameters[iii],/overwrite
          endif
       endif
@@ -354,7 +345,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;******************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;******************************
 
 print, '****************************************************************

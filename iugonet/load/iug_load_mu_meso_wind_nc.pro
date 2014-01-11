@@ -9,27 +9,27 @@
 ;  and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_meso_wind_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_mu_meso_wind_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_wind_meso_nc, datatype = 'mesosphere'.
-;            The default is 'mesosphere'.
-;  level = Observation data level. For example, iug_load_mu_wind_meso_nc, level = 'org'.
+;  LEVEL = Observation data level. For example, iug_load_mu_wind_meso_nc, level = 'org'.
 ;            For example, iug_load_mu_meso_txt, parameter2 = 'scr'.
 ;            The default is 'all', i.e., load all available level data.           
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output. 
+;  
 ;CODE:
 ; A. Shinbori, 21/07/2012.
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
+; A. Shinbori, 10/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -38,8 +38,7 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_meso_wind_nc, datatype = datatype, $ 
-  level = level, $
+pro iug_load_mu_meso_wind_nc, level = level, $
   downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
@@ -49,20 +48,13 @@ pro iug_load_mu_meso_wind_nc, datatype = datatype, $
 ;***********************
 if (not keyword_set(verbose)) then verbose=2
 
- 
-;************************************
-;Load 'mesosphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='mesosphere'
-
-
 ;*************
 ;Level check:
 ;*************
-;--- all parameters2 (default)
+;--- all levels (default)
 level_all = strsplit('org scr',' ', /extract)
 
-;--- check parameters
+;--- check level
 if (not keyword_set(level)) then level='all'
 levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
 
@@ -79,20 +71,22 @@ print, levels
 ;===================================================================
 for ii=0,n_elements(levels)-1 do begin
    if ~size(fns,/type) then begin
-
+     ;****************************
      ;Get files for ith component:
-     ;***************************
+     ;****************************
       file_names = file_dailynames( $
       file_format='YYYY/YYYYMM/'+$
                   'YYYYMMDD',trange=trange,times=times,/unique)+'.wnd.nc'
-     ;
+                  
+     ;===============================
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/mu/mesosphere/nc/'
       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/mesosphere/data/netcdf/'
-    
+      
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source)
@@ -112,7 +106,7 @@ for ii=0,n_elements(levels)-1 do begin
      ;Read the files:
      ;===============
    
-     ;Definition of time and parameters:
+     ;---Definition of time and parameters:
       mu_time = 0
       uwind = 0
       vwind = 0
@@ -135,8 +129,7 @@ for ii=0,n_elements(levels)-1 do begin
          cdfid = ncdf_open(file,/NOWRITE)  ; Open the file
          glob = ncdf_inquire(cdfid)    ; Find out general info
 
-        ;Show user the size of each dimension
-
+        ;---Show user the size of each dimension
          print,'Dimensions', glob.ndims
          for i=0,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
@@ -146,19 +139,18 @@ for ii=0,n_elements(levels)-1 do begin
                print,'    ', name, size  
          endfor
 
-        ;Now tell user about the variables
-
+        ;---Now tell user about the variables
          print
          print, 'Variables'
          for m=0,glob.nvars-1 do begin
 
-           ;Get information about the variable
+           ;---Get information about the variable
             info = ncdf_varinq(cdfid, m)
             FmtStr = '(A," (",A," ) Dimension Ids = [ ", 10(I0," "),$)'
             print, FORMAT=FmtStr, info.name,info.datatype, info.dim[*]
             print, ']'
 
-           ;Get attributes associated with the variable
+           ;---Get attributes associated with the variable
             for l=0,info.natts-1 do begin
                attname = ncdf_attname(cdfid,m,l)
                ncdf_attget,cdfid,m,attname,attvalue
@@ -167,14 +159,14 @@ for ii=0,n_elements(levels)-1 do begin
             endfor
          endfor
 
-        ;Calculation the start time infomation from the attribute data:
+        ;---Get time infomation:
          time_info=strsplit(time_data,' ',/extract)
          syymmdd=time_info[2]
          shhmmss=time_info[3]
          time_diff=strsplit(time_info[4],':',/extract)
          time_diff2=fix(time_diff[0])*3600+fix(time_diff[1])*60 
      
-        ;Get the variable
+        ;---Get the variable
          ncdf_varget, cdfid, 'lat', lat
          ncdf_varget, cdfid, 'lon', lon
          ncdf_varget, cdfid, 'sealvl', sealvl
@@ -190,16 +182,16 @@ for ii=0,n_elements(levels)-1 do begin
          ncdf_varget, cdfid, 'flg_vwnd', flg_vwnd
          ncdf_varget, cdfid, 'flg_wwnd', flg_wwnd
 
-        ;Calculation of unix time:
+        ;---Get date information:
          year = fix(strmid(strtrim(string(date),1),0,4))
          month = fix(strmid(strtrim(string(date),1),4,2))
          day = fix(strmid(strtrim(string(date),1),6,2))
                            
-        ;Definition of arrary names
+        ;---Definition of arrary names
          unix_time = dblarr(n_elements(time))
          
          for i=0, n_elements(time)-1 do begin
-           ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
+           ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
             unix_time[i] = double(time[i]) +time_double(syymmdd+'/'+shhmmss)-time_diff2
                                
             for k=0, n_elements(range)-1 do begin
@@ -233,7 +225,7 @@ for ii=0,n_elements(levels)-1 do begin
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================      
-        ;Acknowlegment string (use for creating tplot vars):
+        ;---Acknowlegment string (use for creating tplot vars):
          acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, '+ $
                             'we ask that you acknowledge us in your use of the data. This may be done by '+ $
                             'including text such as the MU data provided by Research Institute '+ $
@@ -245,27 +237,47 @@ for ii=0,n_elements(levels)-1 do begin
                             'Sports, Science and Technology (MEXT), Japan.'
 
          if size(mu_uwnd,/type) eq 4 then begin
+           ;---Create tplot variable for zonal wind:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))                          
-           ;Store data of zonal wind:
             store_data, 'iug_mu_meso_uwnd_'+levels[ii],data={x:mu_time,y:mu_uwnd,v:height_mz},dlimit=dlimit
+            
+           ;---Add options:
             new_vars=tnames('iug_mu_meso_uwnd*')
             if new_vars[0] ne '' then begin
                   options,'iug_mu_meso_uwnd*', 'spec',1
                   options,'iug_mu_meso_uwnd*', ytitle='MUR-meso!CHeight!C[km]',ztitle='Zonal wind!C[m/s]'  
             endif
-           ;Store data of meridional wind:
+            
+           ;---Create tplot variable for meridional wind:
             store_data, 'iug_mu_meso_vwnd_'+levels[ii],data={x:mu_time,y:mu_vwnd,v:height_mz},dlimit=dlimit
+           
+           ;---Add options:
             new_vars=tnames('iug_mu_meso_vwnd*')
             if new_vars[0] ne '' then begin
                   options,'iug_mu_meso_vwnd*', 'spec',1
                   options,'iug_mu_meso_vwnd*', ytitle='MUR-meso!CHeight!C[km]',ztitle='Meridional wind!C[m/s]' 
             endif
-           ;Store data of meridional wind:
+            
+           ;---Create tplot variable for vertical wind:
             store_data, 'iug_mu_meso_wwnd_'+levels[ii],data={x:mu_time,y:mu_wwnd,v:height_v},dlimit=dlimit
+           
+           ;---Add options:
             new_vars=tnames('iug_mu_meso_wwnd*')
             if new_vars[0] ne '' then begin
                   options,'iug_mu_meso_wwnd*', 'spec',1
                   options,'iug_mu_meso_wwnd*', ytitle='MUR-meso!CHeight!C[km]',ztitle='Vertical wind!C[m/s]' 
+            endif
+           
+           ;---Add tdegap:
+            new_vars=tnames('iug_mu_meso_*')
+            if new_vars[0] ne '' then begin
+               tdegap,'iug_mu_meso_*',/overwrite
+            endif 
+            
+           ;---Add ylim:
+            new_vars=tnames('iug_mu_meso_*')
+            if new_vars[0] ne '' then begin
+               ylim,'iug_mu_meso_*',60,100
             endif                  
          endif    
          new_vars=tnames('iug_mu_meso_*')
@@ -277,28 +289,28 @@ for ii=0,n_elements(levels)-1 do begin
       endif
    endif
 
-  ;Clear time and data buffer:
+  ;---Clear time and data buffer:
    mu_time = 0
    mu_uwnd = 0
    mu_vwnd = 0
    mu_wwnd = 0
    
 endfor      
-  ;*************************
-  ;print of acknowledgement:
-  ;*************************
-   print, '****************************************************************
-   print, 'Acknowledgement'
-   print, '****************************************************************
-   print, 'If you acquire the middle and upper atmosphere (MU) radar data,'
-   print, 'we ask that you acknowledge us in your use of the data.' 
-   print, 'This may be done by including text such as MU data provided' 
-   print, 'by Research Institute for Sustainable Humanosphere of Kyoto University.' 
-   print, 'We would also appreciate receiving a copy of the relevant publications.'
-   print, 'The distribution of MU radar data has been partly supported by the IUGONET'
-   print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
-   print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
-   print, 'Sports, Science and Technology (MEXT), Japan.' 
+;*************************
+;Print of acknowledgement:
+;*************************
+print, '****************************************************************
+print, 'Acknowledgement'
+print, '****************************************************************
+print, 'If you acquire the middle and upper atmosphere (MU) radar data,'
+print, 'we ask that you acknowledge us in your use of the data.' 
+print, 'This may be done by including text such as MU data provided' 
+print, 'by Research Institute for Sustainable Humanosphere of Kyoto University.' 
+print, 'We would also appreciate receiving a copy of the relevant publications.'
+print, 'The distribution of MU radar data has been partly supported by the IUGONET'
+print, '(Inter-university Upper atmosphere Global Observation NETwork) project'
+print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
+print, 'Sports, Science and Technology (MEXT), Japan.' 
         
 end
 

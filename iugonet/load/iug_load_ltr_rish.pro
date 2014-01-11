@@ -9,25 +9,23 @@
 ;  tplot format.
 ;
 ;SYNTAX:
-; iug_load_ltr_rish, datatype = datatype, site=site, parameter=parameter, $
-;                        downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_ltr_rish, site=site, parameter=parameter, $
+;                    downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
-;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_ltr_rish, datatype = 'troposphere'.
-;            The default is 'troposphere'. 
-;   site = LTR observation site.  
+;KEYWOARDS: 
+;   SITE = LTR observation site.  
 ;          For example, iug_load_ltr_rish, site = 'sgk'.
 ;          The default is 'all', i.e., load all available observation points.
-;  parameter = parameter name of LTR obervation data.  
-;          For example, iug_load_ltr_rish, parameter = 'uwnd'.
+;  PARAMETER = For example, iug_load_ltr_rish, parameter = 'uwnd'.
 ;          The default is 'all', i.e., load all available parameters.
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 09/19/2010.
 ;
@@ -37,6 +35,7 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 10/02/2012.
 ; A. Shinbori, 18/12/2012.
+; A. Shinbori, 08/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -45,8 +44,7 @@
 ; $URL $
 ;-
 
-pro iug_load_ltr_rish, datatype = datatype, $
-  site=site, $
+pro iug_load_ltr_rish, site=site, $
   parameter=parameter, $
   downloadonly=downloadonly, $
   trange=trange, $
@@ -56,11 +54,6 @@ pro iug_load_ltr_rish, datatype = datatype, $
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
-
-;**************
-;datatype check:
-;**************
-if (not keyword_set(datatype)) then datatype= 'troposphere'
 
 ;***********
 ;site codes:
@@ -87,9 +80,9 @@ parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /inclu
 print, parameters
 
 ;*****************
-;defition of unit:
+;Defition of unit:
 ;*****************
-;--- all parameters (default)
+;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
 ;******************************************************************
@@ -106,25 +99,27 @@ start_time=time_double('1999-7-7')
 end_time=time_double('2006-3-29')
 for iii=0,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
-
+      ;****************************
       ;Get files for ith component:
-      ;***************************
+      ;****************************
        file_names = file_dailynames( $
          file_format='YYYYMM/YYYYMMDD/'+$
                      'YYYYMMDD',trange=trange,times=times,/unique)+'.'+parameters[iii]+'.csv'
                      
-      ;Set up the start time of the LQ-7 data period:
+      ;---Set up the start time of the LQ-7 data period:
        in_time =  file_dailynames(file_format='YYYYMMDD',trange=trange,times=times,/unique)
        data_time = time_double(strmid(in_time,0,4)+'-'+strmid(in_time,4,2)+'-'+strmid(in_time,6,2))   
        if (data_time[0] lt start_time) or (data_time[0] gt end_time) then break
-      ;
+       
+      ;===============================
       ;Define FILE_RETRIEVE structure:
       ;===============================
        source = file_retrieve(/struct)
        source.verbose=verbose
        source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/sgk/ltr/csv/'
        source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/shigaraki/data/data/ver02.0212/'
-    
+      
+      ;=======================================================
       ;Get files and local paths, and concatenate local paths:
       ;=======================================================
        local_paths=file_retrieve(file_names,_extra=source)
@@ -137,14 +132,13 @@ for iii=0,n_elements(parameters)-1 do begin
     if (not keyword_set(downloadonly)) then downloadonly=0
 
     if (downloadonly eq 0) then begin
-  
+      ;===============
       ;Read the files:
       ;===============
-      ; Definition of parameters:
+      ;---Definition of string variable:
         s=''
-        u=''
 
-      ;Initialize data and time buffer:
+      ;---Initialize data and time buffer:
        ltr_data = 0
        ltr_time = 0
       
@@ -158,25 +152,27 @@ for iii=0,n_elements(parameters)-1 do begin
              dprint,'LTR-shigaraki file ',file,' not found. Skipping'
              continue
           endelse
-          
+         
+         ;---Open read file: 
           openr,lun,file,/get_lun    
-         ;
+         
+         ;=============================
          ;Read information of altitude:
          ;=============================
           readf, lun, s
           height = strsplit(s,',',/extract)
              
-         ;Definition of altitude and data arraies:
+         ;---Definition of altitude and data arraies:
           altitude = fltarr(70)
           data = strarr(70)
           data2 = fltarr(1,70)
              
-         ;Enter the altitude information:
+         ;---Enter the altitude information:
           for j=0,n_elements(height)-2 do begin
              altitude[j] = float(height[j+1]) 
           endfor
 
-         ;Enter the missing value:
+         ;---Enter missing value of NaN:
           for j=0, n_elements(altitude)-1 do begin
              b = float(altitude[j])
              wbad = where(b eq 0,nbad)
@@ -186,7 +182,7 @@ for iii=0,n_elements(parameters)-1 do begin
              altitude[j]=b
           endfor
 
-         ;
+         ;=================
          ;Loop on readdata:
          ;=================
           while(not eof(lun)) do begin
@@ -197,27 +193,26 @@ for iii=0,n_elements(parameters)-1 do begin
                 dprint,s ,dlevel=5
                 data = strsplit(s,',',/extract)
          
-              ;Calcurate time:
-              ;==============
-               u=data(0)
-               year = strmid(u,0,4)
-               month = strmid(u,5,2)
-               day = strmid(u,8,2)
-               hour = strmid(u,11,2)
-               minute = strmid(u,14,2)  
+              ;---Get date and time information:
+               year = strmid(data(0),0,4)
+               month = strmid(data(0),5,2)
+               day = strmid(data(0),8,2)
+               hour = strmid(data(0),11,2)
+               minute = strmid(data(0),14,2)  
                   
-              ;====convert time from LT to UT 
+              ;---Convert time from local time to universal time 
                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
                       -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
                if time lt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
-              ;
-              ;Enter the missing value:
+              
+              ;---Enter the missing value:
                for j=0,n_elements(height)-2 do begin
                   a = float(data[j+1])
                   wbad = where(a eq 999, nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
                   data2[0,j]=a
                endfor
+               
               ;==============================
               ;Append array of time and data:
               ;==============================
@@ -231,7 +226,7 @@ for iii=0,n_elements(parameters)-1 do begin
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
-     ;Acknowlegment string (use for creating tplot vars)
+     ;---Acknowlegment string (use for creating tplot vars)
       acknowledgstring = 'If you acquire the lower troposphere radar (LTR) data, ' $
                        + 'we ask that you acknowledge us in your use of the data. This may be done by' $
                        + 'including text such as the LTR data provided by Research Institute' $
@@ -248,26 +243,28 @@ for iii=0,n_elements(parameters)-1 do begin
          if parameters[iii] eq 'pwr3' then o=1
          if parameters[iii] eq 'pwr4' then o=1
          if parameters[iii] eq 'pwr5' then o=1
- 
+  
+        ;---Create tplot variables:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))
          store_data,'iug_ltr_'+site_code[0]+'_'+parameters[iii],data={x:ltr_time, y:ltr_data, v:altitude},dlimit=dlimit
+        
+        ;---Add options:
          new_vars=tnames('iug_ltr_'+site_code[0]+'_'+parameters[iii])
          if new_vars[0] ne '' then begin                    
             options,'iug_ltr_'+site_code[0]+'_'+parameters[iii],ytitle='LTR-'+site_code[0]+'!CHeight!C[km]',$
                     ztitle=parameters[iii]+'!C['+unit_all[o]+']'
             options,'iug_ltr_'+site_code[0]+'_'+parameters[iii], labels='LTR-'+site_code[0]+' [km]'
-           ;Add options
             options, 'iug_ltr_'+site_code[0]+'_'+parameters[iii], 'spec', 1    
          endif
       endif
 
-     ;Clear time and data buffer:
+     ;---Clear time and data buffer:
       ltr_data = 0
       ltr_time = 0
-          
+     
+     ;---Add tdegap         
       new_vars=tnames('iug_ltr_'+site_code[0]+'_'+parameters[iii])
       if new_vars[0] ne '' then begin           
-        ;Add tdegap
          tdegap, 'iug_ltr_'+site_code[0]+'_'+parameters[iii],/overwrite
       endif
    endif
@@ -282,7 +279,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

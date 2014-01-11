@@ -9,25 +9,25 @@
 ;  and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_mu_iono_teti_txt, datatype = datatype, downloadonly = downloadonly, $
+; iug_load_mu_iono_teti_txt, downloadonly = downloadonly, $
 ;                          trange = trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  datatype = Observation data type. For example, iug_load_mu_iono_teti_txt, datatype = 'ionosphere'.
-;            The default is 'ionosphere'.  
-;  trange = (Optional) Time range of interest  (2 element array), if
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
 ;          day's data is loaded.
 ;  /downloadonly, if set, then only download the data, do not load it
 ;                 into variables.
-;
+;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+;  
 ;CODE:
 ; A. Shinbori, 03/10/2012.
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 24/12/2012.
-;
+; A. Shinbori, 08/01/2014.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -35,20 +35,14 @@
 ; $URL $
 ;-
 
-pro iug_load_mu_iono_teti_txt, datatype = datatype, $
-   downloadonly = downloadonly, $
+pro iug_load_mu_iono_teti_txt, downloadonly = downloadonly, $
    trange = trange, $
    verbose = verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
- 
-;************************************
-;Load 'thermosphere' data by default:
-;************************************
-if (not keyword_set(datatype)) then datatype='ionosphere'
 
 ;******************************************************************
 ;Loop on downloading files
@@ -62,12 +56,12 @@ if (not keyword_set(datatype)) then datatype='ionosphere'
 h=0
 site_time=0
 if ~size(fns,/type) then begin 
-  ;
+  ;****************************
   ;Get files for ith component:
-  ;***************************       
+  ;****************************       
    file_names = file_dailynames(file_format='YYYY/YYYYMMDD',trange=trange,times=times,/unique)+'_teti.txt'
     
-  ;        
+  ;===============================        
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
@@ -75,7 +69,7 @@ if ~size(fns,/type) then begin
    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/mu/ionosphere/teti/text/'
    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/mu/isdata/data/teti/text/'
   
-  ;  
+  ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
   ;=======================================================
    local_paths=file_retrieve(file_names,_extra=source, /last_version)
@@ -89,9 +83,10 @@ if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
 
-  ;Definition of parameters:
+  ;---Definition of string variable:
    s=''
-      
+  
+  ;======================================    
   ;Loop on files (read the NetCDF files): 
   ;======================================
    for h=0,n_elements(local_paths)-1 do begin
@@ -102,49 +97,50 @@ if (downloadonly eq 0) then begin
          continue
       endelse
     
-     ;
-     ;Open the read file:
-     ;===================
+     ;---Open read file:
       openr,lun,file,/get_lun
 
-     ;
+     ;=====================
      ;Read the loop number:
      ;=====================        
       readf,lun,s
       n=fix(s)
    
-     ;
+     ;=====================
      ;Read the height data:
      ;=====================        
       readf,lun,s
       height = float(strsplit(s,' ',/extract))
       
       for i=0, n-1 do begin
-        ;Read the time data:
+        ;---Read the time data:
          readf,lun,s
          time_data=strsplit(s,' ',/extract)
          year = strmid(time_data[0],0,4)
          month = strmid(time_data[0],5,2)
          day = strmid(time_data[0],8,2)
          time = time_data[1]
-        ;Start time:
+         
+        ;---Start time:
          stime = time_double(year+'-'+month+'-'+day+'/'+time)
          year = strmid(time_data[3],0,4)
          month = strmid(time_data[3],5,2)
          day = strmid(time_data[3],8,2)
          time = time_data[4]
-        ;End time:
+         
+        ;---End time:
          etime = time_double(year+'-'+month+'-'+day+'/'+time)
          mu_time = (stime+etime)/2.0D - time_double('1970-1-1/09:00:00')
          
-        ;Definition of temp. arraies: 
+        ;---Definition of temp. arraies: 
          ti = fltarr(1,n_elements(height))
          te = fltarr(1,n_elements(height))
          er_ti = fltarr(1,n_elements(height))
          er_te = fltarr(1,n_elements(height))
          er_tr = fltarr(1,n_elements(height))
          snr = fltarr(1,n_elements(height))
-                  
+        
+        ;---Replace missing value by NaN:         
          for j=0,n_elements(height)-1 do begin
             readf,lun,s
             temp_data=float(strsplit(s,' ',/extract))        
@@ -190,7 +186,7 @@ if (downloadonly eq 0) then begin
   ;==============================
   ;Store data in TPLOT variables:
   ;==============================
-  ;Acknowlegment string (use for creating tplot vars)
+  ;---Acknowlegment string (use for creating tplot vars)
    acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar data, ' $
                     + 'we ask that you acknowledge us in your use of the data. This may be done by ' $
                     + 'including text such as the MU data provided by Research Institute ' $
@@ -201,6 +197,7 @@ if (downloadonly eq 0) then begin
                     + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
 
    if size(ti_app,/type) eq 4 then begin
+     ;---Create tplot variables for temperature:
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'Y. Yamamoto'))
       store_data,'iug_mu_iono_ti',data={x:site_time, y:ti_app,v:height},dlimit=dlimit
       options,'iug_mu_iono_ti',ytitle='MU-iono!CHeight!C[km]',ztitle='Ion temp.!C[K]'
@@ -221,7 +218,7 @@ if (downloadonly eq 0) then begin
       options,'iug_mu_iono_snr',ytitle='MU-iono!CHeight!C[km]',ztitle='SNR!C[dB]'
       options,'iug_mu_iono_snr',spec=1
 
-     ;Add tdegap
+     ;---Add tdegap
       tdegap, 'iug_mu_iono_ti',dt=3600,/overwrite
       tdegap, 'iug_mu_iono_te',dt=3600,/overwrite
       tdegap, 'iug_mu_iono_er_ti',dt=3600,/overwrite
@@ -230,7 +227,7 @@ if (downloadonly eq 0) then begin
       tdegap, 'iug_mu_iono_snr',dt=3600,/overwrite 
    endif
   
-  ;Clear time and data buffer:
+  ;---Clear time and data buffer:
    site_time=0
    ti_app=0
    te_app=0
@@ -248,7 +245,7 @@ if new_vars[0] ne '' then begin
 endif
 
 ;*************************
-;print of acknowledgement:
+;Print of acknowledgement:
 ;*************************
 print, '****************************************************************
 print, 'Acknowledgement'

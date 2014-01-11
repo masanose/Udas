@@ -11,10 +11,8 @@
 ;SYNTAX:
 ;  iug_load_mu [ ,DATATYPE = string ]
 ;              [ ,LEVEL = string ]
-;              [ ,PARAMETER1 = string ]
-;              [ ,PARAMETER2 = string ]
+;              [ ,PARAMETER = string ]
 ;              [ ,TRANGE = [min,max] ]
-;              [ ,FILENAMES = string scalar or array ]
 ;              [ ,<and data keywords below> ]
 ;
 ;KEYWOARDS:
@@ -22,15 +20,14 @@
 ;             DATATYPEs are 'troposphere' etc.
 ;  LEVEL = The level of mesospheric data to be loaded. In this load program,
 ;             LEVELs are 'org' and 'scr'.
-;  PARAMETERS = The parameter of mu observations to be loaded. For example,
-;             PARAMETERS is 'h1t60min00','iemdc3', and so on.
+;  PARAMETER = The parameter of mu observations to be loaded. For example,
+;             PARAMETER is 'h1t60min00','iemdc3', and so on.
 ;  LENGTH = The file type of meteor data to be loaded.
 ;             LENGTHs are '1-day' and '1-month'. Default is 1-day.
-;  TRANGE (In):
-;    Pass a time range a la TIME_STRING.PRO.
-;  FILENAMES (In):
-;    *PRESENTLY DISABLED* Pass user-defined file names (full paths to local data files).  These will
-;      be read a la the RISH format, and the RISH server will not be queried.
+;  TRANGE = (Optional) Time range of interest  (2 element array), if
+;          this is not set, the default is to prompt the user. Note
+;          that if the input time range is not a full day, a full
+;          day's data is loaded.
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;CODE:
@@ -44,7 +41,7 @@
 ; A. Shinbori, 02/08/2013.
 ; A. Shinbori, 25/09/2013.
 ; A. Shinbori, 27/11/2013.
-; A. Shinbori, 07/01/2014.
+; A. Shinbori, 11/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -57,9 +54,9 @@ pro iug_load_mu, datatype = datatype, level = level, length=length, $
                  parameter = parameter, downloadonly=downloadonly, $
                  trange=trange, verbose=verbose
 
-;******************
-;keyword check:
-;******************
+;**********************
+;Verbose keyword check:
+;**********************
 ;verbose
 if (not keyword_set(verbose)) then verbose=2
  
@@ -83,7 +80,7 @@ for i=0, n_elements(datatypes)-1 do begin
   ;load of MU tropsphere data
    if datatypes[i] eq 'troposphere' then begin
    
-      iug_load_mu_trop_nc, datatype = datatypes[i], downloadonly=downloadonly, trange=trange, verbose=verbose
+      iug_load_mu_trop_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
       
    endif 
    
@@ -97,17 +94,17 @@ for i=0, n_elements(datatypes)-1 do begin
       if (not keyword_set(level)) then level='all'
       levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
       
-      iug_load_mu_meso_nc, datatype = datatypes[i], level = levels, downloadonly=downloadonly, trange=trange, verbose=verbose
-      iug_load_mu_meso_wind_nc, datatype = datatypes[i], level = levels, downloadonly=downloadonly, trange=trange, verbose=verbose
+      iug_load_mu_meso_nc, level = levels, downloadonly=downloadonly, trange=trange, verbose=verbose
+      iug_load_mu_meso_wind_nc, level = levels, downloadonly=downloadonly, trange=trange, verbose=verbose
    
    endif 
  
   ;load of MU ionosphere data
    if datatypes[i] eq 'ionosphere' then begin
    
-      iug_load_mu_iono_drift_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
-      iug_load_mu_iono_pwr_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
-      iug_load_mu_iono_teti_nc, datatype = datatypes[i], downloadonly = downloadonly, trange = trange, verbose = verbose
+      iug_load_mu_iono_drift_nc, downloadonly = downloadonly, trange = trange, verbose = verbose
+      iug_load_mu_iono_pwr_nc, downloadonly = downloadonly, trange = trange, verbose = verbose
+      iug_load_mu_iono_teti_nc, downloadonly = downloadonly, trange = trange, verbose = verbose
    
    endif
    
@@ -121,7 +118,7 @@ for i=0, n_elements(datatypes)-1 do begin
       if(not keyword_set(parameter)) then parameter='all'
       parameters = thm_check_valid_name(parameter, parameter_all_meteor, /ignore_case, /include_all)
    
-      iug_load_mu_meteor_nc, datatype = datatypes[i], parameter =parameters, length=length, trange = trange, downloadonly=downloadonly, verbose = verbose
+      iug_load_mu_meteor_nc, parameter =parameters, length=length, trange = trange, downloadonly=downloadonly, verbose = verbose
    
    endif
    
@@ -135,7 +132,7 @@ for i=0, n_elements(datatypes)-1 do begin
       if(not keyword_set(parameter)) then parameter='all'
       parameters = thm_check_valid_name(parameter, parameter_all_rass, /ignore_case, /include_all)
 
-      iug_load_mu_rass_txt, datatype = datatypes[i], parameter =parameters, $
+      iug_load_mu_rass_txt, parameter =parameters, $
                             trange = trange, downloadonly=downloadonly, verbose = verbose
 
    endif
@@ -174,8 +171,8 @@ for i=0, n_elements(datatypes)-1 do begin
       if(not keyword_set(parameter)) then parameter='all'
       parameters = thm_check_valid_name(parameter, parameter_all_fai, /ignore_case, /include_all)
 
-      iug_load_mu_fai_nc, datatype = datatypes[i], parameter =parameters, $
-                           trange = trange, downloadonly=downloadonly, verbose = verbose
+      iug_load_mu_fai_nc, parameter =parameters, $
+                          trange = trange, downloadonly=downloadonly, verbose = verbose
   
    endif
 endfor  
