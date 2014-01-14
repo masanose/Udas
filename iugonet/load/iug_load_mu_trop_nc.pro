@@ -224,9 +224,13 @@ if (downloadonly eq 0) then begin
       if idx eq -1 then begin
          height_vw = float(height_v)
          height_mwzw = float(height_zm)
-         height2 = float(height_v)
-      endif
-    
+         height2 = float(height_vw)
+      endif else begin
+         height_vw = float(height_vw)
+         height_mwzw = float(height_mwzw)
+         height2 = float(height_vw)
+      endelse
+         
       for i=0, n_elements(time)-1 do begin
         ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
          unix_time[i] = double(time[i]) +time_double(syymmdd+'/'+shhmmss)-time_diff2 
@@ -452,4 +456,3 @@ print, '(http://www.iugonet.org/) funded by the Ministry of Education, Culture,'
 print, 'Sports, Science and Technology (MEXT), Japan.'  
     
 end
-
