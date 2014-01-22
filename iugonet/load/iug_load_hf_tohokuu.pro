@@ -13,17 +13,17 @@
 ;   trange = (Optional) Time range of interest  (2 element array).
 ;
 ; EXAMPLE:
-;   iug_load_lfrto, site='ath', datatype='30sec', $
-;                        trange=['2010-10-24/00:00:00','2010-10-25/00:00:00']
+;   iug_load_hf_tohokuU, parameter='RH', $
+;                        trange=['2004-01-09/22:00:00','2004-01-09/23:00:00']
 ;
 ; NOTE: See the rules of the road.
-;       For more information, see http://iprt.gp.tohoku.ac.jp/
+;       For more information, see http://ariel.gp.tohoku.ac.jp/~jupiter/
 ;
 ; Written by: M.Yagi, Oct 2, 2012
 ;             PPARC, Tohoku Univ.
 ;
 ;   $LastChangedBy: M.Yagi $
-;   $LastChangedDate: 2013-01-09 $
+;   $LastChangedDate: 2014-01-08 $
 ;   $URL:
 ;-
 
@@ -91,7 +91,8 @@ for i=0,n_elements(site_code)-1 do begin
       dl =  {cdf:cdf, spec:dlimit.spec, log:dlimit.log, ysubtitle:dlimit.ysubtitle}
 
       ;--- restore data
-      store_data, 'iug_iit_hf_'+param[j], data=data, dlimit=dl
+      if param[j] eq 'rh' then store_data, 'iug_iit_hf_R', data=data, dlimit=dl
+      if param[j] eq 'lh' then store_data, 'iug_iit_hf_L', data=data, dlimit=dl
     endfor
   endif
 endfor

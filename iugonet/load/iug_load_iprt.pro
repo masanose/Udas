@@ -1,6 +1,6 @@
 ;+
 ;Procedure: iug_load_iprt,
-;  iug_load_iprt, site = site, datatype = datatype, $
+;  iug_load_iprt, datatype = datatype, $
 ;           trange = trange, verbose = verbose, $
 ;           downloadonly = downloadonly
 ;Purpose:
@@ -8,7 +8,6 @@
 ;  This is a sample code for IUGONET analysis software.
 ;
 ;Keywords:
-;  site  = Observatory name. Only 'iit' is allowed.
 ;  datatype = The type of data to be loaded.  In this sample
 ;             procedure, there is only one option, the default value of 'Sun'.
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -44,6 +43,7 @@
 ;  27-JUL.-2010, revised for this procedure by M. Kagitani
 ;  12-NOV.-2010, revised by M. Kagitani
 ;  25-NOV.-2010, renamed to 'iug_load_iprt.pro' by M. Kagitani
+;  22-JAN.-2014, revised by M. Yagi
 ;
 ;Acknowledgment:
 ;
@@ -56,9 +56,9 @@
 ;**************************
 ;***** Main Procedure *****
 ;**************************
-pro iug_load_iprt, site=site, datatype = datatype, $
-                           trange = trange, verbose = verbose, $
-                           downloadonly = downloadonly
+pro iug_load_iprt, datatype = datatype, $
+             trange = trange, verbose = verbose, $
+             downloadonly = downloadonly
 
 
 ;*************************
@@ -69,10 +69,6 @@ if ~keyword_set(verbose) then verbose=0
 
 ; dafault data type
 if ~keyword_set(datatype) then datatype='Sun'
-
-; Currently only 'iit' is put in array "sites".
-; This part should be implemented in future to take multiple sites.
-if ~keyword_set(site) then site='iit'
 
 ; validate datatype
 vns=['Sun'];vns=['Sun','Jupiter']
@@ -89,17 +85,6 @@ endif else begin
 ;  continue
 endelse
 
-vsnames = 'iit'
-vsnames_all = strsplit(vsnames, ' ', /extract)
-
-; validate sites
-if(keyword_set(site)) then site_in = site else site_in = 'all'
-foo_sites = thm_check_valid_name(site_in, vsnames_all, $
-                                    /ignore_case, /include_all, /no_warning)
-;if magdas_sites[0] eq '' then return
-
-; number of valid sites
-nsites = n_elements(foo_sites)
 
 ; acknowlegment string (use for creating tplot vars)
 acknowledgstring = '"We would like to present the following two guidelines.' $
@@ -123,65 +108,61 @@ acknowledgstring = '"We would like to present the following two guidelines.' $
 
 
 
-;*************************************************************************
-;***** Download files, read data, and create tplot vars at each site *****
-;*************************************************************************
+;************************************************************
+;***** Download files, read data, and create tplot vars *****
+;************************************************************
 ;=================================
 ;=== Loop on downloading files ===
 ;=================================
 ; make remote path, local path, and download files
 
-for i=0, nsites-1 do begin
-  ; define file names
-  pathformat= strupcase(strmid(foo_sites[i],0,3)) + '/' + $
-            'YYYY/YYYYMMDD_IPRT'
+; define file names
+relpathnames = file_dailynames(file_format='/YYYY/YYYYMMDD_IPRT', $
+                               trange=trange, addmaster=addmaster)+'.fits'
 
-  relpathnames = file_dailynames(file_format='/YYYY/YYYYMMDD_IPRT', $
-                                 trange=trange, addmaster=addmaster)+'.fits'
+; define remote and local path information
+source = file_retrieve(/struct)
+source.verbose = verbose
+source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/iit/'
+source.remote_data_dir = 'http://radio.gp.tohoku.ac.jp/db/IPRT-SUN/DATA2/'
 
-  ; define remote and local path information
-  source = file_retrieve(/struct)
-  source.verbose = verbose
-  source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/iit/'
-  source.remote_data_dir = 'http://radio.gp.tohoku.ac.jp/db/IPRT-SUN/DATA2/'
+; download data
+;local_files = file_retrieve(relpathnames, _extra=source)
+local_files = file_retrieve(relpathnames, _extra=source, /last_version)
 
-  ; download data
-  ;local_files = file_retrieve(relpathnames, _extra=source)
-  local_files = file_retrieve(relpathnames, _extra=source, /last_version)
+; if downloadonly set, go to the top of this loop
+if keyword_set(downloadonly) then return
 
-  ; if downloadonly set, go to the top of this loop
-  if keyword_set(downloadonly) then continue
+;===================================
+;=== Loop on reading MAGDAS data ===
+;===================================
+print,(local_files)
+
+for j=0,n_elements(local_files)-1 do begin
+  file = local_files[j]
+
+  if file_test(/regular,file) then begin
+    dprint,'Loading IPRT SOLAR RADIO DATA file: ', file
+    fexist = 1
+  endif else begin
+    dprint,'Loading IPRT SOLAR RADIO DATA file ',file,' not found. Skipping'
+    continue
+  endelse
+
+  ; create base time
+  year = (strmid(relpathnames[j],strlen(relpathnames[j])-18,4))
+  month = (strmid(relpathnames[j],strlen(relpathnames[j])-14,2))
+  ;day = (strmid(relpathnames[j],27,2))
+  ;basetime = time_double(year+'-'+month+'-'+day)
+
 
   ;===================================
-  ;=== Loop on reading MAGDAS data ===
-  ;===================================
-  print,(local_files)
-
-  for j=0,n_elements(local_files)-1 do begin
-    file = local_files[j]
-
-    if file_test(/regular,file) then begin
-      dprint,'Loading IPRT SOLAR RADIO DATA file: ', file
-      fexist = 1
-    endif else begin
-      dprint,'Loading IPRT SOLAR RADIO DATA file ',file,' not found. Skipping'
-      continue
-    endelse
-
-    ; create base time
-    year = (strmid(relpathnames[j],strlen(relpathnames[j])-18,4))
-    month = (strmid(relpathnames[j],strlen(relpathnames[j])-14,2))
-    ;day = (strmid(relpathnames[j],27,2))
-    ;basetime = time_double(year+'-'+month+'-'+day)
-
-
-    ;===================================
-    fits_read,file,data,hd
-    date_start = time_double(sxpar(hd,'DATE-OBS')+'/'+sxpar(hd,'TIME-OBS'))
-    timearr = date_start $
-         + sxpar(hd,'CRVAL1') + (dindgen(sxpar(hd,'NAXIS1'))-sxpar(hd,'CRPIX1')) * sxpar(hd,'CDELT1')
-    freq = sxpar(hd,'CRVAL2') + (dindgen(sxpar(hd,'NAXIS2'))-sxpar(hd,'CRPIX2')) * sxpar(hd,'CDELT2')
-    ;dindgen(sxpar(hd,'NAXIS2'))
+  fits_read,file,data,hd
+  date_start = time_double(sxpar(hd,'DATE-OBS')+'/'+sxpar(hd,'TIME-OBS'))
+  timearr = date_start $
+       + sxpar(hd,'CRVAL1') + (dindgen(sxpar(hd,'NAXIS1'))-sxpar(hd,'CRPIX1')) * sxpar(hd,'CDELT1')
+  freq = sxpar(hd,'CRVAL2') + (dindgen(sxpar(hd,'NAXIS2'))-sxpar(hd,'CRPIX2')) * sxpar(hd,'CDELT2')
+  ;dindgen(sxpar(hd,'NAXIS2'))
 
 ;print,time_string(date_start)
 ;stop
@@ -203,10 +184,10 @@ for i=0, nsites-1 do begin
      ; pc3p=[pc3p,buf[5]]
     ;endwhile
 ;    free_lun,lun
-    append_array,databufL,data[*,*,0]
-    append_array,databufR,data[*,*,1]
-    append_array,timebuf,timearr
-    ;===================================
+  append_array,databufL,data[*,*,0]
+  append_array,databufR,data[*,*,1]
+  append_array,timebuf,timearr
+  ;===================================
 ;stop
 ;    ; open file
 ;    openr, lun, file, /get_lun
@@ -230,51 +211,51 @@ for i=0, nsites-1 do begin
 ;    append_array, databuf, rdata
 ;    append_array, timebuf, basetime + dindgen(1440)*60d
 
-  endfor
+endfor
 
-  ;=======================================
-  ;=== Loop on creating tplot variable ===
-  ;=======================================
-  if size(databufL,/type) eq 1 then begin
-    ; tplot variable name
-    ;tplot_name = 'onw_pc3_' + strlowcase(strmid(magdas_sites[i],0,3)) + '_pc3'
-    tplot_nameL = 'iprt_sun_L'
-    tplot_nameR = 'iprt_sun_R'
+;=======================================
+;=== Loop on creating tplot variable ===
+;=======================================
+if size(databufL,/type) eq 1 then begin
+  ; tplot variable name
+  ;tplot_name = 'onw_pc3_' + strlowcase(strmid(magdas_sites[i],0,3)) + '_pc3'
+  tplot_nameL = 'iprt_sun_L'
+  tplot_nameR = 'iprt_sun_R'
 
-    ; for bad data
-    wbad = where(finite(databufL) gt 99999, nbad)
-    if nbad gt 0 then databufL[wbad] = !values.f_nan
+  ; for bad data
+  wbad = where(finite(databufL) gt 99999, nbad)
+  if nbad gt 0 then databufL[wbad] = !values.f_nan
 
-    wbad = where(databufL lt 0, nbad)
-    if nbad gt 0 then databuL[wbad] = !values.f_nan
+  wbad = where(databufL lt 0, nbad)
+  if nbad gt 0 then databuL[wbad] = !values.f_nan
 
-    ; default limit structure
-    dlimit=create_struct('data_att',create_struct('acknowledgment', acknowledgstring, $
-                                                  'PI_NAME', 'H. Misawa') $
-                        ,'SPEC',1)
+  ; default limit structure
+  dlimit=create_struct('data_att',create_struct('acknowledgment', acknowledgstring, $
+                                                'PI_NAME', 'H. Misawa') $
+                      ,'SPEC',1)
 
-    ; store data to tplot variable
-    store_data, tplot_nameL, data={x:timebuf, y:databufL, v:freq}, dlimit=dlimit
-    store_data, tplot_nameR, data={x:timebuf, y:databufR, v:freq}, dlimit=dlimit
+  ; store data to tplot variable
+  store_data, tplot_nameL, data={x:timebuf, y:databufL, v:freq}, dlimit=dlimit
+  store_data, tplot_nameR, data={x:timebuf, y:databufR, v:freq}, dlimit=dlimit
 
-    ; add options
-    options, tplot_nameL, labels=['IPRT_SUN_LCP'] , $
-                         ytitle = sxpar(hd,'CTYPE2'), $
-                         ysubtitle = '';, $
-                         title = 'IPRT Solar radio data'
-    options, tplot_nameR, labels=['IPRT_SUN_RCP'] , $
-                         ytitle = sxpar(hd,'CTYPE2'), $
-                         ysubtitle = '';, $
-                         title = 'IPRT Solar radio data'
-  endif
+  ; add options
+  options, tplot_nameL, labels=['IPRT_SUN_LCP'] , $
+                       ytitle = sxpar(hd,'CTYPE2'), $
+                       ysubtitle = '';, $
+                       title = 'IPRT Solar radio data'
+  options, tplot_nameR, labels=['IPRT_SUN_RCP'] , $
+                       ytitle = sxpar(hd,'CTYPE2'), $
+                       ysubtitle = '';, $
+                       title = 'IPRT Solar radio data'
+endif
 
-  ; clear data and time buffer
-  databufL = 0
-  databufR = 0
-  timebuf = 0
+; clear data and time buffer
+databufL = 0
+databufR = 0
+timebuf = 0
 
 ; go to next site
-endfor
+;;endfor
 
 ;******************************
 ;print of acknowledgement:
@@ -297,9 +278,6 @@ print, '4. Entry to publication list:'
 print, 'When your publication is accepted, or when you make a presentation at a '
 print, 'conference on your result, please let us know by sending email to PI.'
 print, 'Contact person & PI: Dr. Hiroaki Misawa (misawa@pparc.gp.tohoku.ac.jp)'
-
-
-
 
 
 end
