@@ -1,15 +1,15 @@
 ;+
 ;
 ;NAME:
-;iug_load_radiosonde_sgk_csv
+;iug_load_radiosonde_sgk_tsv
 ;
 ;PURPOSE:
 ;  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
-;  of the troposphere in csv format taken by the radiosonde at Shigaraki MU Observatory 
+;  of the troposphere in tsv format taken by the radiosonde at Shigaraki MU Observatory 
 ;  and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_radiosonde_sgk_tsv, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
 ;  trange = (Optional) Time range of interest  (2 element array), if
@@ -21,10 +21,10 @@
 ;  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 ;  
 ;CODE:
-;  A. Shinbori, 17/05/2013.
+;  A. Shinbori, 24/01/2014.
 ;  
 ;MODIFICATIONS:
-;  A. Shinbori, 24/01/2014.
+;  
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -33,22 +33,24 @@
 ; $URL $
 ;-
 
-pro iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, $
+pro iug_load_radiosonde_sgk_tsv, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
 
 ;======================
 ;Calculation of height:
 ;======================
-height = fltarr(1200)
-height[0]=350.0
-for i=0L, n_elements(height)-2 do begin
-    height[i+1] = height[i]+30.0
+max_height = 40000
+dh=30.0
+num_h= fix(max_height/dh)
+height = fltarr(num_h)
+for i=0, n_elements(height)-2 do begin
+   if height[i] le 40000 then height[i+1] = height[i]+dh
 endfor
 
 ;==================================================================
@@ -68,14 +70,14 @@ if ~size(fns,/type) then begin
    hour_res = 1  
    file_names = file_dailynames( $
                 file_format='YYYY/'+$
-                'YYYYMMDDhh',trange=trange,hour_res=hour_res,times=times,/unique)+'*.csv'
+                'YYYYMMDDhh',trange=trange,hour_res=hour_res,times=times,/unique)+'*.tsv'
   
   ;===============================        
   ;Define FILE_RETRIEVE structure:
   ;===============================
    source = file_retrieve(/struct)
    source.verbose=verbose
-   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/radiosonde/csv/'
+   source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/radiosonde/tsv/'
    source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/sondedb/'
   
   ;=======================================================  
@@ -105,7 +107,7 @@ if (downloadonly eq 0) then begin
   ;==============     
   ;Loop on files: 
   ;==============
-   for j=0L,n_elements(local_paths)-1 do begin
+   for j=0,n_elements(local_paths)-1 do begin
       file= local_paths[j] 
       if file_test(/regular,file) then  dprint,'Loading Shigaraki sonde data file: ',file $
       else begin
@@ -114,39 +116,53 @@ if (downloadonly eq 0) then begin
       endelse
          
      ;---Open the read file:
-      openr,lun,file,/get_lun 
-          
+      openr,lun,file,/get_lun
+       
      ;---Read time and header information:
-      readf,lun,s
-      temp_name = strsplit(s,',', /extract)
-      year = fix(strmid(temp_name[0],0,4))
-      month = fix(strmid(temp_name[0],5,2))
-      day = fix(strmid(temp_name[0],8,2))
-      hhmmss=temp_name[1] 
-     
+      head_data = strsplit(s,' ', /extract)
+      year = strmid(file,50,4)
+      month = strmid(file,54,2)
+      day = strmid(file,56,2)
+      hour = strmid(file,58,2)
+      minute = strmid(file,60,2)
+
      ;==================   
      ;Loop on read data:
      ;==================
       while(not eof(lun)) do begin
          readf,lun,s
+
          ok=1
          if strmid(s,0,1) eq '[' then ok=0
          if ok && keyword_set(s) then begin
             dprint,s ,dlevel=5
-              
-            data_comp = strsplit(s,' ', /extract)
-             
+     
+            data_comp = strsplit(strcompress(s),' ', /extract)
+
+            if data_comp[0] eq 'RS-Number' then Sonde_Serial_No = data_comp[2]
+            if n_elements(data_comp) eq 19 then begin
+            
            ;===================================================================   
            ;Append array of height, press., temp., rh, dewp, uwind, vwind data:
            ;===================================================================
-            append_array,height_data, float(data_comp[1])
-            append_array,press, float(data_comp[2])
-            append_array,temp, float(data_comp[3])
-            append_array,rh, float(data_comp[4])
-            append_array,uwind, float(data_comp[5])
-            append_array,vwind, float(data_comp[6])
+            append_array,time_data, float(data_comp[0])
+            append_array,height_data, float(data_comp[6])
+            if float(data_comp[7]) ne -32768.00 then append_array,press, float(data_comp[7])
+            if float(data_comp[7]) eq -32768.00 then append_array,press, -999.00
+            if float(data_comp[2]) ne -32768.00 then append_array,temp, float(data_comp[2])-273.15
+            if float(data_comp[2]) eq -32768.00 then append_array,temp, -999.00
+            if float(data_comp[3]) ne -32768.00 then append_array,rh, float(data_comp[3])
+            if float(data_comp[3]) eq -32768.00 then append_array,rh, -999.00
+            if float(data_comp[5]) ne -32768.00 then append_array,uwind, float(data_comp[5])
+            if float(data_comp[5]) eq -32768.00 then append_array,uwind, -999.00
+            if float(data_comp[4]) ne -32768.00 then append_array,vwind, float(data_comp[4])
+            if float(data_comp[4]) eq -32768.00 then append_array,vwind, -999.00
+            append_array,lon_data, float(data_comp[14])
+            append_array,lat_data, float(data_comp[15])
+            endif
             continue       
          endif
+        ; stop
       endwhile 
       free_lun,lun ;Close the file
 
@@ -159,35 +175,36 @@ if (downloadonly eq 0) then begin
       vwind2 = fltarr(1,n_elements(height))+!values.f_nan
          
      ;---Replace missing number by NaN
-      for i=0L, n_elements(height_data)-1 do begin
+      for i=0, n_elements(height_data)-1 do begin
          a = press[i]            
-         wbad = where(a eq -999.0,nbad)
+         wbad = where(a eq -32768.00,nbad)
          if nbad gt 0 then a[wbad] = !values.f_nan
          press[i] =a 
          b = temp[i]            
-         wbad = where(b eq -999.0,nbad)
+         wbad = where(b eq -32768.00,nbad)
          if nbad gt 0 then b[wbad] = !values.f_nan
          temp[i] =b 
          c = rh[i]            
-         wbad = where(c eq -999.0,nbad)
+         wbad = where(c eq -32768.00,nbad)
          if nbad gt 0 then c[wbad] = !values.f_nan
          rh[i] =c 
          d = uwind[i]            
-         wbad = where(d eq -999.0,nbad)
+         wbad = where(d eq -32768.00,nbad)
          if nbad gt 0 then d[wbad] = !values.f_nan
          uwind[i] =d 
          e = vwind[i]            
-         wbad = where(e eq -999.0,nbad)
+         wbad = where(e eq -32768.00,nbad)
          if nbad gt 0 then e[wbad] = !values.f_nan
          vwind[i] =e 
       endfor
 
      ;---Convert time from UT to UNIX time
-      time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hhmmss)) $
+      time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
              -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/09:00:00')
-      k=0L
-      for i=0L, n_elements(height)-1 do begin
-         idx = where((height_data ge height[i]-15) and (height_data lt height[i]+15),cnt)
+
+      k=0
+      for i=0, n_elements(height)-1 do begin
+         idx = where((height_data ge height[i]-dh/2.0) and (height_data lt height[i]+dh/2.0),cnt)
          if idx[0] ne -1 then begin
             press2[0,i]=mean(press[idx],/NAN)
             temp2[0,i]=mean(temp[idx],/NAN)
@@ -196,7 +213,7 @@ if (downloadonly eq 0) then begin
             vwind2[0,i]=mean(vwind[idx],/NAN)
          endif
       endfor
-        
+
      ;=====================
      ;Append time and data:
      ;=====================
@@ -206,15 +223,18 @@ if (downloadonly eq 0) then begin
       append_array, sonde_rh, rh2
       append_array, sonde_uwind, uwind2
       append_array, sonde_vwind, vwind2
-         
+
      ;---Clear Buffer:
       time=0
+      time_data=0
       height_data=0
       press=0
       temp=0
       rh=0
       uwind=0
-      vwind=0 
+      vwind=0
+      lat_data=0
+      lon_data=0 
    endfor
 
       
@@ -253,7 +273,6 @@ if (downloadonly eq 0) then begin
    sonde_press = 0
    sonde_temp = 0
    sonde_rh = 0
-   sonde_dewp = 0
    sonde_uwind = 0
    sonde_vwind = 0
        
@@ -265,6 +284,8 @@ if (downloadonly eq 0) then begin
       tdegap, 'iug_radiosonde_sgk_rh',/overwrite
       tdegap, 'iug_radiosonde_sgk_uwnd',/overwrite
       tdegap, 'iug_radiosonde_sgk_vwnd',/overwrite
+      zlim, 'iug_radiosonde_sgk_uwnd', -40,40
+      zlim, 'iug_radiosonde_sgk_vwnd', -40,40
    endif
 endif 
 

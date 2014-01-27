@@ -27,7 +27,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -54,7 +54,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-h=0
+h=0L
 site_time=0    
 if ~size(fns,/type) then begin 
   ;****************************
@@ -91,7 +91,7 @@ if (downloadonly eq 0) then begin
   ;======================================   
   ;Loop on files (read the NetCDF files): 
   ;======================================
-   for h=0,n_elements(local_paths)-1 do begin
+   for h=0L,n_elements(local_paths)-1 do begin
       file= local_paths[h]
       if file_test(/regular,file) then  dprint,'Loading the ionosphere data estimated from the incoherent scatter observation of the MU radar: ',file $
       else begin

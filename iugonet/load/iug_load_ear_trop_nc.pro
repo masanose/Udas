@@ -28,7 +28,7 @@
 ; A. Shinbori, 13/11/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 18/12/2012.
-; A. Shinbori, 10/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -101,7 +101,7 @@ if (downloadonly eq 0) then begin
   ;==============      
   ;Loop on files: 
   ;==============  
-   for j=0,n_elements(local_paths)-1 do begin
+   for j=0L,n_elements(local_paths)-1 do begin
       file= local_paths[j]
       if file_test(/regular,file) then  dprint,'Loading the troposphere and lower statrosphere observation data taken by the EAR: ',file $
       else begin
@@ -114,7 +114,7 @@ if (downloadonly eq 0) then begin
 
      ;---Show user the size of each dimension
       print,'Dimensions', glob.ndims
-      for i=0,glob.ndims-1 do begin
+      for i=0L,glob.ndims-1 do begin
          ncdf_diminq, cdfid, i, name,size
          if i eq glob.recdim then  $
            print,'    ', name, size, '(Unlimited dim)' $
@@ -125,7 +125,7 @@ if (downloadonly eq 0) then begin
      ;---Now tell user about the variables
       print
       print, 'Variables'
-      for m=0,glob.nvars-1 do begin
+      for m=0L,glob.nvars-1 do begin
 
         ;---Get information about the variable
          info = ncdf_varinq(cdfid, m)
@@ -134,7 +134,7 @@ if (downloadonly eq 0) then begin
          print, ']'
 
         ;---Get attributes associated with the variable
-         for l=0,info.natts-1 do begin
+         for l=0L,info.natts-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
             print,' Attribute ', attname, '=', string(attvalue)
@@ -195,12 +195,12 @@ if (downloadonly eq 0) then begin
       dpl1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
       pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
-      for i=0, n_elements(time)-1 do begin
+      for i=0L, n_elements(time)-1 do begin
         ;Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
          unix_time[i] =  double(time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2     
         
         ;---Replace missing value by NaN:                        
-         for k=0, n_elements(range)-1 do begin
+         for k=0L, n_elements(range)-1 do begin
             a = uwind[k,i]            
             wbad = where(a eq 10000000000,nbad)
             if nbad gt 0 then a[wbad] = !values.f_nan
@@ -216,7 +216,7 @@ if (downloadonly eq 0) then begin
             uwind_ear[i,k]=uwind[k,i]
             vwind_ear[i,k]=vwind[k,i]
             wwind_ear[i,k]=wwind[k,i]                      
-            for l=0, n_elements(beam)-1 do begin           
+            for l=0L, n_elements(beam)-1 do begin           
                e = pwr[k,i,l]            
                wbad = where(e eq 10000000000,nbad)
                if nbad gt 0 then e[wbad] = !values.f_nan
@@ -314,14 +314,14 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
          endif
                   
         ;---Create tplot variable for echo intensity, spectral width, Doppler velocity and niose level for beam 1-5:
-         for l=0, n_elements(beam)-1 do begin
+         for l=0L, n_elements(beam)-1 do begin
              bname2[l]=string(beam[l]+1)
              bname[l]=strsplit(bname2[l],' ', /extract)
-             for k=0, n_elements(range)-1 do begin
+             for k=0L, n_elements(range)-1 do begin
                  height2[k]=height[k,l]
              endfor
-             for i=0, n_elements(ear_time)-1 do begin
-                 for k=0, n_elements(range)-1 do begin
+             for i=0L, n_elements(ear_time)-1 do begin
+                 for k=0L, n_elements(range)-1 do begin
                      pwr2_ear[i,k]=pwr1[i,k,l]
                  endfor
              endfor
@@ -334,8 +334,8 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                 options, 'iug_ear_trop_pwr'+bname[l],'spec',1
                 tdegap, 'iug_ear_trop_pwr'+bname[l],/overwrite
              endif
-             for i=0, n_elements(ear_time)-1 do begin
-                 for k=0, n_elements(range)-1 do begin
+             for i=0L, n_elements(ear_time)-1 do begin
+                 for k=0L, n_elements(range)-1 do begin
                      wdt2_ear[i,k]=wdt1[i,k,l]
                  endfor
              endfor
@@ -349,8 +349,8 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                 tdegap, 'iug_ear_trop_wdt'+bname[l],/overwrite 
              endif
              
-             for i=0, n_elements(ear_time)-1 do begin
-                 for k=0, n_elements(range)-1 do begin
+             for i=0L, n_elements(ear_time)-1 do begin
+                 for k=0L, n_elements(range)-1 do begin
                      dpl2_ear[i,k]=dpl1[i,k,l]
                  endfor
              endfor
@@ -364,7 +364,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
                 tdegap, 'iug_ear_trop_dpl'+bname[l],/overwrite 
              endif
               
-             for i=0, n_elements(ear_time)-1 do begin
+             for i=0L, n_elements(ear_time)-1 do begin
                  pnoise2_ear[i]=pn1[i,l]
              endfor
              

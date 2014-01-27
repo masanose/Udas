@@ -32,7 +32,7 @@
 ;  A. Shinbori, 18/12/2012.
 ;  A. Shinbori, 09/01/2013.
 ;  A. Shinbori, 18/02/2013.
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -117,7 +117,7 @@ if (downloadonly eq 0) then begin
    ;==============      
    ;Loop on files: 
    ;==============        
-    for j=0,n_elements(local_paths_all)-1 do begin
+    for j=0L,n_elements(local_paths_all)-1 do begin
        file=local_paths_all[j]
        if file_test(/regular,file) then  dprint,'Loading the ionogram data taken by the ionosonde at Shigaraki:',file $
        else begin
@@ -134,7 +134,7 @@ if (downloadonly eq 0) then begin
       ;================================
       ;Read information of header data:
       ;================================
-       for i=0, n_elements(header_data)-1 do begin
+       for i=0L, n_elements(header_data)-1 do begin
           readf, lun, s
           header_data[i]=s
        endfor      
@@ -205,7 +205,7 @@ if (downloadonly eq 0) then begin
      ;Create tplot variables for every fixed frequency (2-18 MHz) 
      ;=========================================================== 
       if keyword_set(fixed_freq) then begin
-         for i=0, n_elements(freq)-1 do begin
+         for i=0L, n_elements(freq)-1 do begin
             power = fltarr(n_elements(site_time),n_elements(height3))
             power[*,*] = intensity_all_f2[*,i,*]
             if (i mod 10) eq 0 then begin

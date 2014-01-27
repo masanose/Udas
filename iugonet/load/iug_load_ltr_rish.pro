@@ -35,7 +35,7 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 10/02/2012.
 ; A. Shinbori, 18/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -94,10 +94,10 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-jj=0
+jj=0L
 start_time=time_double('1999-7-7')
 end_time=time_double('2006-3-29')
-for iii=0,n_elements(parameters)-1 do begin
+for iii=0L,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
       ;****************************
       ;Get files for ith component:
@@ -168,12 +168,12 @@ for iii=0,n_elements(parameters)-1 do begin
           data2 = fltarr(1,70)
              
          ;---Enter the altitude information:
-          for j=0,n_elements(height)-2 do begin
+          for j=0L,n_elements(height)-2 do begin
              altitude[j] = float(height[j+1]) 
           endfor
 
          ;---Enter missing value of NaN:
-          for j=0, n_elements(altitude)-1 do begin
+          for j=0L, n_elements(altitude)-1 do begin
              b = float(altitude[j])
              wbad = where(b eq 0,nbad)
              if nbad gt 0 then b[wbad] = !values.f_nan
@@ -206,7 +206,7 @@ for iii=0,n_elements(parameters)-1 do begin
                if time lt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
               
               ;---Enter the missing value:
-               for j=0,n_elements(height)-2 do begin
+               for j=0L,n_elements(height)-2 do begin
                   a = float(data[j+1])
                   wbad = where(a eq 999, nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan

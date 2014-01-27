@@ -33,7 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 10/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -87,8 +87,8 @@ print, levels
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-jj=0
-for ii=0,n_elements(levels)-1 do begin
+jj=0L
+for ii=0L,n_elements(levels)-1 do begin
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
         ;****************************
@@ -157,7 +157,7 @@ for ii=0,n_elements(levels)-1 do begin
             altitude = fltarr(n_elements(h_data)-1)
           
            ;---Enter the altitude information:
-            for j=0,n_elements(h_data)-2 do begin
+            for j=0L,n_elements(h_data)-2 do begin
                altitude[j] = float(h_data[j+1])
             endfor
             
@@ -185,7 +185,7 @@ for ii=0,n_elements(levels)-1 do begin
                           -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
 
                  ;Replace missing value by NaN:
-                  for j=0,(n_elements(data)-2)/2 do begin
+                  for j=0L,(n_elements(data)-2)/2 do begin
                      data2[0,j]=float(data[2*j+1])
                      a = float(data[2*j+1])
                      if levels[ii] eq 'original' then begin

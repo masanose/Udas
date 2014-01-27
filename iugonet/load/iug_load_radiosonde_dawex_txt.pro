@@ -32,7 +32,7 @@
 ;  A. Shinbori, 16/02/2013.
 ;  A. Shinbori, 26/02/2013.
 ;  A. Shinbori, 30/05/2013.
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -78,7 +78,7 @@ site_data_premane = strsplit('nD nG nK',' ', /extract)
 ;Calculation of height:
 ;======================
 height = fltarr(400)
-for i=0, 398 do begin
+for i=0L, 398 do begin
     height[i+1] = height[i]+0.1
 endfor
 
@@ -92,15 +92,15 @@ endfor
 ;=================================
 
 ;Definition of parameter and array:
-h=0
-jj=0
-k=0
+h=0L
+jj=0L
+k=0L
 n_site=intarr(3)
 
 ;In the case that the parameters are except for all.'
 if n_elements(site_code) le 3 then begin
    h_max=n_elements(site_code)
-   for i=0,n_elements(site_code)-1 do begin
+   for i=0L,n_elements(site_code)-1 do begin
       case site_code[i] of
          'drw':n_site[i]=0 
          'gpn':n_site[i]=1 
@@ -109,7 +109,7 @@ if n_elements(site_code) le 3 then begin
     endfor
   endif
 
-for ii=0,n_elements(site_code)-1 do begin
+for ii=0L,n_elements(site_code)-1 do begin
    k=n_site[ii]
    if ~size(fns,/type) then begin  
      ;Definition of DAWEX radiosonde site names:
@@ -228,7 +228,7 @@ for ii=0,n_elements(site_code)-1 do begin
          free_lun,lun ;Close the file
          
         ;---Replace missing number by NaN
-         for i=0, 399 do begin
+         for i=0L, 399 do begin
             a = press[*,i]            
             wbad = where(a eq -999.0 || a eq 0.0,nbad)
             if nbad gt 0 then a[wbad] = !values.f_nan

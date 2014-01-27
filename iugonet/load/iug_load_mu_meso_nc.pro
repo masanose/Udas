@@ -1,3 +1,7 @@
+;+
+;
+;NAME:
+; iug_load_mu_meso_nc
 ;
 ;PURPOSE:
 ;  Queries the RISH servers for the standard observation data (netCDF format) of the 
@@ -26,7 +30,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -66,7 +70,7 @@ print, levels
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-for ii=0, n_elements(levels)-1 do begin
+for ii=0L, n_elements(levels)-1 do begin
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -114,7 +118,7 @@ for ii=0, n_elements(levels)-1 do begin
       ;==============
       ;Loop on files: 
       ;==============
-      for j=0,n_elements(local_paths)-1 do begin
+      for j=0L,n_elements(local_paths)-1 do begin
          file= local_paths[j]
          if file_test(/regular,file) then  dprint,'Loading the mesosphere observation data taken by the MU radar: ',file $
          else begin
@@ -127,7 +131,7 @@ for ii=0, n_elements(levels)-1 do begin
 
         ;---Show user the size of each dimension
          print,'Dimensions', glob.ndims
-         for i=0,glob.ndims-1 do begin
+         for i=0L,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
             if i EQ glob.recdim then  $
                print,'    ', name, size, '(Unlimited dim)' $
@@ -138,7 +142,7 @@ for ii=0, n_elements(levels)-1 do begin
         ;---Now tell user about the variables
          print
          print, 'Variables'
-         for m=0,glob.nvars-1 do begin
+         for m=0L,glob.nvars-1 do begin
 
            ;---Get information about the variable
             info = ncdf_varinq(cdfid, m)
@@ -147,7 +151,7 @@ for ii=0, n_elements(levels)-1 do begin
             print, ']'
 
            ;---Get attributes associated with the variable
-            for l=0,info.natts-1 do begin
+            for l=0L,info.natts-1 do begin
                attname = ncdf_attname(cdfid,m,l)
                ncdf_attget,cdfid,m,attname,attvalue
                print,' Attribute ', attname, '=', string(attvalue)
@@ -194,13 +198,13 @@ for ii=0, n_elements(levels)-1 do begin
          if_cond_mu=lonarr(n_elements(time),n_elements(range),n_elements(beam))
          pnoise1_mu=fltarr(n_elements(time),n_elements(beam)) 
     
-         for i=0, n_elements(time)-1 do begin
+         for i=0L, n_elements(time)-1 do begin
            ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
             unix_time[i] = double(time[i]) +time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+'00:00:00')-time_diff2
            
            ;---Replace missing value by NaN:                    
-            for k=0, n_elements(range)-1 do begin                       
-               for l=0, n_elements(beam)-1 do begin           
+            for k=0L, n_elements(range)-1 do begin                       
+               for l=0L, n_elements(beam)-1 do begin           
                   a = if_cond[i,k,l]
                   if levels[ii] eq 'scr' then begin            
                      if a gt 4 then begin
@@ -262,11 +266,11 @@ for ii=0, n_elements(levels)-1 do begin
          if size(dpl1,/type) eq 4 then begin
            ;---Create tplot variable for echo power, spectral width, Doppler velocity and niose level:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))                          
-            for l=0, n_elements(beam)-1 do begin
+            for l=0L, n_elements(beam)-1 do begin
                bname2[l]=string(beam[l]+1)
                bname[l]=strsplit(bname2[l],' ', /extract)
                for i=0L, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      pwr2_mu[i,k]=pwr1[i,k,l]
                   endfor
                endfor
@@ -281,7 +285,7 @@ for ii=0, n_elements(levels)-1 do begin
                   options, 'iug_mu_meso_pwr'+bname[l]+'_'+levels[ii],'spec',1
                endif            
                for i=0L, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      wdt2_mu[i,k]=wdt1[i,k,l]
                   endfor
                endfor
@@ -296,7 +300,7 @@ for ii=0, n_elements(levels)-1 do begin
                   options, 'iug_mu_meso_wdt'+bname[l]+'_'+levels[ii],'spec',1
                endif
                for i=0L, n_elements(mu_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      dpl2_mu[i,k]=dpl1[i,k,l]
                   endfor
                endfor  

@@ -36,7 +36,7 @@
 ; A. Shinbori, 10/02/2012.
 ; A. Shinbori, 04/03/2013.
 ; A. Shinbori, 08/04/2013.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -115,8 +115,8 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;
 
 ;Definition of parameter
-jj=0
-k=0
+jj=0L
+k=0L
 n_site=intarr(n_elements(site_data_dir))
 start_time=time_double('2006-3-30')
 
@@ -133,7 +133,7 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
    endfor
 endif
 
-for ii=0,h_max-1 do begin
+for ii=0L,h_max-1 do begin
    k=n_site[ii]
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
@@ -223,12 +223,12 @@ for ii=0,h_max-1 do begin
             data2 = fltarr(1,n_elements(height)-1)
              
            ;Enter the altitude information:
-            for j=0,n_elements(height)-2 do begin
+            for j=0L,n_elements(height)-2 do begin
                altitude[j] = float(height[j+1])
             endfor
 
            ;Enter the missing value:
-            for j=0, n_elements(altitude)-1 do begin
+            for j=0L, n_elements(altitude)-1 do begin
                b = float(altitude[j])
                wbad = where(b eq 0,nbad)
                if nbad gt 0 then b[wbad] = !values.f_nan
@@ -260,7 +260,7 @@ for ii=0,h_max-1 do begin
                         -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
                  
                  ;---Enter the missing value:
-                  for j=0,n_elements(height)-2 do begin
+                  for j=0L,n_elements(height)-2 do begin
                      a = float(data[j+1])
                      wbad = where(a eq 999, nbad)
                      if nbad gt 0 then a[wbad] = !values.f_nan

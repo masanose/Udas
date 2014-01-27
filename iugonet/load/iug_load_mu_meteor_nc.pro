@@ -75,7 +75,7 @@ print, parameters
 site_data_dir=strarr(n_elements(parameters))
 site_data_lastmane=strarr(n_elements(parameters))
 
-for i=0, n_elements(site_data_dir)-1 do begin
+for i=0L, n_elements(site_data_dir)-1 do begin
    site_data_dir[i]=strmid(parameters[i],0,2)+'km_'+strmid(parameters[i],2,strlen(parameters[i])-2)+'/'
    site_data_lastmane[i]=parameters[i]
 endfor
@@ -89,8 +89,8 @@ endfor
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-jj=0
-for iii=0,n_elements(parameters)-1 do begin
+jj=0L
+for iii=0L,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin 
      ;****************************
      ;Get files for ith component:
@@ -139,7 +139,7 @@ for iii=0,n_elements(parameters)-1 do begin
 
         ;---Show user the size of each dimension
          print,'Dimensions', glob.ndims
-         for i=0,glob.ndims-1 do begin
+         for i=0L,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
             if i EQ glob.recdim then  $
                print,'    ', name, size, '(Unlimited dim)' $
@@ -150,7 +150,7 @@ for iii=0,n_elements(parameters)-1 do begin
         ;---Now tell user about the variables
           print
           print, 'Variables'
-          for m=0,glob.nvars-1 do begin
+          for m=0L,glob.nvars-1 do begin
    
             ;---Get information about the variable
              info = ncdf_varinq(cdfid, m)
@@ -159,7 +159,7 @@ for iii=0,n_elements(parameters)-1 do begin
              print, ']'
 
             ;---Get attributes associated with the variable
-             for l=0,info.natts-1 do begin
+             for l=0L,info.natts-1 do begin
                 attname = ncdf_attname(cdfid,m,l)
                 ncdf_attget,cdfid,m,attname,attvalue
                 print,' Attribute ', attname, '=', string(attvalue)
@@ -192,7 +192,7 @@ for iii=0,n_elements(parameters)-1 do begin
           sig_vwind_data=fltarr(n_elements(time),n_elements(range))
           num_data=fltarr(n_elements(time),n_elements(range))
 
-          for i=0, n_elements(time)-1 do begin
+          for i=0L, n_elements(time)-1 do begin
             ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
              unix_time[i] = double(time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2 
              

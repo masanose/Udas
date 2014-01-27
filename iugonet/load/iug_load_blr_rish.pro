@@ -37,7 +37,7 @@
 ;  A. Shinbori, 10/02/2012.
 ;  A. Shinbori, 17/12/2012.
 ;  A. Shinbori, 27/02/2013.
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -108,9 +108,9 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 ;Definition of parameter and array:
-h=0
-jj=0
-k=0
+h=0L
+jj=0L
+k=0L
 n_site=intarr(n_elements(site_data_dir))
 start_time=time_double('1992-4-13')
 end_time=time_double('1992-8-29')
@@ -118,7 +118,7 @@ end_time=time_double('1992-8-29')
 ;---In the case that the parameters are except for all.'
 if n_elements(site_code) le n_elements(site_data_dir) then begin
    h_max=n_elements(site_code)
-   for i=0,n_elements(site_code)-1 do begin
+   for i=0L,n_elements(site_code)-1 do begin
       case site_code[i] of
          'ktb':n_site[i]=0
          'sgk':n_site[i]=1 
@@ -127,9 +127,9 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
    endfor
 endif
 
-for ii=0,h_max-1 do begin
+for ii=0L,h_max-1 do begin
    k=n_site[ii]
-   for iii=0,n_elements(parameters)-1 do begin
+   for iii=0L,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
         ;---Definition of blr site names:
          case site_code[ii] of
@@ -210,12 +210,12 @@ for ii=0,h_max-1 do begin
             data2 = fltarr(1,n_elements(height)-1)
              
            ;---Enter the altitude information:
-            for j=0,n_elements(height)-2 do begin
+            for j=0L,n_elements(height)-2 do begin
                altitude[j] = float(height[j+1])
             endfor
              
            ;---Enter the missing value:
-            for j=0, n_elements(altitude)-1 do begin
+            for j=0L, n_elements(altitude)-1 do begin
                b = float(altitude[j])
                wbad = where(b eq 0,nbad)
                if nbad gt 0 then b[wbad] = !values.f_nan

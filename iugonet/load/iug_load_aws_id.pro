@@ -27,7 +27,7 @@
 ;  
 ;MODIFICATIONS:
 ;  A. Shinbori, 08/04/2013.
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;    
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -79,15 +79,15 @@ site_data_dir = strsplit('bik/aws/ ktb/aws/ mnd/aws/ pon/aws/',' ', /extract)
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 ;---Definition of parameter and array:
-h=0
-jj=0
-k=0
+h=0L
+jj=0L
+k=0L
 n_site=intarr(n_elements(site_data_dir))
 
 ;---In the case that the parameters are except for all.'
 if n_elements(site_code) le n_elements(site_data_dir) then begin
    h_max=n_elements(site_code)
-   for i=0,n_elements(site_code)-1 do begin
+   for i=0L,n_elements(site_code)-1 do begin
       case site_code[i] of
          'bik':n_site[i]=0 
          'ktb':n_site[i]=1 
@@ -97,7 +97,7 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
    endfor
 endif
 
-for ii=0,h_max-1 do begin
+for ii=0L,h_max-1 do begin
    k=n_site[ii]
    if ~size(fns,/type) then begin
      ;---Definition of blr site names:

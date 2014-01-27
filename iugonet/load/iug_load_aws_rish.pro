@@ -67,7 +67,7 @@ print, site_code
 ;===============================
 ;======Load data of AWS=========
 ;===============================
-for i=0, n_elements(site_code)-1 do begin
+for i=0L, n_elements(site_code)-1 do begin
   
    if (site_code[i] eq 'sgk') then begin
      ;---load of aws data at the Shigaraki sites

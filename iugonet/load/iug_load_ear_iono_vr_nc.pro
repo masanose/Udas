@@ -37,7 +37,7 @@
 ; A. Shinbori, 09/07/2011.
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 17/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -87,8 +87,8 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-jj=0
-for ii=0,n_elements(parameters)-1 do begin
+jj=0L
+for ii=0L,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -148,7 +148,7 @@ for ii=0,n_elements(parameters)-1 do begin
 
         ;---Show user the size of each dimension
          print,'Dimensions', glob.ndims
-         for i=0,glob.ndims-1 do begin
+         for i=0L,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
             if i eq glob.recdim then  $
                print,'    ', name, size, '(Unlimited dim)' $
@@ -159,7 +159,7 @@ for ii=0,n_elements(parameters)-1 do begin
         ;---Now tell user about the variables
          print
          print, 'Variables'
-         for m=0,glob.nvars-1 do begin
+         for m=0L,glob.nvars-1 do begin
            
            ;---Get information about the variable
             info = ncdf_varinq(cdfid, m)
@@ -168,7 +168,7 @@ for ii=0,n_elements(parameters)-1 do begin
             print, ']'
 
            ;---Get attributes associated with the variable
-            for l=0,info.natts-1 do begin
+            for l=0L,info.natts-1 do begin
                attname = ncdf_attname(cdfid,m,l)
                ncdf_attget,cdfid,m,attname,attvalue
                print,' Attribute ', attname, '=', string(attvalue)
@@ -220,13 +220,13 @@ for ii=0,n_elements(parameters)-1 do begin
          snr1_ear=fltarr(n_elements(time),n_elements(range),n_elements(beam))
          pnoise1_ear=fltarr(n_elements(time),n_elements(beam)) 
     
-         for i=0, n_elements(time)-1 do begin
+         for i=0L, n_elements(time)-1 do begin
            ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
             unix_time[i] = double(time[i]) +time_double(string(syymmdd)+'/'+string(shhmmss))-double(time_diff2)
            
            ;---Replace missing value by NaN:                            
-            for k=0, n_elements(range)-1 do begin
-               for l=0, n_elements(beam)-1 do begin
+            for k=0L, n_elements(range)-1 do begin
+               for l=0L, n_elements(beam)-1 do begin
                   a = pwr[k,i,l]            
                   wbad = where(a eq 10000000000,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan
@@ -244,7 +244,7 @@ for ii=0,n_elements(parameters)-1 do begin
                   dpl1_ear[i,k,l]=dpl[k,i,l]
                endfor        
             endfor
-            for l=0, n_elements(beam)-1 do begin            
+            for l=0L, n_elements(beam)-1 do begin            
                d = pnoise[i,l]            
                wbad = where(d eq 10000000000,nbad)
                if nbad gt 0 then d[wbad] = !values.f_nan
@@ -256,9 +256,9 @@ for ii=0,n_elements(parameters)-1 do begin
        
         ;---Calculation of SNR
          snr=fltarr(n_elements(time),n_elements(range),n_elements(beam)) 
-         for i=0,n_elements(time)-1 do begin
-            for l=0,n_elements(beam)-1 do begin
-               for k=0,n_elements(range)-1 do begin
+         for i=0L,n_elements(time)-1 do begin
+            for l=0L,n_elements(beam)-1 do begin
+               for k=0L,n_elements(range)-1 do begin
                   snr1_ear[i,k,l]=pwr1_ear[i,k,l]-(pnoise1_ear[i,l]+alog10(nfft))
               endfor 
             endfor
@@ -299,14 +299,14 @@ for ii=0,n_elements(parameters)-1 do begin
          if size(pwr1,/type) eq 4 then begin
            ;---Create tplot variable for each parameter:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))         
-            for l=0, n_elements(beam)-1 do begin
+            for l=0L, n_elements(beam)-1 do begin
                bname2[l]=string(beam[l]+1)
                bname[l]=strsplit(bname2[l],' ', /extract)
-               for k=0, n_elements(range)-1 do begin
+               for k=0L, n_elements(range)-1 do begin
                   height2[k]=height[k,l]
                endfor
-               for i=0, n_elements(ear_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+               for i=0L, n_elements(ear_time)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      pwr2_ear[i,k]=pwr1[i,k,l]
                   endfor
                endfor
@@ -321,8 +321,8 @@ for ii=0,n_elements(parameters)-1 do begin
                   options,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], /overwrite
                endif
-               for i=0, n_elements(ear_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+               for i=0L, n_elements(ear_time)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      wdt2_ear[i,k]=wdt1[i,k,l]
                   endfor
                endfor
@@ -337,8 +337,8 @@ for ii=0,n_elements(parameters)-1 do begin
                   options,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], /overwrite
                endif 
-               for i=0, n_elements(ear_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+               for i=0L, n_elements(ear_time)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      dpl2_ear[i,k]=dpl1[i,k,l]
                   endfor
                endfor
@@ -353,8 +353,8 @@ for ii=0,n_elements(parameters)-1 do begin
                   options,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], /overwrite
                endif
-               for i=0, n_elements(ear_time)-1 do begin
-                  for k=0, n_elements(range)-1 do begin
+               for i=0L, n_elements(ear_time)-1 do begin
+                  for k=0L, n_elements(range)-1 do begin
                      snr2_ear[i,k]=snr1[i,k,l]
                   endfor
                endfor
@@ -369,7 +369,7 @@ for ii=0,n_elements(parameters)-1 do begin
                   options,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],'spec',1
                   tdegap, 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l], /overwrite
                endif 
-               for i=0, n_elements(time)-1 do begin
+               for i=0L, n_elements(time)-1 do begin
                   pnoise2_ear[i]=pn1[i,l]
                endfor
                

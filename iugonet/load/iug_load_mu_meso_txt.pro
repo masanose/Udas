@@ -33,7 +33,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -94,8 +94,8 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-jj=0
-for ii=0,n_elements(levels)-1 do begin
+jj=0L
+for ii=0L,n_elements(levels)-1 do begin
    for iii=0,n_elements(parameters)-1 do begin
       if ~size(fns,/type) then begin
         ;****************************
@@ -165,7 +165,7 @@ for ii=0,n_elements(levels)-1 do begin
                altitude = fltarr(n_elements(h_data)-1)
           
               ;---Enter the altitude information:
-               for j=0,n_elements(h_data)-2 do begin
+               for j=0L,n_elements(h_data)-2 do begin
                   altitude[j] = float(h_data[j+1])
                endfor
             endif
@@ -196,7 +196,7 @@ for ii=0,n_elements(levels)-1 do begin
 
                  ;Replace missing value by NaN:
                   if (strmid(parameters[iii],0,2) ne 'pn') then begin
-                     for j=0,(n_elements(data)-2)/2 do begin
+                     for j=0L,(n_elements(data)-2)/2 do begin
                         data2[0,j]=float(data[2*j+1])
                         a = float(data[2*j+1])
                         if levels[ii] eq 'scr' then begin

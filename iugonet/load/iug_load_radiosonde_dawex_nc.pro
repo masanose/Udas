@@ -31,7 +31,7 @@
 ;MODIFICATIONS:
 ;  A. Shinbori, 26/02/2013.
 ;  A. Shinbori, 30/05/2013.
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -77,7 +77,7 @@ site_data_premane = strsplit('nD nG nK',' ', /extract)
 ;Calculation of height:
 ;======================
 height = fltarr(400)
-for i=0, 398 do begin
+for i=0L, 398 do begin
     height[i+1] = height[i]+0.1
 endfor
 
@@ -91,15 +91,15 @@ endfor
 ;=================================
 
 ;---Definition of parameter and array:
-h=0
-jj=0
-k=0
+h=0L
+jj=0L
+k=0L
 n_site=intarr(3)
 
 ;---In the case that the parameters are except for all.'
 if n_elements(site_code) le 3 then begin
    h_max=n_elements(site_code)
-   for i=0,n_elements(site_code)-1 do begin
+   for i=0L,n_elements(site_code)-1 do begin
       case site_code[i] of
          'drw':n_site[i]=0 
          'gpn':n_site[i]=1 
@@ -108,7 +108,7 @@ if n_elements(site_code) le 3 then begin
    endfor
 endif
 
-for ii=0,n_elements(site_code)-1 do begin
+for ii=0L,n_elements(site_code)-1 do begin
    k=n_site[ii]
    if ~size(fns,/type) then begin
      ;---Definition of DAWEX radiosonde site names:
@@ -176,7 +176,7 @@ for ii=0,n_elements(site_code)-1 do begin
         ;---Show user the size of each dimension
 
          print,'Dimensions', glob.ndims
-         for i=0,glob.ndims-1 do begin
+         for i=0L,glob.ndims-1 do begin
             ncdf_diminq, cdfid, i, name,size
             if i EQ glob.recdim then  $
                print,'    ', name, size, '(Unlimited dim)' $
@@ -188,7 +188,7 @@ for ii=0,n_elements(site_code)-1 do begin
 
          print
          print, 'Variables'
-         for m=0,glob.nvars-1 do begin
+         for m=0L,glob.nvars-1 do begin
 
            ;---Get information about the variable
             info = ncdf_varinq(cdfid, m)
@@ -197,7 +197,7 @@ for ii=0,n_elements(site_code)-1 do begin
             print, ']'
 
            ;---Get attributes associated with the variable
-            for l=0,info.natts-1 do begin
+            for l=0L,info.natts-1 do begin
                attname = ncdf_attname(cdfid,m,l)
                ncdf_attget,cdfid,m,attname,attvalue
                print,' Attribute ', attname, '=', string(attvalue)
@@ -239,7 +239,7 @@ for ii=0,n_elements(site_code)-1 do begin
          uwnd = fltarr(1,400)
          vwnd = fltarr(1,400)
       
-         for k=0, n_elements(ht)-1 do begin
+         for k=0L, n_elements(ht)-1 do begin
            ;========================
            ;Get height array number:
            ;========================
@@ -256,7 +256,7 @@ for ii=0,n_elements(site_code)-1 do begin
             vwnd[0,h_num] = vwind[k]     
          endfor   
         ;---Replace missing number by NaN
-         for i=0, 399 do begin
+         for i=0L, 399 do begin
             a = p[*,i]            
             wbad = where(a eq -999.0 || a eq 0.0,nbad)
             if nbad gt 0 then a[wbad] = !values.f_nan

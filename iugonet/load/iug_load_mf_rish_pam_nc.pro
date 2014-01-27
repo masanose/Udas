@@ -28,7 +28,7 @@
 ; A. Shinbori, 27/12/2011.
 ; A. Shinbori, 31/10/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -91,7 +91,7 @@ if (downloadonly eq 0) then begin
    ver_wind=0
    height = fltarr(36)
   
-   for j=0,n_elements(local_paths)-1 do begin
+   for j=0L,n_elements(local_paths)-1 do begin
       file= local_paths[j]
       if file_test(/regular,file) then  dprint,'Loading pameungpeuk file: ',file $
       else begin
@@ -104,7 +104,7 @@ if (downloadonly eq 0) then begin
 
      ;---Show user the size of each dimension
       print,'Dimensions', glob.ndims
-      for i=0,glob.ndims-1 do begin
+      for i=0L,glob.ndims-1 do begin
          ncdf_diminq, cdfid, i, name,size
          if i EQ glob.recdim then  $
             print,'    ', name, size, '(Unlimited dim)' $
@@ -115,7 +115,7 @@ if (downloadonly eq 0) then begin
      ;---Now tell user about the variables
       print
       print, 'Variables'
-      for m=0,glob.nvars-1 do begin
+      for m=0L,glob.nvars-1 do begin
 
         ;---Get information about the variable
          info = ncdf_varinq(cdfid, m)
@@ -124,7 +124,7 @@ if (downloadonly eq 0) then begin
          print, ']'
 
         ;---Get attributes associated with the variable
-         for l=0,info.natts-1 do begin
+         for l=0L,info.natts-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
             print,' Attribute ', attname, '=', string(attvalue)
@@ -144,7 +144,7 @@ if (downloadonly eq 0) then begin
       wwind_pam=fltarr(n_elements(time),n_elements(range))
 
       height = range/1000 ;m -> km
-      for i=0, n_elements(time)-1 do begin         
+      for i=0L, n_elements(time)-1 do begin         
          uwind_pam[i,*]=uwind[0,*,i]
          vwind_pam[i,*]=vwind[0,*,i]
          wwind_pam[i,*]=wwind[0,*,i]

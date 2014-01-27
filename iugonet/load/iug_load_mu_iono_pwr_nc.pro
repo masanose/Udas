@@ -27,7 +27,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -54,7 +54,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-h=0
+h=0L
 site_time=0    
 if ~size(fns,/type) then begin 
   ;****************************
@@ -86,7 +86,7 @@ if (downloadonly eq 0) then begin
   ;======================================   
   ;Loop on files (read the NetCDF files): 
   ;======================================
-   for h=0,n_elements(local_paths)-1 do begin
+   for h=0L,n_elements(local_paths)-1 do begin
       file= local_paths[h]
       if file_test(/regular,file) then  dprint,'Loading the ionosphere data estimated from the incoherent scatter observation of the MU radar: ',file $
       else begin
@@ -99,7 +99,7 @@ if (downloadonly eq 0) then begin
 
      ;---Show user the size of each dimension
       print,'Dimensions', glob.ndims
-      for i=0,glob.ndims-1 do begin
+      for i=0L,glob.ndims-1 do begin
          ncdf_diminq, cdfid, i, name,size
          if i EQ glob.recdim then  $
             print,'    ', name, size, '(Unlimited dim)' $
@@ -110,7 +110,7 @@ if (downloadonly eq 0) then begin
      ;---Now tell user about the variables
       print
       print, 'Variables'
-      for m=0,glob.nvars-1 do begin
+      for m=0L,glob.nvars-1 do begin
 
         ;---Get information about the variable
          info = ncdf_varinq(cdfid, m)
@@ -119,7 +119,7 @@ if (downloadonly eq 0) then begin
          print, ']'
 
         ;---Get attributes associated with the variable
-         for l=0,info.natts-1 do begin
+         for l=0L,info.natts-1 do begin
             attname = ncdf_attname(cdfid,m,l)
             ncdf_attget,cdfid,m,attname,attvalue
             print,' Attribute ', attname, '=', string(attvalue)
@@ -150,13 +150,13 @@ if (downloadonly eq 0) then begin
      ;---Definition of arrary names
       unix_time = dblarr(n_elements(stime))
       center_time = (stime+etime)/2.0                         
-      for i=0, n_elements(center_time)-1 do begin
+      for i=0L, n_elements(center_time)-1 do begin
         ;---Change seconds since the midnight of every day (Local Time) into unix time (1970-01-01 00:00:00)    
          unix_time[i] = double(center_time[i])+time_double(syymmdd+'/'+shhmmss)-time_diff2 
          
         ;---Replace missing value by NAN:      
-         for j=0, n_elements(beam)-1 do begin
-            for k=0, n_elements(height[*,0])-1 do begin
+         for j=0L, n_elements(beam)-1 do begin
+            for k=0L, n_elements(height[*,0])-1 do begin
                a = pwr[k,i,j]            
                wbad = where(a eq -999.0,nbad)
                if nbad gt 0 then a[wbad] = !values.f_nan

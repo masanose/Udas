@@ -26,7 +26,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -53,7 +53,7 @@ if (not keyword_set(verbose)) then verbose=2
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-h=0
+h=0L
 site_time=0
 if ~size(fns,/type) then begin 
   ;****************************
@@ -89,7 +89,7 @@ if (downloadonly eq 0) then begin
   ;======================================    
   ;Loop on files (read the NetCDF files): 
   ;======================================
-   for h=0,n_elements(local_paths)-1 do begin
+   for h=0L,n_elements(local_paths)-1 do begin
       file= local_paths[h]
       if file_test(/regular,file) then  dprint,'Loading the ionosphere data estimated from the incoherent scatter observation of the MU radar: ',file $
       else begin
@@ -112,7 +112,7 @@ if (downloadonly eq 0) then begin
       readf,lun,s
       height = float(strsplit(s,' ',/extract))
       
-      for i=0, n-1 do begin
+      for i=0L, n-1 do begin
         ;---Read the time data:
          readf,lun,s
          time_data=strsplit(s,' ',/extract)
@@ -141,7 +141,7 @@ if (downloadonly eq 0) then begin
          snr = fltarr(1,n_elements(height))
         
         ;---Replace missing value by NaN:         
-         for j=0,n_elements(height)-1 do begin
+         for j=0L,n_elements(height)-1 do begin
             readf,lun,s
             temp_data=float(strsplit(s,' ',/extract))        
             a = float(temp_data[0])            

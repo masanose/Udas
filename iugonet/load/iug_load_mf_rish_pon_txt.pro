@@ -24,7 +24,7 @@
 ;
 ;Modifications:
 ;  A. Shinbori, 05/06/2011.
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;  
 ;Acknowledgment:
 ; $LastChangedBy:  $
@@ -95,7 +95,7 @@ if (downloadonly eq 0) then begin
   ;==============
   ;Loop on files: 
   ;==============
-   for j=0,n_elements(local_paths)-1 do begin
+   for j=0L,n_elements(local_paths)-1 do begin
       file= local_paths[j]
       if file_test(/regular,file) then  dprint,'Loading Pontianak file: ',file $
       else begin
@@ -120,7 +120,7 @@ if (downloadonly eq 0) then begin
         ;==============
         ;Read data set:
         ;==============
-         for k=0,n_elements(height)-1 do begin
+         for k=0L,n_elements(height)-1 do begin
             readf,lun,s
             data1 = strsplit(s,' ',/EXTRACT)
            

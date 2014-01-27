@@ -34,7 +34,7 @@
 ; A. Shinbori, 31/01/2012.
 ; A. Shinbori, 19/12/2012.
 ; A. Shinbori, 27/07/2013.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -103,9 +103,9 @@ f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 ;Definition of parameter:
-jj=0
+jj=0L
 
-for ii=0,n_elements(parameters)-1 do begin
+for ii=0L,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -215,7 +215,7 @@ for ii=0,n_elements(parameters)-1 do begin
               ;---Replace missing value by NaN:
                d_num=n_elements(data)-1
                st_num=120-d_num
-               for j=0,n_elements(data)-2 do begin
+               for j=0L,n_elements(data)-2 do begin
                   a = float(data[j+1])
                   wbad = where(a eq 999,nbad)
                   if nbad gt 0 then a[wbad] = !values.f_nan

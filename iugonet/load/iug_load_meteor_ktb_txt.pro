@@ -38,7 +38,7 @@
 ; A. Shinbori, 28/05/2012.
 ; A. Shinbori, 12/06/2012.
 ; A. Shinbori, 18/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -82,7 +82,7 @@ print, parameters
 site_data_dir=strarr(n_elements(parameters))
 site_data_lastmane=strarr(n_elements(parameters))
 
-for i=0, n_elements(site_data_dir)-1 do begin
+for i=0L, n_elements(site_data_dir)-1 do begin
    site_data_dir[i]=strmid(parameters[i],0,2)+'km_'+strmid(parameters[i],2,strlen(parameters[i])-2)+'/'
    site_data_lastmane[i]=parameters[i]
 endfor
@@ -96,9 +96,9 @@ endfor
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-h=0
-jj=0
-for iii=0,n_elements(parameters)-1 do begin
+h=0L
+jj=0L
+for iii=0L,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -284,7 +284,7 @@ for iii=0,n_elements(parameters)-1 do begin
          mer_thermal=0
          meteor_num=0             
       endfor       
-      for g=0,arr_num-1 do begin         
+      for g=0L,arr_num-1 do begin         
          height[g]=float(70+g*dh) 
       endfor
    

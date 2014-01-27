@@ -27,7 +27,7 @@
 ; A. Shinbori, 03/24/2011.
 ; A. Shinbori, 27/12/2011.
 ; A. Shinbori, 24/12/2011.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -135,7 +135,7 @@ if (downloadonly eq 0) then begin
   ;==============       
   ;Loop on files: 
   ;==============
-   for j=0,n_elements(local_paths)-1 do begin
+   for j=0L,n_elements(local_paths)-1 do begin
       file= local_paths[j]
       if file_test(/regular,file) then  dprint,'Loading pameungpeuk sswma file: ',file $
       else begin
@@ -365,7 +365,7 @@ if (downloadonly eq 0) then begin
              n=n+1
           endfor
            
-          for i=0,n_elements(height)-1 do begin
+          for i=0L,n_elements(height)-1 do begin
              f=height[i]
              wbad = where(f eq 0,nbad)
              if nbad gt 0 then f[wbad] = !values.f_nan

@@ -30,7 +30,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 04/06/2013.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -45,10 +45,9 @@ pro iug_load_radiosonde_rish, datatype = datatype, $
   trange=trange, $
   verbose=verbose
 
-;**************
-;keyword check:
-;**************
-;verbose
+;**********************
+;Verbose keyword check:
+;**********************
 if (not keyword_set(verbose)) then verbose=2
  
 ;***************

@@ -26,7 +26,7 @@
 ;  A. Shinbori, 28/02/2013.
 ;  
 ;MODIFICATIONS:
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -119,7 +119,7 @@ if (downloadonly eq 0) then begin
    ;==============      
    ;Loop on files: 
    ;==============
-    for j=0,n_elements(local_paths)-1 do begin
+    for j=0L,n_elements(local_paths)-1 do begin
        file= local_paths[j]
        if file_test(/regular,file) then  dprint,'Loading the surface meteorological data taken by the AWS-sgk :',file $
        else begin

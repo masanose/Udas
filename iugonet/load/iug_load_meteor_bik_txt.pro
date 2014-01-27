@@ -31,7 +31,7 @@
 ; 
 ;MODIFICATIONS:
 ; A. Shinbori, 19/01/2013.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -100,9 +100,9 @@ endfor
 ;******************************************************************
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
-h=0
-jj=0
-for iii=0,n_elements(parameters)-1 do begin
+h=0L
+jj=0L
+for iii=0L,n_elements(parameters)-1 do begin
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component: 
@@ -242,7 +242,7 @@ for iii=0,n_elements(parameters)-1 do begin
                      append_array, meteor_num, meteor_num_data
                   endif
                   n=n+1
-                  for i=0, arr_num-1 do begin
+                  for i=0L, arr_num-1 do begin
                      zon_wind_data(0,i)=!values.f_nan
                      mer_wind_data(0,i)=!values.f_nan
                      zon_thermal_data(0,i)=!values.f_nan
@@ -290,7 +290,7 @@ for iii=0,n_elements(parameters)-1 do begin
          meteor_num=0               
        endfor
        
-       for g=0,arr_num-1 do begin         
+       for g=0L,arr_num-1 do begin         
            height[g]=float(70+g*dh) 
        endfor
        

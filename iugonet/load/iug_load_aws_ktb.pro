@@ -25,7 +25,7 @@
 ;  A. Shinbori, 28/02/2013.
 ;  
 ;MODIFICATIONS:
-;  A. Shinbori, 08/01/2014.
+;  A. Shinbori, 24/01/2014.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -79,22 +79,22 @@ month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 ;Definition of parameter and array:
-h=0
-jj=0
-kk=0
+h=0L
+jj=0L
+kk=0L
 kkk=intarr(n_elements(site_data_dir))
 
 ;In the case that the parameters are except for all.'
 if n_elements(site_code) le n_elements(site_data_dir) then begin
    h_max=n_elements(site_code)
-   for i=0,n_elements(site_code)-1 do begin
+   for i=0L,n_elements(site_code)-1 do begin
       if site_code[i] eq 'ktb' then begin
          kkk[i]=0 
       endif
    endfor
 endif
 
-for ii=0,h_max-1 do begin
+for ii=0L,h_max-1 do begin
    kk=kkk[ii]
    if ~size(fns,/type) then begin
      ;Definition of blr site names:
@@ -108,14 +108,15 @@ for ii=0,h_max-1 do begin
       file_names = file_dailynames(file_format='YYYY/YYYYMM/'+$
                   'YYYYMMDD',trange=trange,times=times,/unique)+'.csv'
                      
-     ;
+     ;===============================
      ;Define FILE_RETRIEVE structure:
      ;===============================
       source = file_retrieve(/struct)
       source.verbose=verbose
       source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[kk]+'csv/'
       source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/surface/'+site_code2+'/aws/csv/'
-    
+     
+     ;=======================================================
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
       local_paths=file_retrieve(file_names,_extra=source)

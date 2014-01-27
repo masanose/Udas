@@ -30,7 +30,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
-; A. Shinbori, 08/01/2014.
+; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -70,10 +70,10 @@ print, parameters
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
-h=0
+h=0L
 site_time=0
-jj=0  
-for ii=0,n_elements(parameters)-1 do begin   
+jj=0L
+for ii=0L,n_elements(parameters)-1 do begin   
    if ~size(fns,/type) then begin 
      ;****************************
      ;Get files for ith component:
@@ -108,7 +108,7 @@ for ii=0,n_elements(parameters)-1 do begin
      ;======================================
      ;Loop on files (read the NetCDF files): 
      ;======================================
-      for h=0,n_elements(local_paths)-1 do begin
+      for h=0L,n_elements(local_paths)-1 do begin
          file= local_paths[h]
          if file_test(/regular,file) then  dprint,'Loading the ionosphere data estimated from the incoherent scatter observation of the MU radar: ',file $
          else begin
@@ -158,7 +158,7 @@ for ii=0,n_elements(parameters)-1 do begin
             
            ;---Replace missing value by NaN:
             pwr[0,*]= float(data[5:n_elements(height)-1+5])
-            for j=0,n_elements(height)-1 do begin       
+            for j=0L,n_elements(height)-1 do begin       
                a = float(pwr[0,j])            
                wbad = where(a eq 999.0 ,nbad)
                if nbad gt 0 then a[wbad] = !values.f_nan
