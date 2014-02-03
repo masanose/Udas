@@ -30,7 +30,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 10/01/2014.
-; A. Shinbori, 24/01/2014. 
+; A. Shinbori, 03/02/2014. 
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -75,7 +75,7 @@ print, parameters
 site_data_dir=strarr(n_elements(parameters))
 site_data_lastmane=strarr(n_elements(parameters))
 
-for i=0L Shinbori, 10/01/2014., n_elements(site_data_dir)-1 do begin
+for i=0L, n_elements(site_data_dir)-1 do begin
    site_data_dir[i]=strmid(parameters[i],0,2)+'km_'+strmid(parameters[i],2,strlen(parameters[i])-2)+'/'
    site_data_lastmane[i]=parameters[i]
 endfor
