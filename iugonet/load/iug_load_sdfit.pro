@@ -1,6 +1,8 @@
 ;+
 ; PROCEDURE: iug_load_sdfit
-;   to load the SuperDARN fitacf data from the STEL ERG-SC site 
+;
+; PURPOSE:
+;    Load fitacf CDF files of SuperDARN as tplot variables.
 ;
 ; NOTE: This procedure is a simple alias to "erg_load_sdfit" 
 ;   and calls the original one by just providing the same 
@@ -14,8 +16,11 @@
 ;
 ; :KEYWORDS:
 ;    sites: 3-letter code of SD radar name. 
-;           Currently only the following codes work: 
-;           'hok', 'ksr'  
+;           Currently only the following station codes work: 
+;                 'ade', 'adw', 'bks', 'cly', 'cve', 'cvw', 'dce', 'fhe', 
+;                  'fhw', 'gbr', 'hal', 'han', 'hok', 'inv', 'kap', 'kod', 
+;                  'ksr', 'pgr', 'pyk', 'rkn', 'san', 'sas', 'sto', 'sye', 
+;                  'sys', 'tig', 'unw', 'wal', 'zho' 
 ;    cdffn: File path of a CDF file if given explicitly. 
 ;    get_support_data: Turn this on to load the supporting data 
 ;    trange: time range for which data are loaded. 
@@ -30,25 +35,22 @@
 ;
 ;---------------------------------------------------------------------------
 ;!!!!! NOTICE !!!!!
-;Japanese SuperDARN radar data (HOK,KSR,SYE,SYS) in CDF are distributed
+;The common time fitacf data of SuperDARN in CDF are distributed
 ;by Energization and Radiation in Geospace Science Center (ERG-SC) at
 ;Solar-Terrestrial Environment Laboratory, Nagoya University, in
-;collaboration with Japanese SuperDARN PI groups.
+;collaboration with the SuperDARN PI groups.
 ;
-;Access to these data are currently restricted to only users in Japan.
-;The data will be open to foreign researchers in future upon
-;confirmation by the SuperDARN PI committee.
+;It is required for users to read carefully and follow 
+;the rules of the road attached to the CDF files upon using the data for 
+;his/her scientific researches. 
 ;
 ;As for questions and request for the data, please feel free to contact
 ;the ERG-SC office (E-mail:  erg-sc-core at st4a.stelab.nagoya-u.ac.jp,
-;please replace “ at ” by “@”).
+;please replace "at" by "@").
 ;------------------------------------------------------------------------------
 ;
+; Written by: Y.-M Tanaka, Feb. 5, 2014 (ytanaka at nipr.ac.jp)
 ;
-; $LastChangedBy:$
-; $LastChangedDate:$
-; $LastChangedRevision:$
-; $URL:$
 ;-
 
 pro iug_load_sdfit, sites=sites, cdffn=cdffn, $
