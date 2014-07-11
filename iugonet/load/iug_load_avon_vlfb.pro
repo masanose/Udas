@@ -109,8 +109,12 @@ for i=0,n_elements(site_code)-1 do begin
       cdf2tplot, file=source.local_data_dir+relfnames,varformat='vlf_wave_'+parameter[j]
 
       ;--- change tplot variable name
-      copy_data,  'vlf_wave_'+parameter[j], 'avon_vlfb_'+site_code[i]+'_'+parameter[j]
-      store_data,  'vlf_wave_'+parameter[j], /delete
+      newname = 'avon_vlfb_'+site_code[i]+'_'+parameter[j]
+      copy_data,  'vlf_wave_'+parameter[j], newname
+      store_data, 'vlf_wave_'+parameter[j], /delete
+      ;--- modify ytitle
+      options, newname, ytitle='AVON/VLF-B'
+      options, newname, ysubtitle=site_code[i]+'_'+parameter[j]+' [V]'
     endfor
   endif
 
