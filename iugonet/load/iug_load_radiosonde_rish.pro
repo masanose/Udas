@@ -67,7 +67,7 @@ print, datatypes
 ;site check:
 ;***********
 ;--- all site codes (default)
-site_all = strsplit('drw gpn ktb ktr sgk srp',' ', /extract)
+site_all = strsplit('bdg drw gpn ktb ktr pon sgk srp uji',' ', /extract)
 
 ;--- check site code
 if (not keyword_set(site)) then site='all'
@@ -89,7 +89,17 @@ print, site_code
      ;load of Shigaraki radiosonde data
       if (datatypes[i] eq 'misc') then begin
          for j=0, n_elements(site_code)-1 do begin
-            iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+            case site_code[j] of
+               'bdg':iug_load_radiosonde_bdg_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
+               'ktb':iug_load_radiosonde_ktb_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
+               'pon':iug_load_radiosonde_pon_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+               'sgk':iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+               'srp':iug_load_radiosonde_srp_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
+               'uji':iug_load_radiosonde_uji_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+               else:begin
+                  print,'found no match sites for datatype misc'
+               end
+            endcase
          endfor
       endif 
    endfor  
