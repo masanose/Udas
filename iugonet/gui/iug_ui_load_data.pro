@@ -20,6 +20,7 @@
 ;A. Shinbori, 25/09/2013
 ;A. Shinbori, 09/10/2013
 ;A. Shinbori, 27/11/2013
+;A. Shinbori, 09/08/2014
 ;
 ;--------------------------------------------------------------------------------
 pro iug_ui_load_data_event,event
@@ -489,7 +490,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
                                   'iftes1','iftes2','iftes3','iftes5','iftes6','iftes7','iftes8','ifts01','ifts02',$
                                   'ifts03','ifts04','ifts05','ifts06','ifts07'])
   (*paramArray[16])[0] = ptr_new(['*(all)','drw','gpn','ktr'])
-  (*paramArray[16])[1] = ptr_new(['*(all)','ktb','sgk','srp'])
+  (*paramArray[16])[1] = ptr_new(['*(all)','bdg','ktb','pon','sgk','srp','uji'])
   (*paramArray[17])[0] = ptr_new(['*(all)','hok','sye','sys'])
   (*paramArray[18])[0] = ptr_new(['*(all)','bik','mnd','pon','sgk'])
 
