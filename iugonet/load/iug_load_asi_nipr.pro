@@ -1,6 +1,6 @@
 ;+
-; PROCEDURE: IUG_LOAD_ASK_NIPR
-;   iug_load_ask_nipr, site = site, $
+; PROCEDURE: IUG_LOAD_ASI_NIPR
+;   iug_load_asi_nipr, site = site, $
 ;                     wavelength=wavelength, $
 ;                     trange=trange, $
 ;                     verbose=verbose, $
@@ -8,10 +8,10 @@
 ;                     no_download=no_download
 ;
 ; PURPOSE:
-;   Loads the keogram of all-sky imager data obtained by NIPR.
+;   Loads the all-sky imager data obtained by NIPR.
 ;
 ; KEYWORDS:
-;   site  = Observatory name, example, iug_load_ask_nipr, site='syo',
+;   site  = Observatory name, example, iug_load_asi_nipr, site='syo',
 ;           the default is 'all', i.e., load all available stations.
 ;           This can be an array of strings, e.g., ['syo', 'hus']
 ;           or a single string delimited by spaces, e.g., 'syo hus'.
@@ -26,19 +26,19 @@
 ;   /no_download: use only files which are online locally.
 ;
 ; EXAMPLE:
-;   iug_load_ask_nipr, site='syo', wavelength=0000, $
-;                 trange=['2012-01-22','2012-01-23']
+;   iug_load_asi_nipr, site='hus', wavelength=0000, $
+;                 trange=['2012-01-22/20:30','2012-01-22/21:00']
 ;
-; Written by Y.-M. Tanaka, August, 2014 (ytanaka at nipr.ac.jp)
+; Written by Y.-M. Tanaka, July, 2014 (ytanaka at nipr.ac.jp)
 ;-
 
 ;************************************************
 ;*** Load procedure for imaging riometer data ***
 ;***             obtained by NIPR             ***
 ;************************************************
-pro iug_load_ask_nipr, site=site, wavelength=wavelength, $
-        trange=trange, verbose=verbose, $
-        downloadonly=downloadonly, no_download=no_download
+pro iug_load_asi_nipr, site=site, wavelength=wavelength, $
+        trange=trange, verbose=verbose, downloadonly=downloadonly, $
+	no_download=no_download
 
 ;===== Keyword check =====
 ;----- default -----;
@@ -74,18 +74,21 @@ source.remote_data_dir = 'http://iugonet0.nipr.ac.jp/data/'
 ; source.remote_data_dir = 'http://polaris.nipr.ac.jp/~ytanaka/data/'
 if keyword_set(no_download) then source.no_download = 1
 if keyword_set(downloadonly) then source.downloadonly = 1
-relpathnames1 = file_dailynames(file_format='YYYY', trange=trange)
-relpathnames2 = file_dailynames(file_format='YYYYMMDD', trange=trange)
+relpathnames1 = file_dailynames(file_format='YYYY/MM/DD', trange=trange, /hour_res)
+relpathnames2 = file_dailynames(file_format='YYYYMMDDhh', trange=trange, /hour_res)
 
-instr='ask'
+instr='asi'
 
 ;===== Download files, read data, and create tplot vars at each site =====
 ;----- Loop -----
 for i=0,n_elements(site_code)-1 do begin
   for j=0,n_elements(wavelength)-1 do begin
-    relpathnames  = instr+'/'+site_code[i]+'/'+relpathnames1+'/'+$
-      'nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_'+relpathnames2+$
-      '_v??.cdf'
+    relpathnames  = instr+'/'+site_code[i]+'/'+$
+      relpathnames1 + '/nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_'+$
+      relpathnames2 + '_v??.cdf'
+
+print, relpathnames
+
     files = file_retrieve(relpathnames, _extra=source, /last_version)
 
     filestest=file_test(files)
@@ -131,29 +134,72 @@ for i=0,n_elements(site_code)-1 do begin
           pos=strpos(tplot_name_tmp[k],'_')
           param=strmid(tplot_name_tmp[k],pos+1,len-pos-1)
 
-          ;----- ylim & degap -----;
-          ylim, tplot_name_tmp[k], 0, 480
-          tdegap, tplot_name_tmp[k], margin=6, /overwrite
-
-          ;----- options -----;
-          case param of
-            'keo_raw_ns': begin
-              options, tplot_name_tmp[k], ytitle=site_code[i]+' '+wlenstr[j]+'!CNS keogram', $
-                ysubtitle = '[pixels]', spec=1, ztitle='[counts]'
-              tplot_name_new='nipr_'+instr+'_ns_'+site_code[i]+'_'+wlenstr[j]
-            end
-            'keo_raw_ew': begin
-              options, tplot_name_tmp[k], ytitle=site_code[i]+' '+wlenstr[j]+'!CEW keogram', $
-                ysubtitle = '[pixels]', spec=1, ztitle='[counts]'
-              tplot_name_new='nipr_'+instr+'_ew_'+site_code[i]+'_'+wlenstr[j]
-            end
-            else: tplot_name_new='nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_'+param
-          endcase
+          if param eq 'image_raw' then begin
+            tplot_name_new='nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]
+          endif else begin
+            tplot_name_new='nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_'+param
+          endelse
 
           ;----- Rename tplot variables -----;
           copy_data, tplot_name_tmp[k], tplot_name_new
           store_data, tplot_name_tmp[k], /delete
+
         endfor
+
+        ;----- Load positions -----;
+        cdfi = cdf_load_vars(files[0], varformat='*')
+        tm_vn = (strfilter(cdfi.vars.name, 'epoch_image'))[0]
+        az_vn = (strfilter(cdfi.vars.name, 'azimuth_angle'))[0]
+        el_vn = (strfilter(cdfi.vars.name, 'elevation_angle'))[0]
+        glatcen_vn = (strfilter(cdfi.vars.name, 'glat_center'))[0]
+        gloncen_vn = (strfilter(cdfi.vars.name, 'glon_center'))[0]
+        glatcor_vn = (strfilter(cdfi.vars.name, 'glat_corner'))[0]
+        gloncor_vn = (strfilter(cdfi.vars.name, 'glon_corner'))[0]
+        alt_vn = (strfilter(cdfi.vars.name, 'altitude'))[0]
+
+        tm_idx = (where(strcmp(cdfi.vars.name, tm_vn) , cnt))[0]
+        az_idx = (where(strcmp(cdfi.vars.name, az_vn) , cnt))[0]
+        el_idx = (where(strcmp(cdfi.vars.name, el_vn) , cnt))[0]
+        glatcen_idx = (where(strcmp(cdfi.vars.name, glatcen_vn) , cnt))[0]
+        gloncen_idx = (where(strcmp(cdfi.vars.name, gloncen_vn) , cnt))[0]
+        glatcor_idx = (where(strcmp(cdfi.vars.name, glatcor_vn) , cnt))[0]
+        gloncor_idx = (where(strcmp(cdfi.vars.name, gloncor_vn) , cnt))[0]
+        alt_idx = (where(strcmp(cdfi.vars.name, alt_vn) , cnt))[0]
+
+        tm_dat = *cdfi.vars[tm_idx].dataptr
+        az_dat = *cdfi.vars[az_idx].dataptr
+        el_dat = *cdfi.vars[el_idx].dataptr
+        glatcen_dat = *cdfi.vars[glatcen_idx].dataptr
+        gloncen_dat = *cdfi.vars[gloncen_idx].dataptr
+        glatcor_dat = *cdfi.vars[glatcor_idx].dataptr
+        gloncor_dat = *cdfi.vars[gloncor_idx].dataptr
+        alt_dat = *cdfi.vars[alt_idx].dataptr
+
+        time=[tm_dat[0], tm_dat[n_elements(tm_dat)-1]]
+        dim=size(glatcen_dat, /dim)
+		nalt=dim[0] & nx=dim[1] & ny=dim[2]
+
+        v1=[0,1]
+		vx=indgen(nx) & vy=indgen(ny)
+        azel=fltarr(2, nx, ny, 2)
+        azel[0, *, *, 0]=az_dat & azel[0, *, *, 1]=az_dat
+        azel[1, *, *, 0]=el_dat & azel[1, *, *, 1]=el_dat
+        store_data, 'nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_azel', $
+                    data={x:time_double(time,/epoch), y:azel, v1:v1, v2:vx, v3:vy}
+
+        pos_cen=fltarr(2, nalt, nx, ny, 2)
+        pos_cen[0, *, *, *, 0]=glatcen_dat & pos_cen[0, *, *, *, 1]=glatcen_dat
+        pos_cen[1, *, *, *, 0]=gloncen_dat & pos_cen[1, *, *, *, 1]=gloncen_dat
+        store_data, 'nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_pos_cen', $
+                    data={x:time_double(time,/epoch), y:pos_cen, v1:v1, v2:alt_dat, v3:vx, v4:vy}
+
+		vx2=indgen(nx+1) & vy2=indgen(ny+1)
+        pos_cor=fltarr(2, nalt, nx+1, ny+1, 2)
+        pos_cor[0, *, *, *, 0]=glatcor_dat & pos_cor[0, *, *, *, 1]=glatcor_dat
+        pos_cor[1, *, *, *, 0]=gloncor_dat & pos_cor[1, *, *, *, 1]=gloncor_dat
+        store_data, 'nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_pos_cor', $
+                    data={x:time_double(time,/epoch), y:pos_cor, v1:v1, v2:alt_dat, v3:vx2, v4:vy2}
+
 
       endelse
     endif
