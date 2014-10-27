@@ -50,7 +50,7 @@ stop
 
 
 ; Change to AACGM
-map2d_init, coord='aacgm'
+map2d_init, coord='aacgm'  ; map2d_coord, 'aacgm'
 
 ; Create a new window 
 window, 1, xsize=600, ysize=600 & erase
@@ -58,7 +58,8 @@ window, 1, xsize=600, ysize=600 & erase
 ; Draw map
 map2d_set, glatc=65., glonc=-25., scale=20e+6, /mltlabel, charsize=2.0
 
-; Overlay ASI images on the map
+; Overlay ASI images on the map.
+; If the DLM for AACGM is not used, it may take long time for calculation.
 overlay_map_asi_nipr, 'nipr_asi_hus_0000', cscharsize=1.5, tlcharsize=3.0
 
 ; Overlay coast
