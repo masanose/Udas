@@ -30,7 +30,7 @@ iug_load_ask_nipr,site='tro', wavelength='0000'
 tplot_names
 
 ; Plot the loaded data
-tplot, ['nipr_ask_ns_tro_0000', 'nipr_ask_ew_tro_0000']
+tplot, ['nipr_ask_tro_0000_ns', 'nipr_ask_ew_tro_0000_ew']
 
 ; Stop
 print,'Enter ".c" to continue.'
