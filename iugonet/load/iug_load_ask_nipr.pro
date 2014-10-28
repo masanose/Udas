@@ -55,14 +55,17 @@ if site_code[0] eq '' then return
 print, site_code
 
 ;----- wavelength -----;
-if(not keyword_set(wavelength)) then wavelength=[0000]
-wlenstr=string(wavelength, format='(i4.4)')
+if(not keyword_set(wavelength)) then begin
+    wlenstr='0000'
+endif else begin
+    wlenstr=wavelength
+endelse
 
-wlenstr_all=strsplit('0000 4278 4300 5577 5580 6300', /extract)
+wlenstr_all=strsplit('0000', /extract)
 wlenstr=thm_check_valid_name(wlenstr,wlenstr_all, $
                              /ignore_case, /include_all)
 if wlenstr[0] eq '' then begin
-    print, 'The wavelength:'+wlenstr+' is not supported!'
+    print, 'The input value for wavelength is not supported!'
     return
 endif
 
@@ -82,7 +85,7 @@ instr='ask'
 ;===== Download files, read data, and create tplot vars at each site =====
 ;----- Loop -----
 for i=0,n_elements(site_code)-1 do begin
-  for j=0,n_elements(wavelength)-1 do begin
+  for j=0,n_elements(wlenstr)-1 do begin
     relpathnames  = instr+'/'+site_code[i]+'/'+relpathnames1+'/'+$
       'nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_'+relpathnames2+$
       '_v??.cdf'
@@ -140,12 +143,12 @@ for i=0,n_elements(site_code)-1 do begin
             'keo_raw_ns': begin
               options, tplot_name_tmp[k], ytitle=site_code[i]+' '+wlenstr[j]+'!CNS keogram', $
                 ysubtitle = '[pixels]', spec=1, ztitle='[counts]'
-              tplot_name_new='nipr_'+instr+'_ns_'+site_code[i]+'_'+wlenstr[j]
+              tplot_name_new='nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_ns'
             end
             'keo_raw_ew': begin
               options, tplot_name_tmp[k], ytitle=site_code[i]+' '+wlenstr[j]+'!CEW keogram', $
                 ysubtitle = '[pixels]', spec=1, ztitle='[counts]'
-              tplot_name_new='nipr_'+instr+'_ew_'+site_code[i]+'_'+wlenstr[j]
+              tplot_name_new='nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_ew'
             end
             else: tplot_name_new='nipr_'+instr+'_'+site_code[i]+'_'+wlenstr[j]+'_'+param
           endcase
