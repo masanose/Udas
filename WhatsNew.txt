@@ -1,4 +1,25 @@
 ------------------------------------------------------
+; What's new in udas_s1_00_1          October 28, 2014
+------------------------------------------------------
+1) Added 3 new load procedures: 
+- iug_load_asi_nipr  : all-sky 2D images from NIPR
+- iug_load_ask_nipr  : all-sky imager keograms from NIPR
+- iug_load_avon_vlfb : AVON(Asia VLF Observation Network)/VLF-B data
+
+2) Added "bdg", "pon", "uji" to the sites for 
+"iug_load_radiosonde_rish.pro".
+
+3) Modified some procedures for the GUI to run them on SPEDAS1.00.
+
+4) Added the fluxgate magnetometer data to GUI.
+- MAGDAS 1sec data from ICSWSE, Kyushu Univ.
+- Fluxgate magnetometer data from STEL, Nagoya Univ. and Osaka Electro-
+Communication Univ.
+- 210MM 1sec data.
+
+5) Added "map2d" procudures to draw 2D image data on the world map.
+
+------------------------------------------------------
 ; What's new in udas_3_00_3          December 25, 2013
 ------------------------------------------------------
 1) Added some choices of parameter of the FAI observation mode

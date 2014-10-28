@@ -1,13 +1,13 @@
 ==================================================================
-; UDAS plug-in software package for tdas_8_00 (UDAS ver.3.00.3)
-;                                                December 25, 2013
+; UDAS plug-in software package for spedas_1_00 (UDAS ver.s1.00.1)
+;                                                 October 28, 2014
 ==================================================================
 
-  UDAS is a plug-in software package for TDAS (Themis Data Analysis Software 
-suite; http://themis.ssl.berkeley.edu/software.shtml). UDAS consists of IDL 
-procedures to download, visualize, and analyze observational data distributed 
-from the IUGONET institutions(*). For detailed information on IUGONET, please 
-see the project website at http://www.iugonet.org/en/.
+  UDAS is a plug-in software package for SPEDAS (Space Physics Environment 
+Data Analysis Software; http://themis.ssl.berkeley.edu/software.shtml). UDAS 
+consists of IDL procedures to download, visualize, and analyze observational 
+data distributed from the IUGONET institutions(*). For detailed information 
+on IUGONET, please see the project website at http://www.iugonet.org/en/.
   Our software has been developed in collaboration with ERG Science Center 
 (ERG-SC website: http://gemsissc.stelab.nagoya-u.ac.jp/erg/).
 
@@ -25,8 +25,8 @@ see the project website at http://www.iugonet.org/en/.
 ++++++++++++++++++++++++++++++++
 +     System Requirements      +
 ++++++++++++++++++++++++++++++++
-  The system requirements are the same as required for TDAS.
-Please see TDAS Users' Guide.
+  The system requirements are the same as required for SPEDAS.
+Please see SPEDAS(TDAS) Users' Guide.
 (http://themis.ssl.berkeley.edu/software.shtml)
 
 
@@ -39,13 +39,15 @@ Please see TDAS Users' Guide.
 ------------------------------------------------------------
 <load>
 Load procedures for IUGONET data:
+- iug_load_asi_nipr     ; All-sky 2D image data from NIPR
+- iug_load_ask_nipr     ; All-sky imager keogram data from NIPR
+- iug_load_avon_vlfb    ; AVON(Asia VLF Observation Network)/VLF-B data
 - iug_load_aws_rish     ; Automatic weather station data from RISH, Kyoto Univ
 - iug_load_blr_rish     ; Boundary layer radar data from RISH
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
 - iug_load_eiscat_vief  ; EISCAT ion velocity and electric field vetor data
 - iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
-- iug_load_gmag_serc    ; MAGDAS magnetometer data from ICSWSE, Kyushu Univ
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
 - iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
 - iug_load_hf_tohokuu   ; Jupiter's/solar wide band spectral data in HF-band
@@ -61,15 +63,20 @@ Load procedures for IUGONET data:
 - iug_load_radiosonde_rish ; Radiosonde data from RISH
 - iug_load_smart        : SMART solar images from the Hida Observatory, Kyoto.
 - iug_load_wpr_rish     ; Wind profiler radar (LQ7) from RISH
+- iug_load_gmag_magdas_1sec ; Alias for "erg_load_gmag_magdas_1sec"
 - iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
+- iug_load_gmag_stel_fluxgate ; Alias for "erg_load_gmag_stel_fluxgate"
 - iug_load_gmag_stel_induction ; Alias for "erg_load_gmag_stel_induction"
 - iug_load_sdfit        ; Alias for "erg_load_sdfit"
+
+<plot>
+Plot procedures for IUGONET data
 
 <examples>
 Example crib sheets for IUGONET data
 
 <gui>
-Procudures in this directory are used to customize TDAS-GUI for 
+Procudures in this directory are used to customize SPEDAS-GUI for 
 IUGONET/ERG data
 
 <tools>
@@ -83,6 +90,10 @@ Convenient functions to plot and analyze data.
 
 CUI:
 --------------------------------------------------------------------------
+  timespan,'2012-01-22/20',/hour,1 & iug_load_asi_nipr, site='hus'
+  timespan,'2012-01-22' & iug_load_ask_nipr, site='tro'
+  timespan,'2007-12-28/10:20',/min,20 & cdf_leap_second_init & $
+      iug_load_avon_vlfb, site='tnn'
   timespan,'1994-05-03' & iug_load_aws_rish, site='sgk'
   timespan,'2006-12-01' & iug_load_blr_rish, site='ktb'
   timespan,'2003-03-25' & iug_load_ear
@@ -114,6 +125,7 @@ GUI:
 --------------------------------------------------------------------------
   Instrument Type       datatype        param1          param2  Date
 --------------------------------------------------------------------------
+- AllSky_Imager_Keogram NIPR#           hus             *       2012-01-22
 - Auto._Weather_Station troposphere     sgk             *       1994-05-03
 - Boundary_Layer_Radar  troposphere     ktb             *       2006-12-01
 - EISCAT_radar          altitude_prof   esr_32m         *       2011-02-03
@@ -123,12 +135,13 @@ GUI:
                         ef_region       efb1p16         *       2001-07-30
                         v_region        150p8c8b2a      *       2008-03-05
                         f_region        fb1p16a         *       2001-08-05
-- geomag._fluxgate      magdas          anc             *       2008-03-20
-                        210mm           tik             *       2006-12-01
+- geomag._fluxgate      magdas#         onw             *       2010-01-24
+                        210mm#          tik             *       2006-12-01
+                        STEL#           msr             *       2006-11-20
                         WDC_kyoto       kak             *       2006-12-01
-                        NIPR_mag        syo             *       2003-03-25
-- geomag._induction     NIPR_mag        syo             *       2006-04-17
-                        STEL            ath             *       2008-02-28
+                        NIPR#           syo             *       2003-03-25
+- geomag._induction     NIPR#           syo             *       2006-04-17
+                        STEL#           ath             *       2008-02-28
 - geomag._index         Dst_index       WDC_kyoto       *       2006-12-01
                         AE_index        WDC_kyoto       *       2006-12-01
                         ASY_index       WDC_kyoto       *       2006-12-01
@@ -166,24 +179,18 @@ Asfor questions about the data and the plug-in package, please feel
 freeto contact the ERG-SC office (E-mail: erg-sc-core at
 st4a.stelab.nagoya-u.ac.jp).
 
-2. Load procedure of MAGDAS data (iug_load_gmag_serc) is currently applicable 
-only to MAGDAS 1-minute averaged data observed during recent WHI campaign 
-(from March 20 to April 16, 2008). You can see more details about this data:
-http://magdas.serc.kyushu-u.ac.jp/whi/index.php
-Future data release is a work in progress.
-
-3. Kyushu GCM data are prepared for the Research Project No.3 (Atmospheric 
+2. Kyushu GCM data are prepared for the Research Project No.3 (Atmospheric 
 studies on Arctic change and its global impacts) in the Green Network of 
 Excellence" Program (GRENE Program) Arctic Climate Change Research Project 
 'Rapid Change of the Arctic Climate System and its Global Influences'.
 Database construction of the Kyushu GCM data is financially supported by 
 the GRENE Arctic Climate Change Research Project.
 
-4. You can get useful information of our data (ex., data availability, 
+3. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database:
 http://search.iugonet.org/iugonet/.
 
-5. For some kinds of data, it may be difficult to load more than one 
+4. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
 
 
@@ -191,7 +198,7 @@ week by using GUI due to the memory problem.
 +       Acknowledgements       +
 ++++++++++++++++++++++++++++++++
   We acknowledge the cooperation and generosity of the THEMIS Science Support 
-Team in allowing us to use TDAS for our analysis software. 
+Team in allowing us to use SPEDAS for our analysis software. 
 
 
 ++++++++++++++++++++++++++++++++

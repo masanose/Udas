@@ -1,19 +1,19 @@
 =======================================================
 ; How to install UDAS.
-;                                        April 16, 2011
+;                                      October 28, 2014
 =======================================================
 
-0. If TDAS has not been installed yet, download TDAS from 
+0. If SPEDAS has not been installed yet, download SPEDAS from 
 http://themis.ssl.berkeley.edu/software.shtml ,
-and set it up according to the TDAS User's guide.
+and set it up according to the SPEDAS User's guide.
 1. Download UDAS from http://www.iugonet.org/en/software/install.html
 2. Unzip the downloaded file.
 3. Copy "udas_x_xx_x" into any directory you want.
 4. Set IDL path as follows;
 
 ------------------------------------------------
-[Windows]
-- IDLDE 7.0/7.1:
+[Windows] 
+- IDL7 or newer:
 a) Run idlde.
 b) Open the Window->Preferences menu.
 c) Select IDL->Paths.
@@ -21,7 +21,7 @@ d) Select Insert.
 e) Select the UDAS directory you installed, and select OK.
 f) Check the box next to the left of the newly created directory.
 g) Push the "Move up" button on the right-hand side and put the UDAS 
-directory above the TDAS directory.
+directory above the SPEDAS directory.
 h) Select OK.
 i) Type .full_reset_session at the idl command line.
 
@@ -33,34 +33,35 @@ d) Select Insert.
 e) Select the UDAS directory you installed, and select OK.
 f) Check the box next to the left of the newly created directory.
 g) Push the up arrow on the right-hand side and put the UDAS directory 
-above the TDAS directory.
+above the SPEDAS directory.
 h) Select OK.
 i) Type .full_reset_session at the idl command line.
-
 
 [Unix/Linux/Mac]
 - Bash:
 a) Put the following line into your .bashrc or .bash_profile:
-export IDL_PATH='<IDL_DEFAULT>:+/path/to/udas:+/path/to/tdas'
-b) Replace /path/to/udas and /path/to/tdas with your actual installation 
+export IDL_PATH='<IDL_DEFAULT>:+/path/to/udas:+/path/to/spedas'
+b) Replace /path/to/udas and /path/to/spedas with your actual installation 
 directories. Please note that /path/to/udas must be located prior to 
-/path/to/tdas.
+/path/to/spedas.
 c) Restart your shell/terminal or source your .bashrc/.bash_profile to be 
 sure that changes took effect.
 d) Restart IDL.
 
 - CSH/TCSH:
 a) Put the following line into your .cshrc:
-setenv IDL_PATH '<IDL_DEFAULT>:+/path/to/udas:+/path/to/tdas'
-b) Replace /path/to/udas and /path/to/tdas with your actual installation 
+setenv IDL_PATH '<IDL_DEFAULT>:+/path/to/udas:+/path/to/spedas'
+b) Replace /path/to/udas and /path/to/spedas with your actual installation 
 directories. Please note that /path/to/udas must be located prior to 
-/path/to/tdas.
+/path/to/spedas.
 c) Restart your shell/terminal or source your .cshrc to be sure that changes 
 took effect.
 d) Restart IDL.
 ------------------------------------------------
 
-5. Test GUI of UDAS
-a) Type thm_gui_new at the idl command line.
+5. Test GUI of SPEDAS
+a) Type thm_gui at the idl command line.
 b) Select the File->Load Data menu.
-c) Confirm that a new tab "IUGONET" appears.
+c) Select the "IUGONET" tab.
+d) Confirm that "AllSky_Imager_Keograms" appears in the Instrument_Type, 
+which does not exist in the original SPEDAS.
