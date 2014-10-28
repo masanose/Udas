@@ -183,10 +183,15 @@ case instrument of
     'Middle_Upper_atmosphere_radar' : iug_var = !iugonet.data_policy.mu
     'Radiosonde': begin
         case site_or_param of
+            'bdg': iug_var = !iugonet.data_policy.radiosonde_rish_sgk
             'drw': iug_var = !iugonet.data_policy.radiosonde_rish_dawex
             'gpn': iug_var = !iugonet.data_policy.radiosonde_rish_dawex
+            'ktb': iug_var = !iugonet.data_policy.radiosonde_rish_sgk
             'ktr': iug_var = !iugonet.data_policy.radiosonde_rish_dawex
+            'pon': iug_var = !iugonet.data_policy.radiosonde_rish_sgk
             'sgk': iug_var = !iugonet.data_policy.radiosonde_rish_sgk
+            'srp': iug_var = !iugonet.data_policy.radiosonde_rish_sgk
+            'uji': iug_var = !iugonet.data_policy.radiosonde_rish_sgk
         endcase
     end 
     'SuperDARN_radar#': begin
@@ -379,10 +384,15 @@ endif else begin
             'Middle_Upper_atmosphere_radar' : !iugonet.data_policy.mu = iug_var
             'Radiosonde': begin
                 case site_or_param of
+                    'bdg': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
                     'drw': !iugonet.data_policy.radiosonde_rish_dawex = iug_var
                     'gpn': !iugonet.data_policy.radiosonde_rish_dawex = iug_var
+                    'ktb': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
                     'ktr': !iugonet.data_policy.radiosonde_rish_dawex = iug_var
+                    'pon': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
                     'sgk': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
+                    'srp': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
+                    'uji': !iugonet.data_policy.radiosonde_rish_sgk = iug_var
                 endcase
             end
             'SuperDARN_radar#': begin
