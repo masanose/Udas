@@ -24,8 +24,7 @@
 ;  A. Shinbori, 12/02/2014.
 ;  
 ;MODIFICATIONS:
-;  A. Shinbori, 28/10/2014.
-;   
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -250,7 +249,7 @@ if (downloadonly eq 0) then begin
                     + 'acknowledge us in your use of the data. This may be done by' $
                     + 'including text such as the radiosonde data provided by Research Institute' $
                     + 'for Sustainable Humanosphere of Kyoto University. We would also' $
-                    + 'appreciate receiving a copy of the relevant publications. The distribution of radiosonde data' $
+                    + 'appreciate receiving a copy of the relevant publications. The distribution of dawin sonde data' $
                     + 'has been partly supported by the IUGONET (Inter-university Upper atmosphere Global' $
                     + 'Observation NETwork) project (http://www.iugonet.org/) funded by the' $
                     + 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
@@ -314,7 +313,7 @@ print, 'If you acquire the radiosonde data, we ask that you acknowledge'
 print, 'us in your use of the data. This may be done by including text such as' 
 print, 'radiosonde data provided by Research Institute for Sustainable Humanosphere' 
 print, 'of Kyoto University. We would also appreciate receiving a copy of the' 
-print, 'relevant publications. The distribution of radiosonde data has been partly'
+print, 'relevant publications. The distribution of dawin sonde data has been partly'
 print, 'supported by the IUGONET (Inter-university Upper atmosphere Global'
 print, 'Observation NETwork) project (http://www.iugonet.org/) funded by the'
 print, 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'

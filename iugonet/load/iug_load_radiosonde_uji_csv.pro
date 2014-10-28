@@ -24,7 +24,7 @@
 ;  A. Shinbori, 12/02/2014.
 ;  
 ;MODIFICATIONS:
-;  A. Shinbori, 28/10/2014.
+; 
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -218,10 +218,10 @@ if (downloadonly eq 0) then begin
   ;Store data in TPLOT variables:
   ;==============================
   ;---Acknowlegment string (use for creating tplot vars)
-   acknowledgstring = 'If you acquire the radiosonde data, we ask that you acknowledge us in your use of the data. ' $
+   acknowledgstring = 'If you acquire radiosonde data, we ask that you acknowledge us in your use of the data. ' $
                     + 'This may be done by including text such as radiosonde data provided by Research Institute ' $
                     + 'for Sustainable Humanosphere of Kyoto University. We would also appreciate receiving a copy ' $
-                    + 'of the relevant publications. The distribution of radiosonde data' $
+                    + 'of the relevant publications. The distribution of dawin sonde data' $
                     + 'has been partly supported by the IUGONET (Inter-university Upper atmosphere Global' $
                     + 'Observation NETwork) project (http://www.iugonet.org/) funded by the' $
                     + 'Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
@@ -279,12 +279,12 @@ endif
 print, '****************************************************************
 print, 'Acknowledgement'
 print, '****************************************************************
-print, 'If you acquire the radiosonde data, we ask that you acknowledge us in  ' 
-print, 'your use of the data. This may be done by including text such as ' 
+print, 'If you acquire radiosonde data, we ask that you acknowledge us in  ' 
+print, 'your use of the data.This may be done by including text such as ' 
 print, 'radiosonde data provided by Research Institute for Sustainable ' 
 print, 'Humanosphere of Kyoto University. We would also appreciate ' 
 print, 'receiving a copy of the relevant publications. The distribution ' 
-print, 'of radiosonde data has been partly supported by the IUGONET ' 
+print, 'of dawin sonde datahas been partly supported by the IUGONET ' 
 print, '(Inter-university Upper atmosphere Global Observation NETwork) '
 print, 'project (http://www.iugonet.org/) funded by theMinistry of Education, '
 print, 'Culture, Sports, Science and Technology (MEXT), Japan.'
