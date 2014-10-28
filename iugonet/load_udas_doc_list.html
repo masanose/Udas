@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Fri Dec 27 11:43:59 2013.<P>
+<STRONG>Last modified: </STRONG>Tue Oct 28 21:48:08 2014.<P>
  
 <HR>
  
@@ -22,8 +22,12 @@ This page was created by the IDL library routine
 <LI><A HREF="#CONV3D">CONV3D</A>
 <br>Convert 3D data to 2D or 1D data
 <LI><A HREF="#FILE_DAILYNAMES_IUG">FILE_DAILYNAMES_IUG</A>
+<LI><A HREF="#IUG_LOAD_ASI_NIPR">IUG_LOAD_ASI_NIPR</A>
+<br>Loads the all-sky imager data obtained by NIPR.
 <LI><A HREF="#IUG_LOAD_ASK_NIPR">IUG_LOAD_ASK_NIPR</A>
-<br>Loads keogram data obtained with AWI by NIPR.
+<br>Loads the keogram of all-sky imager data obtained by NIPR.
+<LI><A HREF="#IUG_LOAD_AVON_VLFB">IUG_LOAD_AVON_VLFB</A>
+<br>To load AVON/VLF-B data
 <LI><A HREF="#IUG_LOAD_AWS_ID">IUG_LOAD_AWS_ID</A>
 <br>Queries the RISH server for the surface meterology data taken by the automatic weather
 <LI><A HREF="#IUG_LOAD_AWS_KTB">IUG_LOAD_AWS_KTB</A>
@@ -34,6 +38,8 @@ This page was created by the IDL library routine
 <br>Queries the RISH server for the surface meterology data taken by the automatic weather
 <LI><A HREF="#IUG_LOAD_BLR_RISH">IUG_LOAD_BLR_RISH</A>
 <br>Queries the Kyoto_RISH server for the CSV data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
+<LI><A HREF="#IUG_LOAD_CAMERA_OMTI_ASI">IUG_LOAD_CAMERA_OMTI_ASI</A>
+<br>To load the OMTI ASI data from the STEL ERG-SC site
 <LI><A HREF="#IUG_LOAD_EAR">IUG_LOAD_EAR</A>
 <br>Queries the RISH servers for all the observation data (troposphere and FAI)
 <LI><A HREF="#IUG_LOAD_EAR_IONO_EFR_NC">IUG_LOAD_EAR_IONO_EFR_NC</A>
@@ -60,12 +66,15 @@ This page was created by the IDL library routine
 <br>loads the EISCAT radar data.
 <LI><A HREF="#IUG_LOAD_EISCAT_VIEF">IUG_LOAD_EISCAT_VIEF</A>
 <br>loads the EISCAT vector Vi and E field data.
+<LI><A HREF="#IUG_LOAD_GMAG_MAGDAS_1SEC">IUG_LOAD_GMAG_MAGDAS_1SEC</A>
+<br>To load the MAGDAS geomagnetic data from the STEL ERG-SC site
 <LI><A HREF="#IUG_LOAD_GMAG_MM210">IUG_LOAD_GMAG_MM210</A>
 <LI><A HREF="#IUG_LOAD_GMAG_NIPR">IUG_LOAD_GMAG_NIPR</A>
 <br>Loads the fluxgate magnetometer data obtained by NIPR.
 <LI><A HREF="#IUG_LOAD_GMAG_NIPR_INDUCTION">IUG_LOAD_GMAG_NIPR_INDUCTION</A>
 <LI><A HREF="#IUG_LOAD_GMAG_SERC">IUG_LOAD_GMAG_SERC</A>
 <br>This procedure allows you to download and plot MAGDAS 1-minute
+<LI><A HREF="#IUG_LOAD_GMAG_STEL_FLUXGATE">IUG_LOAD_GMAG_STEL_FLUXGATE</A>
 <LI><A HREF="#IUG_LOAD_GMAG_STEL_INDUCTION">IUG_LOAD_GMAG_STEL_INDUCTION</A>
 <br>To load STEL induction magnetometer data from the STEL ERG-SC site
 <LI><A HREF="#IUG_LOAD_GMAG_WDC">IUG_LOAD_GMAG_WDC</A>
@@ -139,6 +148,8 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <br>Queries the Kyoto_RISH servers for ion and electron temperatures in netCDF format
 <LI><A HREF="#IUG_LOAD_MU_IONO_TETI_TXT">IUG_LOAD_MU_IONO_TETI_TXT</A>
 <br>Queries the Kyoto_RISH servers for ion and electron temperatures in text format
+<LI><A HREF="#IUG_LOAD_MU_MESO_NC">IUG_LOAD_MU_MESO_NC</A>
+<br>Queries the RISH servers for the standard observation data (netCDF format) of the
 <LI><A HREF="#IUG_LOAD_MU_MESO_TXT">IUG_LOAD_MU_MESO_TXT</A>
 <br>Queries the RISH servers for the standard observation data (CSV format) of the
 <LI><A HREF="#IUG_LOAD_MU_MESO_WIND_NC">IUG_LOAD_MU_MESO_WIND_NC</A>
@@ -153,29 +164,43 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <br>Queries the Kyoto_RISH servers for the special observation data of the
 <LI><A HREF="#IUG_LOAD_MU_TROP_TXT">IUG_LOAD_MU_TROP_TXT</A>
 <br>Queries the Kyoto_RISH servers for the standard observation data of the
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_BDG_CSV">IUG_LOAD_RADIOSONDE_BDG_CSV</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_BDG_NC">IUG_LOAD_RADIOSONDE_BDG_NC</A>
+<br>Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd)
 <LI><A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_NC">IUG_LOAD_RADIOSONDE_DAWEX_NC</A>
 <br>Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd)
 <LI><A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_TXT">IUG_LOAD_RADIOSONDE_DAWEX_TXT</A>
 <br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_KTB_CSV">IUG_LOAD_RADIOSONDE_KTB_CSV</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_KTB_NC">IUG_LOAD_RADIOSONDE_KTB_NC</A>
+<br>Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_PON_CSV">IUG_LOAD_RADIOSONDE_PON_CSV</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_PON_NC">IUG_LOAD_RADIOSONDE_PON_NC</A>
+<br>Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd)
 <LI><A HREF="#IUG_LOAD_RADIOSONDE_RISH">IUG_LOAD_RADIOSONDE_RISH</A>
 <br>Queries the Kyoto_RISH servers for all the observation data taken by
 <LI><A HREF="#IUG_LOAD_RADIOSONDE_SGK_CSV">IUG_LOAD_RADIOSONDE_SGK_CSV</A>
 <br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_SGK_SND">IUG_LOAD_RADIOSONDE_SGK_SND</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_SGK_TSV">IUG_LOAD_RADIOSONDE_SGK_TSV</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_SRP_CSV">IUG_LOAD_RADIOSONDE_SRP_CSV</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_SRP_NC">IUG_LOAD_RADIOSONDE_SRP_NC</A>
+<br>Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_UJI_CSV">IUG_LOAD_RADIOSONDE_UJI_CSV</A>
+<br>Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd)
+<LI><A HREF="#IUG_LOAD_RADIOSONDE_UJI_NC">IUG_LOAD_RADIOSONDE_UJI_NC</A>
+<br>Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd)
 <LI><A HREF="#IUG_LOAD_SDFIT">IUG_LOAD_SDFIT</A>
+<br>Load fitacf CDF files of SuperDARN as tplot variables.
 <LI><A HREF="#IUG_LOAD_SMART">IUG_LOAD_SMART</A>
 <LI><A HREF="#IUG_LOAD_WPR_RISH">IUG_LOAD_WPR_RISH</A>
 <br>Queries the Kyoto_RISH servers for the observation data (uwnd, vwnd, wwnd, pwr1-5, wdt1-5)
-<LI><A HREF="#IUG_MOVIE_SMART">IUG_MOVIE_SMART</A>
-<LI><A HREF="#IUG_PLOT2D_EAR_FAI">IUG_PLOT2D_EAR_FAI</A>
-<br>Generate several 2-D plots from the FAI f-region observation data taken by the EAR.
-<LI><A HREF="#IUG_PLOT2D_IONOGRAM">IUG_PLOT2D_IONOGRAM</A>
-<br>Generate several ionogram plots from the ionogram data taken by the ionosonde.
-<LI><A HREF="#IUG_PLOT2D_IRIO">IUG_PLOT2D_IRIO</A>
-<LI><A HREF="#IUG_PLOT2D_MU_FAI">IUG_PLOT2D_MU_FAI</A>
-<br>Generate several 2-D plots from the FAI f-region observation data taken by the MU radar.
-<LI><A HREF="#IUG_PLOT2D_RADIOSONDE">IUG_PLOT2D_RADIOSONDE</A>
-<br>Generate several height profiles from the radiosonde data.
-<LI><A HREF="#IUG_PLOT2D_SMART">IUG_PLOT2D_SMART</A>
 <br>
 </UL><P>
 <HR>
@@ -219,7 +244,7 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <A NAME="FILE_DAILYNAMES_IUG">
 <H2>FILE_DAILYNAMES_IUG</H2></A>
 <A HREF="#CONV3D">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_ASK_NIPR">[Next Routine]</A>
+<A HREF="#IUG_LOAD_ASI_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
   Procedure:  FILE_DAILYNAMES
@@ -228,42 +253,135 @@ IUG_LOAD_GMAG_WDC_RELPATH_TO_YEAR</A>
 <STRONG>(See <A href="load/file_dailynames_iug.pro">iugonet/load/file_dailynames_iug.pro</A>)</STRONG><P>
 <HR>
  
-<A NAME="IUG_LOAD_ASK_NIPR">
-<H2>IUG_LOAD_ASK_NIPR</H2></A>
+<A NAME="IUG_LOAD_ASI_NIPR">
+<H2>IUG_LOAD_ASI_NIPR</H2></A>
 <A HREF="#FILE_DAILYNAMES_IUG">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_AWS_ID">[Next Routine]</A>
+<A HREF="#IUG_LOAD_ASK_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
-PROCEDURE: IUG_LOAD_ASK_NIPR,
-  iug_load_ask_nipr, site = site, trange = trange, 
-                     verbose = verbose, downloadonly = downloadonly
+ PROCEDURE: IUG_LOAD_ASI_NIPR
+   iug_load_asi_nipr, site = site, $
+                     wavelength=wavelength, $
+                     trange=trange, $
+                     verbose=verbose, $
+                     downloadonly=downloadonly, $
+                     no_download=no_download
 
-PURPOSE:
-  Loads keogram data obtained with AWI by NIPR.
+ PURPOSE:
+   Loads the all-sky imager data obtained by NIPR.
 
-KEYWORDS:
-  site  = Observatory name.  For example, iug_load_ask_nipr, site = 'tro'.
-          Available sites: 'tro', 'lyr'
-          The default is 'all', i.e., load all available stations.
-  trange = (Optional) Time range of interest  (2 element array), if
-          this is not set, the default is to prompt the user. Note
-          that if the input time range is not a full day, a full
-          day's data is loaded.
-  /verbose, if set, then output some useful info
-  /downloadonly, if set, then only download the data, do not load it
-                 into variables.
+ KEYWORDS:
+   site  = Observatory name, example, iug_load_asi_nipr, site='syo',
+           the default is 'all', i.e., load all available stations.
+           This can be an array of strings, e.g., ['syo', 'hus']
+           or a single string delimited by spaces, e.g., 'syo hus'.
+           Available sites as of April, 2013 : syo
+   wavelength = Wavelength in Angstrom, i.e., 4278, 5577, 6300, etc.
+           The 0000 means white light images taken without filter.
+           Only 0000 is available as of October, 2014.
+   trange = (Optional) Time range of interest  (2 element array).
+   /verbose: set to output some useful info
+   /downloadonly: if set, then only download the data, do not load it 
+           into variables.
+   /no_download: use only files which are online locally.
 
-EXAMPLE:
-  iug_load_ask_nipr, site = 'tro'
+ EXAMPLE:
+   iug_load_asi_nipr, site='hus', wavelength=0000, $
+                 trange=['2012-01-22/20:30','2012-01-22/21:00']
 
- Written by: Y.-M. Tanaka, Feb. 20, 2012 (ytanaka at nipr.ac.jp)
+ Written by Y.-M. Tanaka, July, 2014 (ytanaka at nipr.ac.jp)
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_asi_nipr.pro">iugonet/load/iug_load_asi_nipr.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_ASK_NIPR">
+<H2>IUG_LOAD_ASK_NIPR</H2></A>
+<A HREF="#IUG_LOAD_ASI_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_AVON_VLFB">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: IUG_LOAD_ASK_NIPR
+   iug_load_ask_nipr, site = site, $
+                     wavelength=wavelength, $
+                     trange=trange, $
+                     verbose=verbose, $
+                     downloadonly=downloadonly, $
+                     no_download=no_download
+
+ PURPOSE:
+   Loads the keogram of all-sky imager data obtained by NIPR.
+
+ KEYWORDS:
+   site  = Observatory name, example, iug_load_ask_nipr, site='syo',
+           the default is 'all', i.e., load all available stations.
+           This can be an array of strings, e.g., ['syo', 'hus']
+           or a single string delimited by spaces, e.g., 'syo hus'.
+           Available sites as of April, 2013 : syo
+   wavelength = Wavelength in Angstrom, i.e., 4278, 5577, 6300, etc.
+           The 0000 means white light images taken without filter.
+           Only 0000 is available as of October, 2014.
+   trange = (Optional) Time range of interest  (2 element array).
+   /verbose: set to output some useful info
+   /downloadonly: if set, then only download the data, do not load it 
+           into variables.
+   /no_download: use only files which are online locally.
+
+ EXAMPLE:
+   iug_load_ask_nipr, site='syo', wavelength=0000, $
+                 trange=['2012-01-22','2012-01-23']
+
+ Written by Y.-M. Tanaka, August, 2014 (ytanaka at nipr.ac.jp)
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_ask_nipr.pro">iugonet/load/iug_load_ask_nipr.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_AVON_VLFB">
+<H2>IUG_LOAD_AVON_VLFB</H2></A>
+<A HREF="#IUG_LOAD_ASK_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_AWS_ID">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: iug_load_avon_vlfb
+
+ PURPOSE:
+   To load AVON/VLF-B data 
+
+ KEYWORDS:
+   site  = Observatory name, example, iug_load_avon, site='TNN',
+           This can be an array of strings, e.g., ['tnn', 'srb']
+           or a single string delimited by spaces, e.g., 'tnn srb'.
+           Sites:  tnn srb ptk lbs
+   parameter = Parameter name. 'ch1' and 'ch2' are available.
+               ch1 for north-south component, and ch2 for east-west component.
+   /downloadonly, if set, then only download the data, do not load it into variables.
+   /no_download: use only files which are online locally.
+   /verbose : set to output some useful info
+   trange = (Optional) Time range of interest  (2 element array).
+
+ EXAMPLE:
+   iug_load_avon_vlfb, site='tnn', $
+            trange=['2007-12-28/10:20:00','2007-12-28/10:40:00']
+
+ NOTE: See the rules of the road.
+       For more information, see http://iugonet02.gp.tohoku.ac.jp/avon/rules.txt
+
+ NAMING CONVENTIONS:
+       avon_[site]_vlfb_[parameter]
+       ex. avon_tnn_vlfb_ch1
+
+ Written by: M.Yagi, May 14, 2014
+             PPARC, Tohoku Univ.
+
+   $LastChangedBy: M.Yagi $
+   $LastChangedDate: 2014-05-14 $
+   $URL:
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_avon_vlfb.pro">iugonet/load/iug_load_avon_vlfb.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_AWS_ID">
 <H2>IUG_LOAD_AWS_ID</H2></A>
-<A HREF="#IUG_LOAD_ASK_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_AVON_VLFB">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_AWS_KTB">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -276,27 +394,26 @@ PURPOSE:
   station (AWS) at the Indonesian stations and loads data into tplot format.
 
 SYNTAX:
- iug_load_aws_id, datatype = datatype, site=site, $
-                    downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_aws_id, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_aws_id, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  site = AWS observation site.  
+KEYWOARDS: 
+  SITE = AWS observation site.  
          For example, iug_load_aws_id, site = 'pon'.
          The default is 'all', i.e., load all available observation points.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
   A. Shinbori, 28/02/2013.
   
 MODIFICATIONS:
   A. Shinbori, 08/04/2013.
+  A. Shinbori, 24/01/2014.
     
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -322,25 +439,24 @@ PURPOSE:
   station (AWS) at the Kototabang stations and loads data into tplot format.
 
 SYNTAX:
- iug_load_aws_ktb, datatype = datatype, site=site, $
-                    downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_aws_ktb, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_aws_ktb, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  site = AWS observation site.  
+  SITE = AWS observation site.  
          For example, iug_load_aws_ktb, site = 'ktb'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+ 
 CODE:
   A. Shinbori, 28/02/2013.
   
 MODIFICATIONS:
+  A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -366,27 +482,25 @@ PURPOSE:
   station (AWS) and loads data into tplot format.
 
 SYNTAX:
- iug_load_aws_rish, datatype = datatype, site=site, $
-                    downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_aws_rish, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_aws_rish, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  site = AWS observation site.  
+  SITE = AWS observation site.  
          For example, iug_load_aws_rish, site = 'bik'.
          The default is 'all', i.e., load all available observation points.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE : [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
   A. Shinbori, 28/02/2013.
   
 MODIFICATIONS:
-
+  A. Shinbori, 08/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -412,27 +526,25 @@ PURPOSE:
   station (AWS) at Shigaraki and loads data into tplot format.
 
 SYNTAX:
- iug_load_aws_sgk, datatype = datatype, site=site, $
-                    downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_aws_sgk, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_aws_sgk, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  site = AWS observation site.  
+KEYWOARDS: 
+  SITE = AWS observation site.  
          For example, iug_load_aws_sgk, site = 'sgk'.
          The default is 'all', i.e., load all available observation points.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+ 
 CODE:
   A. Shinbori, 28/02/2013.
   
 MODIFICATIONS:
-
+  A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -446,7 +558,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_BLR_RISH">
 <H2>IUG_LOAD_BLR_RISH</H2></A>
 <A HREF="#IUG_LOAD_AWS_SGK">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_EAR">[Next Routine]</A>
+<A HREF="#IUG_LOAD_CAMERA_OMTI_ASI">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -459,25 +571,24 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_blr_rish, datatype = datatype, site=site, parameter=parameter, $
-                        downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_blr_rish, site=site, parameter=parameter, $
+                    downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_blr_rish, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-   site = BLR observation site.  
+   SITE = BLR observation site.  
           For example, iug_load_blr_rish, site = 'ktb'.
           The default is 'all', i.e., load all available observation points.
-  parameter = parameter name of BLR obervation data.  
+  PARAMETER = parameter name of BLR obervation data.  
           For example, iug_load_blr_rish, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+ 
 CODE:
   A. Shinbori, 09/09/2010.
   
@@ -488,6 +599,7 @@ MODIFICATIONS:
   A. Shinbori, 10/02/2012.
   A. Shinbori, 17/12/2012.
   A. Shinbori, 27/02/2013.
+  A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -498,9 +610,60 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_blr_rish.pro">iugonet/load/iug_load_blr_rish.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_CAMERA_OMTI_ASI">
+<H2>IUG_LOAD_CAMERA_OMTI_ASI</H2></A>
+<A HREF="#IUG_LOAD_BLR_RISH">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_EAR">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: iug_load_camera_omti_asi
+
+ PURPOSE:
+   To load the OMTI ASI data from the STEL ERG-SC site 
+
+ NOTE: This procedure is a simple alias to "iug_load_camera_omti_asi"
+   and calls the original one by just providing the same
+   arguments/keywords given.
+   Some load procedures for the ground-based observational data
+   in the  ERG mission, named "erg_load_???", can be also called
+   by "iug_load_???", because these data are related to the both
+   ERG and IUGONET projects.
+   For more information, see http://www.iugonet.org/en/
+                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
+   See the rules of the road.
+   For more information, see http://stdb2.stelab.nagoya-u.ac.jp/omti/
+
+ KEYWORDS:
+   site  = Observatory name, example, iug_load_camera_omti_asi, site='sgk'.
+           The default is 'all', i.e., load all available stations.
+           This can be an array of strings, e.g., ['sgk', 'sta']
+           or a single string delimited by spaces, e.g., 'sgk sta'.
+           Sites: ith rsb trs ath mgd ptk rik sgk sta yng drw ktb syo
+   wavelength = Wavelength in Angstrom, i.e., 5577, 6300, 7200, 7774, 5893, etc.
+                The default is 5577. This can be an array of integers, e.g., [5577, 6300]
+                or strings, e.g., '5577', '5577 6300', and ['5577', '6300'].
+   /downloadonly, if set, then only download the data, do not load it into variables.
+   /no_server, use only files which are online locally.
+   /no_download, use only files which are online locally. (Identical to no_server keyword.)
+   trange = (Optional) Time range of interest  (2 element array).
+   /timeclip, if set, then data are clipped to the time range set by timespan
+
+ EXAMPLE:
+   iug_load_camera_omti_asi, site='sgk', wavelength=5577, trange=['2012-01-01/00:00:00','2012-01-02/00:00:00']
+
+ Author: Y. Miyashita, Mar 28, 2013
+         ERG-Science Center, STEL, Nagoya Univ.
+         erg-sc-core at st4a.stelab.nagoya-u.ac.jp
+
+ Written by: Y.-M Tanaka, Feb. 5, 2014 (ytanaka at nipr.ac.jp)
+
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_camera_omti_asi.pro">iugonet/load/iug_load_camera_omti_asi.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_EAR">
 <H2>IUG_LOAD_EAR</H2></A>
-<A HREF="#IUG_LOAD_BLR_RISH">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_CAMERA_OMTI_ASI">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_EAR_IONO_EFR_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -528,9 +691,9 @@ KEYWOARDS:
       assumed.  Returns cleaned input, or shows default.  
   TRANGE (In):
     Pass a time range a la TIME_STRING.PRO.
-  FILENAMES (In):
-    *PRESENTLY DISABLED* Pass user-defined file names (full paths to local data files).  These will
-      be read a la the RISH format, and the RISH server will not be queried.
+    
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
   VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 
 DATA AVAILABILITY:
@@ -548,6 +711,7 @@ A. Shinbori, 11/05/2011.
 A. Shinbori, 27/05/2011.
 A. Shinbori, 15/06/2011.
 A. Shinbori, 25/07/2011.
+A. Shinbori, 10/01/2014.
 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -574,21 +738,19 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_efr_nc, datatype = datatype, parameter1=parameter1, $
-                           downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_ear_iono_efr_nc, parameter=parameter, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_er_nc, datatype = 'ionosphere'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETER = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_er_nc, parameter = 'efb1p16'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
@@ -605,6 +767,7 @@ MODIFICATIONS:
  A. Shinbori, 17/12/2012.
  A. Shinbori, 08/07/2013.
  A. Shinbori, 19/08/2013.
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -631,24 +794,24 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_efr_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+ iug_load_ear_iono_efr_txt, parameter1=parameter1, parameter2=parameter2 $
                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_efr_txt, datatype = 'fai'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETER1 = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_efr_txt, parameter1 = 'efb1p16'.
           The default is 'all', i.e., load all available parameters.
-  parameter2 = second parameter name of EAR FAI obervation data.  
+  PARAMETER2 = second parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_efr_txt, parameter2 = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+
 
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
@@ -664,6 +827,7 @@ MODIFICATIONS:
  A. Shinbori, 31/01/2012.
  A. Shinbori, 01/08/2013.
  A. Shinbori, 18/08/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -690,21 +854,19 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_er_nc, datatype = datatype, parameter1=parameter1, $
-                          downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_ear_iono_er_nc, parameter=parameter, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_er_nc, datatype = 'fai'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETER = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_er_nc, parameter1 = 'eb1p2a'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
                  
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
@@ -721,7 +883,8 @@ MODIFICATIONS:
  A. Shinbori, 17/12/2012.
  A. Shinbori, 08/07/2013.
  A. Shinbori, 18/08/2013.
-  
+ A. Shinbori, 24/01/2014. 
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -747,24 +910,23 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_er_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+ iug_load_ear_iono_er_txt, parameter1=parameter1, parameter2=parameter2 $
                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_er_txt, datatype = 'ionosphere'.
-            The default is 'ionosphere'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETER1 = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_er_txt, parameter = 'eb1p2a'.
           The default is 'all', i.e., load all available parameters.
-  parameter2 = second parameter name of EAR FAI obervation data.  
+  PARAMETER2 = second parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_er_txt, parameter = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
@@ -781,7 +943,8 @@ MODIFICATIONS:
  A. Shinbori, 17/12/2012.
  A. Shinbori, 01/08/2013.
  A. Shinbori, 18/08/2013.
- 
+ A. Shinbori, 24/01/2014.
+  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -807,22 +970,20 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_fr_nc, datatype = datatype, parameter1=parameter1, $
-                          downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_ear_iono_fr_nc, parameter=parameter, downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_fr_nc, datatype = 'fai'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
-          For example, iug_load_ear_iono_fr_nc, parameter1 = 'fb1p16a'.
+KEYWOARDS: 
+  PARAMETER = first parameter name of EAR FAI obervation data.  
+          For example, iug_load_ear_iono_fr_nc, parameter = 'fb1p16a'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-                 
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+                
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
   before you analyze the FAI data using this software. 
@@ -838,6 +999,7 @@ MODIFICATIONS:
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
  A. Shinbori, 18/08/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -864,25 +1026,24 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_fr_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+ iug_load_ear_iono_fr_txt, parameter1=parameter1, parameter2=parameter2 $
                            downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_fr_txt, datatype = 'fai'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETER1 = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_fr_txt, parameter1 = 'fb1p16a'.
           The default is 'all', i.e., load all available parameters.
-  parameter2 = second parameter name of EAR FAI obervation data.  
+  PARAMETER2 = second parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_fr_txt, parameter2 = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+  
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
   before you analyze the FAI data using this software. 
@@ -898,6 +1059,7 @@ MODIFICATIONS:
  A. Shinbori, 17/12/2012.
  A. Shinbori, 01/08/2013.
  A. Shinbori, 18/08/2013.
+ A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -924,22 +1086,21 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_vr_nc, datatype = datatype, parameter1=parameter1, $
+ iug_load_ear_iono_vr_nc, parameter=parameter, $
                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_vr_nc, datatype = 'fai'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETERS = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_vr_nc, parameter = 'vb3p4a'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+  
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
   before you analyze the FAI data using this software. 
@@ -953,6 +1114,7 @@ MODIFICATIONS:
  A. Shinbori, 09/07/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 17/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -979,25 +1141,24 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_iono_vr_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+ iug_load_ear_iono_vr_txt, parameter1=parameter1, parameter2=parameter2 $
                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_iono_vr_txt, datatype = 'fai'.
-            The default is 'fai'. 
-  parameter1 = first parameter name of EAR FAI obervation data.  
+  PARAMETER1 = first parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_vr_txt, parameter1 = 'vb3p4a'.
           The default is 'all', i.e., load all available parameters.
-  parameter2 = second parameter name of EAR FAI obervation data.  
+  PARAMETER2 = second parameter name of EAR FAI obervation data.  
           For example, iug_load_ear_iono_vr_txt, parameter2 = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+  
 DATA AVAILABILITY:
   Please check the following homepage of the time schedule of field-aligned irregularity (FAI) observation 
   before you analyze the FAI data using this software. 
@@ -1013,6 +1174,7 @@ MODIFICATIONS:
  A. Shinbori, 17/12/2012.
  A. Shinbori, 01/08/2013.
  A. Shinbori, 18/08/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1039,18 +1201,17 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_trop_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_ear_trop_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_trop_nc, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 19/09/2010.
 
@@ -1059,6 +1220,7 @@ MODIFICATIONS:
  A. Shinbori, 13/11/2011.
  A. Shinbori, 31/01/2012.
  A. Shinbori, 18/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1085,22 +1247,21 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $
+ iug_load_ear_trop_txt, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ear_trop_txt, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  parameter = parameter name of EAR troposphere standard obervation data.  
+KEYWOARDS: 
+  PARAMETER = parameter name of EAR troposphere standard obervation data.  
           For example, iug_load_ear_trop_txt, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 19/09/2010.
 
@@ -1110,6 +1271,7 @@ MODIFICATIONS:
  A. Shinbori, 26/12/2011.
  A. Shinbori, 31/01/2011.
  A. Shinbori, 18/12/2011.
+ A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1178,7 +1340,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_EISCAT_VIEF">
 <H2>IUG_LOAD_EISCAT_VIEF</H2></A>
 <A HREF="#IUG_LOAD_EISCAT">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_GMAG_MM210">[Next Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_MAGDAS_1SEC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: IUG_LOAD_EISCAT_VIEF
@@ -1221,9 +1383,58 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_eiscat_vief.pro">iugonet/load/iug_load_eiscat_vief.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_GMAG_MAGDAS_1SEC">
+<H2>IUG_LOAD_GMAG_MAGDAS_1SEC</H2></A>
+<A HREF="#IUG_LOAD_EISCAT_VIEF">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_MM210">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: iug_load_gmag_magdas_1sec
+
+ PURPOSE:
+   To load the MAGDAS geomagnetic data from the STEL ERG-SC site 
+
+ NOTE: This procedure is a simple alias to "erg_load_gmag_magdas_1sec" 
+   and calls the original one by just providing the same 
+   arguments/keywords given.
+   Some load procedures for the ground-based observational data 
+   in the  ERG mission, named "erg_load_???", can be also called  
+   by "iug_load_???", because these data are related to the both 
+   ERG and IUGONET projects.
+   For more information, see http://www.iugonet.org/en/ 
+                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
+   See the rules of the road.
+   For more information, see http://magdas.serc.kyushu-u.ac.jp/
+
+ KEYWORDS:
+   site  = Observatory name, example, iug_load_magdas_1sec, site='asb',
+           the default is 'all', i.e., load all available stations.
+           This can be an array of strings, e.g., ['asb', 'onw']
+           or a single string delimited by spaces, e.g., 'asb onw'.
+           Sites for 1 sec data:  
+              asb ...
+           Sites for 1 min/h data:
+              ...
+   datatype = Time resolution. '1sec' for 1 sec', '1min' for 1 min, and '1h' for 1 h.
+              The default is 'all'.  If you need two of them, set to 'all'.
+   /downloadonly, if set, then only download the data, do not load it into variables.
+   /no_server, use only files which are online locally.
+   /no_download, use only files which are online locally. (Identical to no_server keyword.)
+   trange = (Optional) Time range of interest  (2 element array).
+
+ EXAMPLE:
+   iug_load_gmag_magdas_1sec, site='asb onw', datatype='1sec', $
+                        trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
+
+ Written by: Y.-M Tanaka, Feb. 5, 2014 (ytanaka at nipr.ac.jp)
+
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_gmag_magdas_1sec.pro">iugonet/load/iug_load_gmag_magdas_1sec.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_GMAG_MM210">
 <H2>IUG_LOAD_GMAG_MM210</H2></A>
-<A HREF="#IUG_LOAD_EISCAT_VIEF">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_MAGDAS_1SEC">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_GMAG_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1370,7 +1581,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_GMAG_SERC">
 <H2>IUG_LOAD_GMAG_SERC</H2></A>
 <A HREF="#IUG_LOAD_GMAG_NIPR_INDUCTION">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_GMAG_STEL_INDUCTION">[Next Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_STEL_FLUXGATE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 PROCEDURE: IUG_LOAD_GMAG_SERC,
@@ -1426,9 +1637,58 @@ ACKNOWLEDGMENT:
 <STRONG>(See <A href="load/iug_load_gmag_serc.pro">iugonet/load/iug_load_gmag_serc.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_GMAG_STEL_FLUXGATE">
+<H2>IUG_LOAD_GMAG_STEL_FLUXGATE</H2></A>
+<A HREF="#IUG_LOAD_GMAG_SERC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_STEL_INDUCTION">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: iug_load_gmag_stel_fluxgate
+   To load the STEL fluxgate geomagnetic data from the STEL ERG-SC site 
+
+ NOTE: This procedure is a simple alias to "erg_load_gmag_stel_fluxgate" 
+   and calls the original one by just providing the same 
+   arguments/keywords given.
+   Some load procedures for the ground-based observational data 
+   in the  ERG mission, named "erg_load_???", can be also called  
+   by "iug_load_???", because these data are related to the both 
+   ERG and IUGONET projects.
+   For more information, see http://www.iugonet.org/en/ 
+                         and http://gemsissc.stelab.nagoya-u.ac.jp/erg/
+   See the rules of the road.
+   For more information, see http://stdb2.stelab.nagoya-u.ac.jp/magne/
+   and http://www1.osakac.ac.jp/crux/ (for mdm and tew).
+
+ KEYWORDS:
+   site  = Observatory name, example, iug_load_gmag_stel_fluxgate, site='msr',
+           the default is 'all', i.e., load all available stations.
+           This can be an array of strings, e.g., ['msr', 'kag']
+           or a single string delimited by spaces, e.g., 'msr kag'.
+           Sites for 1 sec data:  
+              msr rik kag ktb
+           Sites for 1 min/h data:
+              msr rik kag ktb mdm tew
+   datatype = Time resolution. '1sec' for 1 sec', '1min' for 1 min, and '1h' for 1 h.
+              The default is 'all'.  If you need two of them, set to 'all'.
+   /downloadonly, if set, then only download the data, do not load it into variables.
+   /no_server, use only files which are online locally.
+   /no_download, use only files which are online locally. (Identical to no_server keyword.)
+   trange = (Optional) Time range of interest  (2 element array).
+   /timeclip, if set, then data are clipped to the time range set by timespan
+
+ EXAMPLE:
+   iug_load_gmag_stel_fluxgate, site='msr kag', datatype='1min', $
+       trange=['2003-11-20/00:00:00','2003-11-21/00:00:00']
+
+ Written by: Y.-M Tanaka, Feb. 5, 2014 (ytanaka at nipr.ac.jp)
+
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_gmag_stel_fluxgate.pro">iugonet/load/iug_load_gmag_stel_fluxgate.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_GMAG_STEL_INDUCTION">
 <H2>IUG_LOAD_GMAG_STEL_INDUCTION</H2></A>
-<A HREF="#IUG_LOAD_GMAG_SERC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_GMAG_STEL_FLUXGATE">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_GMAG_WDC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1779,17 +2039,17 @@ Updated by:  Yukinobu KOYAMA, Jan 21, 2011
    trange = (Optional) Time range of interest  (2 element array).
 
  EXAMPLE:
-   iug_load_lfrto, site='ath', datatype='30sec', $
-                        trange=['2010-10-24/00:00:00','2010-10-25/00:00:00']
+   iug_load_hf_tohokuU, parameter='RH', $
+                        trange=['2004-01-09/22:00:00','2004-01-09/23:00:00']
 
  NOTE: See the rules of the road.
-       For more information, see http://iprt.gp.tohoku.ac.jp/
+       For more information, see http://ariel.gp.tohoku.ac.jp/~jupiter/
 
  Written by: M.Yagi, Oct 2, 2012
              PPARC, Tohoku Univ.
 
    $LastChangedBy: M.Yagi $
-   $LastChangedDate: 2013-01-09 $
+   $LastChangedDate: 2014-01-08 $
    $URL:
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_hf_tohokuu.pro">iugonet/load/iug_load_hf_tohokuu.pro</A>)</STRONG><P>
@@ -1810,23 +2070,22 @@ PURPOSE:
   at Shigaraki and loads data into tplot format.
 
 SYNTAX:
- iug_load_ionosonde_rish, datatype = datatype, site=site, $
+ iug_load_ionosonde_rish, site=site, fixed_freq = fixed_freq, $
                     downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ionosonde_rish, datatype = 'ionosphere'.
-            The default is 'ionosphere'. 
-  site = Ionosonde observation site.  
+KEYWOARDS: 
+  SITE = Ionosonde observation site.  
          For example, iug_load_ionosonde_rish, site = 'sgk'.
          The default is 'all', i.e., load all available observation points.
   /fixed_freq, if set, then tplot variables for every fixed frequency (2-18 MHZ) are created.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
   A. Shinbori, 24/10/2012.
   
@@ -1835,6 +2094,7 @@ MODIFICATIONS:
   A. Shinbori, 18/12/2012.
   A. Shinbori, 09/01/2013.
   A. Shinbori, 18/02/2013.
+  A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -1852,7 +2112,7 @@ ACKNOWLEDGEMENT:
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 Procedure: iug_load_iprt,
-  iug_load_iprt, site = site, datatype = datatype, $
+  iug_load_iprt, datatype = datatype, $
            trange = trange, verbose = verbose, $
            downloadonly = downloadonly
 Purpose:
@@ -1860,7 +2120,6 @@ Purpose:
   This is a sample code for IUGONET analysis software.
 
 Keywords:
-  site  = Observatory name. Only 'iit' is allowed.
   datatype = The type of data to be loaded.  In this sample
              procedure, there is only one option, the default value of 'Sun'.
   trange = (Optional) Time range of interest  (2 element array), if
@@ -1896,6 +2155,7 @@ ChangeLog:
   27-JUL.-2010, revised for this procedure by M. Kagitani
   12-NOV.-2010, revised by M. Kagitani
   25-NOV.-2010, renamed to 'iug_load_iprt.pro' by M. Kagitani
+  22-JAN.-2014, revised by M. Yagi
 
 Acknowledgment:
 
@@ -2082,25 +2342,23 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_ltr_rish, datatype = datatype, site=site, parameter=parameter, $
-                        downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_ltr_rish, site=site, parameter=parameter, $
+                    downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_ltr_rish, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-   site = LTR observation site.  
+KEYWOARDS: 
+   SITE = LTR observation site.  
           For example, iug_load_ltr_rish, site = 'sgk'.
           The default is 'all', i.e., load all available observation points.
-  parameter = parameter name of LTR obervation data.  
-          For example, iug_load_ltr_rish, parameter = 'uwnd'.
+  PARAMETER = For example, iug_load_ltr_rish, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 09/19/2010.
 
@@ -2110,6 +2368,7 @@ MODIFICATIONS:
  A. Shinbori, 31/01/2012.
  A. Shinbori, 10/02/2012.
  A. Shinbori, 18/12/2012.
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2135,29 +2394,28 @@ PURPOSE:
   the meteor wind radar (MWR) at Biak and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_bik_nc, datatype = datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+ iug_load_meteor_bik_nc, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_bik_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_bik_nc, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_bik_nc, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.  
- parameter = Data parameter. For example, iug_load_meteor_bik_nc, parameter = 'h2t60min00'. 
+ PARAMETER = Data parameter. For example, iug_load_meteor_bik_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
              The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 23/09/2012.
 
 MODIFICATIONS:
-
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2184,31 +2442,30 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_meteor_ktb_bik, datatype=daatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+ iug_load_meteor_ktb_bik, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_bik_txt, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_bik_txt, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'. 
-  parameter = Data parameter. For example, iug_load_meteor_bik_txt, parameter = 'h2t60min00'. 
+  PARAMETER = Data parameter. For example, iug_load_meteor_bik_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
               The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 15/07/2011.
- A. Shinbori, 19/01/2013.
  
 MODIFICATIONS:
+ A. Shinbori, 19/01/2013.
+ A. Shinbori, 24/01/2014.
  
-
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -2233,23 +2490,22 @@ PURPOSE:
   the meteor wind radar (MWR) at Kototabang and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_ktb_nc, datatype = datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+ iug_load_meteor_ktb_nc, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_ktb_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_nc, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_nc, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.  
- parameter = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
+ PARAMETER = Data parameter. For example, iug_load_meteor_ktb_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
              The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.                 
 
 CODE:
  A. Shinbori, 19/09/2010.
@@ -2264,7 +2520,8 @@ MODIFICATIONS:
  A. Shinbori, 12/06/2012.
  A. Shinbori, 25/07/2012.
  A. Shinbori, 18/12/2012.
-  
+ A. Shinbori, 24/01/2014.
+   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -2289,24 +2546,23 @@ PURPOSE:
   the meteor wind radar (MWR) at Kototabang and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_ktb_txt, datatype=datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
+ iug_load_meteor_ktb_txt, parameter = parameter, length = length, downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_ktb_txt, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_txt, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_ktb_txt, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'. 
-  parameter = Data parameter. For example, iug_load_meteor_ktb_txt, parameter = 'h2t60min00'. 
+  PARAMETER = Data parameter. For example, iug_load_meteor_ktb_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
               The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 19/09/2010.
 
@@ -2320,6 +2576,7 @@ MODIFICATIONS:
  A. Shinbori, 28/05/2012.
  A. Shinbori, 12/06/2012.
  A. Shinbori, 18/12/2012.
+ A. Shinbori, 24/01/2014.
    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2379,26 +2636,24 @@ PURPOSE:
   the meteor wind radar (MWR) at Kototabang and Serpong and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_rish, datatype = datatype, site=site, parameter = parameter, $
+ iug_load_meteor_rish, site=site, parameter = parameter, $
                        downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
- datatype = Observation data type. For example, iug_load_meteor_rish, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
-   site  = Observatory code name.  For example, iug_load_meteor_rish, site = 'ktb'.
+   SITE  = Observatory code name.  For example, iug_load_meteor_rish, site = 'ktb'.
            The default is 'all', i.e., load all available stations.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_rish, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_rish, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.
- parameter = Data parameter. For example, iug_load_meteor_rish, parameter = 'h2t60min00'. 
+ PARAMETER = Data parameter. For example, iug_load_meteor_rish, parameter = 'h2t60min00'. 
              A kind of parameters is 5 types of 'h2t60min00', 'h2t60min30', 'h4t60min00', 'h4t60min00', 'h4t240min00'.
              The default is 'h2t60min00'. 
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
  A. Shinbori, 19/09/2010.
@@ -2410,6 +2665,7 @@ MODIFICATIONS:
  A. Shinbori, 24/07/2012.
  A. Shinbori, 19/01/2013.
  A. Shinbori, 16/05/2013.
+ A. Shinbori, 08/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2435,30 +2691,30 @@ PURPOSE:
   the meteor wind radar (MWR) at Shigaraki MU Observatory and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_sgk_nc, datatype = datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
-                           trange = trange, verbose=verbose
+ iug_load_meteor_sgk_nc, parameter = parameter, length = length, downloadonly = downloadonly, $
+                         trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_sgk_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_sgk_nc, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_sgk_nc, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.  
- parameter = Data parameter. For example, iug_load_meteor_sgk_nc, parameter = 'h2t60min00'. 
+ PARAMETER = Data parameter. For example, iug_load_meteor_sgk_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
              The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 16/05/2013.
 
 MODIFICATIONS:
-
-  
+ A. Shinbori, 10/01/2014.
+ A. Shinbori, 03/02/2014. 
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -2483,29 +2739,30 @@ PURPOSE:
   the meteor wind radar (MWR) at Shigaraki MU Observatory and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_sgk_txt, datatype=datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
-                           trange = trange, verbose=verbose
+ iug_load_meteor_sgk_txt, parameter = parameter, length = length, downloadonly = downloadonly, $
+                          trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_sgk_txt, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_sgk_txt, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_sgk_txt, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'. 
-  parameter = Data parameter. For example, iug_load_meteor_sgk_txt, parameter = 'h2t60min00'. 
+  PARAMETER = Data parameter. For example, iug_load_meteor_sgk_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
               The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 16/05/2013.
 
 MODIFICATIONS:
-   
+ A. Shinbori, 10/01/2014.
+ A. Shinbori, 24/01/2014.
+    
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -2530,24 +2787,23 @@ PURPOSE:
   the meteor wind radar (MWR) at Serpong and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_srp_nc, datatype = datatype, parameter = parameter, length = length, downloadonly = downloadonly, $
-                           trange = trange, verbose=verbose
+ iug_load_meteor_srp_nc, parameter = parameter, length = length, downloadonly = downloadonly, $
+                         trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_srp_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_nc, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'. 
-  parameter = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
+  PARAMETER = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h2t60min00'. 
              A kind of parameters is 2 types of 'h2t60min00', 'h4t60min00'.
              The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 19/09/2010.
 
@@ -2561,6 +2817,7 @@ MODIFICATIONS:
  A. Shinbori, 12/06/2012.
  A. Shinbori, 25/07/2012.
  A. Shinbori, 18/12/2012.
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2586,24 +2843,23 @@ PURPOSE:
   the meteor wind radar (MWR) at Serpong and loads data into tplot format.
 
 SYNTAX:
- iug_load_meteor_srp_txt, datatype = datatype, parameter = parameter, length=length, downloadonly = downloadonly, $
+ iug_load_meteor_srp_txt, parameter = parameter, length=length, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_meteor_srp_txt, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
-  length = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_txt, length = '1_day'.
+KEYWOARDS: 
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_meteor_srp_txt, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.
-  parameter = Data parameter. For example, iug_load_meteor_srp_txt, parameter = 'h2t60min00'. 
+  PARAMETER = Data parameter. For example, iug_load_meteor_srp_txt, parameter = 'h2t60min00'. 
               A kind of parameters is 4 types of 'h2t60min00', 'h2t60min00', 'h4t60min00', 'h4t60min00'.
               The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 19/09/2010.
 
@@ -2617,6 +2873,7 @@ MODIFICATIONS:
  A. Shinbori, 28/05/2012.
  A. Shinbori, 12/06/2012.
  A. Shinbori, 18/12/2012.
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2643,26 +2900,26 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_mf_rish, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mf_rish, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
- datatype = Observation data type. For example, iug_load_mf_rish, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
-   site  = Observatory code name.  For example, iug_load_mf_rish, site = 'pam'.
+   SITE  = Observatory code name.  For example, iug_load_mf_rish, site = 'pam'.
           The default is 'all', i.e., load all available stations.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 09/19/2010.
 
 MODIFICATIONS:
  A. Shinbori, 03/24/2011.
  A. Shinbori, 02/04/2013.
+ A. Shinbori, 08/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2689,20 +2946,17 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_mf_rish_pam_bin, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mf_rish_pam_bin, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mf_rish_pam_bin, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-   site  = Observatory code name.  For example, iug_load_mf_rish_pam_bin, site = 'pam'.
-          The default is 'all', i.e., load all available stations.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 09/19/2010.
 
@@ -2710,6 +2964,7 @@ MODIFICATIONS:
  A. Shinbori, 03/24/2011.
  A. Shinbori, 27/12/2011.
  A. Shinbori, 24/12/2011.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2736,20 +2991,17 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_mf_rish_pam_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mf_rish_pam_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mf_rish_pam_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
-   site  = Observatory code name.  For example, iug_load_mf_rish_pam_nc, site = 'pam'.
-          The default is 'all', i.e., load all available stations.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-                 
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+                   
 CODE:
  A. Shinbori, 09/19/2010.
 
@@ -2758,6 +3010,7 @@ MODIFICATIONS:
  A. Shinbori, 27/12/2011.
  A. Shinbori, 31/10/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2784,22 +3037,19 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_mf_rish_pon_nc, datatype = datatype, site=site, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mf_rish_pon_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mf_rish_pon_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
-   site  = Observatory code name.  For example, iug_load_mf_rish_pon_nc, site = 'pon'.
-          The default is 'all', i.e., load all available stations.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-                 
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+                   
 CODE:
- A. Shinbori, 18/01/2013.
+ A. Shinbori, 24/01/2013.
 
 MODIFICATIONS:
 
@@ -2828,27 +3078,23 @@ Purpose:
   tplot format.
 
 Syntax:
- iug_load_mf_rish_pon_txt, datatype = datatype, site = site, downloadonly = downloadonly, trange = trange, verbose = verbose
+ iug_load_mf_rish_pon_txt, downloadonly = downloadonly, trange = trange, verbose = verbose
 
 Keywords:
-  datatype = Observation data type. For example, iug_load_mf_rish_pon_txt, datatype = 'thermosphere'.
-            The default is 'thermosphere'. 
-   site  = Observatory code name.  For example, iug_load_mf_rish_pon_txt, site = 'pon'.
-          The default is 'all', i.e., load all available stations.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 
 Code:
   A. Shinbori, 10/09/2010.
 
 Modifications:
   A. Shinbori, 05/06/2011.
-
+  A. Shinbori, 24/01/2014.
   
 Acknowledgment:
  $LastChangedBy:  $
@@ -2877,10 +3123,8 @@ PURPOSE:
 SYNTAX:
   iug_load_mu [ ,DATATYPE = string ]
               [ ,LEVEL = string ]
-              [ ,PARAMETER1 = string ]
-              [ ,PARAMETER2 = string ]
+              [ ,PARAMETER = string ]
               [ ,TRANGE = [min,max] ]
-              [ ,FILENAMES = string scalar or array ]
               [ ,<and data keywords below> ]
 
 KEYWOARDS:
@@ -2888,17 +3132,14 @@ KEYWOARDS:
              DATATYPEs are 'troposphere' etc.
   LEVEL = The level of mesospheric data to be loaded. In this load program,
              LEVELs are 'org' and 'scr'.
-  PARAMETER1 = The parameter of meteor and fai data to be loaded. In this load program,
-             PARAMETERs are 'h1t60min00','h1t60min30','h2t60min00','h2t60min30' and 'iemdc3'.
-  PARAMETER2 = The parameter of rass and fai data to be loaded. In this load program,
-             PARAMETERs are 'uwnd','pwr1','wdt1' 'dpl1','pn1' and so on.
+  PARAMETER = The parameter of mu observations to be loaded. For example,
+             PARAMETER is 'h1t60min00','iemdc3', and so on.
   LENGTH = The file type of meteor data to be loaded.
              LENGTHs are '1-day' and '1-month'. Default is 1-day.
-  TRANGE (In):
-    Pass a time range a la TIME_STRING.PRO.
-  FILENAMES (In):
-    *PRESENTLY DISABLED* Pass user-defined file names (full paths to local data files).  These will
-      be read a la the RISH format, and the RISH server will not be queried.
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
   VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
@@ -2912,6 +3153,7 @@ MODIFICATIONS:
  A. Shinbori, 02/08/2013.
  A. Shinbori, 25/09/2013.
  A. Shinbori, 27/11/2013.
+ A. Shinbori, 11/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2937,22 +3179,20 @@ PURPOSE:
   taken by the MU radar and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_fai_nc, datatype = datatype, parameter1=parameter1, $
-                          downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mu_fai_nc, parameter=parameter, $
+                     downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_fai_nc, datatype = 'ionosphere'.
-            The default is 'ionosphere'. 
-  parameter1 = first parameter name of MU FAI obervation data.  
+  PARAMETER = first parameter name of MU FAI obervation data.  
           For example, iug_load_mu_fai_nc, parameter = 'iemdc3'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
  A. Shinbori, 18/08/2013.
@@ -2961,6 +3201,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 17/11/2013.
  A. Shinbori, 18/12/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -2986,25 +3227,23 @@ PURPOSE:
   taken by the MU radar and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_fai_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
+ iug_load_mu_fai_txt, parameter1=parameter1, parameter2=parameter2 $
                           downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_fai_txt, datatype = 'ionosphere'.
-            The default is 'ionosphere'. 
-  parameter1 = first parameter name of MU FAI obervation data.  
+  PARAMETER1 = first parameter name of MU FAI obervation data.  
           For example, iug_load_mu_fai_txt, parameter = 'iemdc3'.
           The default is 'all', i.e., load all available parameters.
-  parameter2 = second parameter name of MU FAI obervation data.  
+  PARAMETER2 = second parameter name of MU FAI obervation data.  
           For example, iug_load_mu_fai_txt, parameter = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
  A. Shinbori, 01/08/2013.
@@ -3012,6 +3251,7 @@ CODE:
  
 MODIFICATIONS:
  A. Shinbori, 27/11/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3038,12 +3278,10 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_iono_drift_nc, datatype = datatype, downloadonly = downloadonly, $
+ iug_load_mu_iono_drift_nc, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_iono_drift_nc, datatype = 'ionosphere'.
-            The default is 'ionosphere'.  
+KEYWOARDS:  
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
@@ -3057,6 +3295,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 12/11/2012. 
  A. Shinbori, 24/12/2012. 
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3083,26 +3322,26 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_iono_drift_txt, datatype = datatype, downloadonly = downloadonly, $
+ iug_load_mu_iono_drift_txt, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_iono_drift_txt, datatype = 'ionosphere'.
-            The default is 'ionosphere'.  
-  trange = (Optional) Time range of interest  (2 element array), if
+KEYWOARDS:  
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 03/10/2012.
 
 MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
- 
+ A. Shinbori, 24/01/2014.
+  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -3128,25 +3367,25 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_iono_pwr_nc, datatype = datatype, downloadonly = downloadonly, $
+ iug_load_mu_iono_pwr_nc, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_iono_pwr_nc, datatype = 'ionosphere'.
-            The default is 'ionosphere'.  
-  trange = (Optional) Time range of interest  (2 element array), if
+KEYWOARDS:  
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 02/10/2012.
 
 MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3173,28 +3412,28 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_iono_pwr_txt, datatype = datatype, parameter = parameter, downloadonly = downloadonly, $
+ iug_load_mu_iono_pwr_txt, parameter = parameter, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_iono_pwr_txt, datatype = 'ionosphere'.
-            The default is 'ionosphere'.
-  parameter = parameter name of echo power data taken by the MU incherent scatter mode.  
+  PARAMETER = parameter name of echo power data taken by the MU incherent scatter mode.  
           For example, iug_load_mu_iono_pwr_txt, parameter = 'pwr1'.
           The default is 'all', i.e., load all available parameters.  
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 03/10/2012.
 
 MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3221,26 +3460,26 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_iono_teti_nc, datatype = datatype, downloadonly = downloadonly, $
+ iug_load_mu_iono_teti_nc, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_iono_teti_nc, datatype = 'ionosphere'.
-            The default is 'ionosphere'.  
-  trange = (Optional) Time range of interest  (2 element array), if
+KEYWOARDS: 
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 02/10/2012.
 
 MODIFICATIONS:
  A. Shinbori, 12/11/2012. 
  A. Shinbori, 24/12/2012.
- 
+ A. Shinbori, 24/01/2014.
+  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -3253,7 +3492,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_MU_IONO_TETI_TXT">
 <H2>IUG_LOAD_MU_IONO_TETI_TXT</H2></A>
 <A HREF="#IUG_LOAD_MU_IONO_TETI_NC">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_MU_MESO_TXT">[Next Routine]</A>
+<A HREF="#IUG_LOAD_MU_MESO_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -3266,25 +3505,25 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_iono_teti_txt, datatype = datatype, downloadonly = downloadonly, $
+ iug_load_mu_iono_teti_txt, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_iono_teti_txt, datatype = 'ionosphere'.
-            The default is 'ionosphere'.  
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 03/10/2012.
 
 MODIFICATIONS:
  A. Shinbori, 24/12/2012.
-
+ A. Shinbori, 24/01/2014.
+ 
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
  $LastChangedDate:  $
@@ -3294,9 +3533,57 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_mu_iono_teti_txt.pro">iugonet/load/iug_load_mu_iono_teti_txt.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_MU_MESO_NC">
+<H2>IUG_LOAD_MU_MESO_NC</H2></A>
+<A HREF="#IUG_LOAD_MU_IONO_TETI_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_MESO_TXT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+ iug_load_mu_meso_nc
+
+PURPOSE:
+  Queries the RISH servers for the standard observation data (netCDF format) of the 
+  mesosphere taken by the Middle and Upper atmosphere (MU) radar at Shigaraki 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_mu_meso_nc, level=level, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:.
+  LEVEL = Observation data level. For example, iug_load_mu_meso_nc, level = 'org'.
+            The default is 'scr'.
+            When you set the level of 'org', the original data are stored in tplot variables.
+            When you set the level of 'scr', the screening data are stored in tplot variables.            
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+ A. Shinbori, 14/07/2012.
+
+MODIFICATIONS:
+ A. Shinbori, 12/11/2012.
+ A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
+ 
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_mu_meso_nc.pro">iugonet/load/iug_load_mu_meso_nc.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_MU_MESO_TXT">
 <H2>IUG_LOAD_MU_MESO_TXT</H2></A>
-<A HREF="#IUG_LOAD_MU_IONO_TETI_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_MU_MESO_NC">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_MU_MESO_WIND_NC">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -3310,25 +3597,23 @@ PURPOSE:
   loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_meso_txt, datatype = datatype, parameter1=parameter1, parameter2=parameter2 $
-                          downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mu_meso_txt, level=level, parameter=parameter, $
+                       downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_meso_txt, datatype = 'mesosphere'.
-            The default is 'mesosphere'. 
-  parameter1 = Parameter name of MU mesosphere obervation data.  
+  PARAMETER = Parameter name of MU mesosphere obervation data.  
           For example, iug_load_mu_meso_txt, parameter1 = 'dpl1'.
           The default is 'all', i.e., load all available parameters.
-  parameter2 = Choice of original and screening data of MU mesosphere obervation.  
+  LEVEL = Choice of original and screening data of MU mesosphere obervation.  
           For example, iug_load_mu_meso_txt, parameter2 = 'screening'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
  A. Shinbori, 25/07/2012.
@@ -3336,6 +3621,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3362,27 +3648,27 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_meso_wind_nc, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mu_meso_wind_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_wind_meso_nc, datatype = 'mesosphere'.
-            The default is 'mesosphere'.
-  level = Observation data level. For example, iug_load_mu_wind_meso_nc, level = 'org'.
+  LEVEL = Observation data level. For example, iug_load_mu_wind_meso_nc, level = 'org'.
             For example, iug_load_mu_meso_txt, parameter2 = 'scr'.
             The default is 'all', i.e., load all available level data.           
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output. 
+  
 CODE:
  A. Shinbori, 21/07/2012.
 
 MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3409,24 +3695,23 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_meso_wind_txt, datatype = datatype, downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_mu_meso_wind_txt,downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_wind_meso_txt, datatype = 'mesosphere'.
-            The default is 'mesosphere'.
-  parameter = parameter name of wind data in the mesosphere.  
+  PARAMETER = parameter name of wind data in the mesosphere.  
           For example, iug_load_mu_meso_wind_txt, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  level = Observation data level. For example, iug_load_mu_wind_meso_txt, level = 'org'.
+  LEVEL = Observation data level. For example, iug_load_mu_wind_meso_txt, level = 'org'.
             The default is 'all', i.e., load all available levels.
             When you set the level of 'org', the original data are stored in tplot variables.
             When you set the level of 'scr', the screening data are stored in tplot variables.            
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.                
 
 CODE:
  A. Shinbori, 25/07/2012.
@@ -3434,6 +3719,7 @@ CODE:
 MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3460,30 +3746,30 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_meteor_nc, datatype = datatype, parameter = parameter,length = length,downloadonly = downloadonly, $
+ iug_load_mu_meteor_nc, parameter = parameter,length = length,downloadonly = downloadonly, $
                            trange = trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_meteor_nc, datatype = 'thermosphere'.
-            The default is 'thermosphere'.
-  length = Data length '1-day' or '1-month'. For example, iug_load_mu_meteor_nc, length = '1_day'.
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_mu_meteor_nc, length = '1_day'.
            A kind of parameters is 2 types of '1_day', and '1_month'.   
-  parameters = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h1t60min00'. 
+  PARAMETER = Data parameter. For example, iug_load_meteor_srp_nc, parameter = 'h1t60min00'. 
              A kind of parameters is 2 types of 'h1t60min00', 'h1t30min00'.
              The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 06/07/2012.
 
 MODIFICATIONS:
  A. Shinbori, 08/08/2012.
  A. Shinbori, 24/12/2012.
+ A. Shinbori, 08/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3510,20 +3796,23 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_meteor_txt, parameter = parameter, downloadonly = downloadonly, $
+ iug_load_mu_meteor_txt, parameter = parameter, length=length, downloadonly = downloadonly, $
                           trange = trange, verbose=verbose
 
 KEYWOARDS:
-  parameter = Data parameter. For example, iug_load_mu_meteor_txt, parameter = 'h1t60min00'. 
+  LENGTH = Data length '1-day' or '1-month'. For example, iug_load_mu_meteor_nc, length = '1_day'.
+           A kind of parameters is 2 types of '1_day', and '1_month'. 
+  PARAMETER = Data parameter. For example, iug_load_mu_meteor_txt, parameter = 'h1t60min00'. 
               A kind of parameters is 2 types of 'h1t60min00' and 'h1t30min00'.
               The default is 'all'.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 10/06/2010.
 
@@ -3533,6 +3822,7 @@ MODIFICATIONS:
  A. Shinbori, 12/11/2012.
  A. Shinbori, 24/12/2012.
  A. Shinbori, 15/04/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3559,16 +3849,14 @@ PURPOSE:
   Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 
 SYNTAX:
- iug_load_mu_rass_txt, datatype = datatype, parameter=parameter, $
+ iug_load_mu_rass_txt, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  parameter = parameter name of MU troposphere standard obervation data.  
+  PARAMETER = parameter name of MU troposphere standard obervation data.  
           For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
@@ -3579,6 +3867,7 @@ CODE:
  A. Shinbori, 22/06/2013.
 
 MODIFICATIONS:
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3592,7 +3881,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_MU_TROP_TXT">
 <H2>IUG_LOAD_MU_TROP_TXT</H2></A>
 <A HREF="#IUG_LOAD_MU_RASS_TXT">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_NC">[Next Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_BDG_CSV">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -3605,22 +3894,21 @@ PURPOSE:
   Upper atmosphere (MU) radar at Shigaraki and loads data into tplot format.
 
 SYNTAX:
- iug_load_ear_trop_txt, datatype = datatype, parameter=parameter, $
+ iug_load_ear_trop_txt, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_mu_trop_txt, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  parameter = parameter name of MU troposphere standard obervation data.  
+KEYWOARDS: 
+  PARAMETER = parameter name of MU troposphere standard obervation data.  
           For example, iug_load_mu_trop_txt, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 19/09/2010.
 
@@ -3631,6 +3919,7 @@ MODIFICATIONS:
  A. Shinbori, 31/01/2012.
  A. Shinbori, 19/12/2012.
  A. Shinbori, 27/07/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3641,9 +3930,94 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_mu_trop_txt.pro">iugonet/load/iug_load_mu_trop_txt.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_RADIOSONDE_BDG_CSV">
+<H2>IUG_LOAD_RADIOSONDE_BDG_CSV</H2></A>
+<A HREF="#IUG_LOAD_MU_TROP_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_BDG_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_bdg_csv
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in csv format taken by the radiosonde at Bandung 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_bdg_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+ 
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_bdg_csv.pro">iugonet/load/iug_load_radiosonde_bdg_csv.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_BDG_NC">
+<H2>IUG_LOAD_RADIOSONDE_BDG_NC</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_BDG_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_bdg_nc
+
+PURPOSE:
+  Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere taken by the radiosonde at Bandung 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_ktb_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS: 
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE, Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_bdg_nc.pro">iugonet/load/iug_load_radiosonde_bdg_nc.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_RADIOSONDE_DAWEX_NC">
 <H2>IUG_LOAD_RADIOSONDE_DAWEX_NC</H2></A>
-<A HREF="#IUG_LOAD_MU_TROP_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_BDG_NC">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_TXT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -3657,29 +4031,29 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_radiosonde_dawex_nc, datatype = datatype, site=site, $
+ iug_load_radiosonde_dawex_nc, site=site, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_radiosonde_dawex_nc, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-   site = DAWEX observation site.  
+KEYWOARDS: 
+   SITE = DAWEX observation site.  
           For example, iug_load_radiosonde_dawex_nc, site = 'drw'.
           The default is 'all', i.e., load all available observation points.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
   A. Shinbori, 19/12/2012.
   
 MODIFICATIONS:
   A. Shinbori, 26/02/2013.
   A. Shinbori, 30/05/2013.
+  A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3693,7 +4067,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_RADIOSONDE_DAWEX_TXT">
 <H2>IUG_LOAD_RADIOSONDE_DAWEX_TXT</H2></A>
 <A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_NC">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_RADIOSONDE_RISH">[Next Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_KTB_CSV">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -3706,23 +4080,22 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_radiosonde_dawex_txt, datatype = datatype, site=site, $
+ iug_load_radiosonde_dawex_txt, site=site, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_radiosonde_dawex_txt, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-   site = DAWEX observation site.  
+KEYWOARDS: 
+   SITE = DAWEX observation site.  
           For example, iug_load_radiosonde_dawex_txt, site = 'drw'.
           The default is 'all', i.e., load all available observation points.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
   A. Shinbori, 19/12/2012.
   
@@ -3730,6 +4103,7 @@ MODIFICATIONS:
   A. Shinbori, 16/02/2013.
   A. Shinbori, 26/02/2013.
   A. Shinbori, 30/05/2013.
+  A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3740,9 +4114,177 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_radiosonde_dawex_txt.pro">iugonet/load/iug_load_radiosonde_dawex_txt.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_RADIOSONDE_KTB_CSV">
+<H2>IUG_LOAD_RADIOSONDE_KTB_CSV</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_KTB_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_ktb_csv
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in csv format taken by the radiosonde at Koto. Tabang 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_ktb_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014. 
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_ktb_csv.pro">iugonet/load/iug_load_radiosonde_ktb_csv.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_KTB_NC">
+<H2>IUG_LOAD_RADIOSONDE_KTB_NC</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_KTB_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_PON_CSV">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_ktb_nc
+
+PURPOSE:
+  Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere taken by the radiosonde at Koto Tabang 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_ktb_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS: 
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE, Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+   
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_ktb_nc.pro">iugonet/load/iug_load_radiosonde_ktb_nc.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_PON_CSV">
+<H2>IUG_LOAD_RADIOSONDE_PON_CSV</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_KTB_NC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_PON_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_pon_csv
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in csv format taken by the radiosonde at Pontianak 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_pon_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014. 
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_pon_csv.pro">iugonet/load/iug_load_radiosonde_pon_csv.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_PON_NC">
+<H2>IUG_LOAD_RADIOSONDE_PON_NC</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_PON_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_RISH">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_pon_nc
+
+PURPOSE:
+  Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere taken by the radiosonde at Pontianak 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_pong_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS: 
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE, Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+   
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_pon_nc.pro">iugonet/load/iug_load_radiosonde_pon_nc.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_RADIOSONDE_RISH">
 <H2>IUG_LOAD_RADIOSONDE_RISH</H2></A>
-<A HREF="#IUG_LOAD_RADIOSONDE_DAWEX_TXT">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_PON_NC">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_RADIOSONDE_SGK_CSV">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -3759,7 +4301,6 @@ SYNTAX:
   iug_load_radiosonde_rish [ ,DATATYPE = string ]
                            [ ,SITE = string ]
                            [ ,TRANGE = [min,max] ]
-                           [ ,FILENAMES = string scalar or array ]
                            [ ,<and data keywords below> ]
 
 KEYWOARDS:
@@ -3767,11 +4308,10 @@ KEYWOARDS:
              DATATYPEs are 'DAWEX' and 'misc'.
   SITE = The observation site. In this load program,
              defualt is 'sgk'.
-  TRANGE (In):
-    Pass a time range a la TIME_STRING.PRO.
-  FILENAMES (In):
-    *PRESENTLY DISABLED* Pass user-defined file names (full paths to local data files).  These will
-      be read a la the RISH format, and the RISH server will not be queried.
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
   VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 
 CODE:
@@ -3779,6 +4319,7 @@ CODE:
 
 MODIFICATIONS:
  A. Shinbori, 04/06/2013.
+ A. Shinbori, 24/01/2014.
  
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3792,7 +4333,7 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_RADIOSONDE_SGK_CSV">
 <H2>IUG_LOAD_RADIOSONDE_SGK_CSV</H2></A>
 <A HREF="#IUG_LOAD_RADIOSONDE_RISH">[Previous Routine]</A>
-<A HREF="#IUG_LOAD_SDFIT">[Next Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SGK_SND">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -3805,28 +4346,23 @@ PURPOSE:
   and loads data into tplot format.
 
 SYNTAX:
- iug_load_radiosonde_sgk_csv, datatype = datatype, site=site, $
-                        downloadonly=downloadonly, trange=trange, verbose=verbose
+ iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_radiosonde_sgk_csv, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-   site = Shigaraki MU Observatory.  
-          For example, iug_load_radiosonde_sgk_csv, site = 'sgk'.
-          The default is 'all', i.e., load all available observation points.
-          The default is 'all', i.e., load all available parameters.
   trange = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
   A. Shinbori, 17/05/2013.
   
 MODIFICATIONS:
-
+  A. Shinbori, 24/01/2014.
+  A. Shinbori, 28/10/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3837,14 +4373,269 @@ ACKNOWLEDGEMENT:
 <STRONG>(See <A href="load/iug_load_radiosonde_sgk_csv.pro">iugonet/load/iug_load_radiosonde_sgk_csv.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_LOAD_RADIOSONDE_SGK_SND">
+<H2>IUG_LOAD_RADIOSONDE_SGK_SND</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SGK_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SGK_TSV">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_sgk_snd
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in snd format taken by the radiosonde at Shigaraki MU Observatory 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_sgk_snd, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 17/05/2013.
+  
+MODIFICATIONS:
+  A. Shinbori, 24/01/2014.
+  A. Shinbori, 28/10/2014.
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_sgk_snd.pro">iugonet/load/iug_load_radiosonde_sgk_snd.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_SGK_TSV">
+<H2>IUG_LOAD_RADIOSONDE_SGK_TSV</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SGK_SND">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SRP_CSV">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_sgk_tsv
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in tsv format taken by the radiosonde at Shigaraki MU Observatory 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_sgk_tsv, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 24/01/2014.
+  
+MODIFICATIONS:
+  
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_sgk_tsv.pro">iugonet/load/iug_load_radiosonde_sgk_tsv.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_SRP_CSV">
+<H2>IUG_LOAD_RADIOSONDE_SRP_CSV</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SGK_TSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SRP_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_srp_csv
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in csv format taken by the radiosonde at Serpong 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_srp_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014. 
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_srp_csv.pro">iugonet/load/iug_load_radiosonde_srp_csv.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_SRP_NC">
+<H2>IUG_LOAD_RADIOSONDE_SRP_NC</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SRP_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_UJI_CSV">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_srp_nc
+
+PURPOSE:
+  Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere taken by the radiosonde at Serpong 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_srp_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS: 
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE, Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+    
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_srp_nc.pro">iugonet/load/iug_load_radiosonde_srp_nc.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_UJI_CSV">
+<H2>IUG_LOAD_RADIOSONDE_UJI_CSV</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_SRP_NC">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_UJI_NC">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_uji_csv
+
+PURPOSE:
+  Queries the Kyoto RISH server for the text data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere in csv format taken by the radiosonde at Pontianak 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_pon_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS:
+  trange = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+  
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_uji_csv.pro">iugonet/load/iug_load_radiosonde_uji_csv.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_LOAD_RADIOSONDE_UJI_NC">
+<H2>IUG_LOAD_RADIOSONDE_UJI_NC</H2></A>
+<A HREF="#IUG_LOAD_RADIOSONDE_UJI_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_SDFIT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME:
+iug_load_radiosonde_uji_nc
+
+PURPOSE:
+  Queries the Kyoto RISH server for the netCDF data (press, temp, rh, uwnd, vwnd) 
+  of the troposphere taken by the radiosonde at Uji 
+  and loads data into tplot format.
+
+SYNTAX:
+ iug_load_radiosonde_uji_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+
+KEYWOARDS: 
+  TRANGE = (Optional) Time range of interest  (2 element array), if
+          this is not set, the default is to prompt the user. Note
+          that if the input time range is not a full day, a full
+          day's data is loaded.
+  /downloadonly, if set, then only download the data, do not load it
+                 into variables.
+  VERBOSE, Get more detailed (higher number) command line output.
+  
+CODE:
+  A. Shinbori, 12/02/2014.
+  
+MODIFICATIONS:
+  A. Shinbori, 28/10/2014.
+   
+ACKNOWLEDGEMENT:
+ $LastChangedBy:  $
+ $LastChangedDate:  $
+ $LastChangedRevision:  $
+ $URL $
+</PRE><P>
+<STRONG>(See <A href="load/iug_load_radiosonde_uji_nc.pro">iugonet/load/iug_load_radiosonde_uji_nc.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_LOAD_SDFIT">
 <H2>IUG_LOAD_SDFIT</H2></A>
-<A HREF="#IUG_LOAD_RADIOSONDE_SGK_CSV">[Previous Routine]</A>
+<A HREF="#IUG_LOAD_RADIOSONDE_UJI_NC">[Previous Routine]</A>
 <A HREF="#IUG_LOAD_SMART">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  PROCEDURE: iug_load_sdfit
-   to load the SuperDARN fitacf data from the STEL ERG-SC site 
+
+ PURPOSE:
+    Load fitacf CDF files of SuperDARN as tplot variables.
 
  NOTE: This procedure is a simple alias to "erg_load_sdfit" 
    and calls the original one by just providing the same 
@@ -3858,8 +4649,11 @@ ACKNOWLEDGEMENT:
 
  :KEYWORDS:
     sites: 3-letter code of SD radar name. 
-           Currently only the following codes work: 
-           'hok', 'ksr'  
+           Currently only the following station codes work: 
+                 'ade', 'adw', 'bks', 'cly', 'cve', 'cvw', 'dce', 'fhe', 
+                  'fhw', 'gbr', 'hal', 'han', 'hok', 'inv', 'kap', 'kod', 
+                  'ksr', 'pgr', 'pyk', 'rkn', 'san', 'sas', 'sto', 'sye', 
+                  'sys', 'tig', 'unw', 'wal', 'zho' 
     cdffn: File path of a CDF file if given explicitly. 
     get_support_data: Turn this on to load the supporting data 
     trange: time range for which data are loaded. 
@@ -3921,7 +4715,6 @@ ACKNOWLEDGEMENT:
 <A NAME="IUG_LOAD_WPR_RISH">
 <H2>IUG_LOAD_WPR_RISH</H2></A>
 <A HREF="#IUG_LOAD_SMART">[Previous Routine]</A>
-<A HREF="#IUG_MOVIE_SMART">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 
@@ -3934,25 +4727,24 @@ PURPOSE:
   tplot format.
 
 SYNTAX:
- iug_load_wpr_rish, datatype = datatype, site=site, parameter=parameter, $
+ iug_load_wpr_rish, site=site, parameter=parameter, $
                         downloadonly=downloadonly, trange=trange, verbose=verbose
 
 KEYWOARDS:
-  datatype = Observation data type. For example, iug_load_wpr_rish, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-   site = LTR observation site.  
+   SITE = LTR observation site.  
           For example, iug_load_wpr_rish, site = 'sgk'.
           The default is 'all', i.e., load all available observation points.
-  parameter = parameter name of WPR obervation data.  
+  PARAMETER = parameter name of WPR obervation data.  
           For example, iug_load_wpr_rish, parameter = 'uwnd'.
           The default is 'all', i.e., load all available parameters.
-  trange = (Optional) Time range of interest  (2 element array), if
+  TRANGE = (Optional) Time range of interest  (2 element array), if
           this is not set, the default is to prompt the user. Note
           that if the input time range is not a full day, a full
           day's data is loaded.
   /downloadonly, if set, then only download the data, do not load it
                  into variables.
-
+  VERBOSE: [1,...,5], Get more detailed (higher number) command line output.
+  
 CODE:
  A. Shinbori, 06/10/2011.
 
@@ -3962,6 +4754,7 @@ MODIFICATIONS:
  A. Shinbori, 10/02/2012.
  A. Shinbori, 04/03/2013.
  A. Shinbori, 08/04/2013.
+ A. Shinbori, 24/01/2014.
   
 ACKNOWLEDGEMENT:
  $LastChangedBy:  $
@@ -3970,270 +4763,5 @@ ACKNOWLEDGEMENT:
  $URL $
 </PRE><P>
 <STRONG>(See <A href="load/iug_load_wpr_rish.pro">iugonet/load/iug_load_wpr_rish.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_MOVIE_SMART">
-<H2>IUG_MOVIE_SMART</H2></A>
-<A HREF="#IUG_LOAD_WPR_RISH">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_EAR_FAI">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- :PROCEDURE:
-    iug_movie_smart
-
- :PURPOSE:
-    Show movie of the solar images obtained by the SMART telescope 
-      at the Hida Observatory, Kyoto Univ.
-
- :KEYWOARDS:
-    valuename : tplot variables for image data
-
- :EXAMPLES:
-    iug_movie_smart, 'smart_t1_p00'
-
- :Author:
-    Satoru UeNo (E-mail: ueno@kwasan.kyoto-u.ac.jp)
-</PRE><P>
-<STRONG>(See <A href="load/iug_movie_smart.pro">iugonet/load/iug_movie_smart.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_PLOT2D_EAR_FAI">
-<H2>IUG_PLOT2D_EAR_FAI</H2></A>
-<A HREF="#IUG_MOVIE_SMART">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_IONOGRAM">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
-NAME:
-  iug_plot2d_ear_fai
-
-PURPOSE:
-  Generate several 2-D plots from the FAI f-region observation data taken by the EAR. 
-
-SYNTAX:
-  iug_plot2d_ear_fai, datatype = datatype, valuename=valuename
-
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_plot2d_ear_fai, datatype = 'fai'.
-            The default is 'fai'. 
-  valuename = tplot variable names of ionosonde observation data.  
-         For example, iug_plot2d_ear_fai,valuename = 'faifb8p16m1'.
-         The default is 'faifb8p16m1'.
-  stime = Start time of 2-D plot of the EAR-FAI observations.
-         For example, iug_plot2d_ear_fai, stime = '2012-03-23/15:00:00'.
-         The default is '2012-03-23/15:00:00'.
-  minimum = Minimum value of color plot. For example, iug_plot2d_ear_fai, min = 0.
-         The default is 0.
-  maximum = Maximum value of color plot. For example, iug_plot2d_ear_fai, max = 60.
-         The default is 60.
-  zticks = Number of zticks to divide the bar into. There will be (zticks + 1) annotations. 
-         The default is 6.
-         
-NOTES:
-  Before you examine this procedure, the EAR-FAI data are necceary to load.
-
-CODE:
-  A. Shinbori, 08/07/2013.
-  
-MODIFICATIONS:
-
-  
-ACKNOWLEDGEMENT:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
-</PRE><P>
-<STRONG>(See <A href="load/iug_plot2d_ear_fai.pro">iugonet/load/iug_plot2d_ear_fai.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_PLOT2D_IONOGRAM">
-<H2>IUG_PLOT2D_IONOGRAM</H2></A>
-<A HREF="#IUG_PLOT2D_EAR_FAI">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_IRIO">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
-NAME:
-  iug_plot2d_ionogram
-
-PURPOSE:
-  Generate several ionogram plots from the ionogram data taken by the ionosonde. 
-
-SYNTAX:
-  iug_plot2d_ionogram, datatype = datatype, valuename=valuename
-
-KEYWOARDS:
-  datatype = Observation data type. For example, plot_iug_ionogram, datatype = 'ionosphere'.
-            The default is 'ionosphere'. 
-  valuename = tplot variable names of ionosonde observation data.  
-         For example, iug_plot2d_ionogram,valuename = 'iug_ionosonde_sgk_ionogram'.
-         The default is 'iug_ionosonde_sgk_ionogram'.
-
-CODE:
-  A. Shinbori, 11/01/2013.
-  
-MODIFICATIONS:
-
-  
-ACKNOWLEDGEMENT:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
-</PRE><P>
-<STRONG>(See <A href="load/iug_plot2d_ionogram.pro">iugonet/load/iug_plot2d_ionogram.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_PLOT2D_IRIO">
-<H2>IUG_PLOT2D_IRIO</H2></A>
-<A HREF="#IUG_PLOT2D_IONOGRAM">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_MU_FAI">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- :PROCEDURE:
-    iug_plot2d_irio, vn, col, row, start_time=start_time, $
-           step=step, valrng=valrng, flipns=flipns, flipew=flipew, $
-           oblique_cor=oblique_cor
-
- :PURPOSE:
-    Plot 2D image of the imaging riometer data obtained by NIPR. 
-    The data are mapped to 90km altitude in the magnetic coordinate.
-
- :KEYWOARDS:
-    vn  : tplot variables for image data
-    col : number of column
-    row : number of row
-    start_time : start time of the images
-    step: time step
-    valrng: minimal and maximal values for display (default: [0, 4])
-    flipns: set to flip in the North-South direction (default: top is north)
-    flipew: set to flip in the East-West direction (default: right is east)
-    oblique_cor: if set, CNA for the oblique beams is corrected by CNA*cos(ze).
-
- :EXAMPLES:
-    iug_plot2d_irio, 'nipr_irio_syo_cna', 3, 3, $
-                     start_time='2003-02-09/01:30', step=60
-
- :Author:
-    Y.-M. Tanaka (ytanaka at nipr.ac.jp)
-</PRE><P>
-<STRONG>(See <A href="load/iug_plot2d_irio.pro">iugonet/load/iug_plot2d_irio.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_PLOT2D_MU_FAI">
-<H2>IUG_PLOT2D_MU_FAI</H2></A>
-<A HREF="#IUG_PLOT2D_IRIO">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_RADIOSONDE">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
-NAME:
-  iug_plot2d_mu_fai
-
-PURPOSE:
-  Generate several 2-D plots from the FAI f-region observation data taken by the MU radar. 
-
-SYNTAX:
-  iug_plot2d_mu_fai, datatype = datatype, valuename=valuename
-
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_plot2d_mu_fai, datatype = 'fai'.
-            The default is 'fai'. 
-  valuename = tplot variable names of ionosonde observation data.  
-         For example, iug_plot2d_mu_fai,valuename = 'ifco16'.
-         The default is 'ifco16'.
-  stime = Start time of 2-D plot of the EAR-FAI observations.
-         For example, iug_plot2d_mu_fai, stime = '2007-01-09/15:00:00'.
-         The default is '2007-01-09/15:00:00'.
-  minimum = Minimum value of color plot. For example, iug_plot2d_mu_fai, min = 0.
-         The default is 0.
-  maximum = Maximum value of color plot. For example, iug_plot2d_mu_fai, max = 50.
-         The default is 50.
-  zticks = Number of zticks to divide the bar into. There will be (zticks + 1) annotations. 
-         The default is 5.
-         
-NOTES:
-  Before you examine this procedure, the EAR-FAI data are necceary to load.
-
-CODE:
-  A. Shinbori, 08/07/2013.
-  
-MODIFICATIONS:
-
-  
-ACKNOWLEDGEMENT:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
-</PRE><P>
-<STRONG>(See <A href="load/iug_plot2d_mu_fai.pro">iugonet/load/iug_plot2d_mu_fai.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_PLOT2D_RADIOSONDE">
-<H2>IUG_PLOT2D_RADIOSONDE</H2></A>
-<A HREF="#IUG_PLOT2D_MU_FAI">[Previous Routine]</A>
-<A HREF="#IUG_PLOT2D_SMART">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
-NAME:
-  iug_plot2d_radiosonde
-
-PURPOSE:
-  Generate several height profiles from the radiosonde data. 
-
-SYNTAX:
-  iug_plot2d_radiosonde, datatype = datatype, site=site
-
-KEYWOARDS:
-  datatype = Observation data type. For example, iug_plot2d_radiosonde, datatype = 'troposphere'.
-            The default is 'troposphere'. 
-  site = Radiosonde observation sites.  
-         For example, iug_plot2d_radiosonde,site = 'sgk'.
-         The default is 'sgk'.
-
-CODE:
-  A. Shinbori, 30/05/2013.
-  
-MODIFICATIONS:
-
-  
-ACKNOWLEDGEMENT:
- $LastChangedBy:  $
- $LastChangedDate:  $
- $LastChangedRevision:  $
- $URL $
-</PRE><P>
-<STRONG>(See <A href="load/iug_plot2d_radiosonde.pro">iugonet/load/iug_plot2d_radiosonde.pro</A>)</STRONG><P>
-<HR>
- 
-<A NAME="IUG_PLOT2D_SMART">
-<H2>IUG_PLOT2D_SMART</H2></A>
-<A HREF="#IUG_PLOT2D_RADIOSONDE">[Previous Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- :PROCEDURE:
-    iug_plot2d_smart
-
- :PURPOSE:
-    Plot the solar image data obtained by the SMART telescope at the Hida Observatory, 
-      Kyoto Univ.
-
- :KEYWOARDS:
-    vn  : tplot variables for image data
-    col : number of column
-    row : number of row
-    start_time : start time of the images
-
- :EXAMPLES:
-    iug_plot2d_smart, 'smart_t1_p00', 3, 3, start_time='2005-08-03/05:00:00'
-
- :Author:
-    Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
-    Satoru UeNo (E-mail: ueno@kwasan.kyoto-u.ac.jp)
-</PRE><P>
-<STRONG>(See <A href="load/iug_plot2d_smart.pro">iugonet/load/iug_plot2d_smart.pro</A>)</STRONG><P>
 <HR>
  

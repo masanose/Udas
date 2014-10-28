@@ -11,7 +11,7 @@ This page was created by the IDL library routine
 <CODE>mk_html_help2</CODE>.
 <br>
 <P>
-<STRONG>Last modified: </STRONG>Fri Dec 27 11:43:59 2013.<P>
+<STRONG>Last modified: </STRONG>Tue Oct 28 21:48:08 2014.<P>
  
 <HR>
  
@@ -19,6 +19,9 @@ This page was created by the IDL library routine
 <H1>Directory Listing of Routines</H1></A>
 <UL>
 <H1>iugonet/examples</H1>
+<LI><A HREF="#IUG_CRIB_ASI_NIPR">IUG_CRIB_ASI_NIPR</A>
+<LI><A HREF="#IUG_CRIB_ASK_NIPR">IUG_CRIB_ASK_NIPR</A>
+<LI><A HREF="#IUG_CRIB_AVON_VLFB">IUG_CRIB_AVON_VLFB</A>
 <LI><A HREF="#IUG_CRIB_AWS_RISH">IUG_CRIB_AWS_RISH</A>
 <LI><A HREF="#IUG_CRIB_BLR_RISH">IUG_CRIB_BLR_RISH</A>
 <LI><A HREF="#IUG_CRIB_EAR">IUG_CRIB_EAR</A>
@@ -35,6 +38,7 @@ This page was created by the IDL library routine
 <LI><A HREF="#IUG_CRIB_KYUSHUGCM">IUG_CRIB_KYUSHUGCM</A>
 <LI><A HREF="#IUG_CRIB_LFRTO">IUG_CRIB_LFRTO</A>
 <LI><A HREF="#IUG_CRIB_LTR_RISH">IUG_CRIB_LTR_RISH</A>
+<LI><A HREF="#IUG_CRIB_MAP2D">IUG_CRIB_MAP2D</A>
 <LI><A HREF="#IUG_CRIB_MDDB">IUG_CRIB_MDDB</A>
 <LI><A HREF="#IUG_CRIB_METEOR_NIPR">IUG_CRIB_METEOR_NIPR</A>
 <LI><A HREF="#IUG_CRIB_METEOR_RISH">IUG_CRIB_METEOR_RISH</A>
@@ -48,8 +52,78 @@ This page was created by the IDL library routine
 <HR>
  
 <H1>Routine Descriptions</H1>
+<A NAME="IUG_CRIB_ASI_NIPR">
+<H2>IUG_CRIB_ASI_NIPR</H2></A>
+<A HREF="#IUG_CRIB_ASK_NIPR">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: IUG_CRIB_ASI_NIPR
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_ASI_NIPR">IUG_LOAD_ASI_NIPR</A>" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_asi_nipr
+
+ NOTE: See the rules of the road.
+       For more information, see:
+       http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=103
+    &  http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=115
+ Written by: Y.-M. Tanaka, May 2, 2011
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_asi_nipr.pro">iugonet/examples/iug_crib_asi_nipr.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_CRIB_ASK_NIPR">
+<H2>IUG_CRIB_ASK_NIPR</H2></A>
+<A HREF="#IUG_CRIB_ASI_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_AVON_VLFB">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: IUG_CRIB_ASK_NIPR
+    A sample crib sheet that explains how to use the "<A href="iugonet/load_udas_doc_list.html#IUG_LOAD_ASK_NIPR">IUG_LOAD_ASK_NIPR</A>" 
+    procedure. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_ask_nipr
+
+ NOTE: See the rules of the road.
+       For more information, see:
+       http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=101
+    &  http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=114
+    &  http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=115
+    &  http://scidbase.nipr.ac.jp/modules/metadata/index.php?content_id=224
+ Written by: Y.-M. Tanaka, October 10, 2014
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_ask_nipr.pro">iugonet/examples/iug_crib_ask_nipr.pro</A>)</STRONG><P>
+<HR>
+ 
+<A NAME="IUG_CRIB_AVON_VLFB">
+<H2>IUG_CRIB_AVON_VLFB</H2></A>
+<A HREF="#IUG_CRIB_ASK_NIPR">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_AWS_RISH">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+PROCEDURE: IUG_CRIB_AVON_VLFB
+    A crib sheet to demonstrate how to deal with data from
+    AVON(Asia VLF Observation Network) VLF-B data using udas.
+    You can run this crib sheet by copying&pasting each command
+    below into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_avon_vlfb
+
+ Written by: M. Yagi, May 14, 2014 
+ Last Update: M. Yagi, Jun 26, 2014
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_avon_vlfb.pro">iugonet/examples/iug_crib_avon_vlfb.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_CRIB_AWS_RISH">
 <H2>IUG_CRIB_AWS_RISH</H2></A>
+<A HREF="#IUG_CRIB_AVON_VLFB">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_BLR_RISH">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -258,7 +332,7 @@ PROCEDURE: IUG_CRIB_HF_TOHOKUU
         .run iug_crib_lfrto
 
  Written by: M. Yagi, Jan 20, 2013 
- Last Update: M. Yagi, Feb 20, 2013
+ Last Update: M. Yagi, Jan 22, 2014
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_hf_tohokuu.pro">iugonet/examples/iug_crib_hf_tohokuu.pro</A>)</STRONG><P>
 <HR>
@@ -383,7 +457,7 @@ PROCEDURE: IUG_CRIB_LFRTO
 <A NAME="IUG_CRIB_LTR_RISH">
 <H2>IUG_CRIB_LTR_RISH</H2></A>
 <A HREF="#IUG_CRIB_LFRTO">[Previous Routine]</A>
-<A HREF="#IUG_CRIB_MDDB">[Next Routine]</A>
+<A HREF="#IUG_CRIB_MAP2D">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 PROCEDURE: IUG_CRIB_LTR_RISH.PRO
@@ -399,9 +473,29 @@ Last Updated:  A. Shinbori,  Dec 26, 2011
 <STRONG>(See <A href="examples/iug_crib_ltr_rish.pro">iugonet/examples/iug_crib_ltr_rish.pro</A>)</STRONG><P>
 <HR>
  
+<A NAME="IUG_CRIB_MAP2D">
+<H2>IUG_CRIB_MAP2D</H2></A>
+<A HREF="#IUG_CRIB_LTR_RISH">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_MDDB">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ PROCEDURE: iug_crib_map2d
+    A sample crib sheet that explains how to plot 2D data on the 
+    world map. You can run this crib sheet by copying & pasting each 
+    command below (except for stop and end) into the IDL command line. 
+    Or alternatively compile and run using the command:
+        .run iug_crib_map2d
+
+ Written by: Y.-M. Tanaka, Aug. 1, 2014
+             National Institute of Polar Research, Japan.
+             ytanaka at nipr.ac.jp
+</PRE><P>
+<STRONG>(See <A href="examples/iug_crib_map2d.pro">iugonet/examples/iug_crib_map2d.pro</A>)</STRONG><P>
+<HR>
+ 
 <A NAME="IUG_CRIB_MDDB">
 <H2>IUG_CRIB_MDDB</H2></A>
-<A HREF="#IUG_CRIB_LTR_RISH">[Previous Routine]</A>
+<A HREF="#IUG_CRIB_MAP2D">[Previous Routine]</A>
 <A HREF="#IUG_CRIB_METEOR_NIPR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -492,7 +586,7 @@ PROCEDURE: IUG_CRIB_MU.PRO
         .run iug_crib_mu
 
 Written by: A. Shinbori,  Feb 18, 2011
-Last Updated:  A. Shinbori,  AUG 16, 2013
+Last Updated:  A. Shinbori,  Jan 07, 2014
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_mu.pro">iugonet/examples/iug_crib_mu.pro</A>)</STRONG><P>
 <HR>
@@ -511,7 +605,7 @@ PROCEDURE: IUG_CRIB_RADIOSONDE_RISH.PRO
         .run iug_crib_ltr_rish
 
 Written by: A. Shinbori,  Apr 12, 2013
-Last Updated:  A. Shinbori,  Apr 15, 2013
+Last Updated:  A. Shinbori,  Oct 27, 2014
 </PRE><P>
 <STRONG>(See <A href="examples/iug_crib_radiosonde_rish.pro">iugonet/examples/iug_crib_radiosonde_rish.pro</A>)</STRONG><P>
 <HR>
