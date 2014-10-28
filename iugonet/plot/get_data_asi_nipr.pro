@@ -1,9 +1,9 @@
 ;+
-;	PROCEDURE get_data_asi_nipr
+; PROCEDURE get_data_asi_nipr
 ;
 ; :DESCRIPTION:
 ;    Extract the ASI data at the designated time from the tplot variable 
-;		and make the structure.
+;    and make the structure.
 ;
 ; :PARAMS:
 ;    asi_vn: tplot variable name (as string)
@@ -54,19 +54,19 @@ if npar lt 1 then return
 ;----- if asi_vn is the index number for tplot var -----;
 vn = tnames(asi_vn)
 if total(vn eq '') gt 0 then begin
-	print, 'given tplot var(s) does not exist?'
-	return
+    print, 'given tplot var(s) does not exist?'
+    return
 endif
 
 ;----- set_time -----;
 if ~keyword_set(set_time) then begin
-	t0 = !map2d.time
-	get_timespan, tr
-	if t0 ge tr[0] and t0 le tr[1] then begin
-		set_time = t0 
-	endif else begin
-	    set_time = (tr[0]+tr[1])/2.  ; take the center of the designated time range
-	endelse
+    t0 = !map2d.time
+    get_timespan, tr
+    if t0 ge tr[0] and t0 le tr[1] then begin
+        set_time = t0 
+    endif else begin
+        set_time = (tr[0]+tr[1])/2.  ; take the center of the designated time range
+    endelse
 endif
 
 ;----- altitude -----;
@@ -126,17 +126,17 @@ endelse
 corner_mlat='' & corner_mlon=''
 center_mlat='' & center_mlon=''
 if keyword_set(aacgm) then begin
-	;----- Load the S-H coefficients -----;
+    ;----- Load the S-H coefficients -----;
     ts = time_struct(set_time)
     aacgmloadcoef, ts.year
-	;----- corner mlat mlon -----;
-	altmat = corner_glat & altmat[*] = altitude ;***** altitude in km *****;
-	aacgmconvcoord, corner_glat, corner_glon, altmat, $
-		corner_mlat, corner_mlon, err, /to_aacgm
-	;----- center mlat mlon -----;
-	altmat = center_glat & altmat[*] = altitude ;***** altitude in km *****;
-	aacgmconvcoord, center_glat, center_glon, altmat, $
-		center_mlat, center_mlon, err, /to_aacgm
+    ;----- corner mlat mlon -----;
+    altmat = corner_glat & altmat[*] = altitude ;***** altitude in km *****;
+    aacgmconvcoord, corner_glat, corner_glon, altmat, $
+        corner_mlat, corner_mlon, err, /to_aacgm
+    ;----- center mlat mlon -----;
+    altmat = center_glat & altmat[*] = altitude ;***** altitude in km *****;
+    aacgmconvcoord, center_glat, center_glon, altmat, $
+        center_mlat, center_mlon, err, /to_aacgm
 endif
 
 ;----- initialize output arrays -----;
@@ -148,65 +148,65 @@ dat_time_all = ''
 image_all = fltarr(ntime, nx, ny)
 
 if keyword_set(aacgm) then begin
-	center_mlt_all  = fltarr(ntime, nx, ny)
-	corner_mlt_all  = fltarr(ntime, nx+1, ny+1)
+    center_mlt_all  = fltarr(ntime, nx, ny)
+    corner_mlt_all  = fltarr(ntime, nx+1, ny+1)
 endif else begin
-	center_mlt_all  = ''
-	corner_mlt_all  = ''
+    center_mlt_all  = ''
+    corner_mlt_all  = ''
 endelse
 
 for itime=0L, ntime-1 do begin
-	stime=time_double(set_time[itime])
+    stime=time_double(set_time[itime])
 
-	;----- obtain image data for the designated time -----;
-	get_data, vn, data=d
-	tidx = nn(d.x, stime)
-	if tidx lt 0 then continue
-	image = reform(d.y[tidx, *, *])
-	dtime=d.x[tidx]
+    ;----- obtain image data for the designated time -----;
+    get_data, vn, data=d
+    tidx = nn(d.x, stime)
+    if tidx lt 0 then continue
+    image = reform(d.y[tidx, *, *])
+    dtime=d.x[tidx]
 
-	;----- check if data for the designated time is obtained or not. -----;
-	crt_dt=10.
-	dt = abs(stime - d.x[tidx])
-	if dt lt crt_dt then note = '  (ok)' else note = ' !!! not within '+string(fix(crt_dt))+' sec !!!'
-	print, '========== '+vn+' =========='
-	print, 'designated time: '+time_string(stime)
-	print, '  ASI data time: '+time_string(dtime), tidx, note
-	d = 0L ;initialize the variable to save the memory
+    ;----- check if data for the designated time is obtained or not. -----;
+    crt_dt=10.
+    dt = abs(stime - d.x[tidx])
+    if dt lt crt_dt then note = '  (ok)' else note = ' !!! not within '+string(fix(crt_dt))+' sec !!!'
+    print, '========== '+vn+' =========='
+    print, 'designated time: '+time_string(stime)
+    print, '  ASI data time: '+time_string(dtime), tidx, note
+    d = 0L ;initialize the variable to save the memory
 
-	;----- append array -----;
-	append_array, set_time_all, stime
-	append_array, dat_time_all, dtime
-	image_all[itime, *, *] = image
+    ;----- append array -----;
+    append_array, set_time_all, stime
+    append_array, dat_time_all, dtime
+    image_all[itime, *, *] = image
 
-	;----- ontain mlt -----;
-	if keyword_set(aacgm) then begin
-	    ts = time_struct(stime)
-		;----- center mlt -----;
-	    yrs = fix(center_mlat) & yrs[*] = ts.year
-    	yrsec = long(center_mlat) & yrsec[*] = long( (ts.doy-1)*86400. + ts.sod )
-    	mlt = aacgmmlt( yrs, yrsec, center_mlon ) 
-    	mlt = ( ( mlt + 24. ) mod 24. ) / 24.*360. ; [deg]
-		igt=where(mlt gt 180., cnt)
-		if cnt gt 0 then mlt(igt) -= 360.
-		center_mlt_all[itime, *, *] =mlt
+    ;----- ontain mlt -----;
+    if keyword_set(aacgm) then begin
+        ts = time_struct(stime)
+        ;----- center mlt -----;
+        yrs = fix(center_mlat) & yrs[*] = ts.year
+        yrsec = long(center_mlat) & yrsec[*] = long( (ts.doy-1)*86400. + ts.sod )
+        mlt = aacgmmlt( yrs, yrsec, center_mlon ) 
+        mlt = ( ( mlt + 24. ) mod 24. ) / 24.*360. ; [deg]
+        igt=where(mlt gt 180., cnt)
+        if cnt gt 0 then mlt(igt) -= 360.
+        center_mlt_all[itime, *, *] =mlt
 
-		;----- corner mlt -----;
-	    yrs = fix(corner_mlat) & yrs[*] = ts.year
-    	yrsec = long(corner_mlat) & yrsec[*] = long( (ts.doy-1)*86400. + ts.sod )
-    	mlt = aacgmmlt( yrs, yrsec, corner_mlon ) 
-    	mlt = ( ( mlt + 24. ) mod 24. ) / 24.*360. ; [deg]
-		igt=where(mlt gt 180., cnt)
-		if cnt gt 0 then mlt(igt) -= 360.
-		corner_mlt_all[itime, *, *] =mlt
-	endif
+        ;----- corner mlt -----;
+        yrs = fix(corner_mlat) & yrs[*] = ts.year
+        yrsec = long(corner_mlat) & yrsec[*] = long( (ts.doy-1)*86400. + ts.sod )
+        mlt = aacgmmlt( yrs, yrsec, corner_mlon ) 
+        mlt = ( ( mlt + 24. ) mod 24. ) / 24.*360. ; [deg]
+        igt=where(mlt gt 180., cnt)
+        if cnt gt 0 then mlt(igt) -= 360.
+        corner_mlt_all[itime, *, *] =mlt
+    endif
 endfor
 
 data={name:vn, set_time:set_time_all, dat_time:dat_time_all, $
-	data:image_all, alti:altitude, azim:azim, elev:elev, $
-	center_glat:center_glat, center_glon:center_glon, $
-	corner_glat:corner_glat, corner_glon:corner_glon, $
-	center_mlat:center_mlat, center_mlon:center_mlon, center_mlt:center_mlt_all, $
-	corner_mlat:corner_mlat, corner_mlon:corner_mlon, corner_mlt:corner_mlt_all}
+    data:image_all, alti:altitude, azim:azim, elev:elev, $
+    center_glat:center_glat, center_glon:center_glon, $
+    corner_glat:corner_glat, corner_glon:corner_glon, $
+    center_mlat:center_mlat, center_mlon:center_mlon, center_mlt:center_mlt_all, $
+    corner_mlat:corner_mlat, corner_mlon:corner_mlon, corner_mlt:corner_mlt_all}
 
 end

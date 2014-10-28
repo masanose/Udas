@@ -8,21 +8,19 @@
 ;    asi_vn:   tplot variable names (as strings) to be plotted
 ;
 ; :KEYWORDS:
-;    set_time: set the time (UNIX time) to plot all-sky imager data
-;    altitude: set the altitude on which the image data will be mapped.
-;              The default value is 110 (km).
-;    coord: the name of the coordinate system.
-;           'geo' or 0 for geographic coordinate
-;           'aacgm' or 1 for AACGM coordinate
-;    position:  Set the location of the plot frame in the plot window
-;	 colorrange: set the range of values of colorscale
+;    set_time: time to plot all-sky imager data
+;              (ex., '2011-01-01/00:00:00 or Unix time)
+;    altitude: altitude on which the image data will be mapped.
+;              The default value is 110 (km). Available values are 90, 110, 150, 250.
+;    position:  Position of the plot frame in the plot window
+;    colorrange: range of values of colorscale (this can be an array)
 ;    notimelabel: set to surpress drawing the time label
-;	 timelabelpos: set the position of the color scale in the noraml coordinates.
-;	 tlcharsize: the size of the characters used for the time label.
-;    nocolorscale: set to surpress drawing the color scale 
-;    colorscalepos: set the position of the color scale in the noraml 
-;                   coordinates. Default: [0.85, 0.1, 0.87, 0.45] 
-;    cscharsize: the size of the characters used for the colorscale.
+;    timelabelpos: position of the color scale in the noraml coordinates
+;    tlcharsize: the size of the characters used for the time label
+;    nocolorscale: set to surpress drawing the color scale
+;    colorscalepos: set the position of the color scale in the noraml coordinates. 
+;                   Default: [0.85, 0.1, 0.87, 0.45] 
+;    cscharsize: size of the characters used for the colorscale.
 ;
 ; :AUTHOR:
 ;    Yoshimasa Tanaka (E-mail: ytanaka@nipr.ac.jp)
@@ -32,10 +30,10 @@
 ;
 ;-
 pro overlay_map_thmasi, asi_vns, set_time=set_time, $
-    altitude=altitude, coord=coord, position=position, $
+    altitude=altitude, position=position, $
     colorrange=colorrange, cal=cal, $
     notimelabel=notimelabel, timelabelpos=timelabelpos, $
-	tlcharsize=tlcharsize, $
+    tlcharsize=tlcharsize, $
     nocolorscale=nocolorscale, colorscalepos=colorscalepos, $
     cscharsize=cscharsize
 
@@ -56,7 +54,7 @@ endif
 if ~keyword_set(set_time) then time_tmp=!map2d.time
 
 ;----- coord -----;
-if ~keyword_set(coord) then coord_tmp=!map2d.coord
+coord_tmp=!map2d.coord
 
 ;----- color range -----;
 default_colorrange = [0.01e+3, 2.0e+3]
@@ -70,29 +68,29 @@ cmb_flag = ''
 
 for ivn=0L, n_elements(vns)-1 do begin
     vn = vns[ivn]
-	prefix = strmid( vn, 0, 8 )
-	dtype = strmid( prefix, 4,3 ) ; ast or asf
-	stn = strmid( vn, 8,4 ) ;3-letter station code
-	if strpos(dtype,'ast') eq 0 then is_thumb=1 else is_thumb=0
-	if is_thumb then begin 
-		nx=32 & ny=32
-	endif else begin
-		nx=256 & ny=256
-	endelse
+    prefix = strmid( vn, 0, 8 )
+    dtype = strmid( prefix, 4,3 ) ; ast or asf
+    stn = strmid( vn, 8,4 ) ;3-letter station code
+    if strpos(dtype,'ast') eq 0 then is_thumb=1 else is_thumb=0
+    if is_thumb then begin 
+        nx=32 & ny=32
+    endif else begin
+        nx=256 & ny=256
+    endelse
 
     ;----- obtain image and position data -----;
-	get_data_thmasi, vn, set_time=time_tmp, $
-    	cal=cal, altitude=altitude, aacgm=coord_tmp, data=data
+    get_data_thmasi, vn, set_time=time_tmp, $
+        cal=cal, altitude=altitude, aacgm=coord_tmp, data=data
 
-	elev=data.elev
-	img=reform(data.data)
-	if coord_tmp eq 1 then begin
-		lats_cor=data.corner_mlat
-		lons_cor=reform(data.corner_mlt)
-	endif else begin
-		lats_cor=data.corner_glat
-		lons_cor=data.corner_glon
-	endelse
+    elev=data.elev
+    img=reform(data.data)
+    if coord_tmp eq 1 then begin
+        lats_cor=data.corner_mlat
+        lons_cor=reform(data.corner_mlt)
+    endif else begin
+        lats_cor=data.corner_glat
+        lons_cor=data.corner_glon
+    endelse
 
     ;----- set the color range for image data -----;
     ncrng = size(colorrange, /n_dim)
@@ -112,31 +110,31 @@ for ivn=0L, n_elements(vns)-1 do begin
     scale_image_values, img, crng, imgscl
 
     ;----- generate array -----;
-	dim=size(img, /dim)
-	nx=dim[0] & ny=dim[1]
-	elev=elev[*]
-	npxl=n_elements(elev)
-	lats_corner=fltarr(npxl, 4)
-	lons_corner=fltarr(npxl, 4)
-	flag=intarr(npxl)-1 
+    dim=size(img, /dim)
+    nx=dim[0] & ny=dim[1]
+    elev=elev[*]
+    npxl=n_elements(elev)
+    lats_corner=fltarr(npxl, 4)
+    lons_corner=fltarr(npxl, 4)
+    flag=intarr(npxl)-1 
 
     if not is_thumb then begin  ;For asf
-	    ipxl=0L
-	    for iy=0L, ny-1 do begin
-	    	for ix=0L, nx-1 do begin
-	            lats_corner[ipxl,0:3] = transpose( lats_cor[ [ix,ix,ix+1,ix+1],[iy,iy+1,iy+1,iy] ] )
-	            lons_corner[ipxl,0:3] = transpose( lons_cor[ [ix,ix,ix+1,ix+1],[iy,iy+1,iy+1,iy] ] )
-	            if total(finite(lats_corner[ipxl, 0:3])) eq 4 then flag[ipxl]=1
-	            ipxl = ipxl + 1L
-	        endfor
-	    endfor
+        ipxl=0L
+        for iy=0L, ny-1 do begin
+            for ix=0L, nx-1 do begin
+                lats_corner[ipxl,0:3] = transpose( lats_cor[ [ix,ix,ix+1,ix+1],[iy,iy+1,iy+1,iy] ] )
+                lons_corner[ipxl,0:3] = transpose( lons_cor[ [ix,ix,ix+1,ix+1],[iy,iy+1,iy+1,iy] ] )
+                if total(finite(lats_corner[ipxl, 0:3])) eq 4 then flag[ipxl]=1
+                ipxl = ipxl + 1L
+            endfor
+        endfor
     endif else begin  ;For ast
-		wt = total( finite(lats_cor), 1 ) ;[1024]
-		ipxl = where( wt eq 4, cnt )
-		if cnt gt 0 then flag[ipxl] = 1
-		lats_corner = transpose(lats_cor)  ;[1024, 4]
-		lons_corner = transpose(lons_cor)
-	endelse
+        wt = total( finite(lats_cor), 1 ) ;[1024]
+        ipxl = where( wt eq 4, cnt )
+        if cnt gt 0 then flag[ipxl] = 1
+        lats_corner = transpose(lats_cor)  ;[1024, 4]
+        lons_corner = transpose(lons_cor)
+    endelse
 
     ;----- append array -----;
     append_array, cmb_elev, elev
@@ -173,7 +171,7 @@ endfor
 
 ;---- time label -----;
 if ~keyword_set(notimelabel) then begin
-	if ~keyword_set(tlcharsize) then tlcharsize=1.0
+    if ~keyword_set(tlcharsize) then tlcharsize=1.0
     if keyword_set(timelabelpos) then begin ;customizable by user
         x = !x.window[0] + (!x.window[1]-!x.window[0])*timelabelpos[0] 
         y = !y.window[0] + (!y.window[1]-!y.window[0])*timelabelpos[1]
@@ -182,7 +180,7 @@ if ~keyword_set(notimelabel) then begin
     endelse
     t = time_tmp
     tstr = time_string(t, tfor='hh:mm:ss')+' ut'
-        xyouts, x, y, tstr, /normal, $
+    xyouts, x, y, tstr, /normal, $
         font=1, charsize=tlcharsize
 endif
 
@@ -197,15 +195,15 @@ if ~keyword_set(nocolorscale) then begin
             y0 + ys * cp[1], $
             x0 + xs * cp[2], $
             y0 + ys * cp[3] ]
-	endif else begin
-    	cspos = [0.85,0.1,0.87,0.45]
-	endelse
+    endif else begin
+        cspos = [0.85,0.1,0.87,0.45]
+    endelse
 
-	pre_yticklen = !y.ticklen
-	!y.ticklen = 0.25
-	draw_color_scale, range=cmb_crng[0:1,0], $
-	  pos=cspos, charsize=cscharsize
-	!y.ticklen = pre_yticklen
+    pre_yticklen = !y.ticklen
+    !y.ticklen = 0.25
+    draw_color_scale, range=cmb_crng[0:1,0], $
+        pos=cspos, charsize=cscharsize
+    !y.ticklen = pre_yticklen
 endif
 
 ;----- Resotre the original plot position -----;
