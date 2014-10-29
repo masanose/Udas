@@ -2,9 +2,9 @@
 ; PROCEDURE map2d_grid
 ;
 ; :DESCRIPTION:
-;		Draw the latitude-longitude mesh with given intervals in Lat and Lon. 
+;    Draw the latitude-longitude mesh with given intervals in Lat and Lon. 
 ;
-;	:KEYWORDS:
+; :KEYWORDS:
 ;    dlat:  interval in Latitude [deg]. If not set, 10 deg is used as default. 
 ;    dlon:   interval in Longitude [deg]. If not set, 15 deg (1 hour in local time) is used as default. 
 ;    color: number of color table to be used for drawing lat-LT mesh
@@ -15,10 +15,10 @@
 ;    map2d_grid, dlat=10., dlon=15. 
 ;
 ; :AUTHOR:
-; 	Tomo Hori (E-mail: horit at stelab.nagoya-u.ac.jp)
+;    Tomo Hori (E-mail: horit at stelab.nagoya-u.ac.jp)
 ;
 ; :HISTORY:
-; 	2014/08/12: Created
+;    2014/08/12: Created
 ;
 ; $LastChangedBy: $
 ; $LastChangedDate: $
@@ -34,8 +34,6 @@ PRO map2d_grid, dlat=dlat, dlon=dlon, color=color, linethick=linethick
   if ~keyword_set(dlon) then dlon = 15.  ; 15 deg = 1 hour in local time
   
   map_grid, latdel=dlat, londel=dlon, color=color, glinethick=linethick  
-  
-  
   
   RETURN
 END

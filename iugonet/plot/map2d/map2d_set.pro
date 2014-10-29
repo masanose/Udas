@@ -1,21 +1,21 @@
 ;+
-; PROCEDURE/FUNCTION map2d_set
+; PROCEDURE map2d_set
 ;
 ; :DESCRIPTION:
-;		A wrapper routine for the IDL original "map_set" enabling some
-;		annotations regarding the visualization of 2D data.
+;    A wrapper routine for the IDL original "map_set" enabling some
+;    annotations regarding the visualization of 2D data.
 ;
-;	:KEYWORDS:
+; :KEYWORDS:
 ;    glatc: geographical latitude at which a plot region is centered.
 ;    glonc: geographical longitude at which a plot region is centered.
-;                 (both glatc and glonc should be given, otherwise ignored)
+;           (both glatc and glonc should be given, otherwise ignored)
 ;    scale: same as the keyword "scale" of map_set
 ;    erase: aet to erase pre-existing graphics on the plot window.
 ;    position: gives the position of a plot panel on the plot window as the normal coordinates.
 ;    label: set to label the latitudes and longitudes.
 ;    stereo: use the stereographic mapping, instead of satellite mapping (default)
-;	 charsize: the size of the characters used for the labels.
-;    coord: the name of the coordinate system.
+;    charsize: size of the characters used for the labels.
+;    coord: name of the coordinate system.
 ;        'geo' or 0 for Geographic coordinate
 ;        'aacgm' or non-zero numbers for AACGM coordinate
 ;    set_time: this is used to calculate MLT when coord is 'aacgm'
@@ -32,7 +32,6 @@
 ;
 ; :HISTORY:
 ;    2014/07/07: Created
-;
 ;-
 
 PRO map2d_set, glatc=glatc, glonc=glonc, $
@@ -131,12 +130,12 @@ endelse
 map_set, latc, lonc, rot_angle, $
     satellite=satellite, stereo=stereo, sat_p=[6.6, 0., 0.], $
     scale=scale_tmp, /isotropic, /horizon, noerase=~keyword_set(erase), $
-	label=label, charsize=charsize 
+    label=label, charsize=charsize 
 
 if ~keyword_set(nogrid) then $
   map2d_grid, dlat=dlat_grid, dlon=dlon_grid, color=color_grid, $
     linethick=linethick_grid 
-  
+
 ;    ;Resize the canvas size for the position values
 ;    scl = (!x.window[1]-!x.window[0]) < (!y.window[1]-!y.window[0])
 ;    scale /= scl

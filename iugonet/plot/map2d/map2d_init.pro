@@ -46,7 +46,7 @@ if (exists eq 0) or (keyword_set(reset)) then begin
         aacgm_load_coef, 2000      ;Load the S-H coefficients for Year 2000
     endif else begin
         aacgmidl
-   endelse
+    endelse
 endif
 
 ;----- set set_time -----;

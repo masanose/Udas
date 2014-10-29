@@ -1,25 +1,25 @@
 ;+
-; PROCEDURE/FUNCTION map2d_time
+; PROCEDURE map2d_time
 ;
 ; :Description:
-;		Describe the procedure/function.
+;    Describe the procedure/function.
 ;
-;	:Params:
+; :Params:
 ;    time:  Set the time for which 2D data is drawn on the world map
 ;
-;	:Keywords:
+; :Keywords:
 ;    quiet:   If not set, then the plot time is shown in the command-line console
 ;
 ; :EXAMPLES:
-;   map2d_time, '2007-03-24/14:24' 
-;   map2d_time, 1424 
+;    map2d_time, '2007-03-24/14:24' 
+;    map2d_time, 1424 
 ;
 ; :Author:
-; 	Y.-M. Tanaka (E-mail: ytanaka@nipr.ac.jp)
+;    Y.-M. Tanaka (E-mail: ytanaka@nipr.ac.jp)
 ;
 ; :HISTORY:
-; 	2014/07/28: Created
-; 	
+;    2014/07/28: Created
+;
 ;-
 pro map2d_time, time, quiet=quiet
 
