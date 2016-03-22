@@ -102,7 +102,7 @@ pro iug_load_cosmic_rish, min_lat = min_lat, $
       file= local_paths[j]
       if file_test(/regular,file) then  dprint,'Loading the GPS-RO COSMIC FSI data: ',file $
       else begin
-        dprint,'The GPS-RO COSMIC FSI data ',file,' not found. Skipping'
+        dprint,'The GPS-RO cosmic FSI data ',file,' not found. Skipping'
         continue
       endelse
 
@@ -261,36 +261,53 @@ pro iug_load_cosmic_rish, min_lat = min_lat, $
       + 'the relevant publications. The distribution of GPS radio occultation data has been partly supported by '$
       + 'the IUGONET (Inter-university Upper atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '$
       + 'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
-
-   dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
-   store_data,'gps_ro_cosmic_fsi_event',data = {x:time_app, y:event_app},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_event', ytitle = 'Event number',spec=0
-   store_data,'gps_ro_cosmic_fsi_gpsid',data = {x:time_app, y:gpsid_app},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_gpsid', ytitle = 'GPS satellite ID',spec=0
-   store_data,'gps_ro_cosmic_fsi_leoid',data = {x:time_app, y:leoid_app},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_leoid', ytitle = 'LEO satellite ID',spec=0
-   store_data,'gps_ro_cosmic_fsi_lat',data = {x:time_app, y:lat_app},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_lat', ytitle = 'Latitude [degree]',spec=0
-   store_data,'gps_ro_cosmic_fsi_lon',data = {x:time_app, y:lon_app},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_lon', ytitle = 'Longitude [degree]',spec=0
-   store_data,'gps_ro_cosmic_fsi_ref',data = {x:time_app, y:ref_app, v:height},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_ref', ytitle = 'Height [km]', ztitle = 'Refractivity [N]',spec=1,/noiso
-   store_data,'gps_ro_cosmic_fsi_pres',data = {x:time_app, y:pres_app, v:height},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_pres', ytitle = 'Height [km]', ztitle = 'Dry air pressure [hPa]',spec=1,/noiso
-   store_data,'gps_ro_cosmic_fsi_temp',data = {x:time_app, y:temp_app, v:height},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_temp', ytitle = 'Height [km]',ztitle = 'Dry air temperature [degree C]',spec=1,/noiso
-   store_data,'gps_ro_cosmic_fsi_tan_lat',data = {x:time_app, y:tan_lat_app, v:height},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_tan_lat', ytitle = 'Height [km]',ztitle = 'Latitude of perigee point [degree]',spec=1,/noiso
-   store_data,'gps_ro_cosmic_fsi_tan_lon',data = {x:time_app, y:tan_lon_app, v:height},dlimit=dlimit
-   options, 'gps_ro_cosmic_fsi_tan_lon',ytitle = 'Height [km]', ztitle = 'Longitude of perigee point [degree]',spec=1,/noiso
   
-  ;---Specify the height range of each parameter: 
-   ylim,'gps_ro_cosmic_fsi_ref',0,40
-   ylim,'gps_ro_cosmic_fsi_pres',0,40
-   ylim,'gps_ro_cosmic_fsi_temp',0,40
-   ylim,'gps_ro_cosmic_fsi_tan_lat',0,40
-   ylim,'gps_ro_cosmic_fsi_tan_lon',0,40
+   if size(event_app,/type) eq 4 then begin
+      dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Tsuda'))
+      store_data,'gps_ro_cosmic_fsi_event',data = {x:time_app, y:event_app},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_event', ytitle = 'Event number',spec=0
+  
+      store_data,'gps_ro_cosmic_fsi_gpsid',data = {x:time_app, y:gpsid_app},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_gpsid', ytitle = 'GPS satellite ID',spec=0
    
+      store_data,'gps_ro_cosmic_fsi_leoid',data = {x:time_app, y:leoid_app},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_leoid', ytitle = 'LEO satellite ID',spec=0
+   
+      store_data,'gps_ro_cosmic_fsi_lat',data = {x:time_app, y:lat_app},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_lat', ytitle = 'Latitude [degree]',spec=0
+   
+      store_data,'gps_ro_cosmic_fsi_lon',data = {x:time_app, y:lon_app},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_lon', ytitle = 'Longitude [degree]',spec=0
+   
+      store_data,'gps_ro_cosmic_fsi_ref',data = {x:time_app, y:ref_app, v:height},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_ref', ytitle = 'Height [km]', ztitle = 'Refractivity [N]',spec=1,/noiso
+   
+      store_data,'gps_ro_cosmic_fsi_pres',data = {x:time_app, y:pres_app, v:height},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_pres', ytitle = 'Height [km]', ztitle = 'Dry air pressure [hPa]',spec=1,/noiso
+   
+      store_data,'gps_ro_cosmic_fsi_temp',data = {x:time_app, y:temp_app, v:height},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_temp', ytitle = 'Height [km]',ztitle = 'Dry air temperature [degree C]',spec=1,/noiso
+   
+      store_data,'gps_ro_cosmic_fsi_tan_lat',data = {x:time_app, y:tan_lat_app, v:height},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_tan_lat', ytitle = 'Height [km]',ztitle = 'Latitude of perigee point [degree]',spec=1,/noiso
+   
+      store_data,'gps_ro_cosmic_fsi_tan_lon',data = {x:time_app, y:tan_lon_app, v:height},dlimit=dlimit
+      options, 'gps_ro_cosmic_fsi_tan_lon',ytitle = 'Height [km]', ztitle = 'Longitude of perigee point [degree]',spec=1,/noiso
+  
+     ;---Specify the height range of each parameter: 
+      ylim,'gps_ro_cosmic_fsi_ref',0,40
+      ylim,'gps_ro_cosmic_fsi_pres',0,40
+      ylim,'gps_ro_cosmic_fsi_temp',0,40
+      ylim,'gps_ro_cosmic_fsi_tan_lat',0,40
+      ylim,'gps_ro_cosmic_fsi_tan_lon',0,40
+  
+     ;---Add tdegap
+      tdegap,'gps_ro_cosmic_fsi_ref',/overwrite
+      tdegap,'gps_ro_cosmic_fsi_pres',/overwrite
+      tdegap,'gps_ro_cosmic_fsi_temp',/overwrite
+      tdegap,'gps_ro_cosmic_fsi_tan_lat',/overwrite
+      tdegap,'gps_ro_cosmic_fsi_tan_lon',/overwrite 
+   endif
 endif
 
 ;---Clear buffer:
