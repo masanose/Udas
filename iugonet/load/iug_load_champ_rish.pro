@@ -8,11 +8,11 @@
 ;  provided by UCAR and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_champ_rish, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_champ_rish, region = region, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  MIN_LAT = (Optional) Minimum latitude, if this is not set, the default is -90.00.
-;  MAX_LAT = (Optional) Maximum latitude, if this is not set, the default is 90.00.
+;  REGION = (Optional) Confine the geographical latitude to use data plot, 
+;           if this is not set, the default is 'All_latitude'.
 ;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
@@ -25,7 +25,8 @@
 ; A. Shinbori, 22/03/2016.
 ;
 ;MODIFICATIONS:
-;
+; A. Shinbori, 31/03/2016.
+; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
 ; $LastChangedDate:  $
@@ -33,8 +34,7 @@
 ; $URL $
 ;-
 
-pro iug_load_champ_rish, min_lat = min_lat, $
-  max_lat = max_lat, $
+pro iug_load_champ_rish, region = region, $
   downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
@@ -43,8 +43,8 @@ pro iug_load_champ_rish, min_lat = min_lat, $
   ;Verbose keyword check:
   ;**********************
   if (not keyword_set(verbose)) then verbose = 2
-  if (not keyword_set(min_lat)) then min_lat = -90.00
-  if (not keyword_set(max_lat)) then max_lat = 90.00
+  if (not keyword_set(region)) then region = 'All_latitude'
+
 
   ;******************************************************************
   ;Loop on downloading files
@@ -234,7 +234,10 @@ pro iug_load_champ_rish, min_lat = min_lat, $
       ;===============================
       ;====Store tplot variables======
       ;===============================
-      idx1 = where(lat ge min_lat and lat lt max_lat, cnt)
+      if region eq 'All_latitude' then idx1 = where(abs(lat) ge 0.00, cnt) ;---All region
+      if region eq 'Low_latitude' then idx1 = where(lat ge -30.00 and lat lt 30.00, cnt) ;---Low-latitude region
+      if region eq 'Middle_latitude' then idx1 = where(lat ge -60.00 and lat lt -30.00 or lat ge 30.00 and lat lt 60.00, cnt) ;---Middle-latitude region
+      if region eq 'High_latitude' then idx1 = where(lat ge -90.00 and lat lt -60.00 or lat ge 60.00 and lat lt 90.00, cnt) ;---High-latitude region
 
       if idx1[0] ne -1 then begin
         append_array,time_app, double(time[idx1])+time_double('1980-01-06/00:00:00')

@@ -7,7 +7,7 @@
 ;        .run iug_crib_champ_rish
 ;
 ;Written by: A. Shinbori,  Mar 22, 2016
-;Last Updated:  A. Shinbori,  Mar 22, 2016
+;Last Updated:  A. Shinbori,  Mar 31, 2016
 ;-
 
 ;Initializes system variables for themis:
@@ -20,9 +20,9 @@ timespan,'2005-01-01',10,/day
 
 
 ;Load the GPS RO CHAMP FSI data in timespan:
-;We can specify the latitudinal range with max_lat and min_lat to load the data:
-;===============================================================================
-iug_load_champ_rish, min_lat = -30.00, max_lat = 30.00
+;We can specify the latitudinal range  to load the data:
+;=======================================================
+iug_load_champ_rish, region = 'Low_latitude'
 
 
 ;Plot time-height distribution of refractivity, dry air pressure, and temperature:
