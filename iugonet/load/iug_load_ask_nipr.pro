@@ -49,7 +49,7 @@ if ~keyword_set(no_download) then no_download=0
 ;----- site -----;
 site_code_all = strsplit('hus tjo tro lyr spa syo', /extract)
 if(not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
+site_code = ssl_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 if site_code[0] eq '' then return
 
 print, site_code
@@ -62,7 +62,7 @@ endif else begin
 endelse
 
 wlenstr_all=strsplit('0000', /extract)
-wlenstr=thm_check_valid_name(wlenstr,wlenstr_all, $
+wlenstr=ssl_check_valid_name(wlenstr,wlenstr_all, $
                              /ignore_case, /include_all)
 if wlenstr[0] eq '' then begin
     print, 'The input value for wavelength is not supported!'

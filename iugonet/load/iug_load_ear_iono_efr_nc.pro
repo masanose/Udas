@@ -66,7 +66,7 @@ parameter_all = strsplit('efb1p16 efb1p16a efb1p16b',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 

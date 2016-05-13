@@ -65,7 +65,7 @@ site_code_all = strsplit('ktb sgk srp',' ', /extract)
 
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_code_all, /ignore_case, /include_all)
+site_code = ssl_check_valid_name(site, site_code_all, /ignore_case, /include_all)
 
 if n_elements(site_code) eq 1 then begin
    if site_code eq '' then begin
@@ -83,7 +83,7 @@ parameter_all = strsplit('uwnd vwnd wwnd pwr1 pwr2 pwr3 pwr4 pwr5 wdt1 wdt2 wdt3
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 

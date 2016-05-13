@@ -82,7 +82,7 @@ parameter_all = strsplit('ie2e4b ie2e4c ie2e4d ie2rea ie2mya ie2myb ie2rta ie2tr
 
 ;--- check parameter1s
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 

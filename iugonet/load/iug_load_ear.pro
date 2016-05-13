@@ -72,7 +72,7 @@ datatype_all = strsplit('troposphere e_region ef_region v_region f_region',' ', 
 
 ;--- check datatypes
 if (not keyword_set(datatype)) then datatype='all'
-datatypes = thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
+datatypes = ssl_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
 
 print, datatypes
 
@@ -102,7 +102,7 @@ for i=0, n_elements(datatypes)-1 do begin
 
      ;--- check parameters
       if (not keyword_set(parameter)) then parameter='all'
-      parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+      parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
       case datatypes[i] of
          'e_region':iug_load_ear_iono_er_nc, parameter = parameters, trange = trange, $
                                              downloadonly = downloadonly, verbose = verbose

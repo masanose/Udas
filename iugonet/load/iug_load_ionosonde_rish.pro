@@ -59,7 +59,7 @@ site_code_all = strsplit('sgk',' ', /extract)
 
 ;--- check site codes
 if (not keyword_set(site)) then site='all'
-site_code = strlowcase(thm_check_valid_name(site, site_code_all, /ignore_case, /include_all))
+site_code = strlowcase(ssl_check_valid_name(site, site_code_all, /ignore_case, /include_all))
 
 if n_elements(site_code) eq 1 then begin
    if site_code eq '' then begin

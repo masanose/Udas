@@ -70,7 +70,7 @@ parameter_all = strsplit('fb1p16a fb1p16b fb1p16c fb1p16d fb1p16e fb1p16f fb1p16
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 

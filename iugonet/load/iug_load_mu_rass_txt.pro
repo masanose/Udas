@@ -54,7 +54,7 @@ parameter_all = strsplit('uwnd vwnd wwnd temp',' ', /extract)
 
 ;--- check site codes
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 

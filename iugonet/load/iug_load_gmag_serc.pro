@@ -70,7 +70,7 @@ if ~keyword_set(datatype) then datatype='mag'
 ; validate datatype
 vns=['mag']
 if size(datatype,/type) eq 7 then begin
-  datatype=thm_check_valid_name(datatype,vns, $
+  datatype=ssl_check_valid_name(datatype,vns, $
                                 /ignore_case, /include_all)
   if datatype[0] eq '' then return
 endif else begin
@@ -86,7 +86,7 @@ vsnames_all = strsplit(vsnames, ' ', /extract)
 
 ; validate sites
 if(keyword_set(site)) then site_in = site else site_in = 'all'
-magdas_sites = thm_check_valid_name(site_in, vsnames_all, $
+magdas_sites = ssl_check_valid_name(site_in, vsnames_all, $
                                     /ignore_case, /include_all)
 if magdas_sites[0] eq '' then return
 

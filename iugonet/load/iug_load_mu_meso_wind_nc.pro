@@ -56,7 +56,7 @@ level_all = strsplit('org scr',' ', /extract)
 
 ;--- check level
 if (not keyword_set(level)) then level='all'
-levels = thm_check_valid_name(level, level_all, /ignore_case, /include_all)
+levels = ssl_check_valid_name(level, level_all, /ignore_case, /include_all)
 
 print, levels
 

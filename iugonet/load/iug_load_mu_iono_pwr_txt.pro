@@ -57,7 +57,7 @@ parameter_all = strsplit('pwr1 pwr2 pwr3 pwr4',' ', /extract)
 
 ;--- check parameter
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 

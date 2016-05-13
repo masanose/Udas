@@ -71,7 +71,7 @@ parameter1_all = strsplit('vb3p4a 150p8c8a 150p8c8b 150p8c8c 150p8c8d 150p8c8e 1
 
 ;--- check parameters1
 if(not keyword_set(parameter1)) then parameter1='all'
-parameters = thm_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter1, parameter1_all, /ignore_case, /include_all)
 
 print, parameters
 
@@ -84,7 +84,7 @@ parameter2_all = strsplit('dpl1 dpl2 dpl3 pwr1 pwr2 pwr3 wdt1 wdt2 wdt3 '+$
 
 ;--- check parameters2
 if(not keyword_set(parameter2)) then parameter2='all'
-parameters2 = thm_check_valid_name(parameter2, parameter2_all, /ignore_case, /include_all)
+parameters2 = ssl_check_valid_name(parameter2, parameter2_all, /ignore_case, /include_all)
 
 print, parameters2
 

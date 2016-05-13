@@ -67,7 +67,7 @@ parameter_all = strsplit('vb3p4a 150p8c8a 150p8c8b 150p8c8c 150p8c8d 150p8c8e 15
 
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
-parameters = thm_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
+parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
 
