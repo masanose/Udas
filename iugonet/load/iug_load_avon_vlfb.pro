@@ -49,7 +49,7 @@ param_all = strsplit('ch1 ch2', /extract)
 if(n_elements(parameter) eq 0) then parameter='all'
 parameter=strjoin(parameter, ' ')
 parameter=strsplit(strlowcase(parameter), ' ', /extract)
-parameter = thm_check_valid_name(parameter, param_all, /include_all)
+parameter = ssl_check_valid_name(parameter, param_all, /include_all)
 
 ;--- other options
 if (not keyword_set(verbose)) then verbose=0
