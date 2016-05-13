@@ -215,8 +215,7 @@ pro iug_ui_load_data_load_pro,    $
 
       ;----- GPS_Radio_Occultation_CHAMP ----;
       'GPS_Radio_Occultation_CHAMP' : begin
-        if site_or_param[0] eq '*(all)' then site_or_param = 'All_latitude'
-        iug_load_champ_rish, region = site_or_param, trange = timeRange
+        iug_load_champ_rish, trange = timeRange
         if parameters[0] eq '*' then begin
           par_names=tnames('gps_ro_champ_fsi_*')
         endif else begin
@@ -226,8 +225,7 @@ pro iug_ui_load_data_load_pro,    $
 
       ;----- GPS_Radio_Occultation_COSMIC ----;
       'GPS_Radio_Occultation_COSMIC' : begin
-        if site_or_param[0] eq '*(all)' then site_or_param = 'All_latitude'
-        iug_load_cosmic_rish, region = site_or_param, trange = timeRange
+        iug_load_cosmic_rish, trange = timeRange
         if parameters[0] eq '*' then begin
           par_names=tnames('gps_ro_cosmic_fsi_*')
         endif else begin

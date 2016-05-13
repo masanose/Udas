@@ -8,12 +8,9 @@
 ;  provided by UCAR and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_cosmic_rish, region = region, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_cosmic_rish, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
-;  REGION = (Optional) Confine the geographical latitude to use data plot, 
-;           if this is not set, the default is 'All_latitude'.
-; 
 ;  TRANGE = (Optional) Time range of interest  (2 element array), if
 ;          this is not set, the default is to prompt the user. Note
 ;          that if the input time range is not a full day, a full
@@ -27,6 +24,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 31/03/2016.
+; A. Shinbori, 13/05/2016.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -35,8 +33,7 @@
 ; $URL $
 ;-
 
-pro iug_load_cosmic_rish, region = region, $
-  downloadonly=downloadonly, $
+pro iug_load_cosmic_rish, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 
@@ -44,7 +41,6 @@ pro iug_load_cosmic_rish, region = region, $
   ;Verbose keyword check:
   ;**********************
   if (not keyword_set(verbose)) then verbose = 2
-  if (not keyword_set(region)) then region = 'All_latitude'
 
   ;******************************************************************
   ;Loop on downloading files
@@ -231,28 +227,19 @@ pro iug_load_cosmic_rish, region = region, $
      ;---Close netCDF file:
       ncdf_close,cdfid
 
-     ;===============================
-     ;====Store tplot variables======
-     ;===============================
-      if region eq 'All_latitude' then idx1 = where(abs(lat) ge 0.00, cnt) ;---All region
-      if region eq 'Low_latitude' then idx1 = where(lat ge -30.00 and lat lt 30.00, cnt) ;---Low-latitude region
-      if region eq 'Middle_latitude' then idx1 = where(lat ge -60.00 and lat lt -30.00 or lat ge 30.00 and lat lt 60.00, cnt) ;---Middle-latitude region
-      if region eq 'High_latitude' then idx1 = where(lat ge -90.00 and lat lt -60.00 or lat ge 60.00 and lat lt 90.00, cnt) ;---High-latitude region 
-
-      if idx1[0] ne -1 then begin     
-         append_array,time_app, double(time[idx1])+time_double('1980-01-06/00:00:00')
-         append_array,event_app, event[idx1]
-         append_array,gpsid_app, gpsid[idx1]
-         append_array,leoid_app, leoid[idx1]
-         append_array,lat_app, lat[idx1]
-         append_array,lon_app, lon[idx1]
-         append_array,ref_app, ref[idx1,*]
-         append_array,pres_app, pres[idx1,*]
-         append_array,temp_app, temp[idx1,*]
-         append_array,tan_lat_app, tan_lat[idx1,*]
-         append_array,tan_lon_app, tan_lon[idx1,*]
-      endif
-    endfor
+     ;---Append the time and data:
+      append_array,time_app, double(time)+time_double('1980-01-06/00:00:00')
+      append_array,event_app, event
+      append_array,gpsid_app, gpsid
+      append_array,leoid_app, leoid
+      append_array,lat_app, lat
+      append_array,lon_app, lon
+      append_array,ref_app, ref
+      append_array,pres_app, pres
+      append_array,temp_app, temp
+      append_array,tan_lat_app, tan_lat
+      append_array,tan_lon_app, tan_lon 
+   endfor
 
   ;===============================
   ;====Store tplot variables======
