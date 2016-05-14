@@ -44,8 +44,7 @@ Load procedures for IUGONET data:
 - iug_load_avon_vlfb    ; AVON(Asia VLF Observation Network)/VLF-B data
 - iug_load_aws_rish     ; Automatic weather station data from RISH, Kyoto Univ
 - iug_load_blr_rish     ; Boundary layer radar data from RISH
-- iug_load_champ_rish   ; GPS-CHAMP satellite occultation full spectral inversion data from RISH, Kyoto Univ
-- iug_load_cosmic_rish  ; GPS-COSMIC satellite occultation full spectral inversion data from RISH, Kyoto Univ
+- iug_load_gps_ro_rish  ; GPS radio occultation full spectral inversion data from RISH, Kyoto Univ
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
 - iug_load_eiscat_vief  ; EISCAT ion velocity and electric field vetor data
@@ -98,8 +97,7 @@ CUI:
       iug_load_avon_vlfb, site='tnn'
   timespan,'1994-05-03' & iug_load_aws_rish, site='sgk'
   timespan,'2006-12-01' & iug_load_blr_rish, site='ktb'
-  timespan,'2006-12-01' & iug_load_champ_rish
-  timespan,'2006-12-01' & iug_load_cosmic_rish
+  timespan,'2006-12-01' & iug_load_gps_ro_rish
   timespan,'2003-03-25' & iug_load_ear
   timespan,'2011-02-03' & iug_load_eiscat
   timespan,'2011-02-04' & iug_load_eiscat_vief
@@ -132,8 +130,6 @@ GUI:
 - AllSky_Imager_Keogram NIPR#           hus             *       2012-01-22
 - Auto._Weather_Station troposphere     sgk             *       1994-05-03
 - Boundary_Layer_Radar  troposphere     ktb             *       2006-12-01
-- GPS_R._O._CHAMP 	troposphere 	*(all)		*	2006-04-22
-- GPS_R._O._COSMIC	troposphere 	*(all)		*	2001-05-18
 - EISCAT_radar          altitude_prof   esr_32m         *       2011-02-03
                         Vi_E_vectors    kst             *       2011-02-04
 - Eq._Atom._Radar       troposphere     *(all)          *       2003-03-25
@@ -151,6 +147,7 @@ GUI:
 - geomag._index         Dst_index       WDC_kyoto       *       2006-12-01
                         AE_index        WDC_kyoto       *       2006-12-01
                         ASY_index       WDC_kyoto       *       2006-12-01
+- GPS_radio_occultation troposphere 	champ		*	2006-05-01
 - HF_radio_spectrometer Sun_or_Jupiter  iit             *       2004-01-09
 - IPRT                  Sun             iit             *       2010-11-01
 - Imaging_Riometer      30MHz           syo             *       2004-04-07

@@ -25,7 +25,7 @@
 ;Y.-M. Tanaka, 16/08/2013
 ;A. Shinbori, 07/01/2014
 ;Y.-M. Tanaka, 05/02/2014
-;A. Shinbori, 31/03/2016
+;A. Shinbori, 14/05/2016
 ;-
 ;--------------------------------------------------------------------------------
 
@@ -214,22 +214,12 @@ pro iug_ui_load_data_load_pro,    $
       end
 
       ;----- GPS_Radio_Occultation_CHAMP ----;
-      'GPS_Radio_Occultation_CHAMP' : begin
-        iug_load_champ_rish, trange = timeRange
+      'GPS_radio_occultation' : begin
+        iug_load_gps_ro_rish, site = site_or_param, trange = timeRange
         if parameters[0] eq '*' then begin
-          par_names=tnames('gps_ro_champ_fsi_*')
+          par_names=tnames('gps_ro_*_fsi_*')
         endif else begin
-          par_names=tnames('gps_ro_champ_fsi_'+parameters)
-        endelse
-      end
-
-      ;----- GPS_Radio_Occultation_COSMIC ----;
-      'GPS_Radio_Occultation_COSMIC' : begin
-        iug_load_cosmic_rish, trange = timeRange
-        if parameters[0] eq '*' then begin
-          par_names=tnames('gps_ro_cosmic_fsi_*')
-        endif else begin
-          par_names=tnames('gps_ro_cosmic_fsi_'+parameters)
+          par_names=tnames('gps_ro_*_fsi_'+parameters)
         endelse
       end
 

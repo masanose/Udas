@@ -1,14 +1,14 @@
 ;+
 ;
 ;NAME:
-;iug_load_champ_rish
+;iug_load_gps_champ_fsi_nc
 ;
 ;PURPOSE:
-;  Queries the Kyoto_RISH servers for the GPS-RO CHAMP FSI data in the netCDF format
+;  Queries the Kyoto_RISH servers for the GPS-CHAMP radio occultation FSI data in the netCDF format
 ;  provided by UCAR and loads data into tplot format.
 ;
 ;SYNTAX:
-; iug_load_champ_rish, downloadonly=downloadonly, trange=trange, verbose=verbose
+; iug_load_gps_champ_fsi_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
 ;
 ;KEYWOARDS:
 ;  TRANGE = (Optional) Time range of interest  (2 element array), if
@@ -20,11 +20,9 @@
 ;  VERBOSE (In): [1,...,5], Get more detailed (higher number) command line output.
 ;
 ;CODE:
-; A. Shinbori, 22/03/2016.
+; A. Shinbori, 14/05/2016.
 ;
 ;MODIFICATIONS:
-; A. Shinbori, 31/03/2016.
-; A. Shinbori, 13/05/2016.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -33,7 +31,7 @@
 ; $URL $
 ;-
 
-pro iug_load_champ_rish, downloadonly=downloadonly, $
+pro iug_load_gps_champ_fsi_nc, downloadonly=downloadonly, $
   trange=trange, $
   verbose=verbose
 

@@ -120,8 +120,7 @@ case instrument of
           end
       endcase
     end
-  'GPS_Radio_Occultation_CHAMP': iug_var = !iugonet.data_policy.gps_ro_rish
-  'GPS_Radio_Occultation_COSMIC': iug_var = !iugonet.data_policy.gps_ro_rish
+  'GPS_radio_occultation': iug_var = !iugonet.data_policy.gps_ro_rish
   'HF_Solar_Jupiter_radio_spectrometer': iug_var = !iugonet.data_policy.hf_tohokuu
   'Iitate_Planetary_Radio_Telescope': iug_var = !iugonet.data_policy.iprt
   'Imaging_Riometer': begin
@@ -279,8 +278,7 @@ endif else begin
               end
           endcase
         end
-      'GPS_Radio_Occultation_CHAMP':  !iugonet.data_policy.gps_ro_rish = iug_var
-      'GPS_Radio_Occultation_COSMIC': !iugonet.data_policy.gps_ro_rish = iug_var 
+      'GPS_radio_occultation':  !iugonet.data_policy.gps_ro_rish = iug_var 
       'HF_Solar_Jupiter_radio_spectrometer': !iugonet.data_policy.hf_tohokuu = iug_var
       'Iitate_Planetary_Radio_Telescope': !iugonet.data_policy.iprt = iug_var
       'Imaging_Riometer': begin
