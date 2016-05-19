@@ -31,6 +31,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 04/06/2013.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 19/05/2016.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -59,7 +60,7 @@ datatype_all = strsplit('dawex misc',' ', /extract)
 
 ;--- check datatypes
 if(not keyword_set(datatype)) then datatype='all'
-datatypes = ssl_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
+datatypes = thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
 
 print, datatypes
 
@@ -68,28 +69,40 @@ print, datatypes
 ;***********
 ;--- all site codes (default)
 site_all = strsplit('bdg drw gpn ktb ktr pon sgk srp uji',' ', /extract)
+dawex_site = strsplit('drw gpn ktr',' ', /extract)
+misc_site = strsplit('bdg ktb pon sgk srp uji',' ', /extract)
 
 ;--- check site code
 if (not keyword_set(site)) then site='all'
-site_code = ssl_check_valid_name(site, site_all, /ignore_case, /include_all)
+site_code = thm_check_valid_name(site, site_all, /ignore_case, /include_all)
+
+;---Search the index of dawex and misc site codes:
+for i = 0, n_elements(dawex_site)-1 do begin
+   site_idx = where(site_code eq dawex_site[i])
+   append_array, dawex_site_idx, site_idx
+endfor
+for i = 0, n_elements(misc_site)-1 do begin
+   site_idx = where(site_code eq misc_site[i])
+   append_array, misc_site_idx, site_idx
+endfor
 
 print, site_code
-                 
+           
   ;======================================
   ;======Load data of radiosonde=========
   ;======================================
   for i=0, n_elements(datatypes)-1 do begin
      ;load of DAWEX radiosonde data
       if strupcase(datatypes[i]) eq 'DAWEX' then begin
-         for j=0, n_elements(site_code)-1 do begin
-            iug_load_radiosonde_dawex_nc, site=site_code[j], $
+         for j=0, n_elements(dawex_site_idx)-1 do begin
+            iug_load_radiosonde_dawex_nc, site=site_code[dawex_site_idx[j]], $
                                           downloadonly=downloadonly, trange=trange, verbose=verbose
          endfor
       endif 
      ;load of Shigaraki radiosonde data
       if (datatypes[i] eq 'misc') then begin
-         for j=0, n_elements(site_code)-1 do begin
-            case site_code[j] of
+         for j=0, n_elements(misc_site_idx)-1 do begin
+            case site_code[misc_site_idx[j]] of
                'bdg':iug_load_radiosonde_bdg_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
                'ktb':iug_load_radiosonde_ktb_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
                'pon':iug_load_radiosonde_pon_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
