@@ -60,7 +60,7 @@ datatype_all = strsplit('dawex misc',' ', /extract)
 
 ;--- check datatypes
 if(not keyword_set(datatype)) then datatype='all'
-datatypes = thm_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
+datatypes = ssl_check_valid_name(datatype, datatype_all, /ignore_case, /include_all)
 
 print, datatypes
 
@@ -74,7 +74,7 @@ misc_site = strsplit('bdg ktb pon sgk srp uji',' ', /extract)
 
 ;--- check site code
 if (not keyword_set(site)) then site='all'
-site_code = thm_check_valid_name(site, site_all, /ignore_case, /include_all)
+site_code = ssl_check_valid_name(site, site_all, /ignore_case, /include_all)
 
 ;---Search the index of dawex and misc site codes:
 for i = 0, n_elements(dawex_site)-1 do begin
