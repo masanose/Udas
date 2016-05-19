@@ -87,7 +87,7 @@ for i = 0, n_elements(misc_site)-1 do begin
 endfor
 
 print, site_code
-           
+
   ;======================================
   ;======Load data of radiosonde=========
   ;======================================
@@ -95,24 +95,26 @@ print, site_code
      ;load of DAWEX radiosonde data
       if strupcase(datatypes[i]) eq 'DAWEX' then begin
          for j=0, n_elements(dawex_site_idx)-1 do begin
-            iug_load_radiosonde_dawex_nc, site=site_code[dawex_site_idx[j]], $
-                                          downloadonly=downloadonly, trange=trange, verbose=verbose
+            if dawex_site_idx[j] ne -1 then iug_load_radiosonde_dawex_nc, site=site_code[dawex_site_idx[j]], $
+                                                                                downloadonly=downloadonly, trange=trange, verbose=verbose
          endfor
       endif 
      ;load of Shigaraki radiosonde data
       if (datatypes[i] eq 'misc') then begin
          for j=0, n_elements(misc_site_idx)-1 do begin
-            case site_code[misc_site_idx[j]] of
-               'bdg':iug_load_radiosonde_bdg_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
-               'ktb':iug_load_radiosonde_ktb_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
-               'pon':iug_load_radiosonde_pon_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
-               'sgk':iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
-               'srp':iug_load_radiosonde_srp_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
-               'uji':iug_load_radiosonde_uji_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+            if misc_site_idx[j] ne -1 then begin
+               case site_code[misc_site_idx[j]] of
+                  'bdg':iug_load_radiosonde_bdg_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
+                  'ktb':iug_load_radiosonde_ktb_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
+                  'pon':iug_load_radiosonde_pon_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
+                  'sgk':iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, trange=trange, verbose=verbose
+                  'srp':iug_load_radiosonde_srp_nc, downloadonly=downloadonly, trange=trange, verbose=verbose 
+                  'uji':iug_load_radiosonde_uji_nc, downloadonly=downloadonly, trange=trange, verbose=verbose
                else:begin
                   print,'found no match sites for datatype misc'
                end
-            endcase
+               endcase
+            endif
          endfor
       endif 
    endfor  
